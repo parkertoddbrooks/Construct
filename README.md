@@ -1,30 +1,6 @@
-# Construct - AI-Powered Architecture System for Swift Projects
+# Construct
 
-<p align="center">
-  <img src="docs/images/construct-logo.png" alt="Construct Logo" width="200">
-</p>
-
-<p align="center">
-  <strong>Trust The Process.</strong>
-</p>
-
-<p align="center">
-  <a href="#quick-start">Quick Start</a> •
-  <a href="#what-is-construct">What is Construct?</a> •
-  <a href="#features">Features</a> •
-  <a href="#installation">Installation</a> •
-  <a href="#documentation">Documentation</a> •
-  <a href="#community">Community</a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Swift-6.0+-orange.svg" alt="Swift 6.0+">
-  <img src="https://img.shields.io/badge/iOS-15.0+-blue.svg" alt="iOS 15.0+">
-  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License">
-  <img src="https://img.shields.io/badge/AI-Claude%20|%20Cursor%20|%20Copilot-purple.svg" alt="AI Support">
-</p>
-
----
+**Trust The Process.**
 
 ## 🚀 Quick Start
 
