@@ -1,0 +1,248 @@
+#!/bin/bash
+
+# Construct Setup Script
+# Initializes a new project with the Construct architecture system
+
+set -e  # Exit on error
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Construct logo
+print_logo() {
+    echo -e "${BLUE}"
+    echo "   ____                _                   _   "
+    echo "  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ "
+    echo " | |   / _ \| '_ \/ __| __| '__| | | |/ __| __|"
+    echo " | |__| (_) | | | \__ \ |_| |  | |_| | (__| |_ "
+    echo "  \____\___/|_| |_|___/\__|_|   \__,_|\___|\__|"
+    echo -e "${NC}"
+    echo -e "${GREEN}Trust The Process.${NC}\n"
+}
+
+# Get project name
+get_project_name() {
+    local current_dir=$(basename "$PWD")
+    
+    # If we're in the Construct template directory, ask for a new name
+    if [[ "$current_dir" == "Construct" ]]; then
+        echo -e "${YELLOW}Please enter your project name:${NC}"
+        read -r PROJECT_NAME
+        
+        if [[ -z "$PROJECT_NAME" ]]; then
+            echo -e "${RED}Error: Project name cannot be empty.${NC}"
+            exit 1
+        fi
+    else
+        PROJECT_NAME="$current_dir"
+        echo -e "${GREEN}Setting up Construct for: $PROJECT_NAME${NC}"
+    fi
+}
+
+# Check prerequisites
+check_prerequisites() {
+    echo -e "${BLUE}Checking prerequisites...${NC}"
+    
+    # Check for Xcode
+    if ! command -v xcodebuild &> /dev/null; then
+        echo -e "${RED}Error: Xcode is not installed. Please install Xcode from the App Store.${NC}"
+        exit 1
+    fi
+    
+    # Check for git
+    if ! command -v git &> /dev/null; then
+        echo -e "${RED}Error: Git is not installed. Please install Git.${NC}"
+        exit 1
+    fi
+    
+    # Check Swift version
+    SWIFT_VERSION=$(swift --version 2>/dev/null | grep -oE 'Swift version [0-9]+\.[0-9]+' | grep -oE '[0-9]+\.[0-9]+')
+    REQUIRED_VERSION="5.9"
+    
+    if ! awk -v v1="$SWIFT_VERSION" -v v2="$REQUIRED_VERSION" 'BEGIN{exit !(v1 >= v2)}'; then
+        echo -e "${YELLOW}Warning: Swift $REQUIRED_VERSION or higher recommended (found $SWIFT_VERSION)${NC}"
+    fi
+    
+    echo -e "${GREEN}✓ Prerequisites check passed${NC}"
+}
+
+# Initialize git repository
+init_git() {
+    if [[ ! -d .git ]]; then
+        echo -e "${BLUE}Initializing git repository...${NC}"
+        git init
+        echo -e "${GREEN}✓ Git repository initialized${NC}"
+    else
+        echo -e "${GREEN}✓ Git repository already exists${NC}"
+    fi
+}
+
+# Setup git hooks
+setup_git_hooks() {
+    echo -e "${BLUE}Setting up git hooks...${NC}"
+    
+    mkdir -p .git/hooks
+    
+    # Copy pre-commit hook
+    cp Template/AI/scripts/git-hooks/pre-commit .git/hooks/pre-commit
+    chmod +x .git/hooks/pre-commit
+    
+    echo -e "${GREEN}✓ Git hooks installed${NC}"
+}
+
+# Setup shell aliases
+setup_aliases() {
+    echo -e "${BLUE}Setting up shell aliases...${NC}"
+    
+    # Detect shell
+    if [[ "$SHELL" == *"zsh"* ]]; then
+        SHELL_RC="$HOME/.zshrc"
+    else
+        SHELL_RC="$HOME/.bashrc"
+    fi
+    
+    # Add aliases if not already present
+    if ! grep -q "# Construct aliases" "$SHELL_RC"; then
+        cat >> "$SHELL_RC" << 'EOF'
+
+# Construct aliases
+alias construct-cd="cd $(pwd)"
+alias construct-ios="cd $(pwd)/Template/iOS-App"
+alias construct-watch="cd $(pwd)/Template/Watch-App"
+alias construct-update="./Template/AI/scripts/update-context.sh"
+alias construct-check="./Template/AI/scripts/check-architecture.sh"
+alias construct-before="./Template/AI/scripts/before_coding.sh"
+alias construct-scan="./Template/AI/scripts/scan_mvvm_structure.sh"
+alias construct-protect="./Template/AI/scripts/check-quality.sh"
+alias construct-learn="./Template/AI/scripts/check-violations.sh"
+alias construct-session="./Template/AI/scripts/session-summary.sh"
+alias construct-export="./Template/AI/scripts/export-ai-rules.sh"
+alias construct-new="./Template/AI/scripts/create-feature.sh"
+alias construct-vision="./Template/AI/scripts/prd-workflow.sh"
+EOF
+        
+        echo -e "${GREEN}✓ Aliases added to $SHELL_RC${NC}"
+        echo -e "${YELLOW}Note: Run 'source $SHELL_RC' to load aliases in current session${NC}"
+    else
+        echo -e "${GREEN}✓ Aliases already configured${NC}"
+    fi
+}
+
+# Create initial CLAUDE.md
+create_claude_md() {
+    echo -e "${BLUE}Creating initial CLAUDE.md...${NC}"
+    
+    # Replace PROJECT_NAME in template
+    sed "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" Template/AI/CLAUDE.template.md > CLAUDE.md
+    
+    echo -e "${GREEN}✓ CLAUDE.md created${NC}"
+}
+
+# Setup Xcode project
+setup_xcode_project() {
+    echo -e "${BLUE}Setting up Xcode project...${NC}"
+    
+    # Create xcodeproj if it doesn't exist
+    if [[ ! -d "$PROJECT_NAME.xcodeproj" ]]; then
+        # Copy template project and rename
+        cp -R Template/iOS-App/ConstructTemplate.xcodeproj "$PROJECT_NAME.xcodeproj"
+        
+        # Update project name in pbxproj
+        sed -i '' "s/ConstructTemplate/$PROJECT_NAME/g" "$PROJECT_NAME.xcodeproj/project.pbxproj"
+        
+        echo -e "${GREEN}✓ Xcode project created${NC}"
+    else
+        echo -e "${GREEN}✓ Xcode project already exists${NC}"
+    fi
+}
+
+# Create initial directories
+create_directories() {
+    echo -e "${BLUE}Creating project directories...${NC}"
+    
+    # Create directories if they don't exist
+    mkdir -p AI/{dev-logs/session-states,structure/_old}
+    mkdir -p _trash
+    
+    echo -e "${GREEN}✓ Project directories created${NC}"
+}
+
+# Initialize first PRD
+init_first_prd() {
+    echo -e "${BLUE}Creating first sprint PRD...${NC}"
+    
+    local date=$(date +%Y-%m-%d)
+    local prd_file="Template/AI/PRDs/current-sprint/${date}-initial-setup-prd.md"
+    
+    cat > "$prd_file" << EOF
+# PRD: Initial Setup - $PROJECT_NAME
+**Date**: $date
+**Sprint**: Initial Setup
+
+## Overview
+Setting up $PROJECT_NAME with Construct architecture system.
+
+## Goals
+- [ ] Configure project structure
+- [ ] Implement first feature
+- [ ] Setup CI/CD pipeline
+- [ ] Create documentation
+
+## Success Criteria
+- All Construct tools working
+- No architecture violations
+- Tests passing
+- Documentation complete
+
+## Technical Requirements
+- iOS 15.0+ support
+- Swift 6 compatibility
+- Accessibility compliance
+- Performance targets met
+
+## Notes
+This is your first sprint PRD. Update it with your actual project goals!
+EOF
+    
+    echo -e "${GREEN}✓ Initial PRD created${NC}"
+}
+
+# Main setup flow
+main() {
+    clear
+    print_logo
+    
+    get_project_name
+    check_prerequisites
+    
+    echo -e "\n${BLUE}Starting Construct setup...${NC}\n"
+    
+    init_git
+    setup_git_hooks
+    setup_aliases
+    create_directories
+    create_claude_md
+    setup_xcode_project
+    init_first_prd
+    
+    # Run initial context update
+    echo -e "\n${BLUE}Running initial context update...${NC}"
+    ./Template/AI/scripts/update-context.sh
+    
+    echo -e "\n${GREEN}✨ Construct setup complete!${NC}\n"
+    
+    echo -e "${BLUE}Next steps:${NC}"
+    echo "1. Run: source $SHELL_RC"
+    echo "2. Run: construct-update"
+    echo "3. Open: open $PROJECT_NAME.xcodeproj"
+    echo "4. Start building with: construct-new YourFirstFeature"
+    
+    echo -e "\n${GREEN}Trust The Process.${NC}"
+}
+
+# Run main function
+main
