@@ -2,26 +2,6 @@
 
 **Trust The Process.**
 
-## 🚀 Quick Start
-
-```bash
-# Clone and setup your new project
-git clone https://github.com/yourusername/construct.git MyAwesomeApp
-cd MyAwesomeApp
-./construct-setup
-
-# Start building with AI assistance
-construct-update    # Updates CLAUDE.md with project state
-construct-check     # Verify architecture compliance
-```
-
-Your project now has:
-- ✅ Self-enforcing MVVM architecture
-- ✅ Design token system (no hardcoded values)
-- ✅ AI that understands your codebase
-- ✅ Swift 6 patterns enforced
-- ✅ Professional quality gates
-
 ## 🌟 What is Construct?
 
 Construct is an AI-powered architecture system that makes good code inevitable. Built on the **Pentagram Construct** - five points of intelligent protection that prevent architecture drift and maintain code quality automatically.
@@ -235,13 +215,6 @@ Construct is released under the MIT License. See [LICENSE](LICENSE) for details.
 Built with insights from real-world Swift projects and the collective wisdom of the iOS development community.
 
 Special thanks to all contributors who help make Construct better!
-
-## 🔗 Links
-
-- **Documentation**: [construct.dev](https://construct.dev)
-- **GitHub**: [github.com/yourusername/construct](https://github.com/yourusername/construct)
-- **Discord**: [discord.gg/construct](https://discord.gg/construct)
-- **Twitter**: [@construct_swift](https://twitter.com/construct_swift)
 
 ---
 
