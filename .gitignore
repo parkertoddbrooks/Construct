@@ -119,6 +119,9 @@ Temporary Items
 # Construct specific
 _trash/
 _ai-ignore*/
+_git-ignore/
+_git-ignore*
+*_git-ignore*
 *.backup-*
 .construct-cache/
 
