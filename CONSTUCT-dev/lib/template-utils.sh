@@ -18,84 +18,200 @@ get_construct_root() {
     echo "$(dirname "$(dirname "$script_dir")")"
 }
 
-# Get paths to key directories
-get_templates_dir() {
-    echo "$(get_construct_root)/CONSTUCT-dev/Templates"
+# Get path to template directory
+get_template_dir() {
+    echo "$(get_construct_root)/PROJECT-TEMPLATE"
 }
 
-# Get the path to the user project directory
-get_user_project_dir() {
-    echo "$(get_construct_root)/USER-project-files"
+# Get the path to the template project structure
+get_template_project_dir() {
+    echo "$(get_template_dir)/USER-CHOSEN-NAME"
 }
 
-# Validate template integrity
-validate_template_integrity() {
-    local templates_dir="$(get_templates_dir)"
+# Detect if we're in a user project or template context
+detect_context() {
+    local current_dir="$(pwd)"
+    local construct_root="$(get_construct_root)"
+    
+    # Check if we're in PROJECT-TEMPLATE (template context)
+    if [[ "$current_dir" == *"PROJECT-TEMPLATE"* ]]; then
+        echo "template"
+        return 0
+    fi
+    
+    # Check if we're in CONSTUCT-dev (development context)
+    if [[ "$current_dir" == *"CONSTUCT-dev"* ]]; then
+        echo "development"
+        return 0
+    fi
+    
+    # Default to development context
+    echo "development"
+}
+
+# Get project directories based on context
+get_project_context() {
+    local context="$(detect_context)"
+    
+    case "$context" in
+        "template")
+            # We're validating the template itself
+            echo "template_validation"
+            ;;
+        "development")
+            # We're in CONSTRUCT development, validating template structure
+            echo "template_validation"
+            ;;
+        *)
+            echo "unknown"
+            ;;
+    esac
+}
+
+# Validate template structure (for template development)
+validate_template_structure() {
+    local template_dir="$(get_template_dir)"
+    local template_project="$(get_template_project_dir)"
     local issues=0
     
-    echo -e "${BLUE}Validating template integrity...${NC}"
+    echo -e "${BLUE}Validating PROJECT-TEMPLATE structure...${NC}"
     
-    # Check for required template directories
-    if [ ! -d "$templates_dir/iOS-App" ]; then
-        echo -e "${RED}❌ Missing Templates/iOS-App directory${NC}"
+    # Check main template directory exists
+    if [ ! -d "$template_dir" ]; then
+        echo -e "${RED}❌ Missing PROJECT-TEMPLATE directory${NC}"
+        ((issues++))
+        return $issues
+    fi
+    
+    # Check template project directory exists
+    if [ ! -d "$template_project" ]; then
+        echo -e "${RED}❌ Missing PROJECT-TEMPLATE/USER-CHOSEN-NAME directory${NC}"
+        ((issues++))
+        return $issues
+    fi
+    
+    # Check template project has required structure
+    local xcode_project="$template_project/USER-CHOSEN-NAME-Project"
+    
+    if [ ! -d "$xcode_project" ]; then
+        echo -e "${RED}❌ Missing template Xcode project directory${NC}"
         ((issues++))
     fi
     
-    if [ ! -d "$templates_dir/Watch-App" ]; then
-        echo -e "${RED}❌ Missing Templates/Watch-App directory${NC}"
+    if [ ! -d "$xcode_project/iOS-App" ]; then
+        echo -e "${RED}❌ Missing template iOS-App directory${NC}"
         ((issues++))
     fi
     
-    if [ ! -d "$templates_dir/AI" ]; then
-        echo -e "${RED}❌ Missing Templates/AI directory${NC}"
+    if [ ! -d "$xcode_project/Watch-App" ]; then
+        echo -e "${RED}❌ Missing template Watch-App directory${NC}"
         ((issues++))
     fi
     
-    # Check for required template files
-    if [ ! -f "$templates_dir/AI/CLAUDE.template.md" ]; then
-        echo -e "${RED}❌ Missing CLAUDE.template.md${NC}"
+    if [ ! -d "$template_project/AI" ]; then
+        echo -e "${RED}❌ Missing template AI directory${NC}"
         ((issues++))
     fi
     
-    # Check for Xcode project template
-    if [ ! -d "$templates_dir/iOS-App/ConstructTemplate.xcodeproj" ]; then
-        echo -e "${RED}❌ Missing ConstructTemplate.xcodeproj${NC}"
+    if [ ! -f "$template_project/CLAUDE.md" ]; then
+        echo -e "${RED}❌ Missing template CLAUDE.md${NC}"
+        ((issues++))
+    fi
+    
+    # Check for template scripts
+    if [ ! -d "$template_project/AI/scripts" ]; then
+        echo -e "${RED}❌ Missing template AI/scripts directory${NC}"
+        ((issues++))
+    fi
+    
+    # Check for project detection library
+    if [ ! -f "$template_project/AI/lib/project-detection.sh" ]; then
+        echo -e "${RED}❌ Missing project-detection.sh library${NC}"
         ((issues++))
     fi
     
     if [ $issues -eq 0 ]; then
-        echo -e "${GREEN}✅ Template integrity validation passed${NC}"
+        echo -e "${GREEN}✅ Template structure is valid${NC}"
     else
-        echo -e "${RED}❌ Found $issues template issues${NC}"
+        echo -e "${RED}❌ Found $issues template structure issues${NC}"
     fi
     
     return $issues
 }
 
-# Check for CONSTRUCT-specific references in templates
+# Validate user project structure (for actual user projects using dynamic detection)
+validate_user_project_structure() {
+    local project_root="$1"
+    local issues=0
+    
+    if [ -z "$project_root" ]; then
+        echo -e "${RED}❌ Project root not provided${NC}"
+        return 1
+    fi
+    
+    echo -e "${BLUE}Validating user project structure: $(basename "$project_root")${NC}"
+    
+    # Source the project detection library if available
+    local detection_lib="$project_root/AI/lib/project-detection.sh"
+    if [ -f "$detection_lib" ]; then
+        source "$detection_lib"
+        
+        # Use dynamic detection
+        if ! verify_project_structure 2>/dev/null; then
+            echo -e "${RED}❌ Project structure validation failed${NC}"
+            ((issues++))
+        else
+            echo -e "${GREEN}✅ User project structure is valid${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️ Project detection library not found, skipping validation${NC}"
+        ((issues++))
+    fi
+    
+    return $issues
+}
+
+# Main validation function that determines context and validates appropriately
+validate_template_integrity() {
+    local context="$(get_project_context)"
+    local issues=0
+    
+    case "$context" in
+        "template_validation")
+            validate_template_structure
+            issues=$?
+            ;;
+        *)
+            echo -e "${YELLOW}⚠️ Unknown context, defaulting to template validation${NC}"
+            validate_template_structure
+            issues=$?
+            ;;
+    esac
+    
+    return $issues
+}
+
+# Check for template contamination (user-specific content in templates)
 check_template_contamination() {
-    local templates_dir="$(get_templates_dir)"
+    local template_dir="$(get_template_dir)"
     local contamination=0
     
     echo -e "${BLUE}Checking for template contamination...${NC}"
     
-    # Look for hardcoded CONSTRUCT references
-    local construct_refs=$(find "$templates_dir" -type f -name "*.swift" -o -name "*.md" | xargs grep -l "CONSTRUCT\|construct-dev" 2>/dev/null || true)
+    # Look for common contamination patterns
+    local patterns=(
+        "RUN"
+        "/Users/"
+        "parker"
+        "specific-project-name"
+    )
     
-    if [ -n "$construct_refs" ]; then
-        echo -e "${RED}❌ Found CONSTRUCT references in templates:${NC}"
-        echo "$construct_refs"
-        ((contamination++))
-    fi
-    
-    # Check for absolute paths
-    local abs_paths=$(find "$templates_dir" -type f -name "*.swift" -o -name "*.md" | xargs grep -l "/Users/\|/home/\|^[[:space:]]*/tmp/" 2>/dev/null | grep -v "# Example\|# TODO\|TMPDIR" || true)
-    
-    if [ -n "$abs_paths" ]; then
-        echo -e "${RED}❌ Found absolute paths in templates:${NC}"
-        echo "$abs_paths"
-        ((contamination++))
-    fi
+    for pattern in "${patterns[@]}"; do
+        if grep -r "$pattern" "$template_dir" --exclude="*.git*" 2>/dev/null | grep -v "# Example:" | grep -v "TODO:" | head -1; then
+            echo -e "${RED}❌ Found potential contamination: $pattern${NC}"
+            ((contamination++))
+        fi
+    done
     
     if [ $contamination -eq 0 ]; then
         echo -e "${GREEN}✅ Templates are clean of contamination${NC}"
@@ -106,130 +222,82 @@ check_template_contamination() {
     return $contamination
 }
 
-# Extract patterns from USER-project-files for template improvement
-extract_user_patterns() {
-    local user_project_dir="$(get_user_project_dir)"
-    local output_file="$1"
-    
-    echo -e "${BLUE}Extracting patterns from USER-project-files...${NC}"
-    
-    # Source file analysis functions
-    source "$(dirname "${BASH_SOURCE[0]}")/file-analysis.sh"
-    
-    echo "# User Project Patterns" > "$output_file"
-    echo "Extracted: $(date)" >> "$output_file"
-    echo "" >> "$output_file"
-    
-    # Analyze iOS app structure
-    if [ -d "$user_project_dir/PROJECT-name/iOS-App" ]; then
-        echo "## iOS App Patterns" >> "$output_file"
-        local temp_dir="${TMPDIR:-/tmp}"
-        generate_architecture_summary "$user_project_dir/PROJECT-name/iOS-App" "$temp_dir/ios_summary.md"
-        cat "$temp_dir/ios_summary.md" >> "$output_file"
-        rm "$temp_dir/ios_summary.md" 2>/dev/null || true
-    fi
-    
-    # Analyze Watch app structure
-    if [ -d "$user_project_dir/PROJECT-name/Watch-App" ]; then
-        echo "## Watch App Patterns" >> "$output_file"
-        generate_architecture_summary "$user_project_dir/PROJECT-name/Watch-App" "/tmp/watch_summary.md"
-        cat "/tmp/watch_summary.md" >> "$output_file"
-        rm "/tmp/watch_summary.md"
-    fi
-    
-    echo -e "${GREEN}✅ Patterns extracted to $output_file${NC}"
-}
-
-# Compare USER-project-files structure against templates
-compare_user_vs_templates() {
-    local user_project_dir="$(get_user_project_dir)"
-    local templates_dir="$(get_templates_dir)"
-    
-    echo -e "${BLUE}Comparing USER-project-files vs Templates...${NC}"
-    
-    # Check if USER structure diverges from template structure
-    local differences=0
-    
-    # Compare directory structures
-    if [ -d "$user_project_dir/PROJECT-name/iOS-App" ] && [ -d "$templates_dir/iOS-App" ]; then
-        echo -e "${YELLOW}Comparing iOS app structures:${NC}"
-        
-        # This would need more sophisticated comparison logic
-        # For now, just basic directory presence check
-        local user_dirs=$(find "$user_project_dir/PROJECT-name/iOS-App" -type d | sort)
-        local template_dirs=$(find "$templates_dir/iOS-App" -type d | sort)
-        
-        # Simple comparison - in practice, this would be more nuanced
-        if [ "$user_dirs" != "$template_dirs" ]; then
-            echo -e "${YELLOW}⚠️ iOS directory structures differ${NC}"
-            ((differences++))
-        fi
-    fi
-    
-    return $differences
-}
-
-# Test template can be used independently
+# Test template independence (ensure templates work standalone)
 test_template_independence() {
-    local temp_dir=$(mktemp -d)
-    local templates_dir="$(get_templates_dir)"
-    local test_passed=0
+    local template_project="$(get_template_project_dir)"
+    local issues=0
     
     echo -e "${BLUE}Testing template independence...${NC}"
     
-    # Copy templates to temp directory
-    cp -r "$templates_dir"/* "$temp_dir/"
-    
-    # Test that templates don't reference CONSTRUCT development paths
-    local bad_refs=$(find "$temp_dir" -type f -exec grep -l "/CONSTUCT-dev/\|/USER-project-files/" {} \; 2>/dev/null || true)
-    
-    if [ -n "$bad_refs" ]; then
-        echo -e "${RED}❌ Templates reference CONSTRUCT development paths:${NC}"
-        echo "$bad_refs"
-        test_passed=1
+    # Check that template scripts don't reference CONSTRUCT development paths
+    if grep -r "CONSTUCT-dev" "$template_project/AI/scripts" 2>/dev/null; then
+        echo -e "${RED}❌ Template scripts reference CONSTRUCT development paths${NC}"
+        ((issues++))
     fi
     
-    # Test placeholder replacement would work
-    local placeholders=$(find "$temp_dir" -type f -exec grep -l "{{.*}}" {} \; 2>/dev/null || true)
+    # Check for placeholder patterns
+    local placeholder_patterns=(
+        "USER-CHOSEN-NAME"
+        "PROJECT-TEMPLATE" 
+        "{{.*}}"
+    )
     
-    if [ -n "$placeholders" ]; then
-        echo -e "${GREEN}✅ Found placeholder files ready for replacement:${NC}"
-        echo "$placeholders"
+    local found_placeholders=0
+    for pattern in "${placeholder_patterns[@]}"; do
+        if grep -r "$pattern" "$template_project" --exclude-dir=".git" 2>/dev/null | head -1 >/dev/null; then
+            ((found_placeholders++))
+        fi
+    done
+    
+    if [ $found_placeholders -eq 0 ]; then
+        echo -e "${YELLOW}⚠️ No placeholder patterns found - ensure templates use proper placeholders${NC}"
     else
-        echo -e "${YELLOW}⚠️ No placeholder files found - ensure templates use {{PROJECT_NAME}} etc.${NC}"
+        echo -e "${GREEN}✅ Template uses placeholder patterns${NC}"
     fi
     
-    # Clean up
-    rm -rf "$temp_dir"
-    
-    if [ $test_passed -eq 0 ]; then
+    if [ $issues -eq 0 ]; then
         echo -e "${GREEN}✅ Template independence test passed${NC}"
     else
-        echo -e "${RED}❌ Template independence test failed${NC}"
+        echo -e "${RED}❌ Found $issues template independence issues${NC}"
     fi
     
-    return $test_passed
+    return $issues
 }
 
-# Generate template status report
-generate_template_report() {
-    local output_file="$1"
+# Get available template scripts
+get_template_scripts() {
+    local template_project="$(get_template_project_dir)"
+    find "$template_project/AI/scripts" -name "*.sh" -type f 2>/dev/null | sort
+}
+
+# Get template script count
+get_template_script_count() {
+    get_template_scripts | wc -l | tr -d ' '
+}
+
+# Validate template scripts have proper structure
+validate_template_scripts() {
+    local scripts="$(get_template_scripts)"
+    local issues=0
     
-    echo "# Template Status Report" > "$output_file"
-    echo "Generated: $(date)" >> "$output_file"
-    echo "" >> "$output_file"
+    echo -e "${BLUE}Validating template scripts...${NC}"
     
-    echo "## Template Integrity" >> "$output_file"
-    validate_template_integrity >> "$output_file" 2>&1
-    echo "" >> "$output_file"
+    while IFS= read -r script; do
+        if [ -f "$script" ]; then
+            # Check for project detection library usage
+            if ! grep -q "project-detection.sh" "$script"; then
+                echo -e "${YELLOW}⚠️ Script $(basename "$script") doesn't use project detection library${NC}"
+            fi
+            
+            # Check for proper error handling
+            if ! grep -q "set -e" "$script"; then
+                echo -e "${YELLOW}⚠️ Script $(basename "$script") missing 'set -e'${NC}"
+            fi
+        fi
+    done <<< "$scripts"
     
-    echo "## Template Contamination Check" >> "$output_file"
-    check_template_contamination >> "$output_file" 2>&1
-    echo "" >> "$output_file"
+    local script_count="$(get_template_script_count)"
+    echo -e "${GREEN}✅ Validated $script_count template scripts${NC}"
     
-    echo "## Template Independence Test" >> "$output_file"
-    test_template_independence >> "$output_file" 2>&1
-    echo "" >> "$output_file"
-    
-    echo -e "${GREEN}✅ Template report generated: $output_file${NC}"
+    return $issues
 }

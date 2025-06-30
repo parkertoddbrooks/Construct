@@ -80,8 +80,8 @@ check_directory_structure() {
     
     local structure_issues=0
     
-    # Required directories
-    local required_dirs=("AI" "lib" "config" "Templates" "tests")
+    # Required directories in CONSTUCT-dev
+    local required_dirs=("AI" "lib" "config" "tests")
     
     for dir in "${required_dirs[@]}"; do
         if [ ! -d "$CONSTUCT_DEV/$dir" ]; then
@@ -91,6 +91,14 @@ check_directory_structure() {
             echo -e "${GREEN}✅ Required directory exists: $dir${NC}"
         fi
     done
+    
+    # Check PROJECT-TEMPLATE at root level
+    if [ ! -d "$CONSTRUCT_ROOT/PROJECT-TEMPLATE" ]; then
+        echo -e "${RED}❌ Missing required directory: PROJECT-TEMPLATE${NC}"
+        ((structure_issues++))
+    else
+        echo -e "${GREEN}✅ Required directory exists: PROJECT-TEMPLATE${NC}"
+    fi
     
     # Check for proper file organization
     if [ ! -f "$CONSTUCT_DEV/AI/CLAUDE.md" ]; then

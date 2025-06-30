@@ -3,6 +3,8 @@
 # Common Script Patterns Library for CONSTRUCT
 # Reusable patterns to reduce code duplication across scripts
 
+set -e
+
 # Standard script directory resolution pattern
 get_script_paths() {
     local script_dir="$(cd "$(dirname "${BASH_SOURCE[1]}")" && pwd)"

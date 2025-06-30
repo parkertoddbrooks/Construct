@@ -71,7 +71,7 @@ generate_auto_update_section() {
 
 ### Template Health
 - **Status**: $template_status
-- **Location**: Templates/
+- **Location**: PROJECT-TEMPLATE/
 - **Integrity**: Run check-architecture.sh for details
 
 ## 🔧 Available Development Tools

@@ -220,7 +220,7 @@ show_next_steps() {
     echo "Available resources:"
     echo "  - lib/ functions for reusable code"
     echo "  - config/ YAML for configuration-driven features"
-    echo "  - Templates/ for user-facing templates"
+    echo "  - PROJECT-TEMPLATE/ for user-facing templates"
     echo "  - tests/ for validation (when implemented)"
 }
 
