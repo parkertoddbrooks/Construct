@@ -1,93 +1,118 @@
-# Construct
+# CONSTRUCT
 
-Self-enforcing architecture for Swift projects. Build with confidence knowing your code quality is protected by automated enforcement and AI-native development patterns.
+CONSTRUCT is a GitHub template repository that gives you a complete Swift development foundation with AI-powered architecture enforcement.
 
-## What is Construct?
+## What You Get
 
-A Swift project foundation that prevents architecture drift through the **Pentagram Construct** - five integrated systems that make good code inevitable:
+When you use CONSTRUCT, you get:
 
-1. **Vision** - Product requirements drive architecture
-2. **Memory** - Continuous documentation stays current
-3. **Prediction** - Discover existing patterns before building
-4. **Protection** - Git hooks enforce standards automatically
-5. **Learning** - Architecture evolves with your codebase
+1. **Complete Swift Project** - Ready-to-build iOS and Watch apps
+2. **AI Development Tools** - Scripts that understand your codebase  
+3. **Self-Enforcing Architecture** - Prevents bad patterns automatically
+4. **Design System Foundation** - Responsive tokens from day one
 
-## Key Features
+### 1. Get Your Project
+Click "Use this template" on the CONSTRUCT GitHub repo. This creates your own repository with all the CONSTRUCT tools.
 
-### 🏗️ Production-Ready Template
-- MVVM architecture with Swift 6 concurrency
-- Token-based responsive design system
-- Professional UI patterns (no background flashing)
-- Accessibility and testing built-in
-- Three complete example features
-
-### 🤖 AI-Native Development
-- Works with Claude
-- Prevents AI from suggesting anti-patterns
-- Context preserved across sessions
-- Export rules to any AI platform
-- Architecture guidance in every file
-
-### 🛡️ Automated Enforcement
-- Pre-commit hooks block bad code
-- 11 quality gates run automatically
-- No hardcoded values allowed
-- Business logic stays out of Views
-- PRD compliance verified
-
-## Quick Start
-
+### 2. Personalize It
 ```bash
-# Clone and setup in 2 minutes
-git clone https://github.com/yourusername/construct.git MyApp
-cd MyApp
-./setup.sh
-
-# Start developing
-construct check              # Verify architecture
-construct new LoginFeature   # Create from template
-git commit                   # Auto-enforcement runs
+cd YourProject
+./construct-setup
+# Enter your project name when prompted
 ```
 
-## Core Commands
+This renames everything to match your project and sets up your development environment.
 
+### 3. Start Building
 ```bash
-construct check      # Architecture compliance
-construct new        # Create features from templates
-construct update     # Refresh documentation
-construct export     # Generate AI platform rules
-construct session    # Preserve context at 90%
+cd USER-project-files/
+./AI/scripts/update-context.sh    # Updates AI with your project state
+./AI/scripts/check-architecture.sh # Validates your code patterns
 ```
 
-## Why Construct?
+Your AI assistant (Claude, Cursor, etc.) now understands your project architecture and will suggest the right patterns.
 
-**Without Construct:**
-- Architecture degrades over time
-- AI suggests anti-patterns
-- Context lost between sessions
-- Inconsistent code quality
-- Manual enforcement fails
+## The AI Integration
 
-**With Construct:**
-- Architecture self-enforces
-- AI understands your patterns
-- Context automatically preserved
-- Quality gates prevent drift
-- Standards applied uniformly
+CONSTRUCT creates a living `CLAUDE.md` file that auto-updates with:
+- Your current component counts
+- Architecture violations to avoid  
+- Available design tokens and patterns
+- Recent development context
 
-## Requirements
+This means your AI always knows:
+- What components already exist (avoid duplicates)
+- Which patterns to follow (MVVM, design tokens)
+- What violations to prevent (hardcoded values, business logic in Views)
 
-- iOS 15.0+ / macOS 13.0+
-- Xcode 15.0+ (Swift 6)
-- Git
+## Architecture Enforcement
 
-## Documentation
+CONSTRUCT prevents common mistakes:
 
-- [Architecture Guide](docs/architecture.md)
-- [Command Reference](docs/commands.md)
-- [AI Integration](docs/ai-integration.md)
-- [Swift 6 Patterns](docs/swift6.md)
+❌ **Prevents**: Business logic in SwiftUI Views  
+✅ **Enforces**: ViewModels handle business logic
 
-## License
+❌ **Prevents**: Hardcoded values like `.frame(width: 200)`  
+✅ **Enforces**: Design tokens like `.frame(width: tokens.buttonWidth)`
 
-MIT License - see [LICENSE](LICENSE)
+❌ **Prevents**: @State for business data  
+✅ **Enforces**: @Published properties in ViewModels
+
+## Your Development Workflow
+
+### Daily Development
+```bash
+# Start your day
+./AI/scripts/update-context.sh      # Refresh AI context
+
+# Before creating something new  
+./AI/scripts/before_coding.sh LoginView  # Shows what exists
+
+# After making changes
+./AI/scripts/check-architecture.sh  # Validate patterns
+```
+
+### When Context Gets Full (~90%)
+```bash
+./AI/scripts/session-summary.sh     # Preserve context
+# Start fresh AI session
+./AI/scripts/update-context.sh      # Load current state
+```
+
+## Project Structure
+
+Your personalized project includes:
+
+```
+YourProject/
+├── USER-project-files/           # Your Swift development workspace
+│   ├── AI/                      # AI tools and context
+│   │   ├── CLAUDE.md           # Auto-updating AI context
+│   │   └── scripts/            # Development workflow scripts
+│   ├── PROJECT-name/           # Your actual Xcode project
+│   │   ├── YourApp.xcodeproj  # Ready to build
+│   │   ├── iOS-App/           # iOS application code
+│   │   └── Watch-App/         # Watch application code
+│   └── scripts/               # Development utilities
+└── CONSTUCT-docs/             # This documentation
+```
+
+## Why CONSTRUCT Works
+
+**Traditional Approach**:
+- Start from scratch each time
+- AI suggests random patterns
+- Architecture drifts over time
+- Manual code reviews catch issues late
+
+**CONSTRUCT Approach**:
+- Start with production-ready foundation
+- AI understands your specific patterns
+- Architecture enforces itself automatically  
+- Issues prevented before they're written
+
+## Getting Help
+
+- **Commands**: See [CONSTUCT-docs/commands.md](CONSTUCT-docs/commands.md) for all available scripts
+- **Issues**: Report problems on the CONSTRUCT GitHub repository
+- **Patterns**: Check your auto-updating `CLAUDE.md` for current project patterns
