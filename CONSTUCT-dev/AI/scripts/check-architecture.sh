@@ -56,7 +56,7 @@ check_shell_script_quality() {
         fi
         
         # Check for hardcoded paths
-        if grep -q "/Users/\|/home/" "$script"; then
+        if grep -q "/Users/\|/home/\|^/tmp/" "$script" | grep -v "# Example\|# TODO\|TMPDIR"; then
             echo -e "${RED}❌ Hardcoded paths found: $script${NC}"
             ((script_issues++))
         fi

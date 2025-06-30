@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# Script to scan RUN-iOS project for MVVM components and generate updated structure
+# Script to scan Swift project for MVVM components and generate updated structure
 
-PROJECT_ROOT="/Users/parker/Documents/dev/claude-engineer/_Projects/RUN/xcode/RUN"
+# Get script directory and project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 STRUCTURE_DIR="$PROJECT_ROOT/AI/structure"
 OLD_DIR="$STRUCTURE_DIR/_old"
 
@@ -15,7 +17,7 @@ fi
 # Create new file with timestamp
 OUTPUT_FILE="$STRUCTURE_DIR/mvvm-structure-$(date +%Y-%m-%d--%H-%M-%S).md"
 
-echo "# RUN Project MVVM Structure Scan - $(date +%Y-%m-%d)" > "$OUTPUT_FILE"
+echo "# Swift Project MVVM Structure Scan - $(date +%Y-%m-%d)" > "$OUTPUT_FILE"
 echo "" >> "$OUTPUT_FILE"
 
 # Function to scan for specific file patterns
@@ -26,7 +28,7 @@ scan_for_pattern() {
     echo "## $title" >> "$OUTPUT_FILE"
     echo '```' >> "$OUTPUT_FILE"
     
-    found_files=$(find "$PROJECT_ROOT/RUN-Project" -name "*${pattern}*.swift" -type f | grep -v "build/" | grep -v "DerivedData/" | sort)
+    found_files=$(find "$PROJECT_ROOT/PROJECT-name" -name "*${pattern}*.swift" -type f | grep -v "build/" | grep -v "DerivedData/" | sort)
     
     if [ -z "$found_files" ]; then
         echo "None found" >> "$OUTPUT_FILE"
@@ -50,10 +52,10 @@ create_tree_structure() {
     # Use tree command if available, otherwise use find
     if command -v tree &> /dev/null; then
         cd "$PROJECT_ROOT"
-        tree -I 'build|DerivedData|*.xcworkspace|*.xcodeproj' RUN-Project -P "*.swift" >> "$OUTPUT_FILE"
+        tree -I 'build|DerivedData|*.xcworkspace|*.xcodeproj' PROJECT-name -P "*.swift" >> "$OUTPUT_FILE"
     else
         # Fallback to find
-        cd "$PROJECT_ROOT/RUN-Project"
+        cd "$PROJECT_ROOT/PROJECT-name"
         find . -name "*.swift" -type f | grep -v "build/" | grep -v "DerivedData/" | sort | sed 's|^\./||' >> "$OUTPUT_FILE"
     fi
     
@@ -87,12 +89,12 @@ create_tree_structure
 # Summary statistics
 echo "## Summary Statistics" >> "$OUTPUT_FILE"
 echo '```' >> "$OUTPUT_FILE"
-echo "ViewModels: $(find "$PROJECT_ROOT/RUN-Project" -name "*ViewModel*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
-echo "Services: $(find "$PROJECT_ROOT/RUN-Project" -name "*Service*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
-echo "Views: $(find "$PROJECT_ROOT/RUN-Project" -name "*View*.swift" -type f | grep -v "ViewModel" | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
-echo "Coordinators: $(find "$PROJECT_ROOT/RUN-Project" -name "*Coordinator*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
-echo "Managers: $(find "$PROJECT_ROOT/RUN-Project" -name "*Manager*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
-echo "Total Swift Files: $(find "$PROJECT_ROOT/RUN-Project" -name "*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "ViewModels: $(find "$PROJECT_ROOT/PROJECT-name" -name "*ViewModel*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "Services: $(find "$PROJECT_ROOT/PROJECT-name" -name "*Service*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "Views: $(find "$PROJECT_ROOT/PROJECT-name" -name "*View*.swift" -type f | grep -v "ViewModel" | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "Coordinators: $(find "$PROJECT_ROOT/PROJECT-name" -name "*Coordinator*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "Managers: $(find "$PROJECT_ROOT/PROJECT-name" -name "*Manager*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "Total Swift Files: $(find "$PROJECT_ROOT/PROJECT-name" -name "*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
 echo '```' >> "$OUTPUT_FILE"
 
 echo "" >> "$OUTPUT_FILE"
@@ -110,9 +112,9 @@ QUICK_REF="$PROJECT_ROOT/AI/structure/current-structure.md"
 echo "# Current MVVM Components ($(date +%Y-%m-%d))" > "$QUICK_REF"
 echo "" >> "$QUICK_REF"
 echo "## Active ViewModels" >> "$QUICK_REF"
-find "$PROJECT_ROOT/RUN-Project" -name "*ViewModel*.swift" -type f | grep -v "build/" | xargs -I {} basename {} | sort >> "$QUICK_REF"
+find "$PROJECT_ROOT/PROJECT-name" -name "*ViewModel*.swift" -type f | grep -v "build/" | xargs -I {} basename {} | sort >> "$QUICK_REF"
 echo "" >> "$QUICK_REF"
 echo "## Active Services" >> "$QUICK_REF"
-find "$PROJECT_ROOT/RUN-Project" -name "*Service*.swift" -type f | grep -v "build/" | xargs -I {} basename {} | sort >> "$QUICK_REF"
+find "$PROJECT_ROOT/PROJECT-name" -name "*Service*.swift" -type f | grep -v "build/" | xargs -I {} basename {} | sort >> "$QUICK_REF"
 
 echo "Quick reference saved to: $QUICK_REF"

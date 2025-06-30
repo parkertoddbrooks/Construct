@@ -3,8 +3,10 @@
 # Enhanced Context Updater for CLAUDE.md
 # Includes sprint context, decisions, patterns, and metrics
 
-CONTEXT_FILE="/Users/parker/Documents/dev/claude-engineer/_Projects/RUN/xcode/RUN/CLAUDE.md"
-PROJECT_ROOT="/Users/parker/Documents/dev/claude-engineer/_Projects/RUN/xcode/RUN"
+# Get script directory and project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+CONTEXT_FILE="$PROJECT_ROOT/CLAUDE.md"
 TEMP_DIR=$(mktemp -d)
 
 # Backup before updating
@@ -22,10 +24,10 @@ EOF
     echo "Last updated: $(date '+%Y-%m-%d %H:%M:%S')" >> "$TEMP_DIR/structure.txt"
     
     # Count components
-    local viewmodels=$(find "$PROJECT_ROOT/RUN-Project" -name "*ViewModel*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')
-    local services=$(find "$PROJECT_ROOT/RUN-Project" -name "*Service*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')
-    local tokens=$(find "$PROJECT_ROOT/RUN-Project" -name "*Tokens*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')
-    local components=$(find "$PROJECT_ROOT/RUN-Project/iOS-App/Shared/Components" -name "*.swift" -type f 2>/dev/null | wc -l | tr -d ' ')
+    local viewmodels=$(find "$PROJECT_ROOT/PROJECT-name" -name "*ViewModel*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')
+    local services=$(find "$PROJECT_ROOT/PROJECT-name" -name "*Service*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')
+    local tokens=$(find "$PROJECT_ROOT/PROJECT-name" -name "*Tokens*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')
+    local components=$(find "$PROJECT_ROOT/PROJECT-name/iOS-App/Shared/Components" -name "*.swift" -type f 2>/dev/null | wc -l | tr -d ' ')
     
     cat >> "$TEMP_DIR/structure.txt" <<EOF
 
@@ -41,13 +43,13 @@ EOF
 EOF
     
     # Check design system files
-    if [ -f "$PROJECT_ROOT/RUN-Project/iOS-App/Shared/Utilities/Colors.swift" ]; then
+    if [ -f "$PROJECT_ROOT/PROJECT-name/iOS-App/Core/DesignSystem/Colors.swift" ]; then
         echo "- ✅ AppColors available" >> "$TEMP_DIR/structure.txt"
     fi
-    if [ -f "$PROJECT_ROOT/RUN-Project/iOS-App/Shared/Utilities/Spacing.swift" ]; then
+    if [ -f "$PROJECT_ROOT/PROJECT-name/iOS-App/Core/DesignSystem/Spacing.swift" ]; then
         echo "- ✅ Spacing.small/medium/large" >> "$TEMP_DIR/structure.txt"
     fi
-    if [ -f "$PROJECT_ROOT/RUN-Project/iOS-App/Shared/Utilities/Typography.swift" ]; then
+    if [ -f "$PROJECT_ROOT/PROJECT-name/iOS-App/Core/DesignSystem/Typography.swift" ]; then
         echo "- ✅ Font system available" >> "$TEMP_DIR/structure.txt"
     fi
     

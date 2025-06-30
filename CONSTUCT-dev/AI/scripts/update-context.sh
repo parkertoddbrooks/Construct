@@ -47,7 +47,8 @@ generate_auto_update_section() {
     fi
     
     # Create the auto-update section
-    cat > /tmp/construct_auto_update.md << EOF
+    local temp_dir="${TMPDIR:-/tmp}"
+    cat > "$temp_dir/construct_auto_update.md" << EOF
 
 ---
 
@@ -120,13 +121,14 @@ generate_auto_update_section() {
 EOF
 
     # Remove any existing auto-generated section and add new one
-    grep -v "# 🤖 AUTO-GENERATED" "$CLAUDE_MD" > /tmp/claude_clean.md 2>/dev/null || cp "$CLAUDE_MD" /tmp/claude_clean.md
+    local temp_dir="${TMPDIR:-/tmp}"
+    grep -v "# 🤖 AUTO-GENERATED" "$CLAUDE_MD" > "$temp_dir/claude_clean.md" 2>/dev/null || cp "$CLAUDE_MD" "$temp_dir/claude_clean.md"
     
     # Combine original content with new auto-section
-    cat /tmp/claude_clean.md /tmp/construct_auto_update.md > "$CLAUDE_MD"
+    cat "$temp_dir/claude_clean.md" "$temp_dir/construct_auto_update.md" > "$CLAUDE_MD"
     
-    # Cleanup
-    rm /tmp/construct_auto_update.md /tmp/claude_clean.md
+    # Cleanup temp files
+    rm "$temp_dir/construct_auto_update.md" "$temp_dir/claude_clean.md" 2>/dev/null || true
     
     echo -e "${GREEN}✅ Auto-generated section updated${NC}"
 }

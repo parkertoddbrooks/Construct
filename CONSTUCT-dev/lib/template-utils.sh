@@ -23,6 +23,7 @@ get_templates_dir() {
     echo "$(get_construct_root)/CONSTUCT-dev/Templates"
 }
 
+# Get the path to the user project directory
 get_user_project_dir() {
     echo "$(get_construct_root)/USER-project-files"
 }
@@ -88,7 +89,7 @@ check_template_contamination() {
     fi
     
     # Check for absolute paths
-    local abs_paths=$(find "$templates_dir" -type f -name "*.swift" -o -name "*.md" | xargs grep -l "/Users/\|/home/" 2>/dev/null || true)
+    local abs_paths=$(find "$templates_dir" -type f -name "*.swift" -o -name "*.md" | xargs grep -l "/Users/\|/home/\|^[[:space:]]*/tmp/" 2>/dev/null | grep -v "# Example\|# TODO\|TMPDIR" || true)
     
     if [ -n "$abs_paths" ]; then
         echo -e "${RED}❌ Found absolute paths in templates:${NC}"
@@ -122,9 +123,10 @@ extract_user_patterns() {
     # Analyze iOS app structure
     if [ -d "$user_project_dir/PROJECT-name/iOS-App" ]; then
         echo "## iOS App Patterns" >> "$output_file"
-        generate_architecture_summary "$user_project_dir/PROJECT-name/iOS-App" "/tmp/ios_summary.md"
-        cat "/tmp/ios_summary.md" >> "$output_file"
-        rm "/tmp/ios_summary.md"
+        local temp_dir="${TMPDIR:-/tmp}"
+        generate_architecture_summary "$user_project_dir/PROJECT-name/iOS-App" "$temp_dir/ios_summary.md"
+        cat "$temp_dir/ios_summary.md" >> "$output_file"
+        rm "$temp_dir/ios_summary.md" 2>/dev/null || true
     fi
     
     # Analyze Watch app structure
