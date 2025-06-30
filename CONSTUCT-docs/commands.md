@@ -1,6 +1,6 @@
 # CONSTRUCT Commands
 
-All commands are run from the `USER-project-files/` directory.
+All commands are run from your project directory (e.g., `MyRunningApp/`).
 
 ## Daily Development Commands
 
@@ -8,9 +8,10 @@ All commands are run from the `USER-project-files/` directory.
 ```bash
 ./AI/scripts/update-context.sh
 ```
-**What it does**: Updates your `CLAUDE.md` file with current project state  
+**What it does**: Updates your `CLAUDE.md` file with current project state using dynamic detection  
 **When to use**: Start of each session, before working with AI  
 **Result**: AI knows your current components, violations, and patterns
+**New**: Now automatically detects your project name and Xcode structure
 
 ### Check Architecture
 ```bash
@@ -19,6 +20,7 @@ All commands are run from the `USER-project-files/` directory.
 **What it does**: Validates your Swift code follows MVVM patterns  
 **When to use**: After making changes, before committing  
 **Result**: Reports violations and suggests fixes
+**New**: Uses dynamic project detection - works with any project name
 
 ### Pre-Coding Guidance
 ```bash
@@ -27,6 +29,7 @@ All commands are run from the `USER-project-files/` directory.
 **What it does**: Shows existing components before you create new ones  
 **When to use**: Before creating any new component  
 **Result**: Prevents duplicates, suggests reusable patterns
+**New**: Automatically finds components using dynamic project detection
 
 ## Session Management
 
@@ -52,9 +55,10 @@ All commands are run from the `USER-project-files/` directory.
 ```bash
 ./AI/scripts/check-quality.sh
 ```
-**What it does**: Runs comprehensive quality checks  
+**What it does**: Runs comprehensive quality checks with automated reporting  
 **When to use**: Before committing code  
 **Result**: Ensures professional quality standards
+**New**: Generates timestamped quality reports automatically
 
 ### MVVM Structure Scan
 ```bash
@@ -63,6 +67,7 @@ All commands are run from the `USER-project-files/` directory.
 **What it does**: Documents current MVVM component organization  
 **When to use**: After adding new features  
 **Result**: Creates architectural snapshot
+**New**: Uses dynamic detection to analyze your specific project structure
 
 ### Accessibility Check
 ```bash
@@ -81,6 +86,7 @@ All commands are run from the `USER-project-files/` directory.
 **What it does**: Installs shell aliases for faster commands  
 **When to use**: First time setup, or if aliases break  
 **Result**: Can use `construct-update` instead of long paths
+**New**: Aliases now use dynamic detection for project navigation
 
 ## Typical Workflows
 
@@ -144,10 +150,45 @@ Most scripts show usage when run without arguments:
 
 ### Troubleshooting
 If commands fail:
-1. Check you're in `USER-project-files/` directory
+1. Check you're in your project root directory (e.g., `MyRunningApp/`)
 2. Ensure scripts are executable: `chmod +x AI/scripts/*.sh`
-3. Update context: `./AI/scripts/update-context.sh`
+3. Verify project structure: `ls -la` should show `CLAUDE.md`, `AI/`, and `{YourProjectName}-Project/`
+4. Update context: `./AI/scripts/update-context.sh`
+5. Test detection: `source AI/lib/project-detection.sh && verify_project_structure`
 
 ### Script Locations
-All development scripts are in: `USER-project-files/AI/scripts/`  
-All utility scripts are in: `USER-project-files/scripts/`
+All development scripts are in: `AI/scripts/`  
+Project detection library: `AI/lib/project-detection.sh`
+
+## New Features (Dynamic Detection)
+
+### Automatic Project Detection
+All scripts now automatically detect:
+- **Your project name**: From your directory structure
+- **Xcode project location**: `{YourProjectName}-Project/`
+- **iOS app source**: `{YourProjectName}-Project/iOS-App/`
+- **Watch app source**: `{YourProjectName}-Project/Watch-App/`
+
+### No More Hardcoded Paths
+- Scripts work with **any project name** you choose
+- No more editing configuration files
+- Works immediately after `construct-setup`
+
+### Example Project Structure
+```
+MyRunningApp/                           # Your chosen name
+├── CLAUDE.md                          # AI context
+├── AI/
+│   ├── scripts/                       # All commands
+│   └── lib/project-detection.sh       # Detection library
+└── MyRunningApp-Project/              # Auto-detected
+    ├── MyRunningApp.xcodeproj         # Auto-detected
+    ├── iOS-App/                       # Auto-detected
+    └── Watch-App/                     # Auto-detected
+```
+
+### Benefits
+- **Just works**: No configuration needed
+- **Any project name**: WeatherApp, TaskManager, MyGreatApp
+- **Reliable**: Robust detection with error handling
+- **Clean**: No hardcoded paths in any scripts
