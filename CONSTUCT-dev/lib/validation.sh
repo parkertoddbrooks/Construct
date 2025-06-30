@@ -140,7 +140,7 @@ validate_environment() {
     # Find CONSTRUCT root by looking for key directories
     local search_dir="$current_dir"
     while [ "$search_dir" != "/" ]; do
-        if [ -d "$search_dir/CONSTUCT-dev" ] && [ -d "$search_dir/USER-project-files" ]; then
+        if [ -d "$search_dir/CONSTUCT-dev" ] && [ -d "$search_dir/PROJECT-TEMPLATE" ]; then
             construct_root="$search_dir"
             break
         fi
