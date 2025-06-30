@@ -1,9 +1,18 @@
 #!/bin/bash
 
-# Architecture Enforcement Script for RUN App
+# Architecture Enforcement Script for CONSTRUCT Template Projects
 # This ensures all architectural patterns are followed
 
-PROJECT_ROOT="/Users/parker/Documents/dev/claude-engineer/_Projects/RUN/xcode/RUN"
+# Source project detection library
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../lib/project-detection.sh"
+
+# Get project paths
+PROJECT_ROOT="$(get_project_root)"
+PROJECT_NAME="$(get_project_name)"
+XCODE_DIR="$(get_xcode_project_dir)"
+IOS_DIR="$(get_ios_app_dir)"
+WATCH_DIR="$(get_watch_app_dir)"
 VIOLATIONS=0
 
 # Colors for output
@@ -12,7 +21,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo "🏗️  RUN App Architecture Check"
+echo "🏗️  CONSTRUCT Project Architecture Check"
 echo "=============================="
 echo ""
 
@@ -22,7 +31,7 @@ check_hardcoded_values() {
     
     violations=$(grep -r "frame.*[0-9]\|padding.*[0-9]\|font.*size:.*[0-9]\|CGFloat.*=.*[0-9]" \
         --include="*.swift" \
-        "$PROJECT_ROOT/RUN-Project" \
+        "$XCODE_DIR" \
         2>/dev/null | \
         grep -v "tokens\|DesignTokens" | \
         grep -v "build/")
@@ -43,11 +52,11 @@ check_mvvm_compliance() {
     
     # Find Views without ViewModels
     orphan_views=""
-    for view_file in $(find "$PROJECT_ROOT/RUN-Project" -name "*View.swift" -type f | grep -v "ViewModel"); do
+    for view_file in $(find "$XCODE_DIR" -name "*View.swift" -type f | grep -v "ViewModel"); do
         view_name=$(basename "$view_file" .swift)
         view_model="${view_name}Model.swift"
         
-        if ! find "$PROJECT_ROOT/RUN-Project" -name "$view_model" -type f | grep -q .; then
+        if ! find "$XCODE_DIR" -name "$view_model" -type f | grep -q .; then
             orphan_views+="  - $view_name\n"
         fi
     done
@@ -62,7 +71,7 @@ check_mvvm_compliance() {
     
     # Check for business logic in Views
     logic_in_views=$(grep -l "URLSession\|await.*Service\|func fetch\|func load\|func save" \
-        $(find "$PROJECT_ROOT/RUN-Project" -name "*View.swift" -type f) 2>/dev/null)
+        $(find "$XCODE_DIR" -name "*View.swift" -type f) 2>/dev/null)
     
     if [ -n "$logic_in_views" ]; then
         echo -e "${RED}❌ Business logic found in Views:${NC}"
@@ -81,7 +90,7 @@ check_coordinator_usage() {
     # Check for direct navigation in Views
     direct_nav=$(grep -r "NavigationLink\|\.sheet.*isPresented\|\.fullScreenCover" \
         --include="*View.swift" \
-        "$PROJECT_ROOT/RUN-Project" \
+        "$XCODE_DIR" \
         2>/dev/null | \
         grep -v "Coordinator")
     
@@ -102,7 +111,7 @@ check_feature_flags() {
     # Look for experimental or new features without flags
     unguarded_features=$(grep -r "// TODO\|// EXPERIMENTAL\|// NEW FEATURE" \
         --include="*.swift" \
-        "$PROJECT_ROOT/RUN-Project" \
+        "$XCODE_DIR" \
         2>/dev/null | \
         grep -v "FeatureFlags")
     
@@ -123,7 +132,7 @@ check_component_reuse() {
     patterns=("Button" "Loading" "Error" "Gauge" "Display")
     
     for pattern in "${patterns[@]}"; do
-        similar_components=$(find "$PROJECT_ROOT/RUN-Project" -name "*${pattern}*.swift" -type f | \
+        similar_components=$(find "$XCODE_DIR" -name "*${pattern}*.swift" -type f | \
             grep -v "Shared/Components" | \
             wc -l)
         
@@ -140,7 +149,7 @@ check_design_tokens() {
     echo "Checking Design Token usage..."
     
     # Check if DesignTokens exist for Views
-    for view_file in $(find "$PROJECT_ROOT/RUN-Project/iOS-App/Features" -name "*View.swift" -type f); do
+    for view_file in $(find "$XCODE_DIR/iOS-App/Features" -name "*View.swift" -type f); do
         view_dir=$(dirname "$view_file")
         view_name=$(basename "$view_file" .swift)
         tokens_file="${view_dir}/${view_name%.swift}DesignTokens.swift"
@@ -159,7 +168,7 @@ check_ios_configuration() {
     # Check for orientation settings in code
     orientation_in_code=$(grep -r "UIInterfaceOrientation\|supportedInterfaceOrientations\|UIDevice.*orientation" \
         --include="*.swift" \
-        "$PROJECT_ROOT/RUN-Project" \
+        "$XCODE_DIR" \
         2>/dev/null | \
         grep -v "// Allowed")
     
@@ -174,7 +183,7 @@ check_ios_configuration() {
     # Check for permission requests in code (should be in Info.plist)
     permissions_in_code=$(grep -r "requestAuthorization\|NSHealthStore.*requestAuthorization" \
         --include="*.swift" \
-        "$PROJECT_ROOT/RUN-Project" \
+        "$XCODE_DIR" \
         2>/dev/null | \
         grep -v "Info.plist")
     
@@ -200,7 +209,7 @@ check_prd_compliance() {
                     echo "  Checking SMVP requirements..."
                     
                     # Check for Watch connectivity implementation
-                    if find "$PROJECT_ROOT/RUN-Project" -name "*WatchConnection*.swift" -type f | grep -q .; then
+                    if find "$XCODE_DIR" -name "*WatchConnection*.swift" -type f | grep -q .; then
                         echo -e "  ${GREEN}✅ Watch connectivity implementation found${NC}"
                     else
                         echo -e "  ${RED}❌ Missing Watch connectivity implementation${NC}"
@@ -208,14 +217,14 @@ check_prd_compliance() {
                     fi
                     
                     # Check for HealthKit permissions
-                    if grep -r "HealthKit\|HKHealthStore" "$PROJECT_ROOT/RUN-Project" --include="*.swift" | grep -q .; then
+                    if grep -r "HealthKit\|HKHealthStore" "$XCODE_DIR" --include="*.swift" | grep -q .; then
                         echo -e "  ${GREEN}✅ HealthKit integration found${NC}"
                     else
                         echo -e "  ${YELLOW}⚠️  HealthKit integration not found${NC}"
                     fi
                     
                     # Check for real-time data considerations
-                    if grep -r "WCSession\|sendMessage\|transferUserInfo" "$PROJECT_ROOT/RUN-Project" --include="*.swift" | grep -q .; then
+                    if grep -r "WCSession\|sendMessage\|transferUserInfo" "$XCODE_DIR" --include="*.swift" | grep -q .; then
                         echo -e "  ${GREEN}✅ Real-time Watch communication implemented${NC}"
                     else
                         echo -e "  ${RED}❌ Missing real-time Watch communication${NC}"
@@ -223,7 +232,7 @@ check_prd_compliance() {
                     fi
                     
                     # Check for latency considerations (<50ms requirement)
-                    if grep -r "latency\|performance\|throttle" "$PROJECT_ROOT/RUN-Project" --include="*.swift" | grep -qi "latency\|50ms"; then
+                    if grep -r "latency\|performance\|throttle" "$XCODE_DIR" --include="*.swift" | grep -qi "latency\|50ms"; then
                         echo -e "  ${GREEN}✅ Latency considerations found${NC}"
                     else
                         echo -e "  ${YELLOW}⚠️  No explicit latency handling found (required: <50ms)${NC}"
@@ -238,7 +247,7 @@ check_prd_compliance() {
                     while IFS= read -r component; do
                         component_name=$(echo "$component" | grep -oE "(MainView|SPM.*[Gg]auge|BPM.*[Gg]auge|ConnectWearable)" | head -1)
                         if [ -n "$component_name" ]; then
-                            if find "$PROJECT_ROOT/RUN-Project" -name "*${component_name}*.swift" -type f | grep -q .; then
+                            if find "$XCODE_DIR" -name "*${component_name}*.swift" -type f | grep -q .; then
                                 echo -e "  ${GREEN}✅ $component_name implemented${NC}"
                             else
                                 echo -e "  ${YELLOW}⚠️  $component_name mentioned in PRD but not found${NC}"
@@ -260,14 +269,14 @@ suggest_components() {
         echo "🔍 Looking for components similar to '$1'..."
         
         echo "Existing components you might reuse:"
-        find "$PROJECT_ROOT/RUN-Project/iOS-App/Shared/Components" -name "*.swift" -type f | \
+        find "$XCODE_DIR/iOS-App/Shared/Components" -name "*.swift" -type f | \
             while read -r component; do
                 echo "  - $(basename "$component")"
             done
         
         echo ""
         echo "Existing utilities:"
-        find "$PROJECT_ROOT/RUN-Project/iOS-App/Shared/Utilities" -name "*.swift" -type f | \
+        find "$XCODE_DIR/iOS-App/Shared/Utilities" -name "*.swift" -type f | \
             while read -r util; do
                 echo "  - $(basename "$util")"
             done

@@ -2,9 +2,14 @@
 
 # Script to scan Swift project for MVVM components and generate updated structure
 
-# Get script directory and project root
+# Source project detection library
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+source "$SCRIPT_DIR/../lib/project-detection.sh"
+
+# Get project paths
+PROJECT_ROOT="$(get_project_root)"
+PROJECT_NAME="$(get_project_name)"
+XCODE_DIR="$(get_xcode_project_dir)"
 STRUCTURE_DIR="$PROJECT_ROOT/AI/structure"
 OLD_DIR="$STRUCTURE_DIR/_old"
 
@@ -28,7 +33,7 @@ scan_for_pattern() {
     echo "## $title" >> "$OUTPUT_FILE"
     echo '```' >> "$OUTPUT_FILE"
     
-    found_files=$(find "$PROJECT_ROOT/PROJECT-name" -name "*${pattern}*.swift" -type f | grep -v "build/" | grep -v "DerivedData/" | sort)
+    found_files=$(find "$XCODE_DIR" -name "*${pattern}*.swift" -type f | grep -v "build/" | grep -v "DerivedData/" | sort)
     
     if [ -z "$found_files" ]; then
         echo "None found" >> "$OUTPUT_FILE"
@@ -52,10 +57,10 @@ create_tree_structure() {
     # Use tree command if available, otherwise use find
     if command -v tree &> /dev/null; then
         cd "$PROJECT_ROOT"
-        tree -I 'build|DerivedData|*.xcworkspace|*.xcodeproj' PROJECT-name -P "*.swift" >> "$OUTPUT_FILE"
+        tree -I 'build|DerivedData|*.xcworkspace|*.xcodeproj' "$XCODE_DIR" -P "*.swift" >> "$OUTPUT_FILE"
     else
         # Fallback to find
-        cd "$PROJECT_ROOT/PROJECT-name"
+        cd "$XCODE_DIR"
         find . -name "*.swift" -type f | grep -v "build/" | grep -v "DerivedData/" | sort | sed 's|^\./||' >> "$OUTPUT_FILE"
     fi
     
@@ -89,12 +94,12 @@ create_tree_structure
 # Summary statistics
 echo "## Summary Statistics" >> "$OUTPUT_FILE"
 echo '```' >> "$OUTPUT_FILE"
-echo "ViewModels: $(find "$PROJECT_ROOT/PROJECT-name" -name "*ViewModel*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
-echo "Services: $(find "$PROJECT_ROOT/PROJECT-name" -name "*Service*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
-echo "Views: $(find "$PROJECT_ROOT/PROJECT-name" -name "*View*.swift" -type f | grep -v "ViewModel" | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
-echo "Coordinators: $(find "$PROJECT_ROOT/PROJECT-name" -name "*Coordinator*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
-echo "Managers: $(find "$PROJECT_ROOT/PROJECT-name" -name "*Manager*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
-echo "Total Swift Files: $(find "$PROJECT_ROOT/PROJECT-name" -name "*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "ViewModels: $(find "$XCODE_DIR" -name "*ViewModel*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "Services: $(find "$XCODE_DIR" -name "*Service*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "Views: $(find "$XCODE_DIR" -name "*View*.swift" -type f | grep -v "ViewModel" | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "Coordinators: $(find "$XCODE_DIR" -name "*Coordinator*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "Managers: $(find "$XCODE_DIR" -name "*Manager*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "Total Swift Files: $(find "$XCODE_DIR" -name "*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
 echo '```' >> "$OUTPUT_FILE"
 
 echo "" >> "$OUTPUT_FILE"
@@ -112,9 +117,9 @@ QUICK_REF="$PROJECT_ROOT/AI/structure/current-structure.md"
 echo "# Current MVVM Components ($(date +%Y-%m-%d))" > "$QUICK_REF"
 echo "" >> "$QUICK_REF"
 echo "## Active ViewModels" >> "$QUICK_REF"
-find "$PROJECT_ROOT/PROJECT-name" -name "*ViewModel*.swift" -type f | grep -v "build/" | xargs -I {} basename {} | sort >> "$QUICK_REF"
+find "$XCODE_DIR" -name "*ViewModel*.swift" -type f | grep -v "build/" | xargs -I {} basename {} | sort >> "$QUICK_REF"
 echo "" >> "$QUICK_REF"
 echo "## Active Services" >> "$QUICK_REF"
-find "$PROJECT_ROOT/PROJECT-name" -name "*Service*.swift" -type f | grep -v "build/" | xargs -I {} basename {} | sort >> "$QUICK_REF"
+find "$XCODE_DIR" -name "*Service*.swift" -type f | grep -v "build/" | xargs -I {} basename {} | sort >> "$QUICK_REF"
 
 echo "Quick reference saved to: $QUICK_REF"

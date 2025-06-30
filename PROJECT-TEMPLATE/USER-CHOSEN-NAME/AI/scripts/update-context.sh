@@ -3,9 +3,16 @@
 # Enhanced Context Updater for CLAUDE.md
 # Includes sprint context, decisions, patterns, and metrics
 
-# Get script directory and project root
+# Source project detection library
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+source "$SCRIPT_DIR/../lib/project-detection.sh"
+
+# Get project paths
+PROJECT_ROOT="$(get_project_root)"
+PROJECT_NAME="$(get_project_name)"
+XCODE_DIR="$(get_xcode_project_dir)"
+IOS_DIR="$(get_ios_app_dir)"
+WATCH_DIR="$(get_watch_app_dir)"
 CONTEXT_FILE="$PROJECT_ROOT/CLAUDE.md"
 TEMP_DIR=$(mktemp -d)
 
@@ -24,10 +31,10 @@ EOF
     echo "Last updated: $(date '+%Y-%m-%d %H:%M:%S')" >> "$TEMP_DIR/structure.txt"
     
     # Count components
-    local viewmodels=$(find "$PROJECT_ROOT/PROJECT-name" -name "*ViewModel*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')
-    local services=$(find "$PROJECT_ROOT/PROJECT-name" -name "*Service*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')
-    local tokens=$(find "$PROJECT_ROOT/PROJECT-name" -name "*Tokens*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')
-    local components=$(find "$PROJECT_ROOT/PROJECT-name/iOS-App/Shared/Components" -name "*.swift" -type f 2>/dev/null | wc -l | tr -d ' ')
+    local viewmodels=$(find "$XCODE_DIR" -name "*ViewModel*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')
+    local services=$(find "$XCODE_DIR" -name "*Service*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')
+    local tokens=$(find "$XCODE_DIR" -name "*Tokens*.swift" -type f | grep -v "build/" | wc -l | tr -d ' ')
+    local components=$(find "$IOS_DIR/Shared/Components" -name "*.swift" -type f 2>/dev/null | wc -l | tr -d ' ')
     
     cat >> "$TEMP_DIR/structure.txt" <<EOF
 
@@ -43,19 +50,19 @@ EOF
 EOF
     
     # Check design system files
-    if [ -f "$PROJECT_ROOT/PROJECT-name/iOS-App/Core/DesignSystem/Colors.swift" ]; then
+    if [ -f "$IOS_DIR/Core/DesignSystem/Colors.swift" ]; then
         echo "- ✅ AppColors available" >> "$TEMP_DIR/structure.txt"
     fi
-    if [ -f "$PROJECT_ROOT/PROJECT-name/iOS-App/Core/DesignSystem/Spacing.swift" ]; then
+    if [ -f "$IOS_DIR/Core/DesignSystem/Spacing.swift" ]; then
         echo "- ✅ Spacing.small/medium/large" >> "$TEMP_DIR/structure.txt"
     fi
-    if [ -f "$PROJECT_ROOT/PROJECT-name/iOS-App/Core/DesignSystem/Typography.swift" ]; then
+    if [ -f "$IOS_DIR/Core/DesignSystem/Typography.swift" ]; then
         echo "- ✅ Font system available" >> "$TEMP_DIR/structure.txt"
     fi
     
     echo "" >> "$TEMP_DIR/structure.txt"
     echo "#### 🧩 Shared Components" >> "$TEMP_DIR/structure.txt"
-    find "$PROJECT_ROOT/RUN-Project/iOS-App/Shared/Components" -name "*.swift" -type f 2>/dev/null | while read -r file; do
+    find "$IOS_DIR/Shared/Components" -name "*.swift" -type f 2>/dev/null | while read -r file; do
         echo "- $(basename "$file" .swift)" >> "$TEMP_DIR/structure.txt"
     done | sort
 }
@@ -68,7 +75,7 @@ EOF
     
     # Check for hardcoded values
     echo "### Hardcoded Values" >> "$TEMP_DIR/violations.txt"
-    if grep -r "CGFloat.*= [0-9]\|\.frame.*[0-9]" "$PROJECT_ROOT/RUN-Project" --include="*.swift" 2>/dev/null | grep -v "Tokens\|tokens" | head -3 > "$TEMP_DIR/hardcoded.txt"; then
+    if grep -r "CGFloat.*= [0-9]\|\.frame.*[0-9]" "$XCODE_DIR" --include="*.swift" 2>/dev/null | grep -v "Tokens\|tokens" | head -3 > "$TEMP_DIR/hardcoded.txt"; then
         if [ -s "$TEMP_DIR/hardcoded.txt" ]; then
             cat "$TEMP_DIR/hardcoded.txt" >> "$TEMP_DIR/violations.txt"
         else
@@ -86,7 +93,7 @@ generate_location() {
 ### Recently Modified Files
 EOF
     
-    find "$PROJECT_ROOT/RUN-Project" -name "*.swift" -type f -mtime -1 2>/dev/null | grep -v "build/" | head -5 | while read -r file; do
+    find "$XCODE_DIR" -name "*.swift" -type f -mtime -1 2>/dev/null | grep -v "build/" | head -5 | while read -r file; do
         echo "- ${file#$PROJECT_ROOT/}" >> "$TEMP_DIR/location.txt"
     done
     
@@ -136,7 +143,7 @@ EOF
     # Current focus from recent changes
     echo "" >> "$TEMP_DIR/sprint-context.txt"
     echo "### Current Focus (from recent changes)" >> "$TEMP_DIR/sprint-context.txt"
-    local recent_dirs=$(find "$PROJECT_ROOT/RUN-Project" -name "*.swift" -type f -mtime -1 2>/dev/null | xargs -I {} dirname {} | sort | uniq | head -3)
+    local recent_dirs=$(find "$XCODE_DIR" -name "*.swift" -type f -mtime -1 2>/dev/null | xargs -I {} dirname {} | sort | uniq | head -3)
     if [ -n "$recent_dirs" ]; then
         echo "$recent_dirs" | while read -r dir; do
             echo "- Working in: ${dir#$PROJECT_ROOT/}"
@@ -176,7 +183,7 @@ EOF
     # Common ViewModel patterns
     echo "### Common @Published Properties" >> "$TEMP_DIR/patterns.txt"
     echo '```swift' >> "$TEMP_DIR/patterns.txt"
-    grep -h "@Published" "$PROJECT_ROOT/RUN-Project"/**/*ViewModel*.swift 2>/dev/null | sed 's/^[[:space:]]*//' | sort | uniq -c | sort -nr | head -5 >> "$TEMP_DIR/patterns.txt"
+    grep -h "@Published" "$XCODE_DIR"/**/*ViewModel*.swift 2>/dev/null | sed 's/^[[:space:]]*//' | sort | uniq -c | sort -nr | head -5 >> "$TEMP_DIR/patterns.txt"
     echo '```' >> "$TEMP_DIR/patterns.txt"
 }
 

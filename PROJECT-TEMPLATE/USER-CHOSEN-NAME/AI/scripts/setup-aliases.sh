@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Setup script for RUN architecture tools aliases
+# Setup script for CONSTRUCT project architecture tools aliases
 
-PROJECT_DIR="/Users/parker/Documents/dev/claude-engineer/_Projects/RUN/xcode/RUN"
+# Get script directory and project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-echo "🔧 Setting up RUN architecture tool aliases..."
+echo "🔧 Setting up CONSTRUCT project architecture tool aliases..."
 
 # Determine shell config file
 if [ -f "$HOME/.zshrc" ]; then
@@ -19,7 +21,7 @@ else
 fi
 
 # Check if aliases already exist
-if grep -q "# RUN Architecture Tools" "$SHELL_CONFIG"; then
+if grep -q "# CONSTRUCT Architecture Tools" "$SHELL_CONFIG"; then
     echo "⚠️  Aliases already exist in $SHELL_CONFIG"
     echo "Remove them first if you want to update"
     exit 0
@@ -28,7 +30,7 @@ fi
 # Add aliases
 cat >> "$SHELL_CONFIG" <<EOF
 
-# RUN Architecture Tools (added $(date))
+# CONSTRUCT Architecture Tools (added $(date))
 alias run-update="cd $PROJECT_DIR && ./AI/scripts/update-context.sh"
 alias run-arch="cd $PROJECT_DIR && ./AI/scripts/update-architecture.sh"
 alias run-check="cd $PROJECT_DIR && ./AI/scripts/check-architecture.sh"
@@ -40,10 +42,12 @@ alias run-claude="cd $PROJECT_DIR && code CLAUDE.md"
 alias run-full="cd $PROJECT_DIR && ./AI/scripts/update-context.sh && ./AI/scripts/update-architecture.sh && ./AI/scripts/check-quality.sh && ./AI/scripts/check-accessibility.sh"
 alias run-session-summary="cd $PROJECT_DIR && ./AI/scripts/session-summary.sh"
 
-# Quick RUN navigation
-alias run-cd="cd $PROJECT_DIR"
-alias run-ios="cd $PROJECT_DIR/RUN-Project/iOS-App"
-alias run-watch="cd $PROJECT_DIR/RUN-Project/Watch-App"
+# Quick project navigation
+alias construct-cd="cd $PROJECT_DIR"
+# Note: These aliases will be dynamically generated during construct-setup
+# based on the actual project structure
+alias construct-ios="cd $PROJECT_DIR/\$(basename $PROJECT_DIR)-Project/iOS-App"
+alias construct-watch="cd $PROJECT_DIR/\$(basename $PROJECT_DIR)-Project/Watch-App"
 
 # PRD workflow
 alias run-prd="cd $PROJECT_DIR && open AI/PRDs/current-sprint/*.md"
@@ -65,7 +69,7 @@ echo "  run-full        - Run all updates and checks"
 echo "  run-prd         - Open current sprint PRD"
 echo "  run-prd-check   - Search PRDs for a term"
 echo "  run-sprint-plan - Create new sprint PRD"
-echo "  run-cd          - Navigate to RUN project"
+echo "  construct-cd    - Navigate to project root"
 echo "  run-ios         - Navigate to iOS app"
 echo "  run-watch       - Navigate to Watch app"
 echo ""

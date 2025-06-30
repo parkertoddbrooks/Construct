@@ -3,7 +3,9 @@
 # Session Summary Generator
 # Creates a summary of the current session for context preservation
 
-PROJECT_ROOT="/Users/parker/Documents/dev/claude-engineer/_Projects/RUN/xcode/RUN"
+# Get script directory and project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 SESSION_DIR="$PROJECT_ROOT/AI/dev-logs/session-states"
 TIMESTAMP=$(date +"%Y-%m-%d-%H%M")
 TODAY=$(date +"%Y-%m-%d")

@@ -3,7 +3,14 @@
 # Architecture Documentation Auto-Updater
 # Updates the current implementation status while preserving planned architecture
 
-PROJECT_ROOT="/Users/parker/Documents/dev/claude-engineer/_Projects/RUN/xcode/RUN"
+# Source project detection library
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../lib/project-detection.sh"
+
+# Get project paths
+PROJECT_ROOT="$(get_project_root)"
+PROJECT_NAME="$(get_project_name)"
+XCODE_DIR="$(get_xcode_project_dir)"
 ARCH_FILE="$PROJECT_ROOT/AI/docs/automated/app_structure_and_architecture_combined-automated.md"
 TEMP_DIR=$(mktemp -d)
 
@@ -39,24 +46,24 @@ generate_status() {
 ## Current Implementation Status (Auto-Updated)
 **Last Updated**: $(date '+%Y-%m-%d %H:%M:%S')
 **Branch**: $(cd "$PROJECT_ROOT" && git branch --show-current)
-**Status**: $(find "$PROJECT_ROOT/RUN-Project" -name "*.swift" | wc -l | tr -d ' ') Swift files implemented
+**Status**: $(find "$XCODE_DIR" -name "*.swift" | wc -l | tr -d ' ') Swift files implemented
 
 ### 📊 Architecture Metrics
-- **Views**: $(find "$PROJECT_ROOT/RUN-Project" -name "*View.swift" | wc -l | tr -d ' ') implemented
-- **ViewModels**: $(find "$PROJECT_ROOT/RUN-Project" -name "*ViewModel*.swift" | wc -l | tr -d ' ') implemented
-- **Services**: $(find "$PROJECT_ROOT/RUN-Project" -name "*Service*.swift" | wc -l | tr -d ' ') implemented
-- **Design Tokens**: $(find "$PROJECT_ROOT/RUN-Project" -name "*Tokens*.swift" | wc -l | tr -d ' ') implemented
-- **Tests**: $(find "$PROJECT_ROOT/RUN-Project" -name "*Test*.swift" -o -name "*Tests.swift" | wc -l | tr -d ' ') test files
+- **Views**: $(find "$XCODE_DIR" -name "*View.swift" | wc -l | tr -d ' ') implemented
+- **ViewModels**: $(find "$XCODE_DIR" -name "*ViewModel*.swift" | wc -l | tr -d ' ') implemented
+- **Services**: $(find "$XCODE_DIR" -name "*Service*.swift" | wc -l | tr -d ' ') implemented
+- **Design Tokens**: $(find "$XCODE_DIR" -name "*Tokens*.swift" | wc -l | tr -d ' ') implemented
+- **Tests**: $(find "$XCODE_DIR" -name "*Test*.swift" -o -name "*Tests.swift" | wc -l | tr -d ' ') test files
 
 ### 🎯 MVVM Compliance Check
 EOF
 
     # Find Views without ViewModels
     local views_without_vm=0
-    find "$PROJECT_ROOT/RUN-Project" -name "*View.swift" | while read -r view; do
+    find "$XCODE_DIR" -name "*View.swift" | while read -r view; do
         local view_name=$(basename "$view" .swift)
         if [[ ! "$view_name" =~ "Component" ]] && [[ ! "$view_name" =~ "ContentView" ]]; then
-            local viewmodel_exists=$(find "$PROJECT_ROOT/RUN-Project" -name "${view_name}Model*.swift" 2>/dev/null | wc -l)
+            local viewmodel_exists=$(find "$XCODE_DIR" -name "${view_name}Model*.swift" 2>/dev/null | wc -l)
             if [ "$viewmodel_exists" -eq 0 ]; then
                 echo "- ⚠️ $view_name is missing ViewModel" >> "$TEMP_DIR/status.txt"
                 ((views_without_vm++))
@@ -78,7 +85,7 @@ generate_actual_tree() {
 EOF
     
     # Generate tree showing what actually exists
-    cd "$PROJECT_ROOT/RUN-Project"
+    cd "$XCODE_DIR"
     
     # Function to mark implementation status
     check_implementation() {
@@ -92,7 +99,7 @@ EOF
         fi
     }
     
-    echo "RUN-Project/" >> "$TEMP_DIR/actual.txt"
+    echo "$PROJECT_NAME-Project/" >> "$TEMP_DIR/actual.txt"
     
     # List actual structure with status
     for entry in "iOS-App"/*; do
@@ -160,7 +167,7 @@ EOF
     
     echo "" >> "$TEMP_DIR/changes.txt"
     echo "### Files Modified in Last 24 Hours" >> "$TEMP_DIR/changes.txt"
-    find "$PROJECT_ROOT/RUN-Project" -name "*.swift" -mtime -1 2>/dev/null | while read -r file; do
+    find "$XCODE_DIR" -name "*.swift" -mtime -1 2>/dev/null | while read -r file; do
         echo "- ${file#$PROJECT_ROOT/}" >> "$TEMP_DIR/changes.txt"
     done
 }
@@ -174,9 +181,9 @@ generate_relationships() {
 EOF
     
     # Find View-ViewModel pairs
-    find "$PROJECT_ROOT/RUN-Project" -name "*View.swift" | while read -r view; do
+    find "$XCODE_DIR" -name "*View.swift" | while read -r view; do
         local view_name=$(basename "$view" .swift)
-        local viewmodel=$(find "$PROJECT_ROOT/RUN-Project" -name "${view_name}Model*.swift" 2>/dev/null | head -1)
+        local viewmodel=$(find "$XCODE_DIR" -name "${view_name}Model*.swift" 2>/dev/null | head -1)
         if [ -n "$viewmodel" ]; then
             echo "- $view_name → $(basename "$viewmodel" .swift)" >> "$TEMP_DIR/relationships.txt"
         fi
@@ -186,9 +193,9 @@ EOF
     echo "### Service Dependencies" >> "$TEMP_DIR/relationships.txt"
     
     # Find services and their users
-    find "$PROJECT_ROOT/RUN-Project" -name "*Service.swift" | while read -r service; do
+    find "$XCODE_DIR" -name "*Service.swift" | while read -r service; do
         local service_name=$(basename "$service" .swift)
-        local users=$(grep -l "$service_name" "$PROJECT_ROOT/RUN-iOS"/**/*.swift 2>/dev/null | grep -v "$service" | head -3)
+        local users=$(grep -l "$service_name" "$XCODE_DIR"/**/*.swift 2>/dev/null | grep -v "$service" | head -3)
         if [ -n "$users" ]; then
             echo "" >> "$TEMP_DIR/relationships.txt"
             echo "**$service_name** used by:" >> "$TEMP_DIR/relationships.txt"

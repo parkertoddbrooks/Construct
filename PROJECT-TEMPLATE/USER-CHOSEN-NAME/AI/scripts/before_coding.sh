@@ -4,7 +4,15 @@
 # Usage: ./before-coding.sh ConnectWearable
 
 COMPONENT_NAME=$1
-PROJECT_ROOT="/Users/parker/Documents/dev/claude-engineer/_Projects/RUN/xcode/RUN"
+# Source project detection library
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../lib/project-detection.sh"
+
+# Get project paths
+PROJECT_ROOT="$(get_project_root)"
+PROJECT_NAME="$(get_project_name)"
+XCODE_DIR="$(get_xcode_project_dir)"
+IOS_DIR="$(get_ios_app_dir)"
 
 if [ -z "$COMPONENT_NAME" ]; then
     echo "Usage: ./before-coding.sh ComponentName"
@@ -17,7 +25,7 @@ echo ""
 
 echo "📦 Existing Components You Can Use:"
 echo "-----------------------------------"
-ls -1 "$PROJECT_ROOT/RUN-Project/iOS-App/Shared/Components/" | grep -v ".DS_Store"
+ls -1 "$IOS_DIR/Shared/Components/" | grep -v ".DS_Store"
 echo ""
 
 echo "🎨 Design System Available:"
@@ -30,12 +38,12 @@ echo ""
 
 echo "📐 Existing Design Tokens:"
 echo "-------------------------"
-find "$PROJECT_ROOT/RUN-Project" -name "*DesignTokens.swift" -type f | xargs basename -a
+find "$XCODE_DIR" -name "*DesignTokens.swift" -type f | xargs basename -a
 echo ""
 
 echo "🔍 Similar Components Found:"
 echo "----------------------------"
-find "$PROJECT_ROOT/RUN-Project" -name "*${COMPONENT_NAME}*.swift" -o -name "*${COMPONENT_NAME,,}*.swift" 2>/dev/null | head -5
+find "$XCODE_DIR" -name "*${COMPONENT_NAME}*.swift" -o -name "*${COMPONENT_NAME,,}*.swift" 2>/dev/null | head -5
 echo ""
 
 echo "📋 PRD Alignment Check:"
