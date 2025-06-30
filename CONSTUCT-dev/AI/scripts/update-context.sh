@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 CONSTUCT_DEV="$CONSTRUCT_ROOT/CONSTUCT-dev"
-CLAUDE_MD="$CONSTUCT_DEV/AI/CLAUDE.md"
+CLAUDE_MD="$CONSTUCT_DEV/CLAUDE.md"
 
 # Source library functions
 source "$CONSTUCT_DEV/lib/validation.sh"
