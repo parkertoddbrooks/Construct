@@ -61,7 +61,7 @@ All commands are run from your CONSTRUCT development directory (`CONSTRUCT-dev/`
 **When to use**: After major structural changes  
 **Result**: Keeps architecture docs current with implementation  
 **Auto-runs**: During git pre-commit hook  
-**Updates**: All documentation in `/docs/` directory
+**Updates**: All documentation in `/AI/docs/automated/` directory
 
 ### Documentation Check
 ```bash
@@ -190,7 +190,7 @@ CONSTRUCT automatically creates and manages:
 - **Quality Reports**: Timestamped in `/AI/dev-logs/check-quality/`
 - **Structure Analysis**: Timestamped in `/AI/structure/`
 - **Session States**: Saved in `/AI/dev-logs/session-states/`
-- **Documentation**: Updated in `/docs/` directory
+- **Architecture Documentation**: Updated in `/AI/docs/automated/` directory
 - **Backups**: Created before any file updates
 
 ### File Naming Conventions
@@ -207,8 +207,10 @@ CONSTRUCT-dev/                          # Development environment
 │   ├── scripts/                       # All commands
 │   ├── lib/                          # Reusable functions
 │   ├── config/                       # Configuration files
-│   └── docs/                         # Documentation (auto-updated)
+│   └── docs/                         # Human documentation
 ├── AI/
+│   ├── docs/
+│   │   └── automated/               # Auto-generated architecture docs
 │   ├── dev-logs/                     # Auto-generated reports
 │   └── structure/                    # Structure analysis
 └── PROJECT-TEMPLATE/                 # Clean template for users

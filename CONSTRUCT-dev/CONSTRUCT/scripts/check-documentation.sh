@@ -52,7 +52,7 @@ echo ""
 echo -e "${BLUE}### 2. Checking README coverage...${NC}"
 check_readme_coverage() {
     local missing_readmes=0
-    local key_dirs=("lib" "config" "tests" "AI/scripts")
+    local key_dirs=("lib" "config" "tests" "CONSTRUCT/scripts")
     
     for dir in "${key_dirs[@]}"; do
         if [ -d "$CONSTRUCT_DEV/$dir" ] && [ ! -f "$CONSTRUCT_DEV/$dir/README.md" ]; then
@@ -145,7 +145,7 @@ echo -e "${BLUE}### 5. Checking script usage documentation...${NC}"
 check_script_usage() {
     local scripts_no_usage=0
     
-    find "$CONSTRUCT_DEV/AI/scripts" -name "*.sh" -type f | while read -r script; do
+    find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | while read -r script; do
         # Check if script shows usage when run without args or with --help
         if ! grep -q "usage\|Usage\|USAGE\|help\|--help\|-h" "$script"; then
             echo -e "${YELLOW}⚠️ Script lacks usage documentation: $(basename "$script")${NC}"
@@ -168,7 +168,7 @@ check_dev_docs() {
     local missing_dev_docs=0
     
     # Check for key development docs
-    local dev_files=("AI/todo/implement-dual-dev-environments.md" "docs/improving-CONSTRUCT-guide.md")
+    local dev_files=("AI/todo/implement-dual-dev-environments.md" "AI/docs/automated/improving-CONSTRUCT-guide-automated.md")
     
     for doc_file in "${dev_files[@]}"; do
         if [ -f "$CONSTRUCT_DEV/$doc_file" ]; then

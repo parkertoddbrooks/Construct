@@ -24,12 +24,13 @@ echo -e "${BLUE}📚 Updating CONSTRUCT Architecture Documentation...${NC}"
 echo ""
 
 # Create docs directory if it doesn't exist
-DOCS_DIR="$CONSTRUCT_DEV/docs"
+DOCS_DIR="$CONSTRUCT_DEV/AI/docs/automated"
 mkdir -p "$DOCS_DIR"
+mkdir -p "$DOCS_DIR/_old"
 
 # Generate architecture overview
 generate_architecture_overview() {
-    local output_file="$DOCS_DIR/architecture-overview.md"
+    local output_file="$DOCS_DIR/architecture-overview-automated.md"
     
     echo -e "${YELLOW}Generating architecture overview...${NC}"
     
@@ -206,7 +207,7 @@ EOF
 
 # Generate script documentation
 generate_script_documentation() {
-    local output_file="$DOCS_DIR/script-reference.md"
+    local output_file="$DOCS_DIR/script-reference-automated.md"
     
     echo -e "${YELLOW}Generating script reference documentation...${NC}"
     
@@ -222,8 +223,8 @@ generate_script_documentation() {
 
 EOF
 
-    # Document each script in AI/scripts/
-    find "$CONSTRUCT_DEV/AI/scripts" -name "*.sh" -type f | sort | while read -r script; do
+    # Document each script in CONSTRUCT/scripts/
+    find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | sort | while read -r script; do
         local script_name=$(basename "$script")
         echo "#### $script_name" >> "$output_file"
         echo "" >> "$output_file"
@@ -316,7 +317,7 @@ EOF
 
 # Generate development patterns documentation
 generate_development_patterns() {
-    local output_file="$DOCS_DIR/development-patterns.md"
+    local output_file="$DOCS_DIR/development-patterns-automated.md"
     
     echo -e "${YELLOW}Generating development patterns documentation...${NC}"
     
@@ -531,14 +532,14 @@ EOF
 
 # Update main architecture document
 update_main_architecture() {
-    local output_file="$DOCS_DIR/improving-CONSTRUCT-guide.md"
+    local output_file="$DOCS_DIR/improving-CONSTRUCT-guide-automated.md"
     
     echo -e "${YELLOW}Updating main architecture guide...${NC}"
     
     # Check if file exists and has manual content to preserve
     if [ -f "$output_file" ]; then
         # Create backup before updating
-        cp "$output_file" "${output_file}.backup-$(date +%Y%m%d-%H%M%S)"
+        cp "$output_file" "$DOCS_DIR/_old/$(basename "$output_file").backup-$(date +%Y%m%d-%H%M%S)"
         echo -e "${GREEN}✅ Backup created for existing architecture guide${NC}"
     fi
     
@@ -615,7 +616,7 @@ EOF
 
 # Generate API documentation for library functions
 generate_api_documentation() {
-    local output_file="$DOCS_DIR/api-reference.md"
+    local output_file="$DOCS_DIR/api-reference-automated.md"
     
     echo -e "${YELLOW}Generating API reference documentation...${NC}"
     
@@ -704,11 +705,11 @@ main() {
     echo -e "${BLUE}📚 Architecture Documentation Update Complete!${NC}"
     echo ""
     echo "Generated documentation:"
-    echo "  - $DOCS_DIR/architecture-overview.md"
-    echo "  - $DOCS_DIR/script-reference.md"
-    echo "  - $DOCS_DIR/development-patterns.md"
-    echo "  - $DOCS_DIR/improving-CONSTRUCT-guide.md (updated)"
-    echo "  - $DOCS_DIR/api-reference.md"
+    echo "  - $DOCS_DIR/architecture-overview-automated.md"
+    echo "  - $DOCS_DIR/script-reference-automated.md"
+    echo "  - $DOCS_DIR/development-patterns-automated.md"
+    echo "  - $DOCS_DIR/improving-CONSTRUCT-guide-automated.md (updated)"
+    echo "  - $DOCS_DIR/api-reference-automated.md"
     echo ""
     echo "Next steps:"
     echo "  ./CONSTRUCT/scripts/update-context.sh      # Update development context"

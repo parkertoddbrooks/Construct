@@ -75,7 +75,7 @@ analyze_shell_scripts() {
         # Categorize by directory
         echo "" >> "$OUTPUT_FILE"
         echo "AI Scripts:" >> "$OUTPUT_FILE"
-        echo "$shell_scripts" | grep "AI/scripts/" | while read -r file; do
+        echo "$shell_scripts" | grep "CONSTRUCT/scripts/" | while read -r file; do
             basename "$file" >> "$OUTPUT_FILE"
         done
         
@@ -200,11 +200,11 @@ echo "=== CONSTRUCT Development Health ===" >> "$OUTPUT_FILE"
 
 # Count working scripts
 working_scripts=0
-if [ -x "$CONSTRUCT_DEV/AI/scripts/update-context.sh" ]; then ((working_scripts++)); fi
-if [ -x "$CONSTRUCT_DEV/AI/scripts/check-architecture.sh" ]; then ((working_scripts++)); fi
-if [ -x "$CONSTRUCT_DEV/AI/scripts/before_coding.sh" ]; then ((working_scripts++)); fi
-if [ -x "$CONSTRUCT_DEV/AI/scripts/session-summary.sh" ]; then ((working_scripts++)); fi
-if [ -x "$CONSTRUCT_DEV/AI/scripts/check-documentation.sh" ]; then ((working_scripts++)); fi
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/update-context.sh" ]; then ((working_scripts++)); fi
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-architecture.sh" ]; then ((working_scripts++)); fi
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/before_coding.sh" ]; then ((working_scripts++)); fi
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/session-summary.sh" ]; then ((working_scripts++)); fi
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-documentation.sh" ]; then ((working_scripts++)); fi
 
 echo "Working AI Scripts: $working_scripts/9" >> "$OUTPUT_FILE"
 
@@ -238,7 +238,7 @@ echo "" >> "$OUTPUT_FILE"
 
 echo "### Architecture Quality" >> "$OUTPUT_FILE"
 # Check if architecture validation exists
-if [ -f "$CONSTRUCT_DEV/AI/scripts/check-architecture.sh" ]; then
+if [ -f "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-architecture.sh" ]; then
     echo "- [ ] Run ./CONSTRUCT/scripts/check-architecture.sh for current quality status" >> "$OUTPUT_FILE"
 else
     echo "- [ ] Architecture validation not yet available" >> "$OUTPUT_FILE"
@@ -261,7 +261,7 @@ echo "# Current CONSTRUCT Development Components ($(date +%Y-%m-%d))" > "$QUICK_
 echo "" >> "$QUICK_REF"
 
 echo "## Working AI Scripts" >> "$QUICK_REF"
-find "$CONSTRUCT_DEV/AI/scripts" -name "*.sh" -type f -perm +111 | xargs -I {} basename {} | sort >> "$QUICK_REF"
+find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f -perm +111 | xargs -I {} basename {} | sort >> "$QUICK_REF"
 
 echo "" >> "$QUICK_REF"
 echo "## Library Functions" >> "$QUICK_REF"

@@ -37,11 +37,14 @@ This document lists all files that are automatically generated or updated by CON
 
 ### 4. Architecture Documentation
 **Script**: `./CONSTRUCT/scripts/update-architecture.sh`  
-**Location**: `/CONSTRUCT-dev/docs/`  
-**Updates**: Architecture documentation files with current implementation status
-- Implementation progress tracking
-- Component status updates
-- Architecture validation results
+**Location**: `/CONSTRUCT-dev/AI/docs/automated/`  
+**Creates**: Five comprehensive architecture documents with `-automated.md` suffix
+- `architecture-overview-automated.md` - System architecture and principles
+- `script-reference-automated.md` - Complete script and library documentation
+- `development-patterns-automated.md` - Coding standards and patterns
+- `improving-CONSTRUCT-guide-automated.md` - Development status dashboard
+- `api-reference-automated.md` - Library function API documentation
+**Backups**: Stored in `/CONSTRUCT-dev/AI/docs/automated/_old/`
 
 ### 5. Session Summaries
 **Script**: `./CONSTRUCT/scripts/session-summary.sh`  

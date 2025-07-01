@@ -82,7 +82,7 @@ log_output "${BLUE}### 2. Checking error handling patterns...${NC}"
 check_error_handling() {
     local missing_error_handling=0
     
-    find "$CONSTRUCT_DEV/AI/scripts" -name "*.sh" -type f | while read -r script; do
+    find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | while read -r script; do
         local has_set_e=$(grep -c "^set -e" "$script" 2>/dev/null || echo "0")
         local has_error_trap=$(grep -c "trap.*ERR\|trap.*EXIT" "$script" 2>/dev/null || echo "0")
         
@@ -171,7 +171,7 @@ log_output "${BLUE}### 5. Checking script permissions...${NC}"
 check_script_permissions() {
     local non_executable=0
     
-    find "$CONSTRUCT_DEV/AI/scripts" -name "*.sh" -type f | while read -r script; do
+    find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | while read -r script; do
         if [ ! -x "$script" ]; then
             log_output "${RED}❌ Not executable: $(basename "$script")${NC}"
             ((non_executable++))
@@ -249,7 +249,7 @@ log_output "${BLUE}### 7. Checking library function usage...${NC}"
 check_library_usage() {
     local missing_imports=0
     
-    find "$CONSTRUCT_DEV/AI/scripts" -name "*.sh" -type f | while read -r script; do
+    find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | while read -r script; do
         # Check if script sources library functions it uses
         local uses_validation=$(grep -c "validate_\|check_" "$script" 2>/dev/null || echo "0")
         local sources_validation=$(grep -c "source.*validation.sh" "$script" 2>/dev/null || echo "0")
@@ -282,7 +282,7 @@ log_output "${BLUE}### 8. Checking output formatting...${NC}"
 check_output_formatting() {
     local inconsistent_output=0
     
-    find "$CONSTRUCT_DEV/AI/scripts" -name "*.sh" -type f | while read -r script; do
+    find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | while read -r script; do
         # Check for colored output consistency
         local has_colors=$(grep -c "RED=\|GREEN=\|YELLOW=\|BLUE=" "$script" 2>/dev/null || echo "0")
         local uses_echo_e=$(grep -c "echo -e" "$script" 2>/dev/null || echo "0")
@@ -323,7 +323,7 @@ check_code_duplication() {
     )
     
     for pattern in "${common_patterns[@]}"; do
-        local usage_count=$(find "$CONSTRUCT_DEV/AI/scripts" -name "*.sh" -type f -exec grep -l "$pattern" {} \; 2>/dev/null | wc -l | tr -d ' ')
+        local usage_count=$(find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f -exec grep -l "$pattern" {} \; 2>/dev/null | wc -l | tr -d ' ')
         
         if [ "$usage_count" -gt 2 ]; then
             log_output "${YELLOW}⚠️ Pattern used in $usage_count scripts: $pattern${NC}"
@@ -347,7 +347,7 @@ check_test_coverage() {
     local missing_tests=0
     
     # Count scripts vs tests
-    local script_count=$(find "$CONSTRUCT_DEV/AI/scripts" -name "*.sh" -type f | wc -l | tr -d ' ')
+    local script_count=$(find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | wc -l | tr -d ' ')
     local test_count=$(find "$CONSTRUCT_DEV/tests" -name "*test*.sh" -type f 2>/dev/null | wc -l | tr -d ' ')
     
     log_output "Scripts: $script_count, Tests: $test_count"

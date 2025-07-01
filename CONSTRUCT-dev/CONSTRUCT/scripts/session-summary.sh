@@ -87,9 +87,9 @@ $(cd "$CONSTRUCT_ROOT" && git status --porcelain 2>/dev/null | grep -E "^( M|M |
 $(cd "$CONSTRUCT_DEV" && find . -name "*.sh" -newer "$SESSION_DIR/../.." 2>/dev/null | head -5 | sed 's|^./|- |' || echo "- No recent script changes")
 
 ### Key CONSTRUCT Scripts Status
-- **update-context.sh**: $([ -f "$CONSTRUCT_DEV/AI/scripts/update-context.sh" ] && echo "✅ Implemented" || echo "❌ Missing")
-- **check-architecture.sh**: $([ -f "$CONSTRUCT_DEV/AI/scripts/check-architecture.sh" ] && echo "✅ Implemented" || echo "❌ Missing")
-- **before_coding.sh**: $([ -f "$CONSTRUCT_DEV/AI/scripts/before_coding.sh" ] && echo "✅ Implemented" || echo "❌ Missing")
+- **update-context.sh**: $([ -f "$CONSTRUCT_DEV/CONSTRUCT/scripts/update-context.sh" ] && echo "✅ Implemented" || echo "❌ Missing")
+- **check-architecture.sh**: $([ -f "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-architecture.sh" ] && echo "✅ Implemented" || echo "❌ Missing")
+- **before_coding.sh**: $([ -f "$CONSTRUCT_DEV/CONSTRUCT/scripts/before_coding.sh" ] && echo "✅ Implemented" || echo "❌ Missing")
 
 ### Template Status
 $(if [ -d "$CONSTRUCT_DEV/Templates" ]; then echo "✅ Templates directory exists"; else echo "❌ Templates directory missing"; fi)

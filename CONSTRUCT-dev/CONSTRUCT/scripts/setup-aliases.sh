@@ -105,20 +105,20 @@ add_construct_aliases() {
     
     # Core CONSTRUCT development workflow
     echo "# Core CONSTRUCT Development Workflow" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-update='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/AI/scripts/update-context.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-check='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/AI/scripts/check-architecture.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-quality='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/AI/scripts/check-quality.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-before='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/AI/scripts/before_coding.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-scan='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/AI/scripts/scan_construct_structure.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-docs='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/AI/scripts/check-documentation.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-session='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/AI/scripts/session-summary.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-update='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/CONSTRUCT/scripts/update-context.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-check='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/CONSTRUCT/scripts/check-architecture.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-quality='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/CONSTRUCT/scripts/check-quality.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-before='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/CONSTRUCT/scripts/before_coding.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-scan='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/CONSTRUCT/scripts/scan_construct_structure.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-docs='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/CONSTRUCT/scripts/check-documentation.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-session='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-dev/CONSTRUCT/scripts/session-summary.sh'" >> "$SHELL_CONFIG"
     echo "" >> "$SHELL_CONFIG"
     
     # Navigation aliases
     echo "# CONSTRUCT Navigation" >> "$SHELL_CONFIG"
     echo "alias cd-construct='cd \"$CONSTRUCT_ROOT\"'" >> "$SHELL_CONFIG"
     echo "alias cd-construct-dev='cd \"$CONSTRUCT_DEV\"'" >> "$SHELL_CONFIG"
-    echo "alias cd-construct-scripts='cd \"$CONSTRUCT_DEV/AI/scripts\"'" >> "$SHELL_CONFIG"
+    echo "alias cd-construct-scripts='cd \"$CONSTRUCT_DEV/CONSTRUCT/scripts\"'" >> "$SHELL_CONFIG"
     echo "alias cd-construct-lib='cd \"$CONSTRUCT_DEV/CONSTRUCT/lib\"'" >> "$SHELL_CONFIG"
     echo "alias cd-construct-config='cd \"$CONSTRUCT_DEV/CONSTRUCT/config\"'" >> "$SHELL_CONFIG"
     echo "" >> "$SHELL_CONFIG"
