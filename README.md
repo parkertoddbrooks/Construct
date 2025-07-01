@@ -94,7 +94,7 @@ YourProject/
 │   │   ├── iOS-App/           # iOS application code
 │   │   └── Watch-App/         # Watch application code
 │   └── scripts/               # Development utilities
-└── CONSTUCT-docs/             # This documentation
+└── CONSTRUCT-docs/             # This documentation
 ```
 
 ## Why CONSTRUCT Works
@@ -113,6 +113,6 @@ YourProject/
 
 ## Getting Help
 
-- **Commands**: See [CONSTUCT-docs/commands.md](CONSTUCT-docs/commands.md) for all available scripts
+- **Commands**: See [CONSTRUCT-docs/commands.md](CONSTRUCT-docs/commands.md) for all available scripts
 - **Issues**: Report problems on the CONSTRUCT GitHub repository
 - **Patterns**: Check your auto-updating `CLAUDE.md` for current project patterns
