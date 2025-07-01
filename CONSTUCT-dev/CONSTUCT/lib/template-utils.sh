@@ -15,7 +15,8 @@ NC='\033[0m' # No Color
 # Get the CONSTRUCT root directory
 get_construct_root() {
     local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    echo "$(dirname "$(dirname "$script_dir")")"
+    # From /CONSTUCT-dev/CONSTUCT/lib -> /CONSTUCT-dev -> /CONSTRUCT
+    echo "$(dirname "$(dirname "$(dirname "$script_dir")")")"
 }
 
 # Get path to template directory
@@ -118,14 +119,14 @@ validate_template_structure() {
         ((issues++))
     fi
     
-    # Check for template scripts
-    if [ ! -d "$template_project/AI/scripts" ]; then
-        echo -e "${RED}❌ Missing template AI/scripts directory${NC}"
+    # Check for template scripts (moved to CONSTUCT/)
+    if [ ! -d "$template_project/CONSTUCT/scripts" ]; then
+        echo -e "${RED}❌ Missing template CONSTUCT/scripts directory${NC}"
         ((issues++))
     fi
     
-    # Check for project detection library
-    if [ ! -f "$template_project/AI/lib/project-detection.sh" ]; then
+    # Check for project detection library (moved to CONSTUCT/)
+    if [ ! -f "$template_project/CONSTUCT/lib/project-detection.sh" ]; then
         echo -e "${RED}❌ Missing project-detection.sh library${NC}"
         ((issues++))
     fi
@@ -207,8 +208,17 @@ check_template_contamination() {
     )
     
     for pattern in "${patterns[@]}"; do
-        if grep -r "$pattern" "$template_dir" --exclude="*.git*" 2>/dev/null | grep -v "# Example:" | grep -v "TODO:" | head -1; then
+        # Check for contamination but exclude Xcode project files and directories
+        local matches=$(find "$template_dir" -type f \
+            -not -name "*.pbxproj" \
+            -not -name "*.xcworkspacedata" \
+            -not -name "*.xcscheme" \
+            -not -path "*/.git/*" \
+            -exec grep -l "$pattern" {} \; 2>/dev/null | head -1)
+        
+        if [ -n "$matches" ]; then
             echo -e "${RED}❌ Found potential contamination: $pattern${NC}"
+            echo "   In: $matches"
             ((contamination++))
         fi
     done

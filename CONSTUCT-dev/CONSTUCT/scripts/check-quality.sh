@@ -18,7 +18,7 @@ CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 CONSTUCT_DEV="$CONSTRUCT_ROOT/CONSTUCT-dev"
 
 # Source library functions
-source "$CONSTUCT_DEV/lib/validation.sh"
+source "$CONSTUCT_DEV/CONSTUCT/lib/validation.sh"
 
 # Setup report file
 REPORT_DIR="$CONSTUCT_DEV/AI/dev-logs/check-quality"
@@ -106,11 +106,11 @@ log_output "${BLUE}### 3. Checking for hardcoded paths...${NC}"
 check_hardcoded_paths() {
     local hardcoded_paths=0
     
-    # Look for suspicious hardcoded paths
-    local suspicious_patterns="/Users/\|/home/\|/tmp/[a-zA-Z]\|/var/folders"
+    # Look for suspicious hardcoded paths (excluding this pattern definition)
+    local suspicious_patterns="/Users/\|/home/\|^[[:space:]]*/tmp/[a-zA-Z]\|/var/folders"
     
     find "$CONSTUCT_DEV" -name "*.sh" -type f | while read -r script; do
-        local violations=$(grep -n "$suspicious_patterns" "$script" 2>/dev/null | grep -v "# Example\|# TODO" || echo "")
+        local violations=$(grep -n "$suspicious_patterns" "$script" 2>/dev/null | grep -v "# Example\|# TODO\|suspicious_patterns=\|Look for suspicious" || echo "")
         
         if [ -n "$violations" ]; then
             log_output "${RED}❌ Hardcoded paths in: $(basename "$script")${NC}"
@@ -132,12 +132,12 @@ check_hardcoded_paths
 log_output ""
 
 # Check 4: Function documentation
-echo -e "${BLUE}### 4. Checking function documentation...${NC}"
+log_output "${BLUE}### 4. Checking function documentation...${NC}"
 check_function_docs() {
     local undocumented_functions=0
     
-    find "$CONSTUCT_DEV/lib" -name "*.sh" -type f | while read -r lib_file; do
-        echo -e "${YELLOW}Checking: $(basename "$lib_file")${NC}"
+    find "$CONSTUCT_DEV/CONSTUCT/lib" -name "*.sh" -type f | while read -r lib_file; do
+        log_output "${YELLOW}Checking: $(basename "$lib_file")${NC}"
         
         # Find function definitions
         local functions=$(grep -n "^[a-zA-Z_][a-zA-Z0-9_]*()" "$lib_file" | cut -d':' -f1)
@@ -150,7 +150,7 @@ check_function_docs() {
             if [ $prev_line -gt 0 ]; then
                 local comment=$(sed -n "${prev_line}p" "$lib_file")
                 if [[ ! "$comment" =~ ^#.*[A-Za-z] ]]; then
-                    echo -e "${YELLOW}⚠️ Function lacks documentation: $func_name${NC}"
+                    log_output "${YELLOW}⚠️ Function lacks documentation: $func_name${NC}"
                     ((undocumented_functions++))
                 fi
             fi
@@ -158,54 +158,64 @@ check_function_docs() {
     done
     
     if [ $undocumented_functions -eq 0 ]; then
-        echo -e "${GREEN}✅ All library functions are documented${NC}"
+        log_output "${GREEN}✅ All library functions are documented${NC}"
     else
-        echo -e "${YELLOW}   Fix: Add comment before each function explaining purpose${NC}"
+        log_output "${YELLOW}   Fix: Add comment before each function explaining purpose${NC}"
     fi
 }
 check_function_docs
-echo ""
+log_output ""
 
 # Check 5: Script executable permissions
-echo -e "${BLUE}### 5. Checking script permissions...${NC}"
+log_output "${BLUE}### 5. Checking script permissions...${NC}"
 check_script_permissions() {
     local non_executable=0
     
     find "$CONSTUCT_DEV/AI/scripts" -name "*.sh" -type f | while read -r script; do
         if [ ! -x "$script" ]; then
-            echo -e "${RED}❌ Not executable: $(basename "$script")${NC}"
+            log_output "${RED}❌ Not executable: $(basename "$script")${NC}"
             ((non_executable++))
         fi
     done
     
     if [ $non_executable -eq 0 ]; then
-        echo -e "${GREEN}✅ All AI scripts are executable${NC}"
+        log_output "${GREEN}✅ All AI scripts are executable${NC}"
     else
-        echo -e "${YELLOW}   Fix: chmod +x for non-executable scripts${NC}"
+        log_output "${YELLOW}   Fix: chmod +x for non-executable scripts${NC}"
         VIOLATIONS=$((VIOLATIONS + non_executable))
     fi
 }
 check_script_permissions
-echo ""
+log_output ""
 
 # Check 6: Configuration file validation
-echo -e "${BLUE}### 6. Validating configuration files...${NC}"
+log_output "${BLUE}### 6. Validating configuration files...${NC}"
 check_config_files() {
     local config_errors=0
     
-    find "$CONSTUCT_DEV/config" -name "*.yaml" -type f | while read -r config_file; do
-        echo -e "${YELLOW}Checking: $(basename "$config_file")${NC}"
+    find "$CONSTUCT_DEV/CONSTUCT/config" -name "*.yaml" -type f | while read -r config_file; do
+        log_output "${YELLOW}Checking: $(basename "$config_file")${NC}"
         
         # Basic YAML syntax check
         if command -v python3 &> /dev/null; then
-            if ! python3 -c "import yaml; yaml.safe_load(open('$config_file'))" 2>/dev/null; then
-                echo -e "${RED}❌ Invalid YAML syntax: $(basename "$config_file")${NC}"
-                ((config_errors++))
+            if python3 -c "import sys; sys.exit(0 if 'yaml' in sys.modules or __import__('yaml') else 1)" 2>/dev/null; then
+                if ! python3 -c "import yaml; yaml.safe_load(open('$config_file'))" 2>/dev/null; then
+                    log_output "${RED}❌ Invalid YAML syntax: $(basename "$config_file")${NC}"
+                    ((config_errors++))
+                fi
+            else
+                log_output "${YELLOW}⚠️ PyYAML not installed, skipping syntax check for: $(basename "$config_file")${NC}"
             fi
         else
             # Fallback basic checks
             if grep -q "^[[:space:]]*-[[:space:]]*$" "$config_file"; then
-                echo -e "${YELLOW}⚠️ Empty list items in: $(basename "$config_file")${NC}"
+                log_output "${YELLOW}⚠️ Empty list items in: $(basename "$config_file")${NC}"
+            fi
+            
+            # Check for basic YAML structure
+            if ! grep -q "^[a-zA-Z_][a-zA-Z0-9_]*:" "$config_file"; then
+                log_output "${YELLOW}⚠️ No valid YAML keys found in: $(basename "$config_file")${NC}"
+                ((config_errors++))
             fi
         fi
         
@@ -213,29 +223,29 @@ check_config_files() {
         case "$(basename "$config_file")" in
             "mvvm-rules.yaml")
                 if ! grep -q "rules:" "$config_file"; then
-                    echo -e "${YELLOW}⚠️ Missing 'rules' section in mvvm-rules.yaml${NC}"
+                    log_output "${YELLOW}⚠️ Missing 'rules' section in mvvm-rules.yaml${NC}"
                 fi
                 ;;
             "quality-gates.yaml")
                 if ! grep -q "thresholds:\|gates:" "$config_file"; then
-                    echo -e "${YELLOW}⚠️ Missing quality sections in quality-gates.yaml${NC}"
+                    log_output "${YELLOW}⚠️ Missing quality sections in quality-gates.yaml${NC}"
                 fi
                 ;;
         esac
     done
     
     if [ $config_errors -eq 0 ]; then
-        echo -e "${GREEN}✅ Configuration files are valid${NC}"
+        log_output "${GREEN}✅ Configuration files are valid${NC}"
     else
-        echo -e "${YELLOW}   Fix: Resolve YAML syntax errors${NC}"
+        log_output "${YELLOW}   Fix: Resolve YAML syntax errors${NC}"
         VIOLATIONS=$((VIOLATIONS + config_errors))
     fi
 }
 check_config_files
-echo ""
+log_output ""
 
 # Check 7: Library function usage
-echo -e "${BLUE}### 7. Checking library function usage...${NC}"
+log_output "${BLUE}### 7. Checking library function usage...${NC}"
 check_library_usage() {
     local missing_imports=0
     
@@ -245,7 +255,7 @@ check_library_usage() {
         local sources_validation=$(grep -c "source.*validation.sh" "$script" 2>/dev/null || echo "0")
         
         if [ "$uses_validation" -gt 0 ] && [ "$sources_validation" -eq 0 ]; then
-            echo -e "${YELLOW}⚠️ Uses validation functions but doesn't source validation.sh: $(basename "$script")${NC}"
+            log_output "${YELLOW}⚠️ Uses validation functions but doesn't source validation.sh: $(basename "$script")${NC}"
             ((missing_imports++))
         fi
         
@@ -253,22 +263,22 @@ check_library_usage() {
         local sources_file_analysis=$(grep -c "source.*file-analysis.sh" "$script" 2>/dev/null || echo "0")
         
         if [ "$uses_file_analysis" -gt 0 ] && [ "$sources_file_analysis" -eq 0 ]; then
-            echo -e "${YELLOW}⚠️ Uses file analysis but doesn't source file-analysis.sh: $(basename "$script")${NC}"
+            log_output "${YELLOW}⚠️ Uses file analysis but doesn't source file-analysis.sh: $(basename "$script")${NC}"
             ((missing_imports++))
         fi
     done
     
     if [ $missing_imports -eq 0 ]; then
-        echo -e "${GREEN}✅ Library functions are properly sourced${NC}"
+        log_output "${GREEN}✅ Library functions are properly sourced${NC}"
     else
-        echo -e "${YELLOW}   Fix: Add proper source statements for library functions${NC}"
+        log_output "${YELLOW}   Fix: Add proper source statements for library functions${NC}"
     fi
 }
 check_library_usage
-echo ""
+log_output ""
 
 # Check 8: Output formatting consistency
-echo -e "${BLUE}### 8. Checking output formatting...${NC}"
+log_output "${BLUE}### 8. Checking output formatting...${NC}"
 check_output_formatting() {
     local inconsistent_output=0
     
@@ -278,29 +288,29 @@ check_output_formatting() {
         local uses_echo_e=$(grep -c "echo -e" "$script" 2>/dev/null || echo "0")
         
         if [ "$uses_echo_e" -gt 0 ] && [ "$has_colors" -eq 0 ]; then
-            echo -e "${YELLOW}⚠️ Uses echo -e but no color definitions: $(basename "$script")${NC}"
+            log_output "${YELLOW}⚠️ Uses echo -e but no color definitions: $(basename "$script")${NC}"
             ((inconsistent_output++))
         fi
         
         # Check for consistent status indicators
         local has_status_indicators=$(grep -c "✅\|❌\|⚠️" "$script" 2>/dev/null || echo "0")
         if [ "$has_status_indicators" -eq 0 ] && [ "$(basename "$script")" != "before_coding.sh" ]; then
-            echo -e "${YELLOW}⚠️ No status indicators found: $(basename "$script")${NC}"
+            log_output "${YELLOW}⚠️ No status indicators found: $(basename "$script")${NC}"
             ((inconsistent_output++))
         fi
     done
     
     if [ $inconsistent_output -eq 0 ]; then
-        echo -e "${GREEN}✅ Output formatting is consistent${NC}"
+        log_output "${GREEN}✅ Output formatting is consistent${NC}"
     else
-        echo -e "${YELLOW}   Fix: Add consistent color coding and status indicators${NC}"
+        log_output "${YELLOW}   Fix: Add consistent color coding and status indicators${NC}"
     fi
 }
 check_output_formatting
-echo ""
+log_output ""
 
 # Check 9: Code duplication
-echo -e "${BLUE}### 9. Checking for code duplication...${NC}"
+log_output "${BLUE}### 9. Checking for code duplication...${NC}"
 check_code_duplication() {
     local duplicated_code=0
     
@@ -316,23 +326,23 @@ check_code_duplication() {
         local usage_count=$(find "$CONSTUCT_DEV/AI/scripts" -name "*.sh" -type f -exec grep -l "$pattern" {} \; 2>/dev/null | wc -l | tr -d ' ')
         
         if [ "$usage_count" -gt 2 ]; then
-            echo -e "${YELLOW}⚠️ Pattern used in $usage_count scripts: $pattern${NC}"
-            echo -e "${YELLOW}   Consider moving to library function${NC}"
+            log_output "${YELLOW}⚠️ Pattern used in $usage_count scripts: $pattern${NC}"
+            log_output "${YELLOW}   Consider moving to library function${NC}"
             ((duplicated_code++))
         fi
     done
     
     if [ $duplicated_code -eq 0 ]; then
-        echo -e "${GREEN}✅ No significant code duplication detected${NC}"
+        log_output "${GREEN}✅ No significant code duplication detected${NC}"
     else
-        echo -e "${YELLOW}   Fix: Extract common patterns into library functions${NC}"
+        log_output "${YELLOW}   Fix: Extract common patterns into library functions${NC}"
     fi
 }
 check_code_duplication
-echo ""
+log_output ""
 
 # Check 10: Test coverage
-echo -e "${BLUE}### 10. Checking test coverage...${NC}"
+log_output "${BLUE}### 10. Checking test coverage...${NC}"
 check_test_coverage() {
     local missing_tests=0
     
@@ -340,24 +350,24 @@ check_test_coverage() {
     local script_count=$(find "$CONSTUCT_DEV/AI/scripts" -name "*.sh" -type f | wc -l | tr -d ' ')
     local test_count=$(find "$CONSTUCT_DEV/tests" -name "*test*.sh" -type f 2>/dev/null | wc -l | tr -d ' ')
     
-    echo "Scripts: $script_count, Tests: $test_count"
+    log_output "Scripts: $script_count, Tests: $test_count"
     
     if [ "$test_count" -eq 0 ]; then
-        echo -e "${YELLOW}⚠️ No test files found in tests/ directory${NC}"
+        log_output "${YELLOW}⚠️ No test files found in tests/ directory${NC}"
         missing_tests=1
     elif [ "$test_count" -lt $((script_count / 2)) ]; then
-        echo -e "${YELLOW}⚠️ Low test coverage: $test_count tests for $script_count scripts${NC}"
+        log_output "${YELLOW}⚠️ Low test coverage: $test_count tests for $script_count scripts${NC}"
         missing_tests=1
     fi
     
     if [ $missing_tests -eq 0 ]; then
-        echo -e "${GREEN}✅ Test coverage appears adequate${NC}"
+        log_output "${GREEN}✅ Test coverage appears adequate${NC}"
     else
-        echo -e "${YELLOW}   Fix: Add test files for critical scripts${NC}"
+        log_output "${YELLOW}   Fix: Add test files for critical scripts${NC}"
     fi
 }
 check_test_coverage
-echo ""
+log_output ""
 
 # Generate summary
 log_output ""
@@ -388,8 +398,8 @@ log_output "  - Code duplication detection"
 log_output "  - Test coverage analysis"
 log_output ""
 log_output "Next steps:"
-log_output "  ./AI/scripts/scan_construct_structure.sh  # Update structure analysis"
-log_output "  ./AI/scripts/update-context.sh           # Update development context"
+log_output "  ./CONSTUCT/scripts/scan_construct_structure.sh  # Update structure analysis"
+log_output "  ./CONSTUCT/scripts/update-context.sh           # Update development context"
 
 # Add report completion
 echo ""

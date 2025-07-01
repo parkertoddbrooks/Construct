@@ -18,7 +18,7 @@ CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 CONSTUCT_DEV="$CONSTRUCT_ROOT/CONSTUCT-dev"
 
 # Source library functions
-source "$CONSTUCT_DEV/lib/validation.sh"
+source "$CONSTUCT_DEV/CONSTUCT/lib/validation.sh"
 
 # Setup report file
 REPORT_DIR="$CONSTUCT_DEV/AI/dev-logs/check-quality"
@@ -398,8 +398,8 @@ log_output "  - Code duplication detection"
 log_output "  - Test coverage analysis"
 log_output ""
 log_output "Next steps:"
-log_output "  ./AI/scripts/scan_construct_structure.sh  # Update structure analysis"
-log_output "  ./AI/scripts/update-context.sh           # Update development context"
+log_output "  ./CONSTUCT/scripts/scan_construct_structure.sh  # Update structure analysis"
+log_output "  ./CONSTUCT/scripts/update-context.sh           # Update development context"
 
 # Add report completion
 echo ""

@@ -28,6 +28,30 @@ safe_grep_count() {
     grep -c "$pattern" "$file" 2>/dev/null || echo "0"
 }
 
+# Common pattern: find shell scripts in directory
+find_shell_scripts_in() {
+    local search_dir="$1"
+    find "$search_dir" -name "*.sh" -type f 2>/dev/null | sort
+}
+
+# Common pattern: count shell scripts
+count_shell_scripts() {
+    local search_dir="$1"
+    find_shell_scripts_in "$search_dir" | wc -l | tr -d ' '
+}
+
+# Common pattern: find yaml files  
+find_yaml_files_in() {
+    local search_dir="$1"
+    find "$search_dir" -name "*.yaml" -type f 2>/dev/null | sort
+}
+
+# Common pattern: count yaml files
+count_yaml_files() {
+    local search_dir="$1"
+    find_yaml_files_in "$search_dir" | wc -l | tr -d ' '
+}
+
 # Create and manage temporary directory
 create_temp_dir() {
     local temp_dir="${TMPDIR:-/tmp}/construct-$$"

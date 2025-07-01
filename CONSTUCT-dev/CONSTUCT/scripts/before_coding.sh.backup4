@@ -18,9 +18,9 @@ CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 CONSTUCT_DEV="$CONSTRUCT_ROOT/CONSTUCT-dev"
 
 # Source library functions
-source "$CONSTUCT_DEV/lib/validation.sh"
-source "$CONSTUCT_DEV/lib/file-analysis.sh"
-source "$CONSTUCT_DEV/lib/template-utils.sh"
+source "$CONSTUCT_DEV/CONSTUCT/lib/validation.sh"
+source "$CONSTUCT_DEV/CONSTUCT/lib/file-analysis.sh"
+source "$CONSTUCT_DEV/CONSTUCT/lib/template-utils.sh"
 
 # Function to search for
 SEARCH_TERM="$1"
@@ -68,7 +68,7 @@ check_existing_functions() {
 check_existing_scripts() {
     echo -e "${BLUE}🔧 Checking existing scripts...${NC}"
     
-    local script_files=$(find "$CONSTUCT_DEV" -name "*.sh" -type f -not -path "*/lib/*")
+    local script_files=$(find "$CONSTUCT_DEV" -name "*.sh" -type f -not -path "*/CONSTUCT/lib/*")
     local found_scripts=0
     
     for script_file in $script_files; do
@@ -212,10 +212,10 @@ show_next_steps() {
     echo "  4. Follow established patterns and conventions"
     echo ""
     echo "Recommended workflow:"
-    echo "  ./AI/scripts/check-architecture.sh    # Verify current state"
+    echo "  ./CONSTUCT/scripts/check-architecture.sh    # Verify current state"
     echo "  # ... make your changes ..."
-    echo "  ./AI/scripts/update-context.sh        # Update development context"
-    echo "  ./AI/scripts/check-architecture.sh    # Verify changes"
+    echo "  ./CONSTUCT/scripts/update-context.sh        # Update development context"
+    echo "  ./CONSTUCT/scripts/check-architecture.sh    # Verify changes"
     echo ""
     echo "Available resources:"
     echo "  - lib/ functions for reusable code"

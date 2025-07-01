@@ -18,8 +18,8 @@ CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 CONSTUCT_DEV="$CONSTRUCT_ROOT/CONSTUCT-dev"
 
 # Source library functions
-source "$CONSTUCT_DEV/lib/validation.sh"
-source "$CONSTUCT_DEV/lib/template-utils.sh"
+source "$CONSTUCT_DEV/CONSTUCT/lib/validation.sh"
+source "$CONSTUCT_DEV/CONSTUCT/lib/template-utils.sh"
 
 echo -e "${BLUE}🏗️ Checking CONSTRUCT development architecture...${NC}"
 
@@ -101,15 +101,15 @@ check_directory_structure() {
     fi
     
     # Check for proper file organization
-    if [ ! -f "$CONSTUCT_DEV/AI/CLAUDE.md" ]; then
-        echo -e "${RED}❌ Missing CONSTRUCT development context: AI/CLAUDE.md${NC}"
+    if [ ! -f "$CONSTUCT_DEV/CLAUDE.md" ]; then
+        echo -e "${RED}❌ Missing CONSTRUCT development context: CLAUDE.md${NC}"
         ((structure_issues++))
     fi
     
     # Check lib functions exist
     local lib_files=("file-analysis.sh" "template-utils.sh" "validation.sh")
     for lib_file in "${lib_files[@]}"; do
-        if [ ! -f "$CONSTUCT_DEV/lib/$lib_file" ]; then
+        if [ ! -f "$CONSTUCT_DEV/CONSTUCT/lib/$lib_file" ]; then
             echo -e "${RED}❌ Missing library function: lib/$lib_file${NC}"
             ((structure_issues++))
         fi
@@ -118,7 +118,7 @@ check_directory_structure() {
     # Check config files exist
     local config_files=("mvvm-rules.yaml" "quality-gates.yaml")
     for config_file in "${config_files[@]}"; do
-        if [ ! -f "$CONSTUCT_DEV/config/$config_file" ]; then
+        if [ ! -f "$CONSTUCT_DEV/CONSTUCT/config/$config_file" ]; then
             echo -e "${RED}❌ Missing configuration: config/$config_file${NC}"
             ((structure_issues++))
         fi
@@ -287,8 +287,8 @@ generate_summary() {
     echo "  - Configuration validity"
     echo ""
     echo "Next steps:"
-    echo "  ./AI/scripts/update-context.sh  # Update development context"
-    echo "  ./AI/scripts/before_coding.sh   # Check before adding features"
+    echo "  ./CONSTUCT/scripts/update-context.sh  # Update development context"
+    echo "  ./CONSTUCT/scripts/before_coding.sh   # Check before adding features"
 }
 
 # Main execution
