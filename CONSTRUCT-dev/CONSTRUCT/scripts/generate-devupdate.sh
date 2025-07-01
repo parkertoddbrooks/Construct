@@ -64,11 +64,13 @@ should_generate_devupdate() {
 
 # Get next dev update number
 get_next_devupdate_number() {
-    local last_number=$(ls -1 "$DEVUPDATE_DIR"/devupdate-*.md 2>/dev/null | grep -oE 'devupdate-[0-9]+' | grep -oE '[0-9]+' | sort -n | tail -1)
+    local last_number=$(ls -1 "$DEVUPDATE_DIR"/devupdate-*.md 2>/dev/null | grep -oE 'devupdate-[0-9]+\.md' | grep -oE '[0-9]+' | sort -n | tail -1)
     if [ -z "$last_number" ]; then
         echo "01"
     else
-        printf "%02d" $((last_number + 1))
+        # Convert to decimal (remove leading zeros) then increment
+        local decimal_number=$((10#$last_number))
+        printf "%02d" $((decimal_number + 1))
     fi
 }
 
