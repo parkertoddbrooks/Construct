@@ -1,4 +1,4 @@
-# CONSTRUCT Development Structure Scan - 2025-06-30
+# CONSTRUCT Development Structure Scan - 2025-07-01
 
 ## Shell Scripts Found
 ```
@@ -56,6 +56,7 @@ CONSTRUCT-dev/CONSTRUCT/config/quality-gates.yaml
 
 ## Markdown Documentation Files
 ```
+CONSTRUCT-dev/AI/ai-misc-conversations/combining-constuct-w-claude-commands.md
 CONSTRUCT-dev/AI/ai-misc-conversations/naming.md
 CONSTRUCT-dev/AI/ai-misc-conversations/sass-business.md
 CONSTRUCT-dev/AI/ai-misc-conversations/what-is-construct/claude-opus4-feedback.md
@@ -99,6 +100,8 @@ CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-42-21.md
 CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-45-54.md
 CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-46-56.md
 CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-49-37.md
+CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-07-01--06-28-44.md
+CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-07-01--09-38-06.md
 CONSTRUCT-dev/AI/dev-logs/check-quality/README.md
 CONSTRUCT-dev/AI/dev-logs/dev-udpates/_devupdate-prompt.md
 CONSTRUCT-dev/AI/dev-logs/dev-udpates/devupdate-01.md
@@ -132,6 +135,8 @@ CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2241-construct-session.md
 CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2242-construct-session.md
 CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2245-construct-session.md
 CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2246-construct-session.md
+CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2249-construct-session.md
+CONSTRUCT-dev/AI/dev-logs/session-states/2025-07-01-0628-construct-session.md
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -158,6 +163,8 @@ CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.back
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-224554
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-224655
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-224936
+CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250701-062844
+CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250701-093805
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide.md.backup-20250630-192951
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide.md.backup-20250630-193956
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide.md.backup-20250630-194407
@@ -168,6 +175,8 @@ CONSTRUCT-dev/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
 CONSTRUCT-dev/AI/docs/automated/script-reference-automated.md
 CONSTRUCT-dev/AI/docs/README.md
 CONSTRUCT-dev/AI/PRDs/construct-template-repository-prd.md
+CONSTRUCT-dev/AI/PRDs/future/ai-enhanced-construct-intelligence-prd.md
+CONSTRUCT-dev/AI/PRDs/future/claude-code-hooks-integration-prd.md
 CONSTRUCT-dev/AI/PRDs/prd-updates-2025-06-28.md
 CONSTRUCT-dev/AI/PRDs/swift-claude-starter-template-prd-info.md
 CONSTRUCT-dev/AI/PRDs/swift-claude-starter-template-prd.md
@@ -203,7 +212,9 @@ CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-41-22.md
 CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-42-22.md
 CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-45-55.md
 CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-46-56.md
-CONSTRUCT-dev/AI/structure/construct-structure-2025-06-30--22-49-38.md
+CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-49-38.md
+CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-07-01--06-28-45.md
+CONSTRUCT-dev/AI/structure/construct-structure-2025-07-01--09-38-07.md
 CONSTRUCT-dev/AI/structure/current-structure.md
 CONSTRUCT-dev/AI/todo/github-template-setup.md
 CONSTRUCT-dev/AI/todo/implement-dual-dev-environments.md
@@ -214,6 +225,7 @@ CONSTRUCT-dev/CLAUDE.md
 CONSTRUCT-dev/CONSTRUCT/docs/_ai-ignore_not-used/improving-CONSTRUCT-guide.md.backup-20250630-135635
 CONSTRUCT-dev/CONSTRUCT/docs/automated-files.md
 CONSTRUCT-dev/CONSTRUCT/docs/commands-readme.md
+CONSTRUCT-dev/CONSTRUCT/docs/README.md
 CONSTRUCT-dev/CONSTRUCT/docs/to-review/api-reference.md
 CONSTRUCT-dev/CONSTRUCT/docs/to-review/architecture-overview.md
 CONSTRUCT-dev/CONSTRUCT/docs/to-review/development-patterns.md
@@ -276,6 +288,7 @@ file-analysis.sh: 10 functions
   AI/docs
   AI/docs/automated
   AI/PRDs
+  AI/PRDs/future
   AI/structure
   AI/todo
   CONSTRUCT
@@ -318,11 +331,11 @@ File: quality-gates.yaml
 === File Counts ===
 Shell Scripts: 17
 YAML Configs: 2
-Markdown Docs: 136
+Markdown Docs: 146
 Python Files: 0
 
 === Directory Structure ===
-Total Directories: 23
+Total Directories: 24
 
 === CONSTRUCT Development Health ===
 Working AI Scripts: 5/9
@@ -350,4 +363,4 @@ Configuration Files: 2
 - [ ] Validate configuration file schemas
 
 ---
-*Generated by scan_construct_structure.sh on Mon Jun 30 22:49:38 PDT 2025*
+*Generated by scan_construct_structure.sh on Tue Jul  1 09:38:07 PDT 2025*

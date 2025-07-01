@@ -71,7 +71,7 @@
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-01 06:28:45
+Last updated: 2025-07-01 09:38:07
 
 ### Active Components
 - **Shell Scripts**:       17 files
@@ -98,7 +98,7 @@ Last updated: 2025-07-01 06:28:45
 **Date**: 2025-07-01
 **Focus**: Dual-environment development system
 **Branch**: main
-**Last Commit**: 2ef2ef3 feat: Add formatted summary to pre-commit hook
+**Last Commit**: e1204e3 feat: Fix update-context.sh and add comprehensive formatting rules
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -128,7 +128,7 @@ Last updated: 2025-07-01 06:28:45
 - [Structure Archive](AI/structure/_old/) - Previous structure snapshots
 
 ### Quality Reports
-- [Latest Quality Report](AI/dev-logs/check-quality/quality-report-2025-07-01--06-28-44.md) - Most recent quality validation
+- [Latest Quality Report](AI/dev-logs/check-quality/quality-report-2025-07-01--09-38-06.md) - Most recent quality validation
 - [Session Summaries](AI/dev-logs/session-states/) - Development session documentation
 
 ### Development Process
@@ -205,30 +205,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-45-54.md
-- CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-46-56.md
-- CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-49-37.md
-- CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2245-construct-session.md
-- CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2246-construct-session.md
-- CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2249-construct-session.md
+- CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-07-01--06-28-44.md
+- CONSTRUCT-dev/AI/dev-logs/session-states/2025-07-01-0628-construct-session.md
 - CONSTRUCT-dev/AI/docs/automated/api-reference-automated.md
 - CONSTRUCT-dev/AI/docs/automated/architecture-overview-automated.md
 - CONSTRUCT-dev/AI/docs/automated/development-patterns-automated.md
 - CONSTRUCT-dev/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
+- CONSTRUCT-dev/AI/docs/automated/script-reference-automated.md
+- CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-49-38.md
+- CONSTRUCT-dev/AI/structure/construct-structure-2025-06-30--22-42-22.md
+- CONSTRUCT-dev/AI/structure/construct-structure-2025-07-01--06-28-45.md
 
 
 ### Git Status
 ```
+A  CONSTRUCT-dev/AI/PRDs/future/ai-enhanced-construct-intelligence-prd.md
+A  CONSTRUCT-dev/AI/PRDs/future/claude-code-hooks-integration-prd.md
+A  CONSTRUCT-dev/AI/ai-misc-conversations/combining-constuct-w-claude-commands.md
  M CONSTRUCT-dev/AI/docs/automated/api-reference-automated.md
  M CONSTRUCT-dev/AI/docs/automated/architecture-overview-automated.md
  M CONSTRUCT-dev/AI/docs/automated/development-patterns-automated.md
  M CONSTRUCT-dev/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
  M CONSTRUCT-dev/AI/docs/automated/script-reference-automated.md
-D  CONSTRUCT-dev/AI/structure/construct-structure-2025-06-30--22-42-22.md
-D  CONSTRUCT-dev/AI/structure/construct-structure-2025-06-30--22-45-55.md
-D  CONSTRUCT-dev/AI/structure/construct-structure-2025-06-30--22-46-56.md
- D CONSTRUCT-dev/AI/structure/construct-structure-2025-06-30--22-49-38.md
- M CONSTRUCT-dev/AI/structure/current-structure.md
+D  CONSTRUCT-dev/AI/structure/construct-structure-2025-06-30--22-49-38.md
+ D CONSTRUCT-dev/AI/structure/construct-structure-2025-07-01--06-28-45.md
 ```
 
 ### Active Development Areas

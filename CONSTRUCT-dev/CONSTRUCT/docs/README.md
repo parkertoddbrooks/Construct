@@ -4,7 +4,7 @@ This directory contains **human documentation ABOUT the project** - guides, tuto
 
 ## Purpose
 
-The CONSTRUCT-docs/ directory serves as the comprehensive documentation hub for:
+The CONSTRUCT-dev/CONSTRUCT/docs/ directory serves as the comprehensive documentation hub for:
 - User guides and tutorials
 - Command references  
 - Setup instructions
@@ -14,7 +14,7 @@ The CONSTRUCT-docs/ directory serves as the comprehensive documentation hub for:
 ## Directory Structure
 
 ```
-CONSTRUCT-docs/
+CONSTRUCT-dev/CONSTRUCT/docs/
 ├── README.md                    # This file
 ├── quick-start.md              # Getting started guide
 ├── commands.md                 # Complete command reference
@@ -71,7 +71,7 @@ CONSTRUCT-docs/
 
 ## Difference from AI Documentation
 
-### CONSTRUCT-docs/ (This Directory)
+### CONSTRUCT-dev/CONSTRUCT/docs/ (This Directory)
 - **Audience**: Human developers and users
 - **Purpose**: Help humans understand, use, and contribute to CONSTRUCT
 - **Content**: User-focused guides, conceptual explanations, tutorials

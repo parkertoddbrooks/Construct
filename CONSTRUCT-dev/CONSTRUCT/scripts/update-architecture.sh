@@ -81,7 +81,9 @@ CONSTRUCT/
 │   │   ├── iOS-App/           # iOS application
 │   │   └── Watch-App/         # Watch application
 │   └── scripts/               # User development utilities
-└── CONSTRUCT-docs/              # User-facing documentation
+└── CONSTRUCT-dev/
+    └── CONSTRUCT/
+        └── docs/                # User-facing documentation
 \`\`\`
 
 ## Component Architecture
