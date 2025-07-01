@@ -5,7 +5,7 @@ This document lists all files that are automatically generated or updated by CON
 ## Auto-Updated Files
 
 ### 1. CLAUDE.md (Auto-Updated Sections)
-**Script**: `./AI/scripts/update-context.sh`  
+**Script**: `./CONSTUCT/scripts/update-context.sh`  
 **File**: `/CONSTUCT-dev/CLAUDE.md`  
 **Updates**: Appends auto-generated sections with current development state
 - Current component counts (shell scripts, libraries, configs)
@@ -15,7 +15,7 @@ This document lists all files that are automatically generated or updated by CON
 - Last updated timestamps
 
 ### 2. Quality Reports
-**Script**: `./AI/scripts/check-quality.sh`  
+**Script**: `./CONSTUCT/scripts/check-quality.sh`  
 **Location**: `/CONSTUCT-dev/AI/dev-logs/check-quality/`  
 **Creates**: `quality-report-YYYY-MM-DD--HH-MM-SS.md`
 - Timestamped quality analysis reports
@@ -25,7 +25,7 @@ This document lists all files that are automatically generated or updated by CON
 - Library function documentation coverage
 
 ### 3. Structure Analysis
-**Script**: `./AI/scripts/scan_construct_structure.sh`  
+**Script**: `./CONSTUCT/scripts/scan_construct_structure.sh`  
 **Location**: `/CONSTUCT-dev/AI/structure/`  
 **Creates**: `construct-structure-YYYY-MM-DD--HH-MM-SS.md`  
 **Updates**: `current-structure.md`
@@ -36,7 +36,7 @@ This document lists all files that are automatically generated or updated by CON
 - Development insights and metrics
 
 ### 4. Architecture Documentation
-**Script**: `./AI/scripts/update-architecture.sh`  
+**Script**: `./CONSTUCT/scripts/update-architecture.sh`  
 **Location**: `/CONSTUCT-dev/docs/`  
 **Updates**: Architecture documentation files with current implementation status
 - Implementation progress tracking
@@ -44,7 +44,7 @@ This document lists all files that are automatically generated or updated by CON
 - Architecture validation results
 
 ### 5. Session Summaries
-**Script**: `./AI/scripts/session-summary.sh`  
+**Script**: `./CONSTUCT/scripts/session-summary.sh`  
 **Location**: `/CONSTUCT-dev/AI/dev-logs/session-states/`  
 **Creates**: Session state files when context reaches capacity
 - Development session preservation
@@ -87,12 +87,12 @@ Backup files append timestamp to original filename:
 ## Development Workflow Integration
 
 ### Daily Development
-1. `./AI/scripts/update-context.sh` - Updates CLAUDE.md with current state
-2. `./AI/scripts/check-quality.sh` - Generates quality report
-3. `./AI/scripts/scan_construct_structure.sh` - Updates structure analysis
+1. `./CONSTUCT/scripts/update-context.sh` - Updates CLAUDE.md with current state
+2. `./CONSTUCT/scripts/check-quality.sh` - Generates quality report
+3. `./CONSTUCT/scripts/scan_construct_structure.sh` - Updates structure analysis
 
 ### Session Management
-- `./AI/scripts/session-summary.sh` - Creates session state when context full
+- `./CONSTUCT/scripts/session-summary.sh` - Creates session state when context full
 - Automated backups before major updates
 - Continuous documentation of development progress
 
