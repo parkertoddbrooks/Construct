@@ -9,6 +9,41 @@ construct_development:
     required_documentation: true
     max_complexity: 10
     
+  formatting:
+    # Shell script formatting standards
+    required_shebang: "#!/bin/bash"
+    required_set_e: true
+    required_color_definitions: true
+    required_path_resolution: true  # Use SCRIPT_DIR pattern
+    required_library_sourcing: true
+    required_help_option: true
+    max_function_length: 50  # lines
+    
+    # Variable naming conventions
+    local_variables_lowercase: true
+    global_variables_uppercase: true
+    readonly_variables_uppercase: true
+    
+    # Function standards
+    required_function_docs: true
+    function_doc_format: "# Description\\n# Parameters:\\n#   $1 - param description\\n# Returns:\\n#   0 on success, 1 on failure"
+    
+    # Output formatting
+    required_colored_output: true
+    required_status_indicators: true  # ✅ ❌ ⚠️ 🔍 
+    consistent_message_format: true
+    
+    # Error handling patterns
+    required_parameter_validation: true
+    required_exit_codes: true
+    forbidden_silent_failures: true
+    
+    # Code organization
+    max_nested_functions: 3
+    required_main_function: true
+    consistent_indentation: "  "  # 2 spaces
+    max_line_length: 120
+    
   documentation:
     required_readme_files: true
     required_inline_docs: true
@@ -63,6 +98,12 @@ checks:
     - function_complexity
     - code_duplication
     - dependency_validation
+    - script_formatting
+    - variable_naming
+    - function_documentation
+    - output_formatting
+    - path_resolution_patterns
+    - library_sourcing_patterns
     
   swift_checks:
     - mvvm_violations
