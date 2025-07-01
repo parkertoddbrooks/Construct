@@ -122,7 +122,17 @@ EOF
 
     # Remove any existing auto-generated section and add new one
     local temp_dir="${TMPDIR:-/tmp}"
-    grep -v "# 🤖 AUTO-GENERATED" "$CLAUDE_MD" > "$temp_dir/claude_clean.md" 2>/dev/null || cp "$CLAUDE_MD" "$temp_dir/claude_clean.md"
+    
+    # Find and remove everything from the auto-generated marker to end of file
+    if grep -q "# 🤖 AUTO-GENERATED" "$CLAUDE_MD"; then
+        # Get line number where auto-generated section starts
+        local auto_start=$(grep -n "# 🤖 AUTO-GENERATED" "$CLAUDE_MD" | head -1 | cut -d: -f1)
+        # Keep only content before the auto-generated section
+        head -n $((auto_start - 1)) "$CLAUDE_MD" > "$temp_dir/claude_clean.md"
+    else
+        # No auto-generated section found, copy entire file
+        cp "$CLAUDE_MD" "$temp_dir/claude_clean.md"
+    fi
     
     # Combine original content with new auto-section
     cat "$temp_dir/claude_clean.md" "$temp_dir/construct_auto_update.md" > "$CLAUDE_MD"
