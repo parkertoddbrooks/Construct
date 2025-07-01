@@ -5,6 +5,7 @@ before_coding.sh
 check-architecture.sh
 check-documentation.sh
 check-quality.sh
+generate-devupdate.sh
 scan_construct_structure.sh
 session-summary.sh
 setup-aliases.sh
