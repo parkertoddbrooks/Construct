@@ -22,7 +22,9 @@ CONSTRUCT-dev/CONSTRUCT/scripts/check-quality.sh
 CONSTRUCT-dev/CONSTRUCT/scripts/check-quality.sh.backup
 CONSTRUCT-dev/CONSTRUCT/scripts/check-quality.sh.backup2
 CONSTRUCT-dev/CONSTRUCT/scripts/check-quality.sh.backup4
+CONSTRUCT-dev/CONSTRUCT/scripts/commit-with-review.sh
 CONSTRUCT-dev/CONSTRUCT/scripts/generate-devupdate.sh
+CONSTRUCT-dev/CONSTRUCT/scripts/pre-commit-review.sh
 CONSTRUCT-dev/CONSTRUCT/scripts/scan_construct_structure.sh
 CONSTRUCT-dev/CONSTRUCT/scripts/scan_construct_structure.sh.backup
 CONSTRUCT-dev/CONSTRUCT/scripts/scan_construct_structure.sh.backup2
@@ -88,6 +90,11 @@ CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-26-47.md
 CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-28-31.md
 CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-30-04.md
 CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-33-54.md
+CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-34-40.md
+CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-35-58.md
+CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-39-15.md
+CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-40-01.md
+CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-06-30--22-41-21.md
 CONSTRUCT-dev/AI/dev-logs/check-quality/README.md
 CONSTRUCT-dev/AI/dev-logs/dev-udpates/_devupdate-prompt.md
 CONSTRUCT-dev/AI/dev-logs/dev-udpates/devupdate-01.md
@@ -103,11 +110,19 @@ CONSTRUCT-dev/AI/dev-logs/dev-udpates/devupdate-10.md
 CONSTRUCT-dev/AI/dev-logs/dev-udpates/devupdate-11.md
 CONSTRUCT-dev/AI/dev-logs/dev-udpates/devupdate-12.md
 CONSTRUCT-dev/AI/dev-logs/dev-udpates/devupdate-13.md
+CONSTRUCT-dev/AI/dev-logs/dev-udpates/devupdate-14.md
+CONSTRUCT-dev/AI/dev-logs/dev-udpates/devupdate-15.md
+CONSTRUCT-dev/AI/dev-logs/dev-udpates/devupdate-16.md
 CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-1320-construct-session.md
 CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2223-construct-session.md
 CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2226-construct-session.md
 CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2228-construct-session.md
 CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2230-construct-session.md
+CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2233-construct-session.md
+CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2234-construct-session.md
+CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2236-construct-session.md
+CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2239-construct-session.md
+CONSTRUCT-dev/AI/dev-logs/session-states/2025-06-30-2240-construct-session.md
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -125,6 +140,11 @@ CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.back
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-222830
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-223003
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-223353
+CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-223439
+CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-223549
+CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-223914
+CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-224001
+CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250630-224120
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide.md.backup-20250630-192951
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide.md.backup-20250630-193956
 CONSTRUCT-dev/AI/docs/automated/_old/improving-CONSTRUCT-guide.md.backup-20250630-194407
@@ -161,7 +181,12 @@ CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-23-19.md
 CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-26-48.md
 CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-28-32.md
 CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-30-04.md
-CONSTRUCT-dev/AI/structure/construct-structure-2025-06-30--22-33-55.md
+CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-33-55.md
+CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-34-41.md
+CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-36-04.md
+CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-39-15.md
+CONSTRUCT-dev/AI/structure/_old/construct-structure-2025-06-30--22-40-02.md
+CONSTRUCT-dev/AI/structure/construct-structure-2025-06-30--22-41-22.md
 CONSTRUCT-dev/AI/structure/current-structure.md
 CONSTRUCT-dev/AI/todo/github-template-setup.md
 CONSTRUCT-dev/AI/todo/implement-dual-dev-environments.md
@@ -196,7 +221,9 @@ before_coding.sh
 check-architecture.sh
 check-documentation.sh
 check-quality.sh
+commit-with-review.sh
 generate-devupdate.sh
+pre-commit-review.sh
 scan_construct_structure.sh
 session-summary.sh
 setup-aliases.sh
@@ -272,9 +299,9 @@ File: quality-gates.yaml
 ## Summary Statistics
 ```
 === File Counts ===
-Shell Scripts: 15
+Shell Scripts: 17
 YAML Configs: 2
-Markdown Docs: 105
+Markdown Docs: 123
 Python Files: 0
 
 === Directory Structure ===
@@ -306,4 +333,4 @@ Configuration Files: 2
 - [ ] Validate configuration file schemas
 
 ---
-*Generated by scan_construct_structure.sh on Mon Jun 30 22:33:55 PDT 2025*
+*Generated by scan_construct_structure.sh on Mon Jun 30 22:41:22 PDT 2025*
