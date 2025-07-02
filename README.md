@@ -1,120 +1,206 @@
 # CONSTRUCT
 
-CONSTRUCT is a GitHub template repository that gives you a complete Swift development foundation with AI-powered architecture enforcement.
+CONSTRUCT is a meta-framework that teaches how to build self-improving development systems. It provides both the tools and the philosophy for creating projects that get better with use.
 
-## What You Get
+## What is CONSTRUCT?
 
-When you use CONSTRUCT, you get:
+CONSTRUCT demonstrates a new development philosophy:
+- **Living Documentation** - Docs that evolve from generic to specific through real experience
+- **Distributed Quality** - Quality control that travels with the code
+- **Self-Improving Systems** - Projects that learn from their own development
 
-1. **Complete Swift Project** - Ready-to-build iOS and Watch apps
-2. **AI Development Tools** - Scripts that understand your codebase  
-3. **Self-Enforcing Architecture** - Prevents bad patterns automatically
-4. **Design System Foundation** - Responsive tokens from day one
+## The Three-Layer Architecture
 
-### 1. Get Your Project
-Click "Use this template" on the CONSTRUCT GitHub repo. This creates your own repository with all the CONSTRUCT tools.
+```
+CONSTRUCT/
+├── CONSTRUCT-CORE/        # Stable, universal tools and templates
+├── CONSTRUCT-LAB/         # Development and experimentation space
+└── TEMPLATES/             # Production-ready project starters
+```
 
-### 2. Personalize It
+### CONSTRUCT-CORE
+The stable foundation containing:
+- Universal orchestration tools
+- Promotion system for quality control
+- Templates for new projects
+- Core documentation and philosophy
+
+### CONSTRUCT-LAB
+Your experimentation workspace:
+- Test new features and improvements
+- Develop with full CONSTRUCT tooling
+- Explicit promotion path to CORE
+- Safe space to break things
+
+### TEMPLATES
+Ready-to-use project templates:
+- Currently: Swift/iOS with MVVM architecture
+- Includes AI integration (CLAUDE.md)
+- Self-enforcing architecture patterns
+- Living documentation system
+
+## Getting Started
+
+### For Template Users (Swift/iOS Project)
+
+1. **Use the Template**
+   ```bash
+   # Use GitHub's template feature or clone
+   git clone https://github.com/yourusername/construct
+   cd construct/TEMPLATES/swift-ios
+   ```
+
+2. **Set Up Your Project**
+   ```bash
+   ./construct-setup
+   # Enter your project name when prompted
+   ```
+
+3. **Start Building**
+   ```bash
+   ./AI/scripts/update-context.sh    # Updates AI context
+   ./AI/scripts/check-architecture.sh # Validates patterns
+   ```
+
+### For CONSTRUCT Contributors
+
+1. **Fork CONSTRUCT**
+   ```bash
+   git clone https://github.com/yourusername/construct-fork
+   cd construct-fork
+   ```
+
+2. **Work in LAB**
+   ```bash
+   cd CONSTRUCT-LAB/experiments/
+   # Create new features
+   ```
+
+3. **Promote to CORE**
+   ```bash
+   # Add to promotion manifest
+   vim ../PROMOTE-TO-CORE.yaml
+   
+   # Validate and promote
+   ../tools/validate-promotion.sh
+   ../tools/promote-to-core.sh
+   ```
+
+## The Philosophy
+
+### Living Documentation
+Documentation starts generic but evolves through real experience:
+```
+Static Template + Real Development + Discoveries = Living Truth
+```
+
+Every project builds its own wisdom through use.
+
+### Distributed Quality
+Quality control isn't centralized - it travels with the code:
+- Every fork includes the promotion system
+- Quality gates run locally before commits
+- PRs arrive pre-validated
+- Standards self-propagate
+
+### Self-Improvement
+CONSTRUCT uses its own methodology:
+- LAB for experimentation
+- Promotion system for quality
+- Living docs for knowledge capture
+- The system that builds systems
+
+## Core Workflows
+
+### The Promotion System
+Nothing enters CORE by accident:
 ```bash
-cd YourProject
+# 1. Develop in LAB
+cd CONSTRUCT-LAB/experiments/
+vim new-feature.sh
+
+# 2. Test thoroughly
+./new-feature.sh
+
+# 3. Declare promotion
+vim ../PROMOTE-TO-CORE.yaml
+
+# 4. Validate
+../tools/validate-promotion.sh
+
+# 5. Promote
+../tools/promote-to-core.sh
+```
+
+### Living Documentation Flow
+```bash
+# Start with template
 ./construct-setup
-# Enter your project name when prompted
+
+# Discover project truths
+# ... development happens ...
+
+# Document discoveries
+vim AI/CLAUDE.md  # Add to "Validated Discoveries"
+
+# Auto-update sections
+./AI/scripts/update-context.sh
 ```
 
-This renames everything to match your project and sets up your development environment.
+## For Different Audiences
 
-### 3. Start Building
-```bash
-cd USER-project-files/
-./AI/scripts/update-context.sh    # Updates AI with your project state
-./AI/scripts/check-architecture.sh # Validates your code patterns
-```
+### If You Want a Swift/iOS Project
+- Go to `TEMPLATES/swift-ios/`
+- Run `construct-setup`
+- Start building with AI assistance
 
-Your AI assistant (Claude, Cursor, etc.) now understands your project architecture and will suggest the right patterns.
+### If You Want to Improve CONSTRUCT
+- Work in `CONSTRUCT-LAB/`
+- Use the promotion system
+- Submit pre-validated PRs
 
-## The AI Integration
+### If You Want to Create New Templates
+- Study the Swift template structure
+- Build in LAB first
+- Promote to CORE/TEMPLATES
+- Share with the community
 
-CONSTRUCT creates a living `CLAUDE.md` file that auto-updates with:
-- Your current component counts
-- Architecture violations to avoid  
-- Available design tokens and patterns
-- Recent development context
+### If You Want the Philosophy
+- Read `CONSTRUCT-CORE/docs/distributed-quality-philosophy.md`
+- Study the promotion system
+- Apply patterns to your projects
 
-This means your AI always knows:
-- What components already exist (avoid duplicates)
-- Which patterns to follow (MVVM, design tokens)
-- What violations to prevent (hardcoded values, business logic in Views)
+## Key Documentation
 
-## Architecture Enforcement
+### Core Philosophy
+- [Distributed Quality Philosophy](CONSTRUCT-CORE/docs/distributed-quality-philosophy.md)
+- [Promotion System Guide](CONSTRUCT-CORE/docs/promotion-system-guide.md)
+- [Living Documentation Philosophy](CONSTRUCT-CORE/docs/living-documentation-philosophy.md) *(coming soon)*
 
-CONSTRUCT prevents common mistakes:
+### Quick References
+- [Promotion Quick Reference](CONSTRUCT-LAB/docs/promotion-quick-reference.md)
+- [Commands Reference](CONSTRUCT-CORE/docs/commands-readme.md)
 
-❌ **Prevents**: Business logic in SwiftUI Views  
-✅ **Enforces**: ViewModels handle business logic
+### For Swift/iOS Development
+- See `TEMPLATES/swift-ios/README.md`
+- Check `AI/CLAUDE.md` after setup
 
-❌ **Prevents**: Hardcoded values like `.frame(width: 200)`  
-✅ **Enforces**: Design tokens like `.frame(width: tokens.buttonWidth)`
+## The Meta-Beauty
 
-❌ **Prevents**: @State for business data  
-✅ **Enforces**: @Published properties in ViewModels
+CONSTRUCT is:
+- **A system that improves itself** (using LAB/CORE workflow)
+- **A teacher that travels with code** (distributed quality)
+- **A philosophy made tangible** (living documentation)
 
-## Your Development Workflow
-
-### Daily Development
-```bash
-# Start your day
-./AI/scripts/update-context.sh      # Refresh AI context
-
-# Before creating something new  
-./AI/scripts/before_coding.sh LoginView  # Shows what exists
-
-# After making changes
-./AI/scripts/check-architecture.sh  # Validate patterns
-```
-
-### When Context Gets Full (~90%)
-```bash
-./AI/scripts/session-summary.sh     # Preserve context
-# Start fresh AI session
-./AI/scripts/update-context.sh      # Load current state
-```
-
-## Project Structure
-
-Your personalized project includes:
-
-```
-YourProject/
-├── USER-project-files/           # Your Swift development workspace
-│   ├── AI/                      # AI tools and context
-│   │   ├── CLAUDE.md           # Auto-updating AI context
-│   │   └── scripts/            # Development workflow scripts
-│   ├── PROJECT-name/           # Your actual Xcode project
-│   │   ├── YourApp.xcodeproj  # Ready to build
-│   │   ├── iOS-App/           # iOS application code
-│   │   └── Watch-App/         # Watch application code
-│   └── scripts/               # Development utilities
-└── CONSTRUCT-dev/
-    └── CONSTRUCT/
-        └── docs/               # This documentation
-```
-
-## Why CONSTRUCT Works
-
-**Traditional Approach**:
-- Start from scratch each time
-- AI suggests random patterns
-- Architecture drifts over time
-- Manual code reviews catch issues late
-
-**CONSTRUCT Approach**:
-- Start with production-ready foundation
-- AI understands your specific patterns
-- Architecture enforces itself automatically  
-- Issues prevented before they're written
+It's not just tools - it's a new way of thinking about how software should be built.
 
 ## Getting Help
 
-- **Commands**: See [CONSTRUCT-dev/CONSTRUCT/docs/commands-readme.md](CONSTRUCT-dev/CONSTRUCT/docs/commands-readme.md) for all available scripts
-- **Issues**: Report problems on the CONSTRUCT GitHub repository
-- **Patterns**: Check your auto-updating `CLAUDE.md` for current project patterns
+- **Issues**: Report on the CONSTRUCT GitHub repository
+- **Philosophy**: Read the docs in `CONSTRUCT-CORE/docs/`
+- **Templates**: Check template-specific READMEs
+- **Promotion**: See `CONSTRUCT-LAB/docs/promotion-quick-reference.md`
+
+---
+
+*"The best systems are those that teach you how to build better systems."*
