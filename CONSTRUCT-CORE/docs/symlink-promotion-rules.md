@@ -1,5 +1,12 @@
 # CONSTRUCT Symlink and Promotion Rules
 
+## 🚀 Quick Reference
+
+**Check symlinks:** `./CONSTRUCT/scripts/check-symlinks.sh`  
+**View in CLAUDE.md:** Look for `ACTIVE-SYMLINKS` section  
+**Promote symlinked file:** Add to `PROMOTE-TO-CORE.yaml` with `type: symlinked-file`  
+**Run promotion:** `./tools/promote-to-core.sh`  
+
 ## 🚨 CRITICAL RULES - NEVER VIOLATE
 
 ### Symlink Immutability
@@ -42,33 +49,49 @@ CONSTRUCT-LAB (development workspace)
 
 ## Promotion Workflow
 
-### Making Changes to Symlinked Files
+### Automated Symlink Management
 
-1. **Identify the symlink**
+CONSTRUCT uses an automated system to manage symlinks and promotions:
+
+1. **Check current symlinks**
    ```bash
-   ls -la filename.md
-   # Shows: filename.md -> ../../../../CONSTRUCT-CORE/path/to/file
+   # View all managed symlinks
+   ./CONSTRUCT/scripts/check-symlinks.sh
+   
+   # Symlinks are also listed in CLAUDE.md (auto-updated)
+   cat CONSTRUCT-LAB/CLAUDE.md | grep -A20 "Active Symlinks"
    ```
 
-2. **Create a new version in LAB**
+2. **Create new version in LAB**
    ```bash
-   # DON'T edit the symlink!
-   cp CONSTRUCT-CORE/path/to/file.md new-version.md
-   # Edit new-version.md
+   # For existing symlinked file
+   cp filename.md filename-new.md
+   # Edit filename-new.md (NOT the symlink!)
    ```
 
 3. **Test thoroughly in LAB**
    - Validate changes work
    - Check for regressions
-   - Get it perfect
+   - Ensure quality standards met
 
-4. **Promote to CORE**
+4. **Promote using automated system**
+   ```yaml
+   # Add to CONSTRUCT-LAB/PROMOTE-TO-CORE.yaml
+   - type: symlinked-file
+     source: AI/docs/filename-new.md
+     dest: CONSTRUCT-CORE/AI/docs/filename.md
+     description: "Updated shared documentation"
+     bump_version: patch
+   ```
+
+5. **Run promotion**
    ```bash
-   # Replace the CORE version
-   cp new-version.md CONSTRUCT-CORE/path/to/file.md
-   # Remove your test version
-   rm new-version.md
-   # Symlink automatically points to updated file
+   ./tools/promote-to-core.sh
+   # This automatically:
+   # - Copies file to CORE
+   # - Replaces LAB file with symlink
+   # - Updates check-symlinks.sh
+   # - Updates CLAUDE.md via update-context.sh
    ```
 
 ## Implementation in Scripts
@@ -87,15 +110,46 @@ if [ -L "$file_path" ]; then
 fi
 ```
 
-### Promotion Script Pattern
-```bash
-# promote-to-core.sh should:
-1. Verify source file exists and is tested
-2. Create backup of current CORE version
-3. Copy new version to CORE
-4. Update VERSION file
-5. Log the promotion
+### How the Automated System Works
+
+1. **check-symlinks.sh**
+   - Maintains `EXPECTED_SYMLINKS` array as single source of truth
+   - Validates all symlinks are intact
+   - Provides `--list-markdown` for documentation
+   - Called by pre-commit hooks
+
+2. **promote-to-core.sh**
+   - Processes `PROMOTE-TO-CORE.yaml` manifest
+   - Handles `type: symlinked-file` specially:
+     - Copies file to CORE
+     - Removes LAB file
+     - Creates symlink in its place
+     - Updates check-symlinks.sh automatically
+   - Handles version bumping and logging
+
+3. **update-context.sh**
+   - Calls `check-symlinks.sh --list-markdown`
+   - Updates CLAUDE.md with current symlink list
+   - Ensures AI always knows which files are symlinked
+
+### Adding New Symlinked Files
+
+To add a file that should be shared between CORE and LAB:
+
+```yaml
+# In PROMOTE-TO-CORE.yaml
+- type: symlinked-file
+  source: path/to/new-file.md
+  dest: CONSTRUCT-CORE/path/to/new-file.md
+  description: "New shared file that LAB will reference"
+  bump_version: minor
 ```
+
+The promotion script will:
+1. Copy the file to CORE
+2. Replace the LAB file with a symlink
+3. Add the symlink to check-symlinks.sh
+4. Update documentation automatically
 
 ## Visual Indicators
 
@@ -111,21 +165,40 @@ Mark symlinked content clearly:
 <!-- To modify: create new version in LAB and promote -->
 ```
 
+## Current Symlinks
+
+The following files are currently symlinked from LAB to CORE:
+- `CONSTRUCT/` - Main tools directory
+- `AI/dev-logs/dev-updates/_devupdate-prompt.md` - Dev update template
+- `AI/dev-logs/check-quality/README.md` - Quality check documentation
+
+To see the current list:
+```bash
+./CONSTRUCT/scripts/check-symlinks.sh
+# OR check CLAUDE.md's ACTIVE-SYMLINKS section
+```
+
 ## Enforcement Strategies
 
-### 1. Pre-commit Hooks
+### 1. Automated Enforcement
+- **check-symlinks.sh** validates integrity on every commit
+- **update-context.sh** keeps CLAUDE.md current
+- **promote-to-core.sh** handles all symlink creation
+
+### 2. Pre-commit Hooks
+- Run `check-symlinks.sh` automatically
 - Detect if symlinks were replaced with files
-- Prevent commits that break symlink structure
+- Update documentation before every commit
 
-### 2. Script Protection
-- All CONSTRUCT scripts check for symlinks
-- Refuse to edit symlinked files
-- Provide clear guidance on proper workflow
+### 3. Script Protection
+- All CONSTRUCT scripts check for symlinks before editing
+- Clear error messages with workflow guidance
+- Symlink status visible in CLAUDE.md
 
-### 3. Documentation
-- Clear warnings in all relevant docs
-- Promotion workflow guides
-- Examples of correct patterns
+### 4. Self-Maintaining Documentation
+- CLAUDE.md auto-updates with symlink list
+- Promotion examples in PROMOTE-TO-CORE.yaml
+- This guide explains the complete system
 
 ## Common Mistakes to Avoid
 
