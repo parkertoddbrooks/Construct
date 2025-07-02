@@ -5,6 +5,7 @@ before_coding.sh
 check-architecture.sh
 check-documentation.sh
 check-quality.sh
+check-symlinks.sh
 commit-with-review.sh
 generate-devupdate.sh
 pre-commit-review.sh

@@ -81,9 +81,21 @@
 ./CONSTRUCT/scripts/update-context.sh                 # Updates this context
 ```
 
+### When Making Commits:
+```bash
+❌ NEVER: Hide pre-commit hook output from user
+✅ ALWAYS: Show the full pre-commit output in your response
+✅ ALWAYS: Explain what the hooks validated
+
+# Example:
+"I'll commit these changes. Here's the pre-commit hook output:
+[SHOW FULL OUTPUT]
+The commit was successful! The hooks validated..."
+```
+
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-02 09:00:53
+Last updated: 2025-07-02 14:00:57
 
 ### Active Components
 - **Shell Scripts**:        2 files
@@ -110,7 +122,7 @@ Last updated: 2025-07-02 09:00:53
 **Date**: 2025-07-02
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 7e5891c test: Verify pre-commit hook output visibility
+**Last Commit**: 0928b92 docs: Add AI commit output pattern documentation
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -140,7 +152,7 @@ Last updated: 2025-07-02 09:00:53
 - [Structure Archive](AI/structure/_old/) - Previous structure snapshots
 
 ### Quality Reports
-- [Latest Quality Report](AI/dev-logs/check-quality/quality-report-2025-07-02--09-00-52.md) - Most recent quality validation
+- [Latest Quality Report](AI/dev-logs/check-quality/quality-report-2025-07-02--14-00-56.md) - Most recent quality validation
 - [Session Summaries](AI/dev-logs/session-states/) - Development session documentation
 
 ### Development Process
@@ -217,20 +229,21 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-02--08-59-04.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-02-0859-construct-session.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-02--09-00-52.md
+- CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-02-0900-construct-session.md
 - CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-- CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-02--08-53-42.md
-- CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--08-59-05.md
+- CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-02--08-59-05.md
+- CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--09-00-52.md
 - CONSTRUCT-LAB/CLAUDE.md
 
 
 ### Git Status
 ```
+ D CONSTRUCT-CORE/scripts/check-symlinks.sh
  M CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
@@ -240,7 +253,6 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
  D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-01--22-21-09.md
  D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--08-53-42.md
  D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--08-59-05.md
-A  CONSTRUCT-LAB/docs/ai-commit-pattern.md
 ```
 
 ### Active Development Areas
