@@ -168,7 +168,7 @@ check_dev_docs() {
     local missing_dev_docs=0
     
     # Check for key development docs
-    local dev_files=("AI/todo/implement-dual-dev-environments.md" "AI/docs/automated/improving-CONSTRUCT-guide-automated.md")
+    local dev_files=("AI/todo/future/implement-dual-dev-environments.md" "AI/docs/automated/improving-CONSTRUCT-guide-automated.md")
     
     for doc_file in "${dev_files[@]}"; do
         if [ -f "$CONSTRUCT_DEV/$doc_file" ]; then
