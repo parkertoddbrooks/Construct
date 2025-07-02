@@ -170,9 +170,34 @@ main() {
     exit $VIOLATIONS
 }
 
+# Generate markdown list of symlinks for CLAUDE.md
+generate_symlink_list() {
+    echo "### 🔗 Active Symlinks (Auto-Updated)"
+    echo ""
+    echo "These files in LAB are symlinks to CORE - NEVER edit them directly:"
+    echo '```bash'
+    for symlink_path in "${!EXPECTED_SYMLINKS[@]}"; do
+        local relative_path=${symlink_path#$CONSTRUCT_LAB/}
+        local target=${EXPECTED_SYMLINKS[$symlink_path]}
+        echo "# $relative_path -> $target"
+    done
+    echo ""
+    echo "# To check symlink integrity:"
+    echo "./CONSTRUCT/scripts/check-symlinks.sh"
+    echo ""
+    echo "# If you need to modify these files:"
+    echo "# 1. Create new version in LAB"
+    echo "# 2. Test thoroughly"
+    echo "# 3. Use promote-to-core.sh to update CORE"
+    echo '```'
+}
+
 # Show help if requested
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "Usage: $0 [options]"
+    echo ""
+    echo "Options:"
+    echo "  --list-markdown    Output symlink list in markdown format for CLAUDE.md"
     echo ""
     echo "CONSTRUCT Symlink Integrity Checker"
     echo ""
@@ -183,6 +208,13 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "  - No broken symlinks exist"
     echo ""
     echo "Exit code: Number of violations found"
+    exit 0
+fi
+
+# Check if we're just generating the markdown list
+if [[ "$1" == "--list-markdown" ]]; then
+    # Don't show any other output, just the markdown
+    generate_symlink_list
     exit 0
 fi
 

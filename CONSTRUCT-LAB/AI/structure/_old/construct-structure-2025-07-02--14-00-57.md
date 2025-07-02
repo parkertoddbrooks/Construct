@@ -13,7 +13,9 @@ CONSTRUCT-LAB/PROMOTE-TO-CORE.yaml
 
 ## Markdown Documentation Files
 ```
+CONSTRUCT-LAB/AI/ai-misc-conversations/claude-ui-opus-feedback.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/combining-constuct-w-claude-commands.md
+CONSTRUCT-LAB/AI/ai-misc-conversations/constrcut-simple-new.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/editing-core-constrcut.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/how-mutiple-claudeme-rules-work.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/more-on-new-structure.md
@@ -75,6 +77,9 @@ CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-01--22-20-50.md
 CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-01--22-21-06.md
 CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-01--22-21-09.md
 CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-02--08-53-41.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-02--08-59-04.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-02--09-00-52.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-02--14-00-56.md
 CONSTRUCT-LAB/AI/dev-logs/dev-udpates/automated/_archive/devupdate-02.md
 CONSTRUCT-LAB/AI/dev-logs/dev-udpates/automated/_archive/devupdate-03.md
 CONSTRUCT-LAB/AI/dev-logs/dev-udpates/automated/_archive/devupdate-04.md
@@ -97,6 +102,9 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-01-2038-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-01-2039-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-01-2220-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-01-2221-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-02-0853-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-02-0859-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-02-0900-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-01-0938-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-01-1641-construct-session.md
@@ -163,6 +171,9 @@ CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.back
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250701-222105
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250701-222108
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250702-085340
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250702-085903
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250702-090051
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250702-140055
 CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
 CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
 CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
@@ -220,9 +231,12 @@ CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-01--20-39-16.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-01--22-20-51.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-01--22-21-06.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-01--22-21-09.md
-CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--08-53-42.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-02--08-53-42.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-02--08-59-05.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-02--09-00-52.md
+CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--14-00-57.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
-CONSTRUCT-LAB/AI/todo/capture as a doc/how-mutiple-claudeme-rules-work.md alias
+CONSTRUCT-LAB/AI/todo/capture as a doc/how-mutiple-claudeme-rules-work--2025-07-02--09-45-22.md
 CONSTRUCT-LAB/AI/todo/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/CONSTRUCT-RESTRUCTURE-PLAN-03.md
@@ -234,6 +248,8 @@ CONSTRUCT-LAB/AI/todo/setup-pyyaml-requirement.md
 CONSTRUCT-LAB/AI/todo/setup-requirements.md
 CONSTRUCT-LAB/AI/todo/two-track-documentation-strategy.md
 CONSTRUCT-LAB/CLAUDE.md
+CONSTRUCT-LAB/docs/_ai-ignore/ai-commit-pattern.md
+CONSTRUCT-LAB/docs/DOCUMENTATION-STRUCTURE.md
 CONSTRUCT-LAB/docs/promotion-quick-reference.md
 CONSTRUCT-LAB/tools/README.md
 ```
@@ -289,6 +305,7 @@ file-analysis.sh: 10 functions
   AI/todo
   AI/todo/capture as a doc
   docs
+  docs/_ai-ignore
   experiments
   tools
 ```
@@ -323,11 +340,11 @@ File: quality-gates.yaml
 === File Counts ===
 Shell Scripts: 2
 YAML Configs: 1
-Markdown Docs: 177
+Markdown Docs: 191
 Python Files: 0
 
 === Directory Structure ===
-Total Directories: 31
+Total Directories: 32
 
 === CONSTRUCT Development Health ===
 Working AI Scripts: 5/9
@@ -355,4 +372,4 @@ Configuration Files: 2
 - [ ] Validate configuration file schemas
 
 ---
-*Generated by scan_construct_structure.sh on Wed Jul  2 08:53:42 PDT 2025*
+*Generated by scan_construct_structure.sh on Wed Jul  2 14:00:57 PDT 2025*

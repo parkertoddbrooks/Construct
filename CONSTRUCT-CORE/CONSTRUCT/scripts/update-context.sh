@@ -283,12 +283,22 @@ $git_status_output
 - CONSTRUCT-LAB/AI/docs/automated/ - Auto-generated documentation
 - PROJECT-TEMPLATE/ - Template files for users"
 
+    # Generate symlinks content
+    local symlinks_content=""
+    if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-symlinks.sh" ]; then
+        symlinks_content=$("$CONSTRUCT_DEV/CONSTRUCT/scripts/check-symlinks.sh" --list-markdown 2>/dev/null || echo "Error generating symlink list")
+    else
+        symlinks_content="### 🔗 Active Symlinks (Auto-Updated)
+Error: check-symlinks.sh not found or not executable"
+    fi
+
     # Write each section to temporary files
     echo "$structure_content" > "$temp_dir/structure.txt"
     echo "$sprint_content" > "$temp_dir/sprint.txt"
     echo "$docs_content" > "$temp_dir/docs.txt"
     echo "$violations_content" > "$temp_dir/violations.txt"
     echo "$working_content" > "$temp_dir/working.txt"
+    echo "$symlinks_content" > "$temp_dir/symlinks.txt"
     
     # Create temporary file with updated content
     local temp_file="$temp_dir/claude_updated.md"
@@ -361,6 +371,20 @@ $git_status_output
         next
     }
     /<!-- END:WORKING-LOCATION -->/ && in_section == 5 {
+        print $0
+        in_section = 0
+        next
+    }
+    /<!-- START:ACTIVE-SYMLINKS -->/ {
+        print $0
+        while ((getline line < "'$temp_dir'/symlinks.txt") > 0) {
+            print line
+        }
+        close("'$temp_dir'/symlinks.txt")
+        in_section = 6
+        next
+    }
+    /<!-- END:ACTIVE-SYMLINKS -->/ && in_section == 6 {
         print $0
         in_section = 0
         next

@@ -14,6 +14,23 @@
 ✅ ALWAYS: Use the promotion workflow for CORE updates
 ```
 
+<!-- START:ACTIVE-SYMLINKS -->
+[0;34m🔗 Checking CONSTRUCT symlink integrity...[0m
+### 🔗 Active Symlinks (Auto-Updated)
+
+These files in LAB are symlinks to CORE - NEVER edit them directly:
+```bash
+
+# To check symlink integrity:
+./CONSTRUCT/scripts/check-symlinks.sh
+
+# If you need to modify these files:
+# 1. Create new version in LAB
+# 2. Test thoroughly
+# 3. Use promote-to-core.sh to update CORE
+```
+<!-- END:ACTIVE-SYMLINKS -->
+
 ### Shell/Python Architecture Rules
 ```bash
 ❌ NEVER: Hardcoded paths in scripts
@@ -95,7 +112,7 @@ The commit was successful! The hooks validated..."
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-02 14:00:57
+Last updated: 2025-07-02 14:23:13
 
 ### Active Components
 - **Shell Scripts**:        2 files
@@ -122,7 +139,7 @@ Last updated: 2025-07-02 14:00:57
 **Date**: 2025-07-02
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 0928b92 docs: Add AI commit output pattern documentation
+**Last Commit**: cf42d43 docs: Update DOCUMENTATION-STRUCTURE.md with VERSION, PROMOTION-LOG, and symlinks
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -152,7 +169,7 @@ Last updated: 2025-07-02 14:00:57
 - [Structure Archive](AI/structure/_old/) - Previous structure snapshots
 
 ### Quality Reports
-- [Latest Quality Report](AI/dev-logs/check-quality/quality-report-2025-07-02--14-00-56.md) - Most recent quality validation
+- [Latest Quality Report](AI/dev-logs/check-quality/quality-report-2025-07-02--14-23-11.md) - Most recent quality validation
 - [Session Summaries](AI/dev-logs/session-states/) - Development session documentation
 
 ### Development Process
@@ -229,30 +246,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-02--09-00-52.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-02-0900-construct-session.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-02--14-00-56.md
+- CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-02-1400-construct-session.md
 - CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-- CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-02--08-59-05.md
-- CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--09-00-52.md
-- CONSTRUCT-LAB/CLAUDE.md
+- CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-02--09-00-52.md
+- CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--14-00-57.md
+- CONSTRUCT-LAB/AI/structure/current-structure.md
 
 
 ### Git Status
 ```
- D CONSTRUCT-CORE/scripts/check-symlinks.sh
+R  CONSTRUCT-CORE/scripts/check-symlinks.sh -> CONSTRUCT-CORE/CONSTRUCT/scripts/check-symlinks.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/update-context.sh
+A  CONSTRUCT-LAB/AI/ai-misc-conversations/claude-ui-opus-feedback.md
+A  CONSTRUCT-LAB/AI/ai-misc-conversations/constrcut-simple-new.md
  M CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
- D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-01--22-21-06.md
- D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-01--22-21-09.md
- D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--08-53-42.md
- D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--08-59-05.md
+D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-01--22-21-06.md
 ```
 
 ### Active Development Areas

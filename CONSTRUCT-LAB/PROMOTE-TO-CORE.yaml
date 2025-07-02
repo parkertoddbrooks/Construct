@@ -31,6 +31,17 @@ promotions:
   #   dest: CONSTRUCT-CORE/docs/new-pattern-guide.md
   #   description: "Documentation for new architectural pattern"
   #   bump_version: patch
+  #
+  # # Promote a file that should be symlinked from LAB
+  # - type: symlinked-file
+  #   source: AI/docs/shared-readme.md
+  #   dest: CONSTRUCT-CORE/AI/docs/shared-readme.md
+  #   description: "Shared README that LAB references via symlink"
+  #   bump_version: patch
+  #   # This will:
+  #   # 1. Copy file to CORE
+  #   # 2. Replace LAB file with symlink
+  #   # 3. Update check-symlinks.sh automatically
   
   # Active promotions will be listed below this line:
   

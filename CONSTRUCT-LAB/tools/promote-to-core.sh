@@ -270,6 +270,43 @@ execute_single_promotion() {
     # Copy file
     cp "$LAB_ROOT/$source" "$dest"
     echo -e "${GREEN}✅ Copied to: $dest${NC}"
+    
+    # Handle symlinked-file type
+    if [[ "$type" == "symlinked-file" ]]; then
+        echo -e "${BLUE}🔗 Creating symlink in LAB...${NC}"
+        
+        # Remove original file in LAB
+        rm "$LAB_ROOT/$source"
+        
+        # Calculate relative path from source to dest
+        local source_dir=$(dirname "$LAB_ROOT/$source")
+        local relative_path=$(realpath --relative-to="$source_dir" "$dest")
+        
+        # Create symlink
+        ln -s "$relative_path" "$LAB_ROOT/$source"
+        echo -e "${GREEN}✅ Created symlink: $source -> $relative_path${NC}"
+        
+        # Update check-symlinks.sh
+        update_check_symlinks_script "$source" "$relative_path"
+    fi
+}
+
+# Update check-symlinks.sh with new symlink
+update_check_symlinks_script() {
+    local symlink_path="$1"
+    local target_path="$2"
+    local check_symlinks_script="$CORE_ROOT/CONSTRUCT/scripts/check-symlinks.sh"
+    
+    echo -e "${BLUE}📝 Updating check-symlinks.sh...${NC}"
+    
+    # Create the new entry
+    local new_entry="    [\"\$CONSTRUCT_LAB/$symlink_path\"]=\"$target_path\""
+    
+    # Insert before the closing parenthesis of EXPECTED_SYMLINKS
+    sed -i.bak "/^)$/i\\
+$new_entry" "$check_symlinks_script"
+    
+    echo -e "${GREEN}✅ Updated check-symlinks.sh with new symlink${NC}"
 }
 
 # Process promotions
