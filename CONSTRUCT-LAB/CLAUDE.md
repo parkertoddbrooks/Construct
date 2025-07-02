@@ -2,6 +2,18 @@
 
 ## 🚨 ENFORCE THESE RULES (Never Deprecated)
 
+### Symlink and Promotion Rules
+```bash
+❌ NEVER: Edit a symlinked file directly
+✅ ALWAYS: Create new version in LAB, test, then promote to CORE
+
+❌ NEVER: Replace a symlink with a regular file
+✅ ALWAYS: Maintain symlink integrity - they point to CORE
+
+❌ NEVER: Commit changes to symlinked files
+✅ ALWAYS: Use the promotion workflow for CORE updates
+```
+
 ### Shell/Python Architecture Rules
 ```bash
 ❌ NEVER: Hardcoded paths in scripts
@@ -71,13 +83,13 @@
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-01 18:50:50
+Last updated: 2025-07-01 20:37:21
 
 ### Active Components
 - **Shell Scripts**:        0 files
 - **Library Functions**:        4 files
 - **Configuration Files**:        2 files  
-- **Documentation Files**:        6 files
+- **Documentation Files**:        5 files
 
 ### Available Resources
 
@@ -98,7 +110,7 @@ Last updated: 2025-07-01 18:50:50
 **Date**: 2025-07-01
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 68343c1 docs: Relocate documentation to proper structure
+**Last Commit**: 86dd0b3 feat: Complete CONSTRUCT restructure to CORE/LAB/TEMPLATES architecture
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -128,7 +140,7 @@ Last updated: 2025-07-01 18:50:50
 - [Structure Archive](AI/structure/_old/) - Previous structure snapshots
 
 ### Quality Reports
-- [Latest Quality Report](AI/dev-logs/check-quality/quality-report-2025-07-01--18-50-48.md) - Most recent quality validation
+- [Latest Quality Report](AI/dev-logs/check-quality/quality-report-2025-07-01--20-37-20.md) - Most recent quality validation
 - [Session Summaries](AI/dev-logs/session-states/) - Development session documentation
 
 ### Development Process
@@ -205,30 +217,29 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-dev/AI/ai-misc-conversations/combining-constuct-w-claude-commands.md
-- CONSTRUCT-dev/AI/dev-logs/check-quality/quality-report-2025-07-01--09-38-06.md
-- CONSTRUCT-dev/AI/dev-logs/session-states/2025-07-01-0938-construct-session.md
-- CONSTRUCT-dev/AI/docs/automated/api-reference-automated.md
-- CONSTRUCT-dev/AI/docs/automated/architecture-overview-automated.md
-- CONSTRUCT-dev/AI/docs/automated/development-patterns-automated.md
-- CONSTRUCT-dev/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
-- CONSTRUCT-dev/AI/docs/automated/script-reference-automated.md
-- CONSTRUCT-dev/AI/PRDs/future/ai-enhanced-construct-intelligence-prd.md
-- CONSTRUCT-dev/AI/PRDs/future/claude-code-hooks-integration-prd.md
+- CONSTRUCT-CORE/config/mvvm-rules.yaml
+- CONSTRUCT-CORE/config/quality-gates.yaml
+- CONSTRUCT-CORE/lib/common-patterns.sh
+- CONSTRUCT-CORE/lib/file-analysis.sh
+- CONSTRUCT-CORE/lib/template-utils.sh
+- CONSTRUCT-CORE/lib/validation.sh
+- CONSTRUCT-CORE/README.md
+- CONSTRUCT-CORE/scripts/before_coding.sh
+- CONSTRUCT-CORE/scripts/README.md
 
 
 ### Git Status
 ```
-A  CONSTRUCT-CORE/README.md
-A  CONSTRUCT-CORE/VERSION
-R  CONSTRUCT-dev/CONSTRUCT/config/mvvm-rules.yaml -> CONSTRUCT-CORE/config/mvvm-rules.yaml
-R  CONSTRUCT-dev/CONSTRUCT/config/quality-gates.yaml -> CONSTRUCT-CORE/config/quality-gates.yaml
-R  CONSTRUCT-dev/CONSTRUCT/lib/common-patterns.sh -> CONSTRUCT-CORE/lib/common-patterns.sh
-R  CONSTRUCT-dev/CONSTRUCT/lib/file-analysis.sh -> CONSTRUCT-CORE/lib/file-analysis.sh
-R  CONSTRUCT-dev/CONSTRUCT/lib/template-utils.sh -> CONSTRUCT-CORE/lib/template-utils.sh
-R  CONSTRUCT-dev/CONSTRUCT/lib/validation.sh -> CONSTRUCT-CORE/lib/validation.sh
-R  CONSTRUCT-dev/CONSTRUCT/scripts/README.md -> CONSTRUCT-CORE/scripts/README.md
-R  CONSTRUCT-dev/CONSTRUCT/scripts/before_coding.sh -> CONSTRUCT-CORE/scripts/before_coding.sh
+A  CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md
+R  TEMPLATES/swift-ios/USER-CHOSEN-NAME/AI/dev-logs/dev-updates/_devupdate-prompt.md -> CONSTRUCT-CORE/AI/dev-logs/dev-updates/_devupdate-prompt.md
+R  CONSTRUCT-LAB/AI/docs/README.md -> CONSTRUCT-CORE/AI/docs/README.md
+R  CONSTRUCT-CORE/README.md -> CONSTRUCT-CORE/CONSTRUCT/README.md
+R  CONSTRUCT-CORE/VERSION -> CONSTRUCT-CORE/CONSTRUCT/VERSION
+R  CONSTRUCT-CORE/config/mvvm-rules.yaml -> CONSTRUCT-CORE/CONSTRUCT/config/mvvm-rules.yaml
+R  CONSTRUCT-CORE/config/quality-gates.yaml -> CONSTRUCT-CORE/CONSTRUCT/config/quality-gates.yaml
+R  CONSTRUCT-CORE/lib/common-patterns.sh -> CONSTRUCT-CORE/CONSTRUCT/lib/common-patterns.sh
+R  CONSTRUCT-CORE/lib/file-analysis.sh -> CONSTRUCT-CORE/CONSTRUCT/lib/file-analysis.sh
+R  CONSTRUCT-CORE/lib/template-utils.sh -> CONSTRUCT-CORE/CONSTRUCT/lib/template-utils.sh
 ```
 
 ### Active Development Areas
