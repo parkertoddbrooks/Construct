@@ -12,6 +12,12 @@ None found
 
 ## Markdown Documentation Files
 ```
+CONSTRUCT-LAB/AI/PRDs/construct-template-repository-prd.md
+CONSTRUCT-LAB/AI/PRDs/future/ai-enhanced-construct-intelligence-prd.md
+CONSTRUCT-LAB/AI/PRDs/future/claude-code-hooks-integration-prd.md
+CONSTRUCT-LAB/AI/PRDs/prd-updates-2025-06-28.md
+CONSTRUCT-LAB/AI/PRDs/swift-claude-starter-template-prd-info.md
+CONSTRUCT-LAB/AI/PRDs/swift-claude-starter-template-prd.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/combining-constuct-w-claude-commands.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/editing-core-constrcut.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/how-mutiple-claudeme-rules-work.md
@@ -67,6 +73,8 @@ CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--18-
 CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--18-50-25.md
 CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--18-50-48.md
 CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-01--20-37-20.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-01--20-38-07.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-01--20-39-03.md
 CONSTRUCT-LAB/AI/dev-logs/dev-udpates/automated/_archive/devupdate-02.md
 CONSTRUCT-LAB/AI/dev-logs/dev-udpates/automated/_archive/devupdate-03.md
 CONSTRUCT-LAB/AI/dev-logs/dev-udpates/automated/_archive/devupdate-04.md
@@ -84,6 +92,8 @@ CONSTRUCT-LAB/AI/dev-logs/dev-udpates/automated/_archive/devupdate-17.md
 CONSTRUCT-LAB/AI/dev-logs/dev-udpates/automated/devupdate-01.md
 CONSTRUCT-LAB/AI/dev-logs/dev-udpates/automated/devupdate-05.md
 CONSTRUCT-LAB/AI/dev-logs/dev-udpates/automated/devupdate-15.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-01-2037-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-01-2038-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-01-0938-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-01-1641-construct-session.md
@@ -143,17 +153,13 @@ CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide.md.backup-202
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide.md.backup-20250630-193956
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide.md.backup-20250630-194407
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250701-203719
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250701-203807
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250701-203903
 CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
 CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
 CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
 CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
 CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-CONSTRUCT-LAB/AI/PRDs/construct-template-repository-prd.md
-CONSTRUCT-LAB/AI/PRDs/future/ai-enhanced-construct-intelligence-prd.md
-CONSTRUCT-LAB/AI/PRDs/future/claude-code-hooks-integration-prd.md
-CONSTRUCT-LAB/AI/PRDs/prd-updates-2025-06-28.md
-CONSTRUCT-LAB/AI/PRDs/swift-claude-starter-template-prd-info.md
-CONSTRUCT-LAB/AI/PRDs/swift-claude-starter-template-prd.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -193,16 +199,18 @@ CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-01--16-41-07.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-01--18-35-11.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-01--18-45-32.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-01--18-50-49.md
-CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-01--20-37-20.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-01--20-37-20.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-01--20-38-08.md
+CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-01--20-39-04.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
-CONSTRUCT-LAB/AI/todo/capture as a doc/how-mutiple-claudeme-rules-work.md alias
 CONSTRUCT-LAB/AI/todo/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/CONSTRUCT-RESTRUCTURE-PLAN-03.md
+CONSTRUCT-LAB/AI/todo/MIGRATION-COMPLETE.md
+CONSTRUCT-LAB/AI/todo/capture as a doc/how-mutiple-claudeme-rules-work.md alias
 CONSTRUCT-LAB/AI/todo/github-template-setup.md
 CONSTRUCT-LAB/AI/todo/implement-dual-dev-environments.md
 CONSTRUCT-LAB/AI/todo/implement-living-documentation-system.md
-CONSTRUCT-LAB/AI/todo/MIGRATION-COMPLETE.md
 CONSTRUCT-LAB/AI/todo/setup-pyyaml-requirement.md
 CONSTRUCT-LAB/AI/todo/setup-requirements.md
 CONSTRUCT-LAB/AI/todo/two-track-documentation-strategy.md
@@ -223,6 +231,11 @@ No shell scripts found
 ```
   .
   AI
+  AI/PRDs
+  AI/PRDs/_archive
+  AI/PRDs/current-sprint
+  AI/PRDs/full-app
+  AI/PRDs/future
   AI/ai-misc-conversations
   AI/ai-misc-conversations/what-is-construct
   AI/ai-raw-cli
@@ -239,11 +252,6 @@ No shell scripts found
   AI/docs
   AI/docs/automated
   AI/docs/automated/_archive
-  AI/PRDs
-  AI/PRDs/_archive
-  AI/PRDs/current-sprint
-  AI/PRDs/full-app
-  AI/PRDs/future
   AI/structure
   AI/todo
   AI/todo/capture as a doc
@@ -279,7 +287,7 @@ File: quality-gates.yaml
 === File Counts ===
 Shell Scripts: 0
 YAML Configs: 0
-Markdown Docs: 156
+Markdown Docs: 162
 Python Files: 0
 
 === Directory Structure ===
@@ -311,4 +319,4 @@ Configuration Files: 2
 - [ ] Validate configuration file schemas
 
 ---
-*Generated by scan_construct_structure.sh on Tue Jul  1 20:37:20 PDT 2025*
+*Generated by scan_construct_structure.sh on Tue Jul  1 20:39:04 PDT 2025*
