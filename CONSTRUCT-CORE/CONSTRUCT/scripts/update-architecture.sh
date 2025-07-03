@@ -576,7 +576,7 @@ update_main_architecture() {
     fi
     
     # Get current statistics
-    local script_count=$(find "$CONSTRUCT_DEV/AI/scripts" -name "*.sh" -type f | wc -l | tr -d ' ')
+    local script_count=$(find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | wc -l | tr -d ' ')
     local lib_count=$(find "$CONSTRUCT_DEV/CONSTRUCT/lib" -name "*.sh" -type f | wc -l | tr -d ' ')
     local config_count=$(find "$CONSTRUCT_DEV/CONSTRUCT/config" -name "*.yaml" -type f | wc -l | tr -d ' ')
     

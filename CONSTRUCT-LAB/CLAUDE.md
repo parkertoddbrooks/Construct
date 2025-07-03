@@ -115,7 +115,7 @@ The commit was successful! The hooks validated..."
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-03 12:17:07
+Last updated: 2025-07-03 15:49:10
 
 ### Active Components
 - **Shell Scripts**: 2 files
@@ -142,7 +142,7 @@ Last updated: 2025-07-03 12:17:07
 **Date**: 2025-07-03
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: b61d97e refactor: Major code deduplication and library function improvements
+**Last Commit**: 3df5dc8 test: Fix pre-commit hook dev update path
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -249,30 +249,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-CORE/CONSTRUCT/lib/common-patterns.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts/before_coding.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts/check-architecture.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts/check-documentation.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts/check-quality.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts/check-symlinks.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts/commit-with-review.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts/generate-devupdate.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts/pre-commit-review.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts/scan_construct_structure.sh
+- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-1217-construct-session.md
+- CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
+- CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-03--12-11-36.md
+- CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--12-17-06.md
+- CONSTRUCT-LAB/CLAUDE.md
+- test-hook.md
 
 
 ### Git Status
 ```
- M CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
- D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--09-16-21.md
- D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--12-11-36.md
-A  test-hook.md
-?? CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-11-35.md
-?? CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-17-06.md
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/update-architecture.sh
+A  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-11-35.md
+A  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-17-06.md
+A  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--13-00-53.md
+A  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--13-01-21.md
+A  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--13-04-35.md
+A  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--12-16-19.md
+A  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--12-17-07.md
+A  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--13-01-22.md
+A  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--13-04-36.md
 ```
 
 ### Active Development Areas

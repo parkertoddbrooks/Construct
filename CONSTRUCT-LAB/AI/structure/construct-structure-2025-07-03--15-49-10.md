@@ -85,6 +85,14 @@ CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-02--14-
 CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-02--14-57-47.md
 CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--08-30-54.md
 CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--08-47-36.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--09-17-08.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-08-57.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-11-35.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-17-06.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--13-00-53.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--13-01-21.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--13-04-35.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--15-49-09.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate-01.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate-02.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate-03.md
@@ -105,10 +113,20 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate-17.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate-18.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--09-03-11.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--09-06-35.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--12-16-19.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--12-17-07.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--13-01-22.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--13-04-36.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate-19--2025-07-03--12-15-08.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-02-1454-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-02-1457-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-0830-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-0847-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-0917-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-1211-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-1217-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-1301-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-1304-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/archive/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/archive/2025-06-30-2223-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/archive/2025-06-30-2226-construct-session.md
@@ -193,6 +211,14 @@ CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.back
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250702-145746
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250703-083053
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250703-084736
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250703-091728
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250703-121135
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250703-121705
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250703-130120
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250703-130130
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250703-130415
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250703-130434
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250703-154908
 CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
 CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
 CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
@@ -259,7 +285,13 @@ CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-02--14-54-43.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-02--14-57-48.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-03--08-30-55.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-03--08-47-37.md
-CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--09-16-21.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-03--09-16-21.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-03--12-11-36.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-03--12-17-06.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-03--13-01-22.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-03--13-01-23.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-03--13-04-35.md
+CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--15-49-10.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
@@ -272,12 +304,14 @@ CONSTRUCT-LAB/AI/todo/future/construct-workspace-architecture.md
 CONSTRUCT-LAB/AI/todo/future/github-template-setup.md
 CONSTRUCT-LAB/AI/todo/future/implement-dual-dev-environments.md
 CONSTRUCT-LAB/AI/todo/future/implement-living-documentation-system.md
+CONSTRUCT-LAB/AI/todo/future/learing-modules-ui-lib.md
 CONSTRUCT-LAB/AI/todo/future/make-readme-config-vs-lib.md
 CONSTRUCT-LAB/AI/todo/future/remove-hard-coded-paths.md
 CONSTRUCT-LAB/AI/todo/future/setup-pyyaml-requirement.md
 CONSTRUCT-LAB/AI/todo/future/setup-requirements.md
 CONSTRUCT-LAB/AI/todo/future/standardize-automated-file-naming.md
 CONSTRUCT-LAB/AI/todo/future/two-track-documentation-strategy.md
+CONSTRUCT-LAB/AI/todo/future/using-promotion-system.md
 CONSTRUCT-LAB/CLAUDE.md
 CONSTRUCT-LAB/docs/_ai-ignore/ai-commit-pattern.md
 CONSTRUCT-LAB/docs/DOCUMENTATION-STRUCTURE.md
@@ -301,10 +335,10 @@ Library Functions:
 Test Scripts:
 
 === Function Analysis ===
+common-patterns.sh: 14 functions
+file-analysis.sh: 10 functions
 template-utils.sh: 13 functions
 validation.sh: 9 functions
-common-patterns.sh: 11 functions
-file-analysis.sh: 10 functions
 ```
 
 ## Complete CONSTRUCT Development Tree
@@ -373,7 +407,7 @@ File: quality-gates.yaml
 === File Counts ===
 Shell Scripts: 2
 YAML Configs: 1
-Markdown Docs: 217
+Markdown Docs: 243
 Python Files: 0
 
 === Directory Structure ===
@@ -405,4 +439,4 @@ Configuration Files: 2
 - [ ] Validate configuration file schemas
 
 ---
-*Generated by scan_construct_structure.sh on Thu Jul  3 09:16:21 PDT 2025*
+*Generated by scan_construct_structure.sh on Thu Jul  3 15:49:10 PDT 2025*
