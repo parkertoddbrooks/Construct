@@ -12,10 +12,13 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Get script directory and project root
+# Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-CONSTRUCT_DEV="$CONSTRUCT_ROOT/CONSTRUCT-LAB"
+source "$SCRIPT_DIR/../lib/common-patterns.sh"
+
+# Get project directories using library functions
+CONSTRUCT_ROOT=$(get_construct_root)
+CONSTRUCT_DEV=$(get_construct_dev)
 
 echo -e "${BLUE}🏗️  CONSTRUCT Pre-Commit Review${NC}"
 echo "=================================="

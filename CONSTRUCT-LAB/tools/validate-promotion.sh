@@ -12,10 +12,13 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Get script directory and project root
+# Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../CONSTRUCT/lib/common-patterns.sh"
+
+# Get project directories
 LAB_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-CONSTRUCT_ROOT="$(cd "$LAB_ROOT/.." && pwd)"
+CONSTRUCT_ROOT=$(get_construct_root)
 CORE_ROOT="$CONSTRUCT_ROOT/CONSTRUCT-CORE"
 
 # Promotion manifest

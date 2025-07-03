@@ -5,13 +5,32 @@
 
 set -e
 
-# Standard script directory resolution pattern
+# Get the directory of the calling script
+# Usage: SCRIPT_DIR=$(get_script_dir)
+get_script_dir() {
+    cd "$(dirname "${BASH_SOURCE[1]}")" && pwd
+}
+
+# Get CONSTRUCT root directory from any script location
+# Usage: CONSTRUCT_ROOT=$(get_construct_root)
+get_construct_root() {
+    local script_dir=$(get_script_dir)
+    cd "$script_dir/../../.." && pwd
+}
+
+# Get CONSTRUCT-LAB directory
+# Usage: CONSTRUCT_DEV=$(get_construct_dev) 
+get_construct_dev() {
+    echo "$(get_construct_root)/CONSTRUCT-LAB"
+}
+
+# Standard script directory resolution pattern (legacy - use individual functions above)
 get_script_paths() {
-    local script_dir="$(cd "$(dirname "${BASH_SOURCE[1]}")" && pwd)"
-    local construct_root="$(cd "$script_dir/../../.." && pwd)"
-    local constuct_dev="$construct_root/CONSTRUCT-LAB"
+    local script_dir=$(get_script_dir)
+    local construct_root=$(get_construct_root)
+    local construct_dev=$(get_construct_dev)
     
-    echo "$script_dir|$construct_root|$constuct_dev"
+    echo "$script_dir|$construct_root|$construct_dev"
 }
 
 # Common file finding pattern for shell scripts

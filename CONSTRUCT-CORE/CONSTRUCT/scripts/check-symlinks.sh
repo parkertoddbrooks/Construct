@@ -12,10 +12,13 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Get script directory and project root
+# Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-CONSTRUCT_LAB="$CONSTRUCT_ROOT/CONSTRUCT-LAB"
+source "$SCRIPT_DIR/../lib/common-patterns.sh"
+
+# Get project directories using library functions
+CONSTRUCT_ROOT=$(get_construct_root)
+CONSTRUCT_LAB=$(get_construct_dev)
 CONSTRUCT_CORE="$CONSTRUCT_ROOT/CONSTRUCT-CORE"
 
 echo -e "${BLUE}🔗 Checking CONSTRUCT symlink integrity...${NC}"
@@ -23,11 +26,17 @@ echo -e "${BLUE}🔗 Checking CONSTRUCT symlink integrity...${NC}"
 # Track violations
 VIOLATIONS=0
 
-# Expected symlinks from LAB to CORE
-declare -A EXPECTED_SYMLINKS=(
-    ["$CONSTRUCT_LAB/CONSTRUCT"]="../CONSTRUCT-CORE/CONSTRUCT"
-    ["$CONSTRUCT_LAB/AI/dev-logs/dev-udpates/_devupdate-prompt.md"]="../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/_devupdate-prompt.md"
-    ["$CONSTRUCT_LAB/AI/dev-logs/check-quality/README.md"]="../../../../CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md"
+# Expected symlinks from LAB to CORE (using arrays instead of associative array for compatibility)
+SYMLINK_PATHS=(
+    "$CONSTRUCT_LAB/CONSTRUCT"
+    "$CONSTRUCT_LAB/AI/dev-logs/dev-updates/_devupdate-prompt.md"
+    "$CONSTRUCT_LAB/AI/dev-logs/check-quality/README.md"
+)
+
+SYMLINK_TARGETS=(
+    "../CONSTRUCT-CORE/CONSTRUCT"
+    "../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/_devupdate-prompt.md"
+    "../../../../CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md"
 )
 
 check_symlink() {
@@ -68,8 +77,8 @@ check_replaced_symlinks() {
     echo -e "${BLUE}📋 Checking for replaced symlinks...${NC}"
     
     # Check each expected symlink
-    for symlink_path in "${!EXPECTED_SYMLINKS[@]}"; do
-        check_symlink "$symlink_path" "${EXPECTED_SYMLINKS[$symlink_path]}"
+    for i in "${!SYMLINK_PATHS[@]}"; do
+        check_symlink "${SYMLINK_PATHS[$i]}" "${SYMLINK_TARGETS[$i]}"
     done
 }
 
@@ -176,9 +185,10 @@ generate_symlink_list() {
     echo ""
     echo "These files in LAB are symlinks to CORE - NEVER edit them directly:"
     echo '```bash'
-    for symlink_path in "${!EXPECTED_SYMLINKS[@]}"; do
+    for i in "${!SYMLINK_PATHS[@]}"; do
+        local symlink_path="${SYMLINK_PATHS[$i]}"
         local relative_path=${symlink_path#$CONSTRUCT_LAB/}
-        local target=${EXPECTED_SYMLINKS[$symlink_path]}
+        local target="${SYMLINK_TARGETS[$i]}"
         echo "# $relative_path -> $target"
     done
     echo ""

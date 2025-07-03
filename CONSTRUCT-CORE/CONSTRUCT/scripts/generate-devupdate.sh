@@ -12,10 +12,13 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Get script directory and project root
+# Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-CONSTRUCT_DEV="$CONSTRUCT_ROOT/CONSTRUCT-LAB"
+source "$SCRIPT_DIR/../lib/common-patterns.sh"
+
+# Get project directories using library functions
+CONSTRUCT_ROOT=$(get_construct_root)
+CONSTRUCT_DEV=$(get_construct_dev)
 DEVUPDATE_DIR="$CONSTRUCT_DEV/AI/dev-logs/dev-updates/automated"
 TEMPLATE_FILE="$CONSTRUCT_DEV/AI/dev-logs/dev-updates/_devupdate-prompt.md"
 
@@ -62,21 +65,14 @@ should_generate_devupdate() {
     return 1
 }
 
-# Get next dev update number
-get_next_devupdate_number() {
-    local last_number=$(ls -1 "$DEVUPDATE_DIR"/devupdate-*.md 2>/dev/null | grep -oE 'devupdate-[0-9]+\.md' | grep -oE '[0-9]+' | sort -n | tail -1)
-    if [ -z "$last_number" ]; then
-        echo "01"
-    else
-        # Convert to decimal (remove leading zeros) then increment
-        local decimal_number=$((10#$last_number))
-        printf "%02d" $((decimal_number + 1))
-    fi
+# Get timestamp for filename
+get_timestamp() {
+    date +"%Y-%m-%d--%H-%M-%S"
 }
 
 # Generate dev update using template
 generate_auto_devupdate() {
-    local update_number=$(get_next_devupdate_number)
+    local timestamp=$(get_timestamp)
     local today=$(date +"%Y-%m-%d")
     local branch=$(cd "$CONSTRUCT_ROOT" && git branch --show-current 2>/dev/null || echo "main")
     
@@ -86,8 +82,8 @@ generate_auto_devupdate() {
     local last_commit=$(cd "$CONSTRUCT_ROOT" && git log -1 --pretty=format:"%s" 2>/dev/null)
     
     # Create dev update using the template format
-    cat > "$DEVUPDATE_DIR/devupdate-$update_number.md" << EOF
-# Dev Update $update_number - Development Session Summary
+    cat > "$DEVUPDATE_DIR/devupdate--$timestamp.md" << EOF
+# Dev Update - Development Session Summary
 
 **Date**: $today
 **Session Duration**: Recent development activity
@@ -154,20 +150,20 @@ $recent_work
 **Trust The Process.**
 EOF
 
-    echo -e "${GREEN}✅ Generated dev update using template: devupdate-$update_number.md${NC}"
+    echo -e "${GREEN}✅ Generated dev update using template: devupdate--$timestamp.md${NC}"
     return 0
 }
 
 # Generate Claude prompt for dev update
 generate_claude_prompt() {
-    local update_number=$(get_next_devupdate_number)
+    local timestamp=$(get_timestamp)
     local today=$(date +"%Y-%m-%d")
     local branch=$(cd "$CONSTRUCT_ROOT" && git branch --show-current 2>/dev/null || echo "main")
     local recent_work=$(cd "$CONSTRUCT_ROOT" && git log -10 --pretty=format:"- %s (%cr)" 2>/dev/null)
     local files_changed=$(cd "$CONSTRUCT_ROOT" && git diff HEAD~10 --name-only 2>/dev/null | wc -l)
     
-    cat > "$DEVUPDATE_DIR/devupdate-$update_number-PROMPT.md" << EOF
-# Claude: Please create Dev Update $update_number
+    cat > "$DEVUPDATE_DIR/devupdate-prompt--$timestamp.md" << EOF
+# Claude: Please create Dev Update
 
 **Context**: Use the template at \`$TEMPLATE_FILE\` to create a comprehensive dev update.
 
@@ -181,7 +177,7 @@ $recent_work
 **Instructions for Claude**:
 1. Read the template at: \`$TEMPLATE_FILE\`
 2. Create a detailed dev update following that template
-3. Save it as: \`devupdate-$update_number.md\`
+3. Save it as: \`devupdate--$timestamp.md\`
 4. Include specific technical details, decisions, and learnings
 5. Reference actual commits, files, and changes made
 
@@ -197,7 +193,7 @@ $recent_work
 Please create a comprehensive dev update now.
 EOF
 
-    echo -e "${GREEN}✅ Generated Claude prompt: devupdate-$update_number-PROMPT.md${NC}"
+    echo -e "${GREEN}✅ Generated Claude prompt: devupdate-prompt--$timestamp.md${NC}"
     echo -e "${BLUE}📋 Template location: $TEMPLATE_FILE${NC}"
     return 0
 }
@@ -261,7 +257,7 @@ main() {
         echo "Options:"
         echo "1. Use --auto to generate automatically"
         echo "2. Use --prompt to generate Claude prompt file"
-        echo "3. Manually copy template to devupdate-$(get_next_devupdate_number).md"
+        echo "3. Manually copy template to devupdate--$(get_timestamp).md"
         echo ""
         echo "Template location: $TEMPLATE_FILE"
     fi

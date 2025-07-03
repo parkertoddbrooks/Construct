@@ -20,6 +20,9 @@
 
 These files in LAB are symlinks to CORE - NEVER edit them directly:
 ```bash
+# CONSTRUCT -> ../CONSTRUCT-CORE/CONSTRUCT
+# AI/dev-logs/dev-updates/_devupdate-prompt.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/_devupdate-prompt.md
+# AI/dev-logs/check-quality/README.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md
 
 # To check symlink integrity:
 ./CONSTRUCT/scripts/check-symlinks.sh
@@ -112,21 +115,21 @@ The commit was successful! The hooks validated..."
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-03 08:47:38
+Last updated: 2025-07-03 12:11:37
 
 ### Active Components
-- **Shell Scripts**:        2 files
-- **Library Functions**:        4 files
-- **Configuration Files**:        2 files  
+- **Shell Scripts**: 2 files
+- **Library Functions**: 4 files
+- **Configuration Files**: 2 files  
 - **Documentation Files**:        5 files
 
 ### Available Resources
 
 #### 🧩 Library Functions
-- template-utils.sh - Shell library function
-- validation.sh - Shell library function
 - common-patterns.sh - Shell library function
 - file-analysis.sh - Shell library function
+- template-utils.sh - Shell library function
+- validation.sh - Shell library function
 
 #### ⚙️ Configuration Files
 - mvvm-rules.yaml - Configuration file
@@ -139,7 +142,7 @@ Last updated: 2025-07-03 08:47:38
 **Date**: 2025-07-03
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 68ec7e3 docs: Add CONSTRUCT workspace architecture and fix documentation check
+**Last Commit**: 3b61404 fix: Reorganize automated files into proper directories
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -246,30 +249,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-03--08-30-54.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-03-0830-construct-session.md
-- CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-- CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-02--14-57-48.md
-- CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--08-30-55.md
-- CONSTRUCT-LAB/AI/structure/current-structure.md
+- CONSTRUCT-CORE/CONSTRUCT/scripts/check-quality.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts/generate-devupdate.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts/session-summary.sh
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-06-30--22-07-16.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-06-30--22-16-34.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--16-40-54.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--18-35-11.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--18-45-32.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--18-50-25.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--18-50-48.md
 
 
 ### Git Status
 ```
+M  CONSTRUCT-CORE/CONSTRUCT/lib/common-patterns.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/before_coding.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/check-architecture.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/check-documentation.sh
 M  CONSTRUCT-CORE/CONSTRUCT/scripts/check-quality.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/check-symlinks.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/commit-with-review.sh
 M  CONSTRUCT-CORE/CONSTRUCT/scripts/generate-devupdate.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts/session-summary.sh
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-06-30--22-07-16.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-06-30--22-07-16.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-06-30--22-16-34.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-06-30--22-16-34.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--16-40-54.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--16-40-54.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--18-35-11.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--18-35-11.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--18-45-32.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--18-45-32.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--18-50-25.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--18-50-25.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--18-50-48.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--18-50-48.md
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/pre-commit-review.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/scan_construct_structure.sh
 ```
 
 ### Active Development Areas

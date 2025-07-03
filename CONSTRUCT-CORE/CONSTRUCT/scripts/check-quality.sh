@@ -12,13 +12,14 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Get script directory and project root
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-CONSTRUCT_DEV="$CONSTRUCT_ROOT/CONSTRUCT-LAB"
-
 # Source library functions
-source "$CONSTRUCT_DEV/CONSTRUCT/lib/validation.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../lib/common-patterns.sh"
+source "$SCRIPT_DIR/../lib/validation.sh"
+
+# Get project directories using library functions
+CONSTRUCT_ROOT=$(get_construct_root)
+CONSTRUCT_DEV=$(get_construct_dev)
 
 # Setup report file
 REPORT_DIR="$CONSTRUCT_DEV/AI/dev-logs/check-quality/automated"
@@ -57,7 +58,7 @@ log_output "${BLUE}### 1. Validating shell script syntax...${NC}"
 check_shell_syntax() {
     local syntax_errors=0
     
-    find "$CONSTRUCT_DEV" -name "*.sh" -type f | while read -r script; do
+    find_shell_scripts "$CONSTRUCT_DEV" | while read -r script; do
         if ! bash -n "$script" 2>/dev/null; then
             log_output "${RED}❌ Syntax error in: $(basename "$script")${NC}"
             bash -n "$script" 2>&1 | head -3 | sed 's/^/   /' | while read -r line; do
@@ -82,9 +83,9 @@ log_output "${BLUE}### 2. Checking error handling patterns...${NC}"
 check_error_handling() {
     local missing_error_handling=0
     
-    find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | while read -r script; do
-        local has_set_e=$(grep -c "^set -e" "$script" 2>/dev/null || echo "0")
-        local has_error_trap=$(grep -c "trap.*ERR\|trap.*EXIT" "$script" 2>/dev/null || echo "0")
+    find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts" | while read -r script; do
+        local has_set_e=$(safe_grep_count "^set -e" "$script")
+        local has_error_trap=$(safe_grep_count "trap.*ERR\|trap.*EXIT" "$script")
         
         if [ "$has_set_e" -eq 0 ] && [ "$has_error_trap" -eq 0 ]; then
             log_output "${YELLOW}⚠️ Missing error handling: $(basename "$script")${NC}"
@@ -109,7 +110,7 @@ check_hardcoded_paths() {
     # Look for suspicious hardcoded paths (excluding this pattern definition)
     local suspicious_patterns="/Users/\|/home/\|^[[:space:]]*/tmp/[a-zA-Z]\|/var/folders"
     
-    find "$CONSTRUCT_DEV" -name "*.sh" -type f | while read -r script; do
+    find_shell_scripts "$CONSTRUCT_DEV" | while read -r script; do
         local violations=$(grep -n "$suspicious_patterns" "$script" 2>/dev/null | grep -v "# Example\|# TODO\|suspicious_patterns=\|Look for suspicious" || echo "")
         
         if [ -n "$violations" ]; then
@@ -136,7 +137,7 @@ log_output "${BLUE}### 4. Checking function documentation...${NC}"
 check_function_docs() {
     local undocumented_functions=0
     
-    find "$CONSTRUCT_DEV/CONSTRUCT/lib" -name "*.sh" -type f | while read -r lib_file; do
+    find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/lib" | while read -r lib_file; do
         log_output "${YELLOW}Checking: $(basename "$lib_file")${NC}"
         
         # Find function definitions
@@ -171,7 +172,7 @@ log_output "${BLUE}### 5. Checking script permissions...${NC}"
 check_script_permissions() {
     local non_executable=0
     
-    find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | while read -r script; do
+    find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts" | while read -r script; do
         if [ ! -x "$script" ]; then
             log_output "${RED}❌ Not executable: $(basename "$script")${NC}"
             ((non_executable++))
@@ -249,18 +250,18 @@ log_output "${BLUE}### 7. Checking library function usage...${NC}"
 check_library_usage() {
     local missing_imports=0
     
-    find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | while read -r script; do
+    find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts" | while read -r script; do
         # Check if script sources library functions it uses
-        local uses_validation=$(grep -c "validate_\|check_" "$script" 2>/dev/null | tr -d ' \n' || echo "0")
-        local sources_validation=$(grep -c "source.*validation.sh" "$script" 2>/dev/null | tr -d ' \n' || echo "0")
+        local uses_validation=$(safe_grep_count "validate_\|check_" "$script" 2>/dev/null | tr -d ' \n' || echo "0")
+        local sources_validation=$(safe_grep_count "source.*validation.sh" "$script" 2>/dev/null | tr -d ' \n' || echo "0")
         
         if [ "$uses_validation" -gt 0 ] && [ "$sources_validation" -eq 0 ]; then
             log_output "${YELLOW}⚠️ Uses validation functions but doesn't source validation.sh: $(basename "$script")${NC}"
             ((missing_imports++))
         fi
         
-        local uses_file_analysis=$(grep -c "analyze_\|parse_" "$script" 2>/dev/null | tr -d ' \n' || echo "0")
-        local sources_file_analysis=$(grep -c "source.*file-analysis.sh" "$script" 2>/dev/null | tr -d ' \n' || echo "0")
+        local uses_file_analysis=$(safe_grep_count "analyze_\|parse_" "$script" 2>/dev/null | tr -d ' \n' || echo "0")
+        local sources_file_analysis=$(safe_grep_count "source.*file-analysis.sh" "$script" 2>/dev/null | tr -d ' \n' || echo "0")
         
         if [ "$uses_file_analysis" -gt 0 ] && [ "$sources_file_analysis" -eq 0 ]; then
             log_output "${YELLOW}⚠️ Uses file analysis but doesn't source file-analysis.sh: $(basename "$script")${NC}"
@@ -282,10 +283,10 @@ log_output "${BLUE}### 8. Checking output formatting...${NC}"
 check_output_formatting() {
     local inconsistent_output=0
     
-    find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | while read -r script; do
+    find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts" | while read -r script; do
         # Check for colored output consistency
-        local has_colors=$(grep -c "RED=\|GREEN=\|YELLOW=\|BLUE=" "$script" 2>/dev/null || echo "0")
-        local uses_echo_e=$(grep -c "echo -e" "$script" 2>/dev/null || echo "0")
+        local has_colors=$(safe_grep_count "RED=\|GREEN=\|YELLOW=\|BLUE=" "$script")
+        local uses_echo_e=$(safe_grep_count "echo -e" "$script")
         
         if [ "$uses_echo_e" -gt 0 ] && [ "$has_colors" -eq 0 ]; then
             log_output "${YELLOW}⚠️ Uses echo -e but no color definitions: $(basename "$script")${NC}"
@@ -293,7 +294,7 @@ check_output_formatting() {
         fi
         
         # Check for consistent status indicators
-        local has_status_indicators=$(grep -c "✅\|❌\|⚠️" "$script" 2>/dev/null || echo "0")
+        local has_status_indicators=$(safe_grep_count "✅\|❌\|⚠️" "$script")
         if [ "$has_status_indicators" -eq 0 ] && [ "$(basename "$script")" != "before_coding.sh" ]; then
             log_output "${YELLOW}⚠️ No status indicators found: $(basename "$script")${NC}"
             ((inconsistent_output++))
@@ -318,12 +319,12 @@ check_code_duplication() {
     local common_patterns=(
         "cd.*dirname.*BASH_SOURCE"
         "find.*-name.*sh.*-type f"
-        "grep -c.*2>/dev/null.*echo.*0"
+        "safe_grep_count.*2>/dev/null.*echo.*0"
         "mkdir -p.*structure.*old"
     )
     
     for pattern in "${common_patterns[@]}"; do
-        local usage_count=$(find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f -exec grep -l "$pattern" {} \; 2>/dev/null | wc -l | tr -d ' ')
+        local usage_count=$(find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts" | xargs grep -l "$pattern" 2>/dev/null | wc -l | tr -d ' ')
         
         if [ "$usage_count" -gt 2 ]; then
             log_output "${YELLOW}⚠️ Pattern used in $usage_count scripts: $pattern${NC}"
@@ -347,8 +348,8 @@ check_test_coverage() {
     local missing_tests=0
     
     # Count scripts vs tests
-    local script_count=$(find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | wc -l | tr -d ' ')
-    local test_count=$(find "$CONSTRUCT_DEV/tests" -name "*test*.sh" -type f 2>/dev/null | wc -l | tr -d ' ')
+    local script_count=$(find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts" | wc -l | tr -d ' ')
+    local test_count=$(find_shell_scripts "$CONSTRUCT_DEV/tests" 2>/dev/null | grep -c "test" | tr -d ' \n' || echo "0")
     
     log_output "Scripts: $script_count, Tests: $test_count"
     

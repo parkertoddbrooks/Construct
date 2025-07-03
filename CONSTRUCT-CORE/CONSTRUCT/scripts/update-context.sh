@@ -12,16 +12,17 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Get script directory and project root
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-CONSTRUCT_DEV="$CONSTRUCT_ROOT/CONSTRUCT-LAB"
-CLAUDE_MD="$CONSTRUCT_DEV/CLAUDE.md"
-
 # Source library functions
-source "$CONSTRUCT_DEV/CONSTRUCT/lib/validation.sh"
-source "$CONSTRUCT_DEV/CONSTRUCT/lib/file-analysis.sh"
-source "$CONSTRUCT_DEV/CONSTRUCT/lib/template-utils.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../lib/common-patterns.sh"
+source "$SCRIPT_DIR/../lib/validation.sh"
+source "$SCRIPT_DIR/../lib/file-analysis.sh"
+source "$SCRIPT_DIR/../lib/template-utils.sh"
+
+# Get project directories using library functions
+CONSTRUCT_ROOT=$(get_construct_root)
+CONSTRUCT_DEV=$(get_construct_dev)
+CLAUDE_MD="$CONSTRUCT_DEV/CLAUDE.md"
 
 echo -e "${BLUE}🔄 Updating CONSTRUCT development context...${NC}"
 
@@ -31,9 +32,9 @@ update_auto_sections() {
     echo -e "${BLUE}🔄 Updating auto-sections in CLAUDE.md...${NC}"
     
     # Compute current state
-    local script_count=$(find "$CONSTRUCT_DEV" -name "*.sh" -type f | wc -l)
-    local lib_functions=$(find "$CONSTRUCT_DEV/CONSTRUCT/lib" -name "*.sh" -type f | wc -l)
-    local config_files=$(find "$CONSTRUCT_DEV/CONSTRUCT/config" -name "*.yaml" -type f | wc -l)
+    local script_count=$(count_shell_scripts "$CONSTRUCT_DEV")
+    local lib_functions=$(count_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/lib")
+    local config_files=$(count_yaml_files "$CONSTRUCT_DEV/CONSTRUCT/config")
     local current_branch=$(cd "$CONSTRUCT_ROOT" && git branch --show-current 2>/dev/null || echo "unknown")
     local last_commit=$(cd "$CONSTRUCT_ROOT" && git log -1 --oneline 2>/dev/null || echo "No commits")
     
@@ -56,7 +57,7 @@ update_auto_sections() {
             desc=$(grep "# Purpose:" "$lib" | head -1 | sed 's/# Purpose: //')
         fi
         lib_list="${lib_list}- $name.sh - $desc"$'\n'
-    done < <(find "$CONSTRUCT_DEV/CONSTRUCT/lib" -name "*.sh" -type f)
+    done < <(find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/lib")
     
     # Generate config files list
     local config_list=""
@@ -210,7 +211,7 @@ $guide_link"
             fi
             missing_docs_count=$((missing_docs_count + 1))
         fi
-    done < <(find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f)
+    done < <(find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts")
     
     if [ $missing_docs_count -eq 0 ]; then
         missing_docs_status="✅ All scripts have documentation headers"

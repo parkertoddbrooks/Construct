@@ -12,23 +12,22 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Get script directory and project root
+# Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-CONSTRUCT_DEV="$CONSTRUCT_ROOT/CONSTRUCT-LAB"
-STRUCTURE_DIR="$CONSTRUCT_DEV/AI/structure"
-OLD_DIR="$STRUCTURE_DIR/_old"
+source "$SCRIPT_DIR/../lib/common-patterns.sh"
 
-# Create directories if they don't exist
-mkdir -p "$STRUCTURE_DIR" "$OLD_DIR"
+# Get project directories using library functions
+CONSTRUCT_ROOT=$(get_construct_root)
+CONSTRUCT_DEV=$(get_construct_dev)
+STRUCTURE_DIR="$CONSTRUCT_DEV/AI/structure"
+
+# Create structure directories using library function
+OLD_DIR=$(create_structure_dirs "$STRUCTURE_DIR")
 
 echo -e "${BLUE}🔍 Scanning CONSTRUCT Development Structure...${NC}"
 
-# Move existing construct-structure files to _old
-if ls "$STRUCTURE_DIR"/construct-structure-*.md 2>/dev/null 1>&2; then
-    echo "Moving existing construct-structure files to _old directory..."
-    mv "$STRUCTURE_DIR"/construct-structure-*.md "$OLD_DIR/" 2>/dev/null || true
-fi
+# Archive existing construct-structure files using library function
+archive_existing_files "$STRUCTURE_DIR" "construct-structure-*.md"
 
 # Create new file with timestamp
 OUTPUT_FILE="$STRUCTURE_DIR/construct-structure-$(date +%Y-%m-%d--%H-%M-%S).md"
@@ -67,7 +66,7 @@ analyze_shell_scripts() {
     echo '```' >> "$OUTPUT_FILE"
     
     # Find all shell scripts in CONSTRUCT-LAB
-    shell_scripts=$(find "$CONSTRUCT_DEV" -name "*.sh" -type f | sort)
+    shell_scripts=$(find_shell_scripts "$CONSTRUCT_DEV")
     
     if [ -n "$shell_scripts" ]; then
         echo "=== Script Categories ===" >> "$OUTPUT_FILE"
@@ -95,9 +94,9 @@ analyze_shell_scripts() {
         echo "=== Function Analysis ===" >> "$OUTPUT_FILE"
         
         # Count functions in each library file
-        find "$CONSTRUCT_DEV/CONSTRUCT/lib" -name "*.sh" -type f | while read -r lib_file; do
+        find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/lib" | while read -r lib_file; do
             if [ -f "$lib_file" ]; then
-                func_count=$(grep -c "^[a-zA-Z_][a-zA-Z0-9_]*()" "$lib_file" 2>/dev/null || echo "0")
+                func_count=$(safe_grep_count "^[a-zA-Z_][a-zA-Z0-9_]*()" "$lib_file")
                 echo "$(basename "$lib_file"): $func_count functions" >> "$OUTPUT_FILE"
             fi
         done
@@ -165,7 +164,7 @@ if [ -d "$CONSTRUCT_DEV/CONSTRUCT/config" ]; then
             echo "  Top-level keys: $key_count" >> "$OUTPUT_FILE"
         else
             # Fallback count
-            key_count=$(grep -c "^[a-zA-Z_].*:" "$config_file" 2>/dev/null || echo "unknown")
+            key_count=$(safe_grep_count "^[a-zA-Z_].*:" "$config_file")
             echo "  Configuration sections: $key_count" >> "$OUTPUT_FILE"
         fi
         
@@ -185,7 +184,7 @@ echo "## Summary Statistics" >> "$OUTPUT_FILE"
 echo '```' >> "$OUTPUT_FILE"
 
 echo "=== File Counts ===" >> "$OUTPUT_FILE"
-echo "Shell Scripts: $(find "$CONSTRUCT_DEV" -name "*.sh" -type f | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
+echo "Shell Scripts: $(count_shell_scripts "$CONSTRUCT_DEV")" >> "$OUTPUT_FILE"
 echo "YAML Configs: $(find "$CONSTRUCT_DEV" -name "*.yaml" -type f | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
 echo "Markdown Docs: $(find "$CONSTRUCT_DEV" -name "*.md" -type f | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
 echo "Python Files: $(find "$CONSTRUCT_DEV" -name "*.py" -type f | wc -l | tr -d ' ')" >> "$OUTPUT_FILE"
@@ -209,7 +208,7 @@ if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-documentation.sh" ]; then ((work
 echo "Working AI Scripts: $working_scripts/9" >> "$OUTPUT_FILE"
 
 # Library completeness
-lib_files=$(find "$CONSTRUCT_DEV/CONSTRUCT/lib" -name "*.sh" -type f | wc -l | tr -d ' ')
+lib_files=$(count_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/lib")
 echo "Library Files: $lib_files" >> "$OUTPUT_FILE"
 
 # Config completeness
@@ -261,11 +260,11 @@ echo "# Current CONSTRUCT Development Components ($(date +%Y-%m-%d))" > "$QUICK_
 echo "" >> "$QUICK_REF"
 
 echo "## Working AI Scripts" >> "$QUICK_REF"
-find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f -perm +111 | xargs -I {} basename {} | sort >> "$QUICK_REF"
+find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts" | xargs -I {} basename {} | sort >> "$QUICK_REF"
 
 echo "" >> "$QUICK_REF"
 echo "## Library Functions" >> "$QUICK_REF"
-find "$CONSTRUCT_DEV/CONSTRUCT/lib" -name "*.sh" -type f | xargs -I {} basename {} | sort >> "$QUICK_REF"
+find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/lib" | xargs -I {} basename {} | sort >> "$QUICK_REF"
 
 echo "" >> "$QUICK_REF"
 echo "## Configuration Files" >> "$QUICK_REF"
