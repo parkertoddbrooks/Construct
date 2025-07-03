@@ -16,8 +16,8 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 CONSTRUCT_DEV="$CONSTRUCT_ROOT/CONSTRUCT-LAB"
-DEVUPDATE_DIR="$CONSTRUCT_DEV/AI/dev-logs/dev-udpates"
-TEMPLATE_FILE="$DEVUPDATE_DIR/_devupdate-prompt.md"
+DEVUPDATE_DIR="$CONSTRUCT_DEV/AI/dev-logs/dev-updates/automated"
+TEMPLATE_FILE="$CONSTRUCT_DEV/AI/dev-logs/dev-updates/_devupdate-prompt.md"
 
 # Help function
 show_help() {
@@ -147,7 +147,7 @@ $recent_work
 - Recent work: $last_commit
 - Context: CONSTRUCT-LAB/AI/CLAUDE.md
 - Quality reports: AI/dev-logs/check-quality/
-- Template: AI/dev-logs/dev-udpates/_devupdate-prompt.md
+- Template: AI/dev-logs/dev-updates/_devupdate-prompt.md
 
 ---
 *Generated using template from: $TEMPLATE_FILE*

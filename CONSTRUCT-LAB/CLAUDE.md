@@ -112,7 +112,7 @@ The commit was successful! The hooks validated..."
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-03 08:30:55
+Last updated: 2025-07-03 08:47:38
 
 ### Active Components
 - **Shell Scripts**:        2 files
@@ -139,7 +139,7 @@ Last updated: 2025-07-03 08:30:55
 **Date**: 2025-07-03
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 9ec6d19 fix: Update documentation check to look for files in new todo/future location
+**Last Commit**: 68ec7e3 docs: Add CONSTRUCT workspace architecture and fix documentation check
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -169,7 +169,7 @@ Last updated: 2025-07-03 08:30:55
 - [Structure Archive](AI/structure/_old/) - Previous structure snapshots
 
 ### Quality Reports
-- [Latest Quality Report](AI/dev-logs/check-quality/quality-report-2025-07-03--08-30-54.md) - Most recent quality validation
+- [Latest Quality Report](AI/dev-logs/check-quality/README.md) - Most recent quality validation
 - [Session Summaries](AI/dev-logs/session-states/) - Development session documentation
 
 ### Development Process
@@ -246,30 +246,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-CORE/CONSTRUCT/scripts/check-documentation.sh
-- CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-02--14-57-47.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-02-1457-construct-session.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/quality-report-2025-07-03--08-30-54.md
+- CONSTRUCT-LAB/AI/dev-logs/session-states/2025-07-03-0830-construct-session.md
 - CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-- CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-02--14-54-43.md
-- CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--14-57-48.md
+- CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-02--14-57-48.md
+- CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--08-30-55.md
+- CONSTRUCT-LAB/AI/structure/current-structure.md
 
 
 ### Git Status
 ```
- M CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--14-23-12.md
-D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--14-54-43.md
- D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-02--14-57-48.md
- M CONSTRUCT-LAB/AI/structure/current-structure.md
-A  CONSTRUCT-LAB/AI/todo/future/construct-workspace-architecture.md
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/check-quality.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/generate-devupdate.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/session-summary.sh
+R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-06-30--22-07-16.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-06-30--22-07-16.md
+R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-06-30--22-16-34.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-06-30--22-16-34.md
+R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--16-40-54.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--16-40-54.md
+R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--18-35-11.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--18-35-11.md
+R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--18-45-32.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--18-45-32.md
+R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--18-50-25.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--18-50-25.md
+R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-01--18-50-48.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-01--18-50-48.md
 ```
 
 ### Active Development Areas

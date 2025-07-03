@@ -21,7 +21,7 @@ CONSTRUCT_DEV="$CONSTRUCT_ROOT/CONSTRUCT-LAB"
 source "$CONSTRUCT_DEV/CONSTRUCT/lib/validation.sh"
 
 # Setup report file
-REPORT_DIR="$CONSTRUCT_DEV/AI/dev-logs/check-quality"
+REPORT_DIR="$CONSTRUCT_DEV/AI/dev-logs/check-quality/automated"
 mkdir -p "$REPORT_DIR"
 REPORT_FILE="$REPORT_DIR/quality-report-$(date +%Y-%m-%d--%H-%M-%S).md"
 

@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 CONSTRUCT_DEV="$CONSTRUCT_ROOT/CONSTRUCT-LAB"
-SESSION_DIR="$CONSTRUCT_DEV/AI/dev-logs/session-states"
+SESSION_DIR="$CONSTRUCT_DEV/AI/dev-logs/session-states/automated"
 TIMESTAMP=$(date +"%Y-%m-%d-%H%M")
 TODAY=$(date +"%Y-%m-%d")
 
