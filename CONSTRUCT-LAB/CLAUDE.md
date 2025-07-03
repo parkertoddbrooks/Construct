@@ -23,6 +23,7 @@ These files in LAB are symlinks to CORE - NEVER edit them directly:
 # CONSTRUCT -> ../CONSTRUCT-CORE/CONSTRUCT
 # AI/dev-logs/dev-updates/_devupdate-prompt.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/_devupdate-prompt.md
 # AI/dev-logs/check-quality/README.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md
+# AI/dev-logs/dev-updates/README.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/README.md
 
 # To check symlink integrity:
 ./CONSTRUCT/scripts/check-symlinks.sh
@@ -115,7 +116,7 @@ The commit was successful! The hooks validated..."
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-03 15:49:10
+Last updated: 2025-07-03 16:32:36
 
 ### Active Components
 - **Shell Scripts**: 2 files
@@ -142,7 +143,7 @@ Last updated: 2025-07-03 15:49:10
 **Date**: 2025-07-03
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 3df5dc8 test: Fix pre-commit hook dev update path
+**Last Commit**: 9c88e11 fix: Resolve script path error and update documentation
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -249,30 +250,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-1217-construct-session.md
-- CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-- CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-03--12-11-36.md
-- CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--12-17-06.md
-- CONSTRUCT-LAB/CLAUDE.md
-- test-hook.md
+- CONSTRUCT-CORE/CONSTRUCT/scripts/update-architecture.sh
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-11-35.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-17-06.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--13-00-53.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--13-01-21.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--13-04-35.md
+- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--12-16-19.md
+- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--12-17-07.md
+- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--13-01-22.md
+- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--13-04-36.md
 
 
 ### Git Status
 ```
-M  CONSTRUCT-CORE/CONSTRUCT/scripts/update-architecture.sh
-A  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-11-35.md
-A  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-17-06.md
-A  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--13-00-53.md
-A  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--13-01-21.md
-A  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--13-04-35.md
-A  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--12-16-19.md
-A  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--12-17-07.md
-A  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--13-01-22.md
-A  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--13-04-36.md
+A  CONSTRUCT-CORE/AI/dev-logs/dev-updates/README.md
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/check-symlinks.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/generate-devupdate.sh
+A  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--15-49-09.md
+A  CONSTRUCT-LAB/AI/dev-logs/dev-updates/README.md
+R  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--09-03-11.md -> CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate--2025-07-03--09-03-11.md
+R  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--09-06-35.md -> CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate--2025-07-03--09-06-35.md
+R  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--12-16-19.md -> CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate--2025-07-03--12-16-19.md
+R  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--12-17-07.md -> CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate--2025-07-03--12-17-07.md
+R  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--13-01-22.md -> CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate--2025-07-03--13-01-22.md
 ```
 
 ### Active Development Areas
