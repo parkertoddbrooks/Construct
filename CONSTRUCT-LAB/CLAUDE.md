@@ -12,6 +12,15 @@
 
 ❌ NEVER: Commit changes to symlinked files
 ✅ ALWAYS: Use the promotion workflow for CORE updates
+
+❌ NEVER: Edit symlinked READMEs directly in LAB
+✅ ALWAYS: Update READMEs in CORE, symlinks auto-reflect changes
+
+❌ NEVER: Break symlinks by replacing with regular files  
+✅ ALWAYS: Keep AI documentation symlinked for consistency
+
+❌ NEVER: Manually copy files from LAB to CORE
+✅ ALWAYS: Use ./tools/promote-to-core.sh for tested changes
 ```
 
 <!-- START:ACTIVE-SYMLINKS -->
@@ -24,6 +33,7 @@ These files in LAB are symlinks to CORE - NEVER edit them directly:
 # AI/dev-logs/dev-updates/_devupdate-prompt.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/_devupdate-prompt.md
 # AI/dev-logs/check-quality/README.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md
 # AI/dev-logs/dev-updates/README.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/README.md
+# AI/docs/README.md -> ../../../CONSTRUCT-CORE/AI/docs/README.md
 
 # To check symlink integrity:
 ./CONSTRUCT/scripts/check-symlinks.sh
@@ -116,13 +126,13 @@ The commit was successful! The hooks validated..."
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-03 16:44:44
+Last updated: 2025-07-03 19:33:48
 
 ### Active Components
 - **Shell Scripts**: 2 files
 - **Library Functions**: 4 files
 - **Configuration Files**: 2 files  
-- **Documentation Files**:        5 files
+- **Documentation Files**:        6 files
 
 ### Available Resources
 
@@ -143,7 +153,7 @@ Last updated: 2025-07-03 16:44:44
 **Date**: 2025-07-03
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 21ccb8a fix: Auto-stage generated files in same commit
+**Last Commit**: f7416bd chore: Clean up archived structure files
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -250,30 +260,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--16-36-44.md
-- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--16-42-45.md
-- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--16-43-08.md
-- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--16-36-45.md
-- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--16-42-46.md
-- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--16-43-10.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-1642-construct-session.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-1643-construct-session.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--16-44-42.md
+- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--16-44-44.md
+- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-1644-construct-session.md
 - CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
 - CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
+- CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-03--16-43-09.md
+- CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--16-35-49.md
 
 
 ### Git Status
 ```
- M CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--16-35-49.md
-D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--16-36-44.md
-D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--16-42-46.md
- D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--16-43-09.md
-?? CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--16-44-42.md
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/README.md
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/check-symlinks.sh
+A  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--19-31-41.md
+A  CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--19-31-43.md
+A  CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-1931-construct-session.md
+A  CONSTRUCT-LAB/AI/docs/README.md
+MM CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
+MM CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
+MM CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
+MM CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
 ```
 
 ### Active Development Areas
@@ -291,6 +301,20 @@ These are empirically proven and remain true:
 - **Template contamination**: USER-project-files must stay clean of CONSTRUCT-specific code
 - **Configuration-driven validation**: Rules in YAML, not hardcoded in scripts
 - **Auto-documentation essential**: Manual docs get out of sync quickly
+
+### Symlink Architecture Truths
+- **AI documentation symlinked**: READMEs and templates shared from CORE for consistency
+- **CONSTRUCT code symlinked**: Whole directory linked for unified functionality  
+- **User file flexibility**: Users can add any files to structure without affecting symlinks
+- **Single source documentation**: Update once in CORE, appears everywhere automatically
+- **Dual independence**: LAB can develop independently where needed while maintaining links
+
+### LAB-to-CORE Promotion Truths
+- **tools/ directory manages promotion**: Structured workflow for LAB → CORE changes
+- **Validation before promotion**: Changes must pass checks before moving to CORE
+- **Configuration-driven promotion**: PROMOTE-TO-CORE.yaml defines promotion rules
+- **Symlinks preserve after promotion**: Promotion updates CORE, symlinks stay intact
+- **Promotion workflow prevents conflicts**: Structured approach avoids manual copy errors
 
 ### Shell Scripting Truths  
 - **Relative paths required**: Hardcoded paths break when used as templates
@@ -573,6 +597,44 @@ analyze_dual_environment() {
     echo -e "${YELLOW}Extracting cross-environment insights...${NC}"
     extract_improvement_patterns
 }
+```
+
+### Symlink Management Pattern
+```bash
+# Check symlink integrity
+./CONSTRUCT/scripts/check-symlinks.sh
+
+# What's symlinked (from LAB to CORE):
+# - CONSTRUCT/ (entire directory)
+# - AI/docs/README.md  
+# - AI/dev-logs/*/README.md
+# - AI/dev-logs/dev-updates/_devupdate-prompt.md
+
+# What's independent:
+# - User-created files in LAB
+# - tools/ directory (LAB-specific)
+# - Development work files
+
+# Generate symlink documentation for CLAUDE.md:
+./CONSTRUCT/scripts/check-symlinks.sh --list-markdown
+```
+
+### LAB-to-CORE Promotion Pattern
+```bash
+# Promotion workflow for tested changes
+./tools/validate-promotion.sh   # Check if changes are ready
+./tools/promote-to-core.sh      # Promote validated changes
+
+# Configuration file: PROMOTE-TO-CORE.yaml
+# - Defines promotion rules
+# - Specifies validation requirements
+# - Controls which files get promoted
+
+# Workflow:
+# 1. Develop and test in LAB
+# 2. Validate promotion readiness
+# 3. Promote to CORE via tools
+# 4. Symlinks automatically reflect changes
 ```
 
 ## 🤖 AI Architectural Guidance
