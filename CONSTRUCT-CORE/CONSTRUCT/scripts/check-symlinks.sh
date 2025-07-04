@@ -31,6 +31,7 @@ SYMLINK_PATHS=(
     "$CONSTRUCT_LAB/AI/dev-logs/check-quality/README-sym.md"
     "$CONSTRUCT_LAB/AI/dev-logs/dev-updates/README-sym.md"
     "$CONSTRUCT_LAB/AI/docs/README-sym.md"
+    "$CONSTRUCT_LAB/AI/todo/README-sym.md"
 )
 
 SYMLINK_TARGETS=(
@@ -39,6 +40,7 @@ SYMLINK_TARGETS=(
     "../../../../CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md"
     "../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/README.md"
     "../../../CONSTRUCT-CORE/AI/docs/README.md"
+    "../../../CONSTRUCT-CORE/AI/todo/README.md"
 )
 
 check_symlink() {

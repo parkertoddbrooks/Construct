@@ -281,16 +281,30 @@ execute_single_promotion() {
         # Remove original file in LAB
         rm "$LAB_ROOT/$source"
         
-        # Calculate relative path from source to dest
+        # Calculate relative path from source to dest (macOS compatible)
         local source_dir=$(dirname "$LAB_ROOT/$source")
-        local relative_path=$(realpath --relative-to="$source_dir" "$dest")
         
-        # Create symlink
-        ln -s "$relative_path" "$LAB_ROOT/$source"
-        echo -e "${GREEN}✅ Created symlink: $source -> $relative_path${NC}"
+        # Use Python for cross-platform relative path calculation
+        local relative_path=$(python3 -c "
+import os
+source_dir = '$source_dir'
+dest = '$dest'
+print(os.path.relpath(dest, source_dir))
+")
+        
+        # Create symlink with -sym naming convention
+        local source_base=$(basename "$source")
+        local source_dir_path=$(dirname "$source")
+        local source_ext="${source_base##*.}"
+        local source_name="${source_base%.*}"
+        local symlink_name="${source_name}-sym.${source_ext}"
+        local symlink_path="${source_dir_path}/${symlink_name}"
+        
+        ln -s "$relative_path" "$LAB_ROOT/$symlink_path"
+        echo -e "${GREEN}✅ Created symlink: $symlink_path -> $relative_path${NC}"
         
         # Update check-symlinks.sh
-        update_check_symlinks_script "$source" "$relative_path"
+        update_check_symlinks_script "$symlink_path" "$relative_path"
     fi
 }
 
@@ -302,12 +316,17 @@ update_check_symlinks_script() {
     
     echo -e "${BLUE}📝 Updating check-symlinks.sh...${NC}"
     
-    # Create the new entry
-    local new_entry="    [\"\$CONSTRUCT_LAB/$symlink_path\"]=\"$target_path\""
+    # Add to SYMLINK_PATHS array
+    sed -i.bak "/^SYMLINK_PATHS=($/,/^)$/ {
+        /^)$/ i\\
+    \"\$CONSTRUCT_LAB/$symlink_path\"
+    }" "$check_symlinks_script"
     
-    # Insert before the closing parenthesis of EXPECTED_SYMLINKS
-    sed -i.bak "/^)$/i\\
-$new_entry" "$check_symlinks_script"
+    # Add to SYMLINK_TARGETS array  
+    sed -i.bak "/^SYMLINK_TARGETS=($/,/^)$/ {
+        /^)$/ i\\
+    \"$target_path\"
+    }" "$check_symlinks_script"
     
     echo -e "${GREEN}✅ Updated check-symlinks.sh with new symlink${NC}"
 }

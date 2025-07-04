@@ -39,6 +39,7 @@ These files in LAB are symlinks to CORE - NEVER edit them directly:
 # AI/dev-logs/check-quality/README-sym.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md
 # AI/dev-logs/dev-updates/README-sym.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/README.md
 # AI/docs/README-sym.md -> ../../../CONSTRUCT-CORE/AI/docs/README.md
+# AI/todo/README-sym.md -> ../../../CONSTRUCT-CORE/AI/todo/README.md
 
 # To check symlink integrity:
 ./CONSTRUCT/scripts/check-symlinks.sh
@@ -129,9 +130,16 @@ These files in LAB are symlinks to CORE - NEVER edit them directly:
 The commit was successful! The hooks validated..."
 ```
 
+### Post-Commit Behavior (Expected)
+After commits, you may see deletions of structure files - this is normal cleanup:
+- New structure files generated during pre-commit
+- Old structure files cleaned up after commit  
+- Only current files remain, old ones moved to _old/
+- These deletions are NOT errors and should NOT be "fixed"
+
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-04 08:44:42
+Last updated: 2025-07-04 09:38:26
 
 ### Active Components
 - **Shell Scripts**: 2 files
@@ -158,7 +166,7 @@ Last updated: 2025-07-04 08:44:42
 **Date**: 2025-07-04
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 59cd670 feat: Implement hybrid symlink naming convention with validation
+**Last Commit**: 8a712b8 feat: Implement hybrid symlink naming convention with validation
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -279,16 +287,16 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 
 ### Git Status
 ```
- M CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-04-0844-construct-session.md
+A  CONSTRUCT-CORE/AI/todo/README.md
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/check-symlinks.sh
+M  CONSTRUCT-CORE/PROMOTION-LOG.md
+M  CONSTRUCT-CORE/VERSION
  M CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-04--08-44-07.md
- D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-04--08-44-20.md
-?? CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-04--08-44-41.md
-?? CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-04--08-44-42.md
+D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-04--08-44-20.md
 ```
 
 ### Active Development Areas

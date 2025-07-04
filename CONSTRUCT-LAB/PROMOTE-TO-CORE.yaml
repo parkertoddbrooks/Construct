@@ -45,9 +45,11 @@ promotions:
   
   # Active promotions will be listed below this line:
   
-  # Promote distributed quality examples documentation
-  - type: file
-    source: experiments/distributed-quality-examples.md
-    dest: CONSTRUCT-CORE/docs/distributed-quality-examples.md
-    description: "Documentation showing real examples of distributed quality philosophy"
-    bump_version: patch
+  # Promote distributed quality examples documentation (disabled - file missing)
+  # - type: file
+  #   source: experiments/distributed-quality-examples.md
+  #   dest: CONSTRUCT-CORE/docs/distributed-quality-examples.md
+  #   description: "Documentation showing real examples of distributed quality philosophy"
+  #   bump_version: patch
+    
+  # Promotion testing complete - manifest cleared
