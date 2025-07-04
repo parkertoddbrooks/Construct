@@ -37,8 +37,8 @@ CONSTRUCT-LAB (development workspace)
 
 ### What Gets Symlinked
 1. **Shared Documentation**
-   - `_devupdate-prompt.md`
-   - `README.md` files for structure
+   - `devupdate-prompt-sym.md` (points to `_devupdate-prompt.md` in CORE)
+   - `README-sym.md` files for structure
    - Shared templates
 
 2. **Configuration Files**
@@ -168,9 +168,30 @@ Mark symlinked content clearly:
 ## Current Symlinks
 
 The following files are currently symlinked from LAB to CORE:
-- `CONSTRUCT/` - Main tools directory
-- `AI/dev-logs/dev-updates/_devupdate-prompt.md` - Dev update template
-- `AI/dev-logs/check-quality/README.md` - Quality check documentation
+- `CONSTRUCT/` - Main tools directory  
+- `AI/dev-logs/dev-updates/devupdate-prompt-sym.md` - Dev update template
+- `AI/dev-logs/check-quality/README-sym.md` - Quality check documentation
+- `AI/dev-logs/dev-updates/README-sym.md` - Dev updates documentation
+- `AI/docs/README-sym.md` - AI documentation overview
+
+**Note**: Files use `-sym.ext` naming convention for GUI clarity while maintaining actual symlinks for terminal visibility.
+
+### Hybrid Symlink Naming Convention
+
+CONSTRUCT uses a hybrid approach that provides clarity in both terminal and GUI environments:
+
+**Terminal Environment**: Symlinks show arrows (`->`) in `ls -la` output
+**GUI Environment**: Symlinks appear identical to regular files in VS Code, Finder, etc.
+
+**Solution**: Use `-sym.ext` naming pattern for symlinked files:
+- `README-sym.md` → actual symlink pointing to `CORE/README.md`  
+- `devupdate-prompt-sym.md` → actual symlink pointing to `CORE/_devupdate-prompt.md`
+
+**Benefits**:
+- **Self-documenting**: Filename clearly indicates symlink status
+- **Cross-platform clarity**: Works in both terminal and GUI
+- **Orphan protection**: Pre-commit validation prevents fake `-sym` files
+- **Alan Cox compliant**: "If you don't know, it isn't right" - the name tells you
 
 To see the current list:
 ```bash
@@ -210,6 +231,12 @@ This breaks the link structure!
 
 ### ❌ Copying over a symlink with `cp`
 Use `cp -H` to copy the content, not create a regular file!
+
+### ❌ Creating files named *-sym.* that aren't symlinks
+The `-sym` naming convention is reserved for actual symlinks only!
+
+### ❌ Copying a *-sym file without preserving the link
+This creates orphan files that lie about being symlinks!
 
 ### ❌ Forgetting symlinks after git clone
 Symlinks must be recreated or verified after cloning!

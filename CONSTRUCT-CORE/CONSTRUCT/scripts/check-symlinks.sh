@@ -21,18 +21,16 @@ CONSTRUCT_ROOT=$(get_construct_root)
 CONSTRUCT_LAB=$(get_construct_dev)
 CONSTRUCT_CORE="$CONSTRUCT_ROOT/CONSTRUCT-CORE"
 
-echo -e "${BLUE}🔗 Checking CONSTRUCT symlink integrity...${NC}"
-
 # Track violations
 VIOLATIONS=0
 
 # Expected symlinks from LAB to CORE (using arrays instead of associative array for compatibility)
 SYMLINK_PATHS=(
     "$CONSTRUCT_LAB/CONSTRUCT"
-    "$CONSTRUCT_LAB/AI/dev-logs/dev-updates/_devupdate-prompt.md"
-    "$CONSTRUCT_LAB/AI/dev-logs/check-quality/README.md"
-    "$CONSTRUCT_LAB/AI/dev-logs/dev-updates/README.md"
-    "$CONSTRUCT_LAB/AI/docs/README.md"
+    "$CONSTRUCT_LAB/AI/dev-logs/dev-updates/devupdate-prompt-sym.md"
+    "$CONSTRUCT_LAB/AI/dev-logs/check-quality/README-sym.md"
+    "$CONSTRUCT_LAB/AI/dev-logs/dev-updates/README-sym.md"
+    "$CONSTRUCT_LAB/AI/docs/README-sym.md"
 )
 
 SYMLINK_TARGETS=(
@@ -233,4 +231,5 @@ if [[ "$1" == "--list-markdown" ]]; then
 fi
 
 # Run main function
+echo -e "${BLUE}🔗 Checking CONSTRUCT symlink integrity...${NC}"
 main "$@"

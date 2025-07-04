@@ -342,8 +342,47 @@ check_code_duplication() {
 check_code_duplication
 log_output ""
 
-# Check 10: Test coverage
-log_output "${BLUE}### 10. Checking test coverage...${NC}"
+# Check 10: Hybrid symlink naming validation
+log_output "${BLUE}### 10. Checking hybrid symlink naming...${NC}"
+check_symlink_naming() {
+    local violations=0
+    
+    # Check: All *-sym.* files must be actual symlinks
+    while IFS= read -r -d '' file; do
+        if [ ! -L "$file" ]; then
+            log_output "${RED}❌ ORPHAN: $file claims to be symlink but isn't!${NC}"
+            ((violations++))
+        fi
+    done < <(find "$CONSTRUCT_DEV" -name "*-sym.*" -print0 2>/dev/null)
+    
+    # Check: Symlinks should use -sym naming for clarity
+    local unnamed_symlinks=0
+    while IFS= read -r -d '' file; do
+        local basename_file=$(basename "$file")
+        if [[ ! "$basename_file" =~ -sym\. ]] && [[ ! "$basename_file" == "CONSTRUCT" ]]; then
+            log_output "${YELLOW}⚠️ Symlink without -sym naming: $file${NC}"
+            ((unnamed_symlinks++))
+        fi
+    done < <(find "$CONSTRUCT_DEV" -type l -print0 2>/dev/null)
+    
+    if [ $violations -eq 0 ]; then
+        log_output "${GREEN}✅ All -sym files are actual symlinks${NC}"
+    else
+        log_output "${YELLOW}   Fix: Remove orphan files or recreate as symlinks${NC}"
+        VIOLATIONS=$((VIOLATIONS + violations))
+    fi
+    
+    if [ $unnamed_symlinks -eq 0 ]; then
+        log_output "${GREEN}✅ All symlinks follow naming convention${NC}"
+    else
+        log_output "${YELLOW}   Consider: Rename symlinks to use -sym pattern for clarity${NC}"
+    fi
+}
+check_symlink_naming
+log_output ""
+
+# Check 11: Test coverage
+log_output "${BLUE}### 11. Checking test coverage...${NC}"
 check_test_coverage() {
     local missing_tests=0
     
@@ -396,6 +435,7 @@ log_output "  - Configuration file validation"
 log_output "  - Library function usage"
 log_output "  - Output formatting consistency"
 log_output "  - Code duplication detection"
+log_output "  - Hybrid symlink naming validation"
 log_output "  - Test coverage analysis"
 log_output ""
 log_output "Next steps:"

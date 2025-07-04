@@ -21,19 +21,24 @@
 
 ❌ NEVER: Manually copy files from LAB to CORE
 ✅ ALWAYS: Use ./tools/promote-to-core.sh for tested changes
+
+❌ NEVER: Create files named *-sym.* that aren't symlinks
+✅ ALWAYS: Use -sym.ext naming only for actual symlinks to CORE
+
+❌ NEVER: Copy a *-sym file without preserving the link
+✅ ALWAYS: Check pre-commit validates symlink naming integrity
 ```
 
 <!-- START:ACTIVE-SYMLINKS -->
-[0;34m🔗 Checking CONSTRUCT symlink integrity...[0m
 ### 🔗 Active Symlinks (Auto-Updated)
 
 These files in LAB are symlinks to CORE - NEVER edit them directly:
 ```bash
 # CONSTRUCT -> ../CONSTRUCT-CORE/CONSTRUCT
-# AI/dev-logs/dev-updates/_devupdate-prompt.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/_devupdate-prompt.md
-# AI/dev-logs/check-quality/README.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md
-# AI/dev-logs/dev-updates/README.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/README.md
-# AI/docs/README.md -> ../../../CONSTRUCT-CORE/AI/docs/README.md
+# AI/dev-logs/dev-updates/devupdate-prompt-sym.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/_devupdate-prompt.md
+# AI/dev-logs/check-quality/README-sym.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md
+# AI/dev-logs/dev-updates/README-sym.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/README.md
+# AI/docs/README-sym.md -> ../../../CONSTRUCT-CORE/AI/docs/README.md
 
 # To check symlink integrity:
 ./CONSTRUCT/scripts/check-symlinks.sh
@@ -126,7 +131,7 @@ The commit was successful! The hooks validated..."
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-04 08:28:13
+Last updated: 2025-07-04 08:44:42
 
 ### Active Components
 - **Shell Scripts**: 2 files
@@ -153,7 +158,7 @@ Last updated: 2025-07-04 08:28:13
 **Date**: 2025-07-04
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: b4e8c04 docs: Document symlink architecture and promotion workflow
+**Last Commit**: 59cd670 feat: Implement hybrid symlink naming convention with validation
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -183,7 +188,7 @@ Last updated: 2025-07-04 08:28:13
 - [Structure Archive](AI/structure/_old/) - Previous structure snapshots
 
 ### Quality Reports
-- [Latest Quality Report](AI/dev-logs/check-quality/README.md) - Most recent quality validation
+- [Latest Quality Report](AI/dev-logs/check-quality/README-sym.md) - Most recent quality validation
 - [Session Summaries](AI/dev-logs/session-states/) - Development session documentation
 
 ### Development Process
@@ -260,30 +265,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
+- CONSTRUCT-CORE/CONSTRUCT/scripts/check-quality.sh
 - CONSTRUCT-CORE/CONSTRUCT/scripts/check-symlinks.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts/README.md
-- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--19-31-41.md
-- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--19-33-46.md
-- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--19-31-43.md
-- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-03--19-33-48.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-1931-construct-session.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-03-1933-construct-session.md
-- CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
-- CONSTRUCT-LAB/AI/docs/README.md
+- CONSTRUCT-CORE/docs/distributed-quality-philosophy.md
+- CONSTRUCT-CORE/docs/symlink-promotion-rules.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-04--08-31-18.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-04--08-35-32.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-04--08-43-46.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-04--08-44-07.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-04--08-44-20.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/README-sym.md
 
 
 ### Git Status
 ```
+ M CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-04-0844-construct-session.md
  M CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--19-31-42.md
- D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-03--19-33-47.md
- M CONSTRUCT-LAB/AI/structure/current-structure.md
-R  CONSTRUCT-LAB/AI/todo/CONSTRUCT-RESTRUCTURE-PLAN-04.md -> CONSTRUCT-LAB/AI/todo/current/CONSTRUCT-RESTRUCTURE-PLAN-04.md
-A  CONSTRUCT-LAB/AI/todo/current/implement-hybrid-symlink-naming.md
+D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-04--08-44-07.md
+ D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-04--08-44-20.md
+?? CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-04--08-44-41.md
+?? CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-04--08-44-42.md
 ```
 
 ### Active Development Areas

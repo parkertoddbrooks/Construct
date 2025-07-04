@@ -134,9 +134,11 @@ CONSTRUCT/
 │   │   ├── promote-to-core.sh
 │   │   └── validate-promotion.sh
 │   ├── PROMOTE-TO-CORE.yaml   # Manifest template
+│   ├── *-sym.*                # Hybrid-named symlinks for clarity
 │   └── docs/                  # How to use it
 └── CONSTRUCT-CORE/
-    └── docs/                  # Philosophy and guides
+    ├── docs/                  # Philosophy and guides
+    └── quality-checks/        # Symlink validation
 ```
 
 ### The Workflow That Travels
