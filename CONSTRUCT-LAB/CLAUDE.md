@@ -139,7 +139,7 @@ After commits, you may see deletions of structure files - this is normal cleanup
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-06 09:11:03
+Last updated: 2025-07-06 18:24:43
 
 ### Active Components
 - **Shell Scripts**: 2 files
@@ -166,7 +166,7 @@ Last updated: 2025-07-06 09:11:03
 **Date**: 2025-07-06
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 6e088a1 chore: Clean up remaining files from hybrid symlink implementation
+**Last Commit**: 5643015 feat: Standardize archive directory naming and analyze unified CLAUDE.md architecture
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -273,29 +273,29 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-04--10-13-00.md
-- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-04--10-13-01.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-04-1013-construct-session.md
-- CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-- CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-04--09-38-25.md
+- CONSTRUCT-CORE/CLAUDE.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-02--14-54-42.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-02--14-57-47.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-03--08-30-54.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-03--08-47-36.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-03--09-17-08.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-03--12-08-57.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-03--12-11-35.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-03--12-17-06.md
 
 
 ### Git Status
 ```
-A  CONSTRUCT-CORE/CLAUDE.md
-A  "CONSTRUCT-LAB/AI/ai-raw-cli/Terminal Saved Output.txt"
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-02--14-54-42.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-02--14-54-42.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-02--14-57-47.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-02--14-57-47.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--08-30-54.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-03--08-30-54.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--08-47-36.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-03--08-47-36.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--09-17-08.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-03--09-17-08.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-08-57.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-03--12-08-57.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-11-35.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-03--12-11-35.md
-R  CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-03--12-17-06.md -> CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-07-03--12-17-06.md
+A  CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/check-quality/README.md
+A  CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/dev-updates/README.md
+A  CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md
+A  CONSTRUCT-CORE/AI/template-structure/AI/docs/README.md
+A  CONSTRUCT-CORE/AI/template-structure/AI/todo/README.md
+A  CONSTRUCT-CORE/CLAUDE-BASE.md
+A  CONSTRUCT-CORE/CONSTRUCT/scripts/assemble-claude.sh
+A  CONSTRUCT-CORE/CONSTRUCT/scripts/construct-patterns.sh
+A  CONSTRUCT-CORE/patterns/plugins/cross-platform/model-sync.md
+A  CONSTRUCT-CORE/patterns/plugins/languages/swift.md
 ```
 
 ### Active Development Areas

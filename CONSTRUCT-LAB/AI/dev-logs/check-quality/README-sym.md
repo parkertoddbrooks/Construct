@@ -1,1 +1,1 @@
-../../../../CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md
+../../../../CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/check-quality/README.md

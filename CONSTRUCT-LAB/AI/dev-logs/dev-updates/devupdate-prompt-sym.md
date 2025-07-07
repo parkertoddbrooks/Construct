@@ -1,1 +1,1 @@
-../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/_devupdate-prompt.md
+../../../../CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md

@@ -1,12 +1,14 @@
 # Current CONSTRUCT Development Components (2025-07-06)
 
 ## Working AI Scripts
+assemble-claude.sh
 before_coding.sh
 check-architecture.sh
 check-documentation.sh
 check-quality.sh
 check-symlinks.sh
 commit-with-review.sh
+construct-patterns.sh
 generate-devupdate.sh
 pre-commit-review.sh
 scan_construct_structure.sh

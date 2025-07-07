@@ -1,1 +1,1 @@
-../../../CONSTRUCT-CORE/AI/docs/README.md
+../../../CONSTRUCT-CORE/AI/template-structure/AI/docs/README.md
