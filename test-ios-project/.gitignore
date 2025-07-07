@@ -1,0 +1,15 @@
+# CONSTRUCT generated files
+CLAUDE-temp.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependencies
+node_modules/

@@ -1,4 +1,4 @@
-# Current CONSTRUCT Development Components (2025-07-06)
+# Current CONSTRUCT Development Components (2025-07-07)
 
 ## Working AI Scripts
 assemble-claude.sh
@@ -9,6 +9,7 @@ check-quality.sh
 check-symlinks.sh
 commit-with-review.sh
 construct-patterns.sh
+create-project.sh
 generate-devupdate.sh
 pre-commit-review.sh
 scan_construct_structure.sh
