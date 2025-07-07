@@ -69,17 +69,29 @@ if [[ "$3" == "--languages" ]]; then
     fi
 fi
 
-# Validate all plugins exist before assembly
+# Validate all plugins exist before assembly (check both CORE and LAB)
 IFS=',' read -ra PLUGIN_ARRAY <<< "$PLUGINS"
 for plugin in "${PLUGIN_ARRAY[@]}"; do
     plugin=$(echo "$plugin" | xargs) # Trim whitespace
     if [ -n "$plugin" ]; then
-        plugin_path="$CONSTRUCT_CORE/patterns/plugins/$plugin.md"
-        if [ ! -f "$plugin_path" ]; then
+        # Check CORE first
+        core_plugin_path="$CONSTRUCT_CORE/patterns/plugins/$plugin.md"
+        # Check LAB second
+        lab_plugin_path="$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/$plugin.md"
+        
+        if [ -f "$core_plugin_path" ]; then
+            continue # Found in CORE
+        elif [ -f "$lab_plugin_path" ]; then
+            continue # Found in LAB
+        else
             echo -e "${RED}❌ Error: Plugin not found: $plugin.md${NC}"
-            echo -e "${YELLOW}   Looking in: $CONSTRUCT_CORE/patterns/plugins/${NC}"
-            echo -e "${YELLOW}   Available plugins:${NC}"
-            find "$CONSTRUCT_CORE/patterns/plugins" -name "*.md" -type f | sed 's|.*/||' | sed 's|\.md$||' | sort
+            echo -e "${YELLOW}   Looking in:${NC}"
+            echo -e "${YELLOW}     CORE: $CONSTRUCT_CORE/patterns/plugins/${NC}"
+            echo -e "${YELLOW}     LAB:  $CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/${NC}"
+            echo -e "${YELLOW}   Available CORE plugins:${NC}"
+            find "$CONSTRUCT_CORE/patterns/plugins" -name "*.md" -type f | sed "s|$CONSTRUCT_CORE/patterns/plugins/||" | sed 's|\.md$||' | sort
+            echo -e "${YELLOW}   Available LAB plugins:${NC}"
+            find "$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns" -name "*.md" -type f | sed "s|$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/||" | sed 's|\.md$||' | sort
             exit 1
         fi
     fi
@@ -168,18 +180,28 @@ for plugin in "${PLUGIN_ARRAY[@]}"; do
     fi
 done
 
-# Add plugin content
+# Add plugin content (check both CORE and LAB)
 echo -e "${BLUE}🔄 Assembling patterns...${NC}"
 for plugin in "${PLUGIN_ARRAY[@]}"; do
     plugin=$(echo "$plugin" | xargs) # Trim whitespace
     if [ -n "$plugin" ]; then
-        plugin_path="$CONSTRUCT_CORE/patterns/plugins/$plugin.md"
-        if [ -f "$plugin_path" ]; then
-            echo -e "${YELLOW}  Adding: $plugin${NC}"
+        # Check CORE first
+        core_plugin_path="$CONSTRUCT_CORE/patterns/plugins/$plugin.md"
+        # Check LAB second
+        lab_plugin_path="$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/$plugin.md"
+        
+        if [ -f "$core_plugin_path" ]; then
+            echo -e "${YELLOW}  Adding: $plugin ${BLUE}(CORE)${NC}"
             CLAUDE_CONTENT+="
 
 "
-            CLAUDE_CONTENT+=$(cat "$plugin_path")
+            CLAUDE_CONTENT+=$(cat "$core_plugin_path")
+        elif [ -f "$lab_plugin_path" ]; then
+            echo -e "${YELLOW}  Adding: $plugin ${GREEN}(LAB)${NC}"
+            CLAUDE_CONTENT+="
+
+"
+            CLAUDE_CONTENT+=$(cat "$lab_plugin_path")
         fi
     fi
 done
