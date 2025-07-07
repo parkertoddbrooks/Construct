@@ -11,6 +11,7 @@ commit-with-review.sh
 construct-patterns.sh
 create-project.sh
 generate-devupdate.sh
+import-component.sh
 import-project.sh
 pre-commit-review.sh
 scan_construct_structure.sh

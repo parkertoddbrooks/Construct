@@ -25,7 +25,7 @@ PROJECT_NAME="$2"
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "Usage: $0 <source-path> [project-name]"
     echo ""
-    echo "Imports an existing project into CONSTRUCT workspace"
+    echo "Imports an existing project into CONSTRUCT workspace (monorepo)"
     echo ""
     echo "Arguments:"
     echo "  source-path    Path to existing project (local or git URL)"
@@ -35,6 +35,9 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "  $0 ../MyProject                    # Import local project"
     echo "  $0 https://github.com/user/repo   # Clone and import"
     echo "  $0 ../MyProject CustomName        # Import with custom name"
+    echo ""
+    echo "For multi-repository projects, use import-component.sh:"
+    echo "  import-component.sh <source> <project> <component>"
     echo ""
     echo "The project will be imported as Projects/{name}/ and maintain"
     echo "its own git repository while being managed by CONSTRUCT."
@@ -275,6 +278,7 @@ echo -e "${YELLOW}📝 Registering project in workspace...${NC}"
 # Update workspace registry using yq if available, otherwise use sed
 if command -v yq >/dev/null 2>&1; then
     # Use yq for clean YAML manipulation
+    yq eval -i ".projects.\"$PROJECT_NAME\".type = \"monorepo\"" "$WORKSPACE_REGISTRY"
     yq eval -i ".projects.\"$PROJECT_NAME\".path = \"./Projects/$PROJECT_NAME\"" "$WORKSPACE_REGISTRY"
     yq eval -i ".projects.\"$PROJECT_NAME\".repo = \"$REMOTE_URL\"" "$WORKSPACE_REGISTRY"
     yq eval -i ".projects.\"$PROJECT_NAME\".branch = \"$CURRENT_BRANCH\"" "$WORKSPACE_REGISTRY"
@@ -284,6 +288,7 @@ if command -v yq >/dev/null 2>&1; then
 else
     # Fallback to manual registry entry
     echo "  $PROJECT_NAME:" >> "$WORKSPACE_REGISTRY"
+    echo "    type: monorepo" >> "$WORKSPACE_REGISTRY"
     echo "    path: ./Projects/$PROJECT_NAME" >> "$WORKSPACE_REGISTRY"
     echo "    repo: $REMOTE_URL" >> "$WORKSPACE_REGISTRY"
     echo "    branch: $CURRENT_BRANCH" >> "$WORKSPACE_REGISTRY"
@@ -331,7 +336,7 @@ echo ""
 echo -e "${BLUE}💡 Workspace commands:${NC}"
 echo "  workspace-status              # View all projects"
 echo "  workspace-update              # Regenerate all CLAUDE.md files"
-echo "  workspace-analyze             # Find pattern opportunities"
+echo "  import-component.sh <source> <project> <component>  # Add component to multi-repo project"
 echo ""
 
 if [ "$OLD_CONSTRUCT_DETECTED" = true ]; then
