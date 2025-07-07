@@ -65,16 +65,19 @@ fi
 
 # Sanitize project name for workspace
 PROJECT_NAME=$(echo "$PROJECT_NAME" | sed 's/[^a-zA-Z0-9-]/-/g')
-WORKSPACE_PROJECT_DIR="$CONSTRUCT_ROOT/Project-$PROJECT_NAME"
+WORKSPACE_PROJECT_DIR="$CONSTRUCT_ROOT/Projects/$PROJECT_NAME"
 
 echo -e "${BLUE}🚀 CONSTRUCT Project Import${NC}"
 echo -e "${BLUE}Source: $SOURCE_PATH${NC}"
-echo -e "${BLUE}Workspace Project: Project-$PROJECT_NAME${NC}"
+echo -e "${BLUE}Workspace Project: Projects/$PROJECT_NAME${NC}"
 echo ""
+
+# Ensure Projects directory exists
+mkdir -p "$CONSTRUCT_ROOT/Projects"
 
 # Check if workspace project already exists
 if [ -d "$WORKSPACE_PROJECT_DIR" ]; then
-    echo -e "${RED}❌ Error: Project-$PROJECT_NAME already exists in workspace${NC}"
+    echo -e "${RED}❌ Error: Projects/$PROJECT_NAME already exists in workspace${NC}"
     echo -e "${BLUE}Choose a different name or remove existing project${NC}"
     exit 1
 fi
@@ -272,16 +275,16 @@ echo -e "${YELLOW}📝 Registering project in workspace...${NC}"
 # Update workspace registry using yq if available, otherwise use sed
 if command -v yq >/dev/null 2>&1; then
     # Use yq for clean YAML manipulation
-    yq eval -i ".projects.\"Project-$PROJECT_NAME\".path = \"./Project-$PROJECT_NAME\"" "$WORKSPACE_REGISTRY"
-    yq eval -i ".projects.\"Project-$PROJECT_NAME\".repo = \"$REMOTE_URL\"" "$WORKSPACE_REGISTRY"
-    yq eval -i ".projects.\"Project-$PROJECT_NAME\".branch = \"$CURRENT_BRANCH\"" "$WORKSPACE_REGISTRY"
-    yq eval -i ".projects.\"Project-$PROJECT_NAME\".default_branch = \"$DEFAULT_BRANCH\"" "$WORKSPACE_REGISTRY"
-    yq eval -i ".projects.\"Project-$PROJECT_NAME\".patterns = [$(echo "$SUGGESTED_CORE_PLUGINS" | sed 's/,/, /g' | sed 's/\([^, ]*\)/"\1"/g')]" "$WORKSPACE_REGISTRY"
+    yq eval -i ".projects.\"$PROJECT_NAME\".path = \"./Projects/$PROJECT_NAME\"" "$WORKSPACE_REGISTRY"
+    yq eval -i ".projects.\"$PROJECT_NAME\".repo = \"$REMOTE_URL\"" "$WORKSPACE_REGISTRY"
+    yq eval -i ".projects.\"$PROJECT_NAME\".branch = \"$CURRENT_BRANCH\"" "$WORKSPACE_REGISTRY"
+    yq eval -i ".projects.\"$PROJECT_NAME\".default_branch = \"$DEFAULT_BRANCH\"" "$WORKSPACE_REGISTRY"
+    yq eval -i ".projects.\"$PROJECT_NAME\".patterns = [$(echo "$SUGGESTED_CORE_PLUGINS" | sed 's/,/, /g' | sed 's/\([^, ]*\)/"\1"/g')]" "$WORKSPACE_REGISTRY"
     yq eval -i ".workspace.total_projects = (.workspace.total_projects // 0) + 1" "$WORKSPACE_REGISTRY"
 else
     # Fallback to manual registry entry
-    echo "  Project-$PROJECT_NAME:" >> "$WORKSPACE_REGISTRY"
-    echo "    path: ./Project-$PROJECT_NAME" >> "$WORKSPACE_REGISTRY"
+    echo "  $PROJECT_NAME:" >> "$WORKSPACE_REGISTRY"
+    echo "    path: ./Projects/$PROJECT_NAME" >> "$WORKSPACE_REGISTRY"
     echo "    repo: $REMOTE_URL" >> "$WORKSPACE_REGISTRY"
     echo "    branch: $CURRENT_BRANCH" >> "$WORKSPACE_REGISTRY"
     echo "    default_branch: $DEFAULT_BRANCH" >> "$WORKSPACE_REGISTRY"
@@ -316,7 +319,7 @@ fi
 echo ""
 echo -e "${GREEN}🎉 Project import complete!${NC}"
 echo ""
-echo -e "${BLUE}📁 Project location: $WORKSPACE_PROJECT_DIR${NC}"
+echo -e "${BLUE}📁 Project location: Projects/$PROJECT_NAME${NC}"
 echo -e "${BLUE}📋 Configuration: .construct/patterns.yaml${NC}"
 echo -e "${BLUE}🤖 Generated context: CLAUDE.md${NC}"
 echo ""
@@ -326,9 +329,9 @@ echo "2. Consider extracting unique patterns to LAB plugins"
 echo "3. Use workspace commands to manage multiple projects"
 echo ""
 echo -e "${BLUE}💡 Workspace commands:${NC}"
-echo "  construct-workspace status    # View all projects"
-echo "  construct-workspace update    # Regenerate all CLAUDE.md files"
-echo "  construct-workspace analyze   # Find pattern opportunities"
+echo "  workspace-status              # View all projects"
+echo "  workspace-update              # Regenerate all CLAUDE.md files"
+echo "  workspace-analyze             # Find pattern opportunities"
 echo ""
 
 if [ "$OLD_CONSTRUCT_DETECTED" = true ]; then

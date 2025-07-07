@@ -18,6 +18,8 @@ session-summary.sh
 setup-aliases.sh
 update-architecture.sh
 update-context.sh
+workspace-status.sh
+workspace-update.sh
 
 ## Library Functions
 common-patterns.sh

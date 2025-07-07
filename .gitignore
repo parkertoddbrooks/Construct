@@ -126,7 +126,7 @@ _git-ignore*
 .construct-cache/
 
 # Workspace projects (each maintains its own git)
-Project-*/
+Projects/
 
 # Session states (contains work in progress)
 AI/dev-logs/session-states/*.md
