@@ -36,7 +36,7 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "  $0 https://github.com/user/repo   # Clone and import"
     echo "  $0 ../MyProject CustomName        # Import with custom name"
     echo ""
-    echo "The project will be imported as Project-{name}/ and maintain"
+    echo "The project will be imported as Projects/{name}/ and maintain"
     echo "its own git repository while being managed by CONSTRUCT."
     exit 0
 fi
