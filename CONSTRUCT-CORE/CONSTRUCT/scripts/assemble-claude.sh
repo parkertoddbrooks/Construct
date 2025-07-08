@@ -255,20 +255,18 @@ fi
 
 # Add generation metadata
 GENERATION_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
-CONTENT_HASH=$(echo -n "$CLAUDE_CONTENT" | shasum -a 256 | cut -d' ' -f1)
 CLAUDE_CONTENT+="
 
 <!-- 
 Generated: $GENERATION_TIME
 Source: CONSTRUCT-CORE/CLAUDE-BASE.md
 Plugins: $PLUGINS
-Hash: $CONTENT_HASH
 -->
 "
 
 # Output or save based on mode
 if [ "$DRY_RUN" = true ]; then
-    echo -n "$CONTENT_HASH"
+    echo "dry-run"
 else
     # Check if file exists and handle read-only status
     if [ -f "$PROJECT_DIR/CLAUDE.md" ]; then
@@ -283,6 +281,10 @@ else
     
     # Write file
     echo "$CLAUDE_CONTENT" > "$PROJECT_DIR/CLAUDE.md"
+    
+    # Generate checksum file
+    mkdir -p "$PROJECT_DIR/.construct"
+    shasum -a 256 "$PROJECT_DIR/CLAUDE.md" > "$PROJECT_DIR/.construct/CLAUDE.md.sha256"
     
     # Make read-only to discourage edits
     chmod 444 "$PROJECT_DIR/CLAUDE.md"
