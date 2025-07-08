@@ -270,9 +270,15 @@ Hash: $CONTENT_HASH
 if [ "$DRY_RUN" = true ]; then
     echo -n "$CONTENT_HASH"
 else
-    # Check if file is writable (warn if it is)
-    if [ -f "$PROJECT_DIR/CLAUDE.md" ] && [ -w "$PROJECT_DIR/CLAUDE.md" ]; then
-        echo -e "${YELLOW}⚠️ Warning: CLAUDE.md is writable; setting to read-only${NC}"
+    # Check if file exists and handle read-only status
+    if [ -f "$PROJECT_DIR/CLAUDE.md" ]; then
+        if [ ! -w "$PROJECT_DIR/CLAUDE.md" ]; then
+            # File exists and is read-only - temporarily make writable
+            chmod +w "$PROJECT_DIR/CLAUDE.md"
+            echo -e "${BLUE}🔓 Temporarily making CLAUDE.md writable for regeneration${NC}"
+        else
+            echo -e "${YELLOW}⚠️ Warning: CLAUDE.md was manually made writable${NC}"
+        fi
     fi
     
     # Write file
@@ -284,4 +290,15 @@ else
     echo -e "${GREEN}✅ Generated CLAUDE.md (read-only) with patterns: $PLUGINS${NC}"
     echo -e "${BLUE}📍 Location: $PROJECT_DIR/CLAUDE.md${NC}"
     echo -e "${YELLOW}🔒 File is read-only. Use 'construct-patterns regenerate' to update.${NC}"
+    
+    # Verify the file was written correctly
+    if [ ! -f "$PROJECT_DIR/CLAUDE.md" ]; then
+        echo -e "${RED}❌ Error: Failed to write CLAUDE.md${NC}"
+        exit 1
+    fi
+    
+    # Verify read-only status
+    if [ -w "$PROJECT_DIR/CLAUDE.md" ]; then
+        echo -e "${YELLOW}⚠️ Warning: Failed to set read-only permissions${NC}"
+    fi
 fi
