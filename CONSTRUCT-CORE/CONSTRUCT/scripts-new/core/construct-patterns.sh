@@ -18,6 +18,24 @@ SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 CONSTRUCT_ROOT="$(cd "$SCRIPTS_ROOT/../../.." && pwd)"
 CONSTRUCT_CORE="$CONSTRUCT_ROOT/CONSTRUCT-CORE"
 
+# Source interactive support
+source "$CONSTRUCT_CORE/CONSTRUCT/lib/interactive-support.sh"
+
+# Function to show what prompts this script needs
+show_construct_patterns_prompts() {
+    echo "Command: regenerate"
+    echo "1. Confirm regeneration of CLAUDE.md"
+    echo "   Options: [y/n]"
+    echo "   Default: n"
+    echo "   Note: This will overwrite any manual changes to CLAUDE.md"
+}
+
+# Check if should show prompts
+if should_show_prompts "$@"; then
+    show_script_prompts "$(basename "$0")" show_construct_patterns_prompts
+    exit 0
+fi
+
 # Parse arguments
 COMMAND="${1:-show}"
 PROJECT_DIR="${2:-.}"
@@ -56,10 +74,10 @@ case "$COMMAND" in
             fi
         fi
         
-        echo -e "${YELLOW}⚠️  Regenerating CLAUDE.md will overwrite any manual changes.${NC}"
-        read -p "Continue? [y/N] " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
+        show_warning "Regenerating CLAUDE.md will overwrite any manual changes."
+        CONFIRM=$(yes_no_prompt "Continue?" "n")
+        
+        if [ "$CONFIRM" = "y" ]; then
             # Make writable temporarily
             if [ -f "$PROJECT_DIR/CLAUDE.md" ]; then
                 chmod +w "$PROJECT_DIR/CLAUDE.md"

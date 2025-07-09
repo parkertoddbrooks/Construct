@@ -15,7 +15,25 @@ NC='\033[0m' # No Color
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-source "$SCRIPTS_ROOT/../lib/common-patterns.sh"
+CONSTRUCT_CORE="$(cd "$SCRIPTS_ROOT/../.." && pwd)"
+source "$CONSTRUCT_CORE/CONSTRUCT/lib/interactive-support.sh"
+
+# Function to show what prompts this script needs
+show_pre_commit_prompts() {
+    echo "1. Proceed with commit (after successful checks)"
+    echo "   Options: [y/n]"
+    echo "   Default: n"
+    echo ""
+    echo "2. Force commit anyway (if checks fail)"
+    echo "   Options: [y/n]"
+    echo "   Default: n"
+}
+
+# Check if should show prompts
+if should_show_prompts "$@"; then
+    show_script_prompts "$(basename "$0")" show_pre_commit_prompts
+    exit 0
+fi
 
 # Show help if requested
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
@@ -171,10 +189,9 @@ echo "=================================="
 if [ "$FAILED" -eq 0 ]; then
     echo -e "${GREEN}✅ All checks passed!${NC}"
     echo ""
-    echo -e "${BLUE}Ready to commit. Proceed? (y/n):${NC}"
-    read -r response
+    PROCEED=$(yes_no_prompt "${BLUE}Ready to commit. Proceed?${NC}" "n")
     
-    if [[ "$response" =~ ^[Yy]$ ]]; then
+    if [ "$PROCEED" = "y" ]; then
         echo ""
         echo -e "${GREEN}🚀 Proceeding with commit...${NC}"
         exit 0
@@ -188,10 +205,9 @@ else
     echo ""
     echo "Fix the failing checks before committing."
     echo ""
-    echo -e "${BLUE}Force commit anyway? (y/n):${NC}"
-    read -r response
+    FORCE=$(yes_no_prompt "${BLUE}Force commit anyway?${NC}" "n")
     
-    if [[ "$response" =~ ^[Yy]$ ]]; then
+    if [ "$FORCE" = "y" ]; then
         echo ""
         echo -e "${YELLOW}⚠️ Forcing commit despite failures...${NC}"
         exit 0

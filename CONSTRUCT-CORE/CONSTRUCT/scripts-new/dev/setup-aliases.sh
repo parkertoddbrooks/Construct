@@ -14,11 +14,26 @@ NC='\033[0m' # No Color
 
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../lib/common-patterns.sh"
+CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+source "$CONSTRUCT_CORE/CONSTRUCT/lib/interactive-support.sh"
 
-# Get project directories using library functions
-CONSTRUCT_ROOT=$(get_construct_root)
-CONSTRUCT_DEV=$(get_construct_dev)
+# Function to show what prompts this script needs
+show_setup_aliases_prompts() {
+    echo "1. Update existing aliases (if found)"
+    echo "   Options: [y/n]"
+    echo "   Default: n"
+    echo "   Note: Asked when CONSTRUCT aliases already exist"
+}
+
+# Check if should show prompts
+if should_show_prompts "$@"; then
+    show_script_prompts "$(basename "$0")" show_setup_aliases_prompts
+    exit 0
+fi
+
+# Get project directories
+CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
+CONSTRUCT_DEV="$CONSTRUCT_ROOT/CONSTRUCT-LAB"
 
 echo -e "${BLUE}🔧 Setting up CONSTRUCT Development Aliases...${NC}"
 echo ""
@@ -77,10 +92,9 @@ backup_config() {
 # Check if aliases already exist
 check_existing_aliases() {
     if [ -f "$SHELL_CONFIG" ] && grep -q "# CONSTRUCT Development Aliases" "$SHELL_CONFIG"; then
-        echo -e "${YELLOW}⚠️ CONSTRUCT aliases already exist in $SHELL_CONFIG${NC}"
-        echo "Would you like to update them? (y/n)"
-        read -r response
-        if [[ "$response" != "y" && "$response" != "Y" ]]; then
+        show_warning "CONSTRUCT aliases already exist in $SHELL_CONFIG"
+        UPDATE_ALIASES=$(yes_no_prompt "Would you like to update them?" "n")
+        if [ "$UPDATE_ALIASES" != "y" ]; then
             echo "Skipping alias setup."
             exit 0
         fi

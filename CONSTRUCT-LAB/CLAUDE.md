@@ -139,7 +139,7 @@ After commits, you may see deletions of structure files - this is normal cleanup
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-09 08:34:12
+Last updated: 2025-07-09 08:39:15
 
 ### Active Components
 - **Shell Scripts**: 2 files
@@ -168,7 +168,7 @@ Last updated: 2025-07-09 08:34:12
 **Date**: 2025-07-09
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 084d085 feat: Make all scripts project-aware with PROJECT_DIR parameter
+**Last Commit**: fb668b2 feat: Implement interactive script support for Claude Code
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -275,30 +275,29 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/scan_construct_structure.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/scan_project_structure.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/update-architecture.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/update-context.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/before_coding.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-architecture.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-documentation.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-quality.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/construct-patterns.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/commit-with-review.sh
+- CONSTRUCT-CORE/CONSTRUCT/lib/interactive-support.sh
+- CONSTRUCT-CORE/CONSTRUCT/lib/template-location.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/assemble-claude.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/before_coding.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-architecture.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-documentation.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-quality.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-symlinks.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/README.md
 
 
 ### Git Status
 ```
-A  CONSTRUCT-CORE/CONSTRUCT/lib/interactive-support.sh
-A  CONSTRUCT-CORE/CONSTRUCT/lib/template-location.sh
-D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/README.md
-D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/assemble-claude.sh
-D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/before_coding.sh
-D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-architecture.sh
-D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-documentation.sh
-D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-quality.sh
-D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-symlinks.sh
-D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-symlinks.sh.bak
+A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/INTERACTIVE-SUPPORT-STATUS.md
+M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/construct-patterns.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/pre-commit-review.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/setup-aliases.sh
+ M CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
+ M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
+ M CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
+ M CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
+ M CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
+D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--00-28-20.md
 ```
 
 ### Active Development Areas
