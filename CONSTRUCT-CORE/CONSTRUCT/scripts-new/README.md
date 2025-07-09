@@ -35,19 +35,24 @@ General-purpose orchestrators that work with any project using patterns.yaml:
 
 ## CONSTRUCT Scripts (`construct/`)
 
-CONSTRUCT-specific tools for managing the CONSTRUCT development environment:
+Project-aware tools that were originally CONSTRUCT-specific but now work with any project:
 
 - **`assemble-claude.sh`** - Assembles CLAUDE.md from multiple sources
 - **`check-symlinks.sh`** - Validates LAB/CORE symlink integrity
-- **`update-context.sh`** - Updates CONSTRUCT development context (CLAUDE.md)
-- **`scan_construct_structure.sh`** - Analyzes CONSTRUCT directory structure
-- **`update-architecture.sh`** - Updates architecture documentation
+- **`update-context.sh`** - Updates project context (PROJECT_DIR/CLAUDE.md)
+- **`scan_project_structure.sh`** - Analyzes any project's directory structure
+- **`update-architecture.sh`** - Updates project architecture documentation based on patterns
 
 ### Usage
 ```bash
-# CONSTRUCT scripts work within CONSTRUCT environment
-./construct/check-symlinks.sh              # Check symlink integrity
-./construct/update-context.sh              # Update CLAUDE.md
+# Most CONSTRUCT scripts now accept PROJECT_DIR parameter
+./construct/update-context.sh                    # Update current project's CLAUDE.md
+./construct/update-context.sh Projects/MyApp     # Update specific project's CLAUDE.md
+./construct/scan_project_structure.sh            # Scan current project
+./construct/update-architecture.sh ~/myproject   # Update architecture docs for any project
+
+# CONSTRUCT-only script
+./construct/check-symlinks.sh                    # Check LAB/CORE symlinks (no PROJECT_DIR)
 ```
 
 ## Workspace Scripts (`workspace/`)
@@ -70,20 +75,23 @@ Tools for managing multi-project workspaces:
 
 ## Development Tools (`dev/`)
 
-Helper scripts for development workflow:
+Project-aware helper scripts for development workflow:
 
 - **`commit-with-review.sh`** - Enhanced commit workflow with checks
-- **`pre-commit-review.sh`** - Pre-commit validation helper
-- **`generate-devupdate.sh`** - Generate development update logs
-- **`session-summary.sh`** - Create session summaries for context preservation
+- **`pre-commit-review.sh`** - Pre-commit validation helper (accepts PROJECT_DIR)
+- **`generate-devupdate.sh`** - Generate development update logs (accepts PROJECT_DIR)
+- **`session-summary.sh`** - Create session summaries for any project
 - **`setup-aliases.sh`** - Setup command shortcuts
 
 ### Usage
 ```bash
-# Development workflow helpers
-./dev/session-summary.sh                   # Before context limit
-./dev/commit-with-review.sh                # Safe commit process
-./dev/setup-aliases.sh                     # Install shortcuts
+# Development workflow helpers (now project-aware)
+./dev/session-summary.sh                         # Current project summary
+./dev/session-summary.sh Projects/MyApp          # Specific project summary
+./dev/generate-devupdate.sh . --auto             # Auto-generate dev update
+./dev/pre-commit-review.sh Projects/MyApp        # Run all checks on specific project
+./dev/commit-with-review.sh                      # Safe commit process
+./dev/setup-aliases.sh                           # Install shortcuts
 ```
 
 ## Pattern Validators (`patterns/`)
@@ -94,6 +102,7 @@ Language and framework-specific validators called by core orchestrators:
 - `shell-scripting/` - Shell script validation
 - `shell-quality/` - Shell script quality checks
 - `construct-development/` - CONSTRUCT-specific validation
+  - Also contains `generate-architecture.sh` for CONSTRUCT-specific docs
 - `python-development/` - Python code validation
 - `swift-language/` - Swift code validation
 - `csharp-language/` - C# code validation
@@ -128,10 +137,29 @@ Runs validators: patterns/swift-language/validate-quality.sh
 Reports: Combined results with total issue count
 ```
 
+## Project-Aware Updates (New!)
+
+Most scripts now accept a PROJECT_DIR parameter as their first argument:
+- Scripts default to current directory if not specified
+- Scripts update the project's AI/ directory, not CONSTRUCT-LAB/AI/
+- Scripts detect project type from .construct/patterns.yaml
+- Scripts adapt behavior based on whether they're in CONSTRUCT or other projects
+
+### Examples
+```bash
+# Old way (only worked in CONSTRUCT)
+./construct/update-context.sh
+
+# New way (works anywhere)
+./construct/update-context.sh                    # Current directory
+./construct/update-context.sh Projects/MyApp     # Specific project
+./construct/update-context.sh ~/external/project # Any project
+```
+
 ## Best Practices
 
 1. **Use Core Scripts** for general validation - they work anywhere
-2. **Use CONSTRUCT Scripts** only in CONSTRUCT development environment
+2. **Most CONSTRUCT Scripts** now work with any project via PROJECT_DIR
 3. **Add Pattern Validators** for new languages/frameworks
 4. **Check Exit Codes** - 0 = success, >0 = issue count
 5. **Run Before Commits** - Catch issues early
@@ -151,24 +179,32 @@ Reports: Combined results with total issue count
 - Should be called by core orchestrators
 
 ### For CONSTRUCT Scripts
-- Can assume CONSTRUCT environment
-- Can use hardcoded CONSTRUCT paths
-- Should maintain CONSTRUCT infrastructure
+- Should accept PROJECT_DIR parameter (most now do)
+- Should work with any project when possible
+- Only assume CONSTRUCT environment if truly CONSTRUCT-specific (like check-symlinks.sh)
 
 ## Quick Reference
 
 ```bash
-# Before coding anything
+# Before coding anything (works in any project)
 ./core/before_coding.sh ComponentName
 
-# Check everything
+# Check everything in current project
 ./core/check-architecture.sh && ./core/check-quality.sh && ./core/check-documentation.sh
 
-# CONSTRUCT maintenance
-./construct/update-context.sh
-./construct/check-symlinks.sh
+# Check specific project
+./core/check-architecture.sh ~/Projects/MyApp
 
-# Development workflow
-./dev/session-summary.sh    # When context is ~90%
-./dev/commit-with-review.sh # Safe commits
+# Update any project's context
+./construct/update-context.sh                    # Current project
+./construct/update-context.sh Projects/MyApp     # Specific project
+
+# CONSTRUCT-specific maintenance
+./construct/check-symlinks.sh                    # Only for CONSTRUCT LAB/CORE
+
+# Development workflow (project-aware)
+./dev/session-summary.sh                         # Current project
+./dev/session-summary.sh Projects/MyApp          # Specific project
+./dev/generate-devupdate.sh . --auto             # Generate dev update
+./dev/pre-commit-review.sh                       # Run all checks
 ```

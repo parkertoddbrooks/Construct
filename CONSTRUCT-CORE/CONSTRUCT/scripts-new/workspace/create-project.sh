@@ -14,8 +14,30 @@ NC='\033[0m' # No Color
 
 # Get script directory and project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-CONSTRUCT_CORE="$CONSTRUCT_ROOT/CONSTRUCT-CORE"
+CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+CONSTRUCT_ROOT="$(cd "$CONSTRUCT_CORE/.." && pwd)"
+
+# Source libraries
+source "$CONSTRUCT_CORE/CONSTRUCT/lib/template-location.sh"
+source "$CONSTRUCT_CORE/CONSTRUCT/lib/interactive-support.sh"
+
+# Function to show what prompts this script needs
+show_create_project_prompts() {
+    echo "1. Project type (if not specified as argument)"
+    echo "   Options: [ios|web|api|fullstack|custom|existing]"
+    echo "   Default: interactive selection"
+    echo ""
+    echo "2. Additional pattern plugins"
+    echo "   Format: comma-separated list"
+    echo "   Example: languages/swift,mvvm-architecture"
+    echo "   Default: (suggested based on project type)"
+}
+
+# Check if should show prompts
+if should_show_prompts "$@"; then
+    show_script_prompts "$(basename "$0")" show_create_project_prompts
+    exit 0
+fi
 
 PROJECT_DIR="${1:-.}"
 PROJECT_TYPE="${2:-interactive}"
@@ -62,15 +84,18 @@ echo ""
 
 # Interactive project type selection
 if [[ "$PROJECT_TYPE" == "interactive" ]]; then
-    echo "What type of project is this?"
-    echo "1. iOS App (Swift + MVVM)"
-    echo "2. Web App (TypeScript/React)"
-    echo "3. Backend API (C#/.NET)"
-    echo "4. Full Stack (Multiple languages)"
-    echo "5. Custom configuration"
-    echo "6. Analyze existing project"
-    echo ""
-    read -p "Select type (1-6): " TYPE_CHOICE
+    if is_interactive; then
+        echo "What type of project is this?"
+        echo "1. iOS App (Swift + MVVM)"
+        echo "2. Web App (TypeScript/React)"
+        echo "3. Backend API (C#/.NET)"
+        echo "4. Full Stack (Multiple languages)"
+        echo "5. Custom configuration"
+        echo "6. Analyze existing project"
+        echo ""
+    fi
+    
+    TYPE_CHOICE=$(get_input_with_default "Select type (1-6)" "1")
     
     case $TYPE_CHOICE in
         1) PROJECT_TYPE="ios" ;;
@@ -79,7 +104,7 @@ if [[ "$PROJECT_TYPE" == "interactive" ]]; then
         4) PROJECT_TYPE="fullstack" ;;
         5) PROJECT_TYPE="custom" ;;
         6) PROJECT_TYPE="existing" ;;
-        *) echo -e "${RED}❌ Invalid selection${NC}"; exit 1 ;;
+        *) show_error "Invalid selection: $TYPE_CHOICE"; exit 1 ;;
     esac
 fi
 
@@ -101,9 +126,11 @@ case $PROJECT_TYPE in
         DESCRIPTION="Backend API with C#/.NET"
         ;;
     "fullstack")
-        echo "Which languages will this project use?"
-        echo "Enter comma-separated list (e.g., swift,csharp,typescript):"
-        read -p "Languages: " LANGUAGES
+        if is_interactive; then
+            echo "Which languages will this project use?"
+            echo "Enter comma-separated list (e.g., swift,csharp,typescript):"
+        fi
+        LANGUAGES=$(get_input_with_default "Languages" "swift,csharp,typescript")
         SUGGESTED_PLUGINS="cross-platform/model-sync,tooling/shell-scripting"
         DESCRIPTION="Full-stack application with multiple languages"
         ;;
@@ -129,8 +156,8 @@ case $PROJECT_TYPE in
             echo -e "${GREEN}✅ Detected languages: $DETECTED_LANGUAGES${NC}"
             LANGUAGES="$DETECTED_LANGUAGES"
         else
-            echo -e "${YELLOW}⚠️ No recognized languages detected${NC}"
-            read -p "Enter languages manually (comma-separated): " LANGUAGES
+            show_warning "No recognized languages detected"
+            LANGUAGES=$(get_input_with_default "Enter languages manually (comma-separated)" "")
         fi
         
         # Suggest patterns based on detected languages
@@ -142,7 +169,7 @@ case $PROJECT_TYPE in
         DESCRIPTION="Existing project with detected patterns"
         ;;
     "custom")
-        read -p "Languages (comma-separated): " LANGUAGES
+        LANGUAGES=$(get_input_with_default "Languages (comma-separated)" "")
         SUGGESTED_PLUGINS="tooling/shell-scripting"
         DESCRIPTION="Custom project configuration"
         ;;
@@ -178,9 +205,11 @@ else
     echo -e "${YELLOW}⚠️ Pattern plugins directory not found${NC}"
 fi
 
-echo "Additional pattern plugins (comma-separated, or press enter for suggested):"
-echo -e "${BLUE}Suggested: $SUGGESTED_PLUGINS${NC}"
-read -p "Additional plugins: " ADDITIONAL_PLUGINS
+if is_interactive; then
+    echo "Additional pattern plugins (comma-separated, or press enter for suggested):"
+    echo -e "${BLUE}Suggested: $SUGGESTED_PLUGINS${NC}"
+fi
+ADDITIONAL_PLUGINS=$(get_input_with_default "Additional plugins" "")
 
 # Combine all plugins
 if [ -n "$ADDITIONAL_PLUGINS" ]; then
@@ -245,9 +274,10 @@ fi
 echo -e "${GREEN}✅ Pattern configuration created: .construct/patterns.yaml${NC}"
 
 # Apply AI template structure if it doesn't exist
-if [ ! -d "$PROJECT_DIR/AI" ] && [ -d "$CONSTRUCT_CORE/AI/template-structure" ]; then
+AI_TEMPLATE_DIR=$(get_ai_template_dir)
+if [ ! -d "$PROJECT_DIR/AI" ] && [ -d "$AI_TEMPLATE_DIR/AI" ]; then
     echo -e "${YELLOW}🧠 Applying AI template structure...${NC}"
-    cp -r "$CONSTRUCT_CORE/AI/template-structure/AI" "$PROJECT_DIR/"
+    cp -r "$AI_TEMPLATE_DIR/AI" "$PROJECT_DIR/"
     echo -e "${GREEN}✅ AI template structure applied${NC}"
 fi
 

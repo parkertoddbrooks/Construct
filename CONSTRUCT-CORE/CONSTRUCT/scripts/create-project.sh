@@ -17,6 +17,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 CONSTRUCT_CORE="$CONSTRUCT_ROOT/CONSTRUCT-CORE"
 
+# Source template location library
+source "$CONSTRUCT_CORE/CONSTRUCT/lib/template-location.sh"
+
 PROJECT_DIR="${1:-.}"
 PROJECT_TYPE="${2:-interactive}"
 
@@ -245,9 +248,10 @@ fi
 echo -e "${GREEN}✅ Pattern configuration created: .construct/patterns.yaml${NC}"
 
 # Apply AI template structure if it doesn't exist
-if [ ! -d "$PROJECT_DIR/AI" ] && [ -d "$CONSTRUCT_CORE/AI/template-structure" ]; then
+AI_TEMPLATE_DIR=$(get_ai_template_dir)
+if [ ! -d "$PROJECT_DIR/AI" ] && [ -d "$AI_TEMPLATE_DIR/AI" ]; then
     echo -e "${YELLOW}🧠 Applying AI template structure...${NC}"
-    cp -r "$CONSTRUCT_CORE/AI/template-structure/AI" "$PROJECT_DIR/"
+    cp -r "$AI_TEMPLATE_DIR/AI" "$PROJECT_DIR/"
     echo -e "${GREEN}✅ AI template structure applied${NC}"
 fi
 

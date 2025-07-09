@@ -139,11 +139,11 @@ After commits, you may see deletions of structure files - this is normal cleanup
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-09 00:28:21
+Last updated: 2025-07-09 08:34:12
 
 ### Active Components
 - **Shell Scripts**: 2 files
-- **Library Functions**: 4 files
+- **Library Functions**: 6 files
 - **Configuration Files**: 2 files  
 - **Documentation Files**:        6 files
 
@@ -152,6 +152,8 @@ Last updated: 2025-07-09 00:28:21
 #### 🧩 Library Functions
 - common-patterns.sh - Shell library function
 - file-analysis.sh - Shell library function
+- interactive-support.sh - Shell library function
+- template-location.sh - Shell library function
 - template-utils.sh - Shell library function
 - validation.sh - Shell library function
 
@@ -166,7 +168,7 @@ Last updated: 2025-07-09 00:28:21
 **Date**: 2025-07-09
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 82a3a6a feat: Reorganize scripts into category-based subdirectories
+**Last Commit**: 084d085 feat: Make all scripts project-aware with PROJECT_DIR parameter
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -273,29 +275,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-CORE/CONSTRUCT/migrate-scripts.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-documentation.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/assemble-claude.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/check-symlinks.sh
 - CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/scan_construct_structure.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/scan_project_structure.sh
 - CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/update-architecture.sh
 - CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/update-context.sh
 - CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/before_coding.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/README.md
+- CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-architecture.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-documentation.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-quality.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/construct-patterns.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/commit-with-review.sh
 
 
 ### Git Status
 ```
-D  CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/scan_construct_structure.sh
-A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/scan_project_structure.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/update-architecture.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/update-context.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/before_coding.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-architecture.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-documentation.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-quality.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/construct-patterns.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/commit-with-review.sh
+A  CONSTRUCT-CORE/CONSTRUCT/lib/interactive-support.sh
+A  CONSTRUCT-CORE/CONSTRUCT/lib/template-location.sh
+D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/README.md
+D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/assemble-claude.sh
+D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/before_coding.sh
+D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-architecture.sh
+D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-documentation.sh
+D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-quality.sh
+D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-symlinks.sh
+D  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-symlinks.sh.bak
 ```
 
 ### Active Development Areas

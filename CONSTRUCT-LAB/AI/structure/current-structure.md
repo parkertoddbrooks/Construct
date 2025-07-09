@@ -25,6 +25,8 @@ workspace-update.sh
 ## Library Functions
 common-patterns.sh
 file-analysis.sh
+interactive-support.sh
+template-location.sh
 template-utils.sh
 validation.sh
 
