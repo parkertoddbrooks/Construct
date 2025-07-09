@@ -139,7 +139,7 @@ After commits, you may see deletions of structure files - this is normal cleanup
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-08 16:28:12
+Last updated: 2025-07-08 20:36:25
 
 ### Active Components
 - **Shell Scripts**: 2 files
@@ -166,7 +166,7 @@ Last updated: 2025-07-08 16:28:12
 **Date**: 2025-07-08
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 0a4d89b feat: Implement Unix-style checksum validation for CLAUDE.md
+**Last Commit**: b066080 feat: Add context engineering integration PRD and backup CLAUDE.md
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -273,30 +273,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-CORE/CONSTRUCT/scripts/assemble-claude.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts/construct-patterns.sh
-- CONSTRUCT-CORE/patterns/plugins/tooling/unix-philosophy.md
-- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-08--13-09-45.md
-- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--13-09-46.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-1309-construct-session.md
-- CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
+- CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/dev-logs/check-quality/README.md
+- CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/dev-logs/dev-updates/_devupdate-prompt.md
+- CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/dev-logs/dev-updates/README.md
+- CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/docs/README.md
+- CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/template-structure/AI/dev-logs/check-quality/README.md
+- CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md
+- CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/template-structure/AI/dev-logs/dev-updates/README.md
+- CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/template-structure/AI/docs/README.md
+- CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/template-structure/AI/todo/README.md
+- CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/todo/README.md
 
 
 ### Git Status
 ```
-R  CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md -> "CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/dev-logs/check-quality/README.md"
-R  CONSTRUCT-CORE/AI/dev-logs/dev-updates/README.md -> "CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/dev-logs/dev-updates/README.md"
-R  CONSTRUCT-CORE/AI/dev-logs/dev-updates/_devupdate-prompt.md -> "CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/dev-logs/dev-updates/_devupdate-prompt.md"
-R  CONSTRUCT-CORE/AI/docs/README.md -> "CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/docs/README.md"
-R  CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/check-quality/README.md -> "CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/template-structure/AI/dev-logs/check-quality/README.md"
-R  CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/dev-updates/README.md -> "CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/template-structure/AI/dev-logs/dev-updates/README.md"
-R  CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md -> "CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md"
-R  CONSTRUCT-CORE/AI/template-structure/AI/docs/README.md -> "CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/template-structure/AI/docs/README.md"
-R  CONSTRUCT-CORE/AI/template-structure/AI/todo/README.md -> "CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/template-structure/AI/todo/README.md"
-R  CONSTRUCT-CORE/AI/todo/README.md -> "CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure /AI/todo/README.md"
+A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/README.md
+A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/assemble-claude.sh
+A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/before_coding.sh
+A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-architecture.sh
+A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-documentation.sh
+A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-quality.sh
+A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-symlinks.sh
+A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-symlinks.sh.bak
+A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/commit-with-review.sh
+A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct-patterns.sh
 ```
 
 ### Active Development Areas
