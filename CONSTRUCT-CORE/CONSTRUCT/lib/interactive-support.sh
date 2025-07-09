@@ -3,6 +3,7 @@
 # Interactive Support Library
 # Provides functions for making scripts work in non-interactive environments
 # Supports Claude Code, CI/CD, and automated workflows
+# INTERACTIVE_MODE: enabled
 
 # Colors for output
 RED='\033[0;31m'
@@ -20,7 +21,7 @@ should_show_prompts() {
     # Check for explicit flags
     for arg in "$@"; do
         case "$arg" in
-            --show-prompts|--dry-run|-p|--prompts)
+            --show-prompts|--dry-run|-p|--prompts|--claude-prompts)
                 return 0
                 ;;
         esac
@@ -40,6 +41,17 @@ should_show_prompts() {
         return 0
     fi
     
+    return 1
+}
+
+# Check if should show simplified Claude prompts
+# Returns: 0 if claude prompts mode, 1 otherwise
+is_claude_prompts_mode() {
+    for arg in "$@"; do
+        if [ "$arg" = "--claude-prompts" ]; then
+            return 0
+        fi
+    done
     return 1
 }
 
@@ -67,6 +79,15 @@ is_interactive() {
 show_script_prompts() {
     local script_name="$1"
     local prompt_function="$2"
+    shift 2  # Remove script_name and prompt_function from args
+    
+    # Check if in Claude prompts mode - just show the questions
+    if is_claude_prompts_mode "$@"; then
+        if type "$prompt_function" >/dev/null 2>&1; then
+            $prompt_function "$@"
+        fi
+        return
+    fi
     
     echo ""
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

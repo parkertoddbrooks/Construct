@@ -20,6 +20,13 @@ source "$CONSTRUCT_CORE/CONSTRUCT/lib/interactive-support.sh"
 
 # Function to show what prompts this script needs
 show_pre_commit_prompts() {
+    # Simplified output for Claude
+    if is_claude_prompts_mode "$@"; then
+        echo "1. Proceed with commit? [y/n]"
+        echo "2. Force commit if checks fail? [y/n]"
+        return
+    fi
+    
     echo "1. Proceed with commit (after successful checks)"
     echo "   Options: [y/n]"
     echo "   Default: n"
@@ -31,7 +38,7 @@ show_pre_commit_prompts() {
 
 # Check if should show prompts
 if should_show_prompts "$@"; then
-    show_script_prompts "$(basename "$0")" show_pre_commit_prompts
+    show_script_prompts "$(basename "$0")" show_pre_commit_prompts "$@"
     exit 0
 fi
 
@@ -59,8 +66,14 @@ fi
 PROJECT_DIR="${1:-.}"
 PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
 
+# Get repository info
+eval $(get_repo_info "$PROJECT_DIR")
+
 echo -e "${BLUE}🏗️  Pre-Commit Review${NC}"
-echo "Project: $PROJECT_DIR"
+echo "**Repo**: $REPO_NAME"
+echo "**Remote**: $REMOTE_URL"
+echo "**Branch**: $(cd "$PROJECT_DIR" && git branch --show-current 2>/dev/null || echo "unknown")"
+echo "**Project**: $PROJECT_DIR"
 echo "=================================="
 echo ""
 

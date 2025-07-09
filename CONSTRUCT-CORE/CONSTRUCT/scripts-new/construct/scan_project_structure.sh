@@ -14,8 +14,8 @@ NC='\033[0m' # No Color
 
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-source "$SCRIPTS_ROOT/../lib/common-patterns.sh"
+CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+source "$CONSTRUCT_CORE/CONSTRUCT/lib/common-patterns.sh"
 
 # Show help if requested
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
@@ -58,8 +58,15 @@ archive_existing_files "$STRUCTURE_DIR" "project-structure-*.md"
 # Create new file with timestamp
 OUTPUT_FILE="$STRUCTURE_DIR/project-structure-$(date +%Y-%m-%d--%H-%M-%S).md"
 
-echo "# Project Structure Scan - $(date +%Y-%m-%d)" > "$OUTPUT_FILE"
-echo "Project: $PROJECT_DIR" >> "$OUTPUT_FILE"
+# Get repository info
+eval $(get_repo_info "$PROJECT_DIR")
+
+echo "# Project Structure Scan" > "$OUTPUT_FILE"
+echo "**Date**: $(date +%Y-%m-%d)" >> "$OUTPUT_FILE"
+echo "**Repo**: $REPO_NAME" >> "$OUTPUT_FILE"
+echo "**Remote**: $REMOTE_URL" >> "$OUTPUT_FILE"
+echo "**Branch**: $(cd "$PROJECT_DIR" && git branch --show-current 2>/dev/null || echo "unknown")" >> "$OUTPUT_FILE"
+echo "**Project**: $PROJECT_DIR" >> "$OUTPUT_FILE"
 echo "" >> "$OUTPUT_FILE"
 
 # Function to scan for specific file patterns in project
@@ -276,10 +283,10 @@ echo "" >> "$OUTPUT_FILE"
 echo "### Structure Analysis" >> "$OUTPUT_FILE"
 
 # Analyze project type based on file extensions
-local swift_files=$(find "$PROJECT_DIR" -name "*.swift" -type f 2>/dev/null | wc -l | tr -d ' ')
-local js_files=$(find "$PROJECT_DIR" -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" -type f 2>/dev/null | wc -l | tr -d ' ')
-local py_files=$(find "$PROJECT_DIR" -name "*.py" -type f 2>/dev/null | wc -l | tr -d ' ')
-local cs_files=$(find "$PROJECT_DIR" -name "*.cs" -type f 2>/dev/null | wc -l | tr -d ' ')
+swift_files=$(find "$PROJECT_DIR" -name "*.swift" -type f 2>/dev/null | wc -l | tr -d ' ')
+js_files=$(find "$PROJECT_DIR" -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" -type f 2>/dev/null | wc -l | tr -d ' ')
+py_files=$(find "$PROJECT_DIR" -name "*.py" -type f 2>/dev/null | wc -l | tr -d ' ')
+cs_files=$(find "$PROJECT_DIR" -name "*.cs" -type f 2>/dev/null | wc -l | tr -d ' ')
 
 if [ $swift_files -gt 0 ]; then
     echo "- Swift/iOS project detected ($swift_files .swift files)" >> "$OUTPUT_FILE"
@@ -311,7 +318,7 @@ else
 fi
 
 if [ -d "$PROJECT_DIR/AI/docs" ]; then
-    local doc_count=$(find "$PROJECT_DIR/AI/docs" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+    doc_count=$(find "$PROJECT_DIR/AI/docs" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
     echo "- AI documentation: $doc_count files" >> "$OUTPUT_FILE"
 else
     echo "- AI documentation directory missing" >> "$OUTPUT_FILE"
@@ -348,9 +355,11 @@ if [ -f "$PROJECT_DIR/.construct/patterns.yaml" ]; then
 fi
 
 # Scripts by category if CONSTRUCT scripts exist
-if [ -d "$PROJECT_DIR/CONSTRUCT/scripts" ]; then
+if [ -d "$PROJECT_DIR/CONSTRUCT/scripts" ] || [ -d "$PROJECT_DIR/CONSTRUCT/scripts-new" ]; then
     echo "### Scripts" >> "$QUICK_REF"
-    find "$PROJECT_DIR/CONSTRUCT/scripts" -name "*.sh" -type f | xargs -I {} basename {} | sort >> "$QUICK_REF" || echo "None found" >> "$QUICK_REF"
+    SCRIPTS_DIR="$PROJECT_DIR/CONSTRUCT/scripts"
+    [ -d "$PROJECT_DIR/CONSTRUCT/scripts-new" ] && SCRIPTS_DIR="$PROJECT_DIR/CONSTRUCT/scripts-new"
+    find "$SCRIPTS_DIR" -name "*.sh" -type f 2>/dev/null | xargs -I {} basename {} | sort >> "$QUICK_REF" || echo "None found" >> "$QUICK_REF"
     echo "" >> "$QUICK_REF"
 fi
 

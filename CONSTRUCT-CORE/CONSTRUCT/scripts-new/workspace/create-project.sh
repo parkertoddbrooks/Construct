@@ -23,6 +23,12 @@ source "$CONSTRUCT_CORE/CONSTRUCT/lib/interactive-support.sh"
 
 # Function to show what prompts this script needs
 show_create_project_prompts() {
+    # Simplified output for Claude
+    if is_claude_prompts_mode "$@"; then
+        echo "1. Additional plugins? [default/list]"
+        return
+    fi
+    
     echo "1. Project type (if not specified as argument)"
     echo "   Options: [ios|web|api|fullstack|custom|existing]"
     echo "   Default: interactive selection"
@@ -35,7 +41,7 @@ show_create_project_prompts() {
 
 # Check if should show prompts
 if should_show_prompts "$@"; then
-    show_script_prompts "$(basename "$0")" show_create_project_prompts
+    show_script_prompts "$(basename "$0")" show_create_project_prompts "$@"
     exit 0
 fi
 

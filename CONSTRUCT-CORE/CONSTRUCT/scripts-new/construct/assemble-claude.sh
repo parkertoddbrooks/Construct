@@ -14,8 +14,8 @@ NC='\033[0m' # No Color
 
 # Get script directory and project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-CONSTRUCT_CORE="$CONSTRUCT_ROOT/CONSTRUCT-CORE"
+CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+CONSTRUCT_ROOT="$(cd "$CONSTRUCT_CORE/.." && pwd)"
 
 PROJECT_DIR="$1"
 PLUGINS="$2"

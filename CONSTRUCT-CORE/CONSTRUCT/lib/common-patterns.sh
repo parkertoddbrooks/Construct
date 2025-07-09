@@ -106,3 +106,24 @@ archive_existing_files() {
         mv "$structure_dir"/$pattern "$old_dir/" 2>/dev/null || true
     fi
 }
+
+# Get repository name and remote URL
+# Usage: eval $(get_repo_info)
+# Sets: REPO_NAME and REMOTE_URL
+get_repo_info() {
+    local project_dir="${1:-$(pwd)}"
+    local remote_url=$(cd "$project_dir" && git config --get remote.origin.url 2>/dev/null || echo "")
+    local repo_name=""
+    
+    if [ -n "$remote_url" ]; then
+        # Extract repo name from remote URL (handles both SSH and HTTPS)
+        repo_name=$(echo "$remote_url" | sed 's/.*[:/]\([^/]*\)\.git$/\1/')
+        echo "REPO_NAME=\"$repo_name\""
+        echo "REMOTE_URL=\"$remote_url\""
+    else
+        # No remote, use directory name
+        repo_name=$(basename "$project_dir")
+        echo "REPO_NAME=\"$repo_name\""
+        echo "REMOTE_URL=\"None (local only)\""
+    fi
+}

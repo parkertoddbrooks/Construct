@@ -16,6 +16,10 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# Source common patterns library
+CONSTRUCT_CORE_PATH="$(cd "$SCRIPTS_ROOT/../.." && pwd)"
+source "$CONSTRUCT_CORE_PATH/CONSTRUCT/lib/common-patterns.sh"
+
 # Accept PROJECT_DIR as first parameter, default to current directory
 PROJECT_DIR="${1:-.}"
 PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
@@ -137,11 +141,17 @@ main() {
     local report_dir="$PROJECT_DIR/AI/quality-reports"
     mkdir -p "$report_dir" 2>/dev/null || true
     
+    # Get repository info
+    eval $(get_repo_info "$PROJECT_DIR")
+    
     if [ -d "$report_dir" ]; then
         local report_file="$report_dir/quality-report-$(date +%Y-%m-%d--%H-%M-%S).md"
         {
             echo "# Quality Report"
-            echo "Generated: $(date)"
+            echo "**Generated**: $(date)"
+            echo "**Repo**: $REPO_NAME"
+            echo "**Remote**: $REMOTE_URL"
+            echo "**Branch**: $(cd "$PROJECT_DIR" && git branch --show-current 2>/dev/null || echo "unknown")"
             echo ""
             echo "## Summary"
             echo "- Project: $PROJECT_DIR"

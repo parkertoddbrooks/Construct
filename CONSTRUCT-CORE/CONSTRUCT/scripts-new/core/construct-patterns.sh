@@ -23,6 +23,12 @@ source "$CONSTRUCT_CORE/CONSTRUCT/lib/interactive-support.sh"
 
 # Function to show what prompts this script needs
 show_construct_patterns_prompts() {
+    # Simplified output for Claude
+    if is_claude_prompts_mode "$@"; then
+        echo "1. Regenerate CLAUDE.md? [y/n]"
+        return
+    fi
+    
     echo "Command: regenerate"
     echo "1. Confirm regeneration of CLAUDE.md"
     echo "   Options: [y/n]"
@@ -32,7 +38,7 @@ show_construct_patterns_prompts() {
 
 # Check if should show prompts
 if should_show_prompts "$@"; then
-    show_script_prompts "$(basename "$0")" show_construct_patterns_prompts
+    show_script_prompts "$(basename "$0")" show_construct_patterns_prompts "$@"
     exit 0
 fi
 

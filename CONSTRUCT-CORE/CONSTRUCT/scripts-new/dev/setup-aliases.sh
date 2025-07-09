@@ -19,6 +19,12 @@ source "$CONSTRUCT_CORE/CONSTRUCT/lib/interactive-support.sh"
 
 # Function to show what prompts this script needs
 show_setup_aliases_prompts() {
+    # Simplified output for Claude
+    if is_claude_prompts_mode "$@"; then
+        echo "1. Update existing aliases? [y/n]"
+        return
+    fi
+    
     echo "1. Update existing aliases (if found)"
     echo "   Options: [y/n]"
     echo "   Default: n"
@@ -27,7 +33,7 @@ show_setup_aliases_prompts() {
 
 # Check if should show prompts
 if should_show_prompts "$@"; then
-    show_script_prompts "$(basename "$0")" show_setup_aliases_prompts
+    show_script_prompts "$(basename "$0")" show_setup_aliases_prompts "$@"
     exit 0
 fi
 

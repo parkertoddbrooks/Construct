@@ -139,7 +139,7 @@ After commits, you may see deletions of structure files - this is normal cleanup
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-09 08:39:15
+Last updated: 2025-07-09 10:42:51
 
 ### Active Components
 - **Shell Scripts**: 2 files
@@ -168,7 +168,7 @@ Last updated: 2025-07-09 08:39:15
 **Date**: 2025-07-09
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: fb668b2 feat: Implement interactive script support for Claude Code
+**Last Commit**: f71f4b5 feat: Add interactive support to remaining scripts in scripts-new
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -275,29 +275,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-CORE/CONSTRUCT/lib/interactive-support.sh
-- CONSTRUCT-CORE/CONSTRUCT/lib/template-location.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/assemble-claude.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/before_coding.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-architecture.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-documentation.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-quality.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-symlinks.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/README.md
+- CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/construct-patterns.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/pre-commit-review.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/setup-aliases.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts-new/INTERACTIVE-SUPPORT-STATUS.md
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-09--08-39-13.md
+- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--08-39-15.md
+- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-09-0839-construct-session.md
+- CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
 
 
 ### Git Status
 ```
-A  CONSTRUCT-CORE/CONSTRUCT/scripts-new/INTERACTIVE-SUPPORT-STATUS.md
+M  CONSTRUCT-CORE/CONSTRUCT/lib/common-patterns.sh
+M  CONSTRUCT-CORE/CONSTRUCT/lib/interactive-support.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/assemble-claude.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/scan_project_structure.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/update-architecture.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-quality.sh
 M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/construct-patterns.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/generate-devupdate.sh
 M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/pre-commit-review.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/setup-aliases.sh
- M CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--00-28-20.md
+M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/session-summary.sh
 ```
 
 ### Active Development Areas
@@ -815,6 +816,34 @@ grep -r "/Users\|/home" CONSTRUCT/ --include="*.sh"
   - Dual-environment design, component relationships
 - **Script Reference**: `./CONSTRUCT-dev/AI/docs/automated/script-reference-automated.md`
   - All available scripts and library functions
+
+## 🔧 Interactive Rails Mode
+
+When working with CONSTRUCT scripts that source `interactive-support.sh`:
+
+### Rails Pattern
+1. **Follow script structure** - Scripts define the conversation flow
+2. **Natural prompts** - Present script prompts conversationally 
+3. **Smart responses**:
+   - Direct answers (ios, default, yes) → Continue script flow
+   - Questions (what? how? list options?) → Provide help, then return to flow
+4. **Minimal context** - Stay on rails unless user needs help
+
+### Example Flow
+```
+User: Create a new project
+Claude: What's the project name and type? (ios, web, api, or fullstack)
+User: MyApp ios
+Claude: Use default plugins or would you like to customize?
+User: What plugins are available?
+Claude: [HELP MODE] Available plugins include:
+- languages/swift - Swift language patterns
+- tooling/shell-scripting - Shell automation
+- cross-platform/model-sync - Multi-platform support
+Would you like default or custom?
+User: default
+[Execute: echo '' | ./create-project.sh MyApp ios]
+```
 
 ## 🤖 Claude Instructions
 

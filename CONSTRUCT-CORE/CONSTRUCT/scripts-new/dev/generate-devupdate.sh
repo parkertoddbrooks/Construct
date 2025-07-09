@@ -14,8 +14,8 @@ NC='\033[0m' # No Color
 
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-source "$SCRIPTS_ROOT/../lib/common-patterns.sh"
+CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+source "$CONSTRUCT_CORE/CONSTRUCT/lib/common-patterns.sh"
 
 # Accept PROJECT_DIR as parameter before other flags
 PROJECT_DIR="${1:-.}"
@@ -90,6 +90,9 @@ generate_comprehensive_devupdate() {
     local today=$(date +"%Y-%m-%d")
     local branch=$(cd "$PROJECT_DIR" && git branch --show-current 2>/dev/null || echo "main")
     
+    # Get repository info
+    eval $(get_repo_info "$PROJECT_DIR")
+    
     # Analyze the actual changes made (like manual analysis)
     local recent_commits=$(cd "$PROJECT_DIR" && git log -5 --pretty=format:"- %s (%cr)" 2>/dev/null)
     local files_changed=$(cd "$PROJECT_DIR" && git diff HEAD~5 --name-only 2>/dev/null | wc -l)
@@ -130,6 +133,8 @@ generate_comprehensive_devupdate() {
 **Date**: $today
 **Focus**: $focus
 **Status**: ✅ Complete
+**Repo**: $REPO_NAME
+**Remote**: $REMOTE_URL
 **Branch**: $branch
 
 ## What We Shipped
@@ -314,6 +319,9 @@ generate_basic_devupdate() {
     local today=$(date +"%Y-%m-%d")
     local branch=$(cd "$PROJECT_DIR" && git branch --show-current 2>/dev/null || echo "main")
     
+    # Get repository info
+    eval $(get_repo_info "$PROJECT_DIR")
+    
     # Get recent commits for context
     local recent_work=$(cd "$PROJECT_DIR" && git log -3 --pretty=format:"- %s (%cr)" 2>/dev/null)
     local files_changed=$(cd "$PROJECT_DIR" && git diff HEAD~3 --name-only 2>/dev/null | wc -l)
@@ -324,6 +332,8 @@ generate_basic_devupdate() {
 # Dev Update - Minor Changes Summary
 
 **Date**: $today
+**Repo**: $REPO_NAME
+**Remote**: $REMOTE_URL
 **Branch**: $branch
 **Status**: ✅ Complete
 
@@ -356,6 +366,9 @@ generate_claude_prompt() {
     local branch=$(cd "$PROJECT_DIR" && git branch --show-current 2>/dev/null || echo "main")
     local recent_work=$(cd "$PROJECT_DIR" && git log -10 --pretty=format:"- %s (%cr)" 2>/dev/null)
     local files_changed=$(cd "$PROJECT_DIR" && git diff HEAD~10 --name-only 2>/dev/null | wc -l)
+    
+    # Get repository info
+    eval $(get_repo_info "$PROJECT_DIR")
     
     cat > "$DEVUPDATE_DIR/devupdate-prompt--$timestamp.md" << EOF
 # Claude: Please create Dev Update

@@ -14,12 +14,27 @@ NC='\033[0m' # No Color
 
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../lib/common-patterns.sh"
+CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+source "$CONSTRUCT_CORE/CONSTRUCT/lib/common-patterns.sh"
 
-# Get project directories using library functions
-CONSTRUCT_ROOT=$(get_construct_root)
-CONSTRUCT_DEV=$(get_construct_dev)
-SESSION_DIR="$CONSTRUCT_DEV/AI/dev-logs/session-states/automated"
+# Accept PROJECT_DIR as parameter, default to CONSTRUCT-LAB
+PROJECT_DIR="${1:-.}"
+PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
+
+# Determine if this is a project or CONSTRUCT development
+if [ -f "$PROJECT_DIR/.construct/patterns.yaml" ]; then
+    # This is a project
+    SESSION_DIR="$PROJECT_DIR/AI/dev-logs/session-states/automated"
+    IS_PROJECT=true
+else
+    # This is CONSTRUCT development
+    CONSTRUCT_ROOT=$(get_construct_root)
+    CONSTRUCT_DEV=$(get_construct_dev)
+    SESSION_DIR="$CONSTRUCT_DEV/AI/dev-logs/session-states/automated"
+    PROJECT_DIR="$CONSTRUCT_ROOT"
+    IS_PROJECT=false
+fi
+
 TIMESTAMP=$(date +"%Y-%m-%d-%H%M")
 TODAY=$(date +"%Y-%m-%d")
 
@@ -33,7 +48,7 @@ LAST_SUMMARY=$(ls -1 "$SESSION_DIR"/*-construct-session.md 2>/dev/null | tail -1
 if [ -f "$LAST_SUMMARY" ]; then
     SESSION_START=$(stat -f "%Sm" -t "%Y-%m-%d %H:%M:%S" "$LAST_SUMMARY" 2>/dev/null || date -v-2H "+%Y-%m-%d %H:%M:%S")
 else
-    SESSION_START=$(cd "$CONSTRUCT_ROOT" && git log --format="%ai" --since="$TODAY 00:00:00" --reverse | head -1 | cut -d' ' -f1-2)
+    SESSION_START=$(cd "$PROJECT_DIR" && git log --format="%ai" --since="$TODAY 00:00:00" --reverse | head -1 | cut -d' ' -f1-2)
 fi
 
 # If no commits today, use current time minus 2 hours
@@ -41,20 +56,33 @@ if [ -z "$SESSION_START" ]; then
     SESSION_START=$(date -v-2H "+%Y-%m-%d %H:%M:%S")
 fi
 
-# Get current development state
-CURRENT_BRANCH=$(cd "$CONSTRUCT_ROOT" && git branch --show-current 2>/dev/null || echo "unknown")
-LAST_COMMIT=$(cd "$CONSTRUCT_ROOT" && git log -1 --pretty=format:"%s" 2>/dev/null || echo "No commits")
-UNCOMMITTED_FILES=$(cd "$CONSTRUCT_ROOT" && git status --porcelain 2>/dev/null | wc -l || echo "0")
+# Get repository info
+eval $(get_repo_info "$PROJECT_DIR")
 
-# Count CONSTRUCT components
-SCRIPT_COUNT=$(find "$CONSTRUCT_DEV" -name "*.sh" -type f | wc -l)
-LIB_FUNCTIONS=$(find "$CONSTRUCT_DEV/CONSTRUCT/lib" -name "*.sh" -type f | wc -l)
-CONFIG_FILES=$(find "$CONSTRUCT_DEV/CONSTRUCT/config" -name "*.yaml" -type f | wc -l)
+# Get current development state
+CURRENT_BRANCH=$(cd "$PROJECT_DIR" && git branch --show-current 2>/dev/null || echo "unknown")
+LAST_COMMIT=$(cd "$PROJECT_DIR" && git log -1 --pretty=format:"%s" 2>/dev/null || echo "No commits")
+UNCOMMITTED_FILES=$(cd "$PROJECT_DIR" && git status --porcelain 2>/dev/null | wc -l || echo "0")
+
+# Count components based on project type
+if [ "$IS_PROJECT" = true ]; then
+    # For projects, count project files
+    SCRIPT_COUNT=$(find "$PROJECT_DIR" -name "*.sh" -type f 2>/dev/null | wc -l || echo "0")
+    LIB_FUNCTIONS=$(find "$PROJECT_DIR" -name "*.swift" -o -name "*.ts" -o -name "*.cs" -type f 2>/dev/null | wc -l || echo "0")
+    CONFIG_FILES=$(find "$PROJECT_DIR/.construct" -name "*.yaml" -type f 2>/dev/null | wc -l || echo "0")
+else
+    # For CONSTRUCT development
+    SCRIPT_COUNT=$(find "$CONSTRUCT_DEV" -name "*.sh" -type f 2>/dev/null | wc -l || echo "0")
+    LIB_FUNCTIONS=$(find "$CONSTRUCT_DEV/CONSTRUCT/lib" -name "*.sh" -type f 2>/dev/null | wc -l || echo "0")
+    CONFIG_FILES=$(find "$CONSTRUCT_DEV/CONSTRUCT/config" -name "*.yaml" -type f 2>/dev/null | wc -l || echo "0")
+fi
 
 # Generate summary file
 cat > "$SESSION_DIR/$TIMESTAMP-construct-session.md" << EOF
 # CONSTRUCT Development Session Summary: $(date +"%Y-%m-%d %H:%M")
 **Duration**: Since $SESSION_START
+**Repo**: $REPO_NAME
+**Remote**: $REMOTE_URL
 **Branch**: $CURRENT_BRANCH
 **Context Usage**: ~90% (summary triggered)
 
