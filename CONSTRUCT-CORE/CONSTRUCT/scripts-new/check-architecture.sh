@@ -12,10 +12,20 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Get script directory and project root
+# Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
-CONSTRUCT_CORE="$CONSTRUCT_ROOT/CONSTRUCT-CORE"
+
+# Accept PROJECT_DIR as first parameter, default to current directory
+PROJECT_DIR="${1:-.}"
+PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
+
+# Detect CONSTRUCT_CORE location (handles both LAB symlink and direct usage)
+if [ -d "$SCRIPT_DIR/../../CONSTRUCT-CORE" ]; then
+    CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../../CONSTRUCT-CORE" && pwd)"
+else
+    # Fallback for different structures
+    CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../.." && pwd)"
+fi
 
 # Source common libraries
 source "$CONSTRUCT_CORE/CONSTRUCT/lib/common-patterns.sh"
@@ -23,46 +33,57 @@ source "$CONSTRUCT_CORE/CONSTRUCT/lib/validation.sh"
 
 echo -e "${BLUE}🏗️  CONSTRUCT Architecture Validation${NC}"
 echo "================================================"
+echo "Project: $PROJECT_DIR"
+echo ""
 
 # Function to get active patterns from patterns.yaml
 get_active_patterns() {
-    local patterns_file="${1:-$CONSTRUCT_ROOT/.construct/patterns.yaml}"
+    local project_dir="$1"
+    local patterns_file="$project_dir/.construct/patterns.yaml"
     
-    if [ -f "$patterns_file" ]; then
-        # Extract active plugins
-        yq eval '.plugins[]' "$patterns_file" 2>/dev/null || echo ""
+    if [ ! -f "$patterns_file" ]; then
+        echo -e "${RED}❌ Error: No .construct/patterns.yaml found${NC}" >&2
+        echo -e "${YELLOW}Run 'construct-patterns init' to create one${NC}" >&2
+        return 1
     fi
     
-    # Always include base CONSTRUCT patterns
-    echo "construct-development"
-    echo "shell-scripting"
+    # Check for yq
+    if ! command -v yq >/dev/null 2>&1; then
+        echo -e "${RED}❌ Error: yq is required to read patterns.yaml${NC}" >&2
+        echo -e "${YELLOW}Install yq: https://github.com/mikefarah/yq${NC}" >&2
+        return 1
+    fi
+    
+    # Extract active plugins
+    yq eval '.plugins[]' "$patterns_file" 2>/dev/null || echo ""
 }
 
 # Run base architecture checks
 run_base_checks() {
     echo -e "\n${YELLOW}Running base architecture checks...${NC}"
     
-    # Check for common architectural issues
+    local project_dir="$1"
     local issues_found=0
     
-    # Check for hardcoded paths
-    echo -n "Checking for hardcoded paths... "
-    if grep -r "/Users\|/home" "$CONSTRUCT_ROOT" --include="*.sh" --exclude-dir=".git" >/dev/null 2>&1; then
-        echo -e "${RED}❌ Found hardcoded paths${NC}"
+    # Check if patterns.yaml exists
+    echo -n "Checking for patterns.yaml... "
+    if [ ! -f "$project_dir/.construct/patterns.yaml" ]; then
+        echo -e "${RED}❌ Missing .construct/patterns.yaml${NC}"
         ((issues_found++))
     else
-        echo -e "${GREEN}✅ No hardcoded paths${NC}"
+        echo -e "${GREEN}✅ patterns.yaml exists${NC}"
     fi
     
-    # Check for proper error handling
-    echo -n "Checking for error handling... "
-    local scripts_without_set_e=$(find "$CONSTRUCT_ROOT" -name "*.sh" -type f -exec grep -L "set -e" {} \; 2>/dev/null | wc -l)
-    if [ "$scripts_without_set_e" -gt 0 ]; then
-        echo -e "${YELLOW}⚠️  $scripts_without_set_e scripts missing 'set -e'${NC}"
+    # Check if project has basic structure
+    echo -n "Checking project structure... "
+    if [ ! -d "$project_dir/AI" ] && [ ! -d "$project_dir/.construct" ]; then
+        echo -e "${YELLOW}⚠️  No AI or .construct directory found${NC}"
         ((issues_found++))
     else
-        echo -e "${GREEN}✅ All scripts have error handling${NC}"
+        echo -e "${GREEN}✅ Project structure looks good${NC}"
     fi
+    
+    # Note: All language-specific checks moved to pattern validators
     
     return $issues_found
 }
@@ -73,13 +94,13 @@ main() {
     local patterns_checked=0
     
     # Run base checks first
-    if ! run_base_checks; then
+    if ! run_base_checks "$PROJECT_DIR"; then
         ((total_issues+=$?))
     fi
     
     # Get active patterns
     echo -e "\n${YELLOW}Detecting active patterns...${NC}"
-    local active_patterns=$(get_active_patterns)
+    local active_patterns=$(get_active_patterns "$PROJECT_DIR")
     
     if [ -z "$active_patterns" ]; then
         echo -e "${YELLOW}No patterns configured, running default checks only${NC}"
@@ -99,7 +120,8 @@ main() {
         
         if [ -f "$pattern_script" ]; then
             echo -e "\n${BLUE}→ Running $pattern architecture checks${NC}"
-            if ! bash "$pattern_script"; then
+            # Pass PROJECT_DIR as parameter to pattern validators
+            if ! bash "$pattern_script" "$PROJECT_DIR"; then
                 ((total_issues+=$?))
             fi
             ((patterns_checked++))
@@ -127,15 +149,23 @@ main() {
 
 # Show help if requested
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-    echo "Usage: $0 [options]"
+    echo "Usage: $0 [PROJECT_DIR]"
     echo ""
     echo "CONSTRUCT Architecture Validation - Master Script"
     echo ""
     echo "This script orchestrates architecture validation across all active patterns."
     echo "It runs base checks and then delegates to pattern-specific validators."
     echo ""
+    echo "Arguments:"
+    echo "  PROJECT_DIR   Directory to check architecture in (default: current directory)"
+    echo ""
     echo "Options:"
     echo "  -h, --help    Show this help message"
+    echo ""
+    echo "Examples:"
+    echo "  $0                    # Check architecture in current directory"
+    echo "  $0 .                  # Check architecture in current directory"
+    echo "  $0 Projects/MyApp/ios # Check architecture in specific project"
     echo ""
     echo "Pattern validators are located in:"
     echo "  $SCRIPT_DIR/patterns/*/validate-architecture.sh"

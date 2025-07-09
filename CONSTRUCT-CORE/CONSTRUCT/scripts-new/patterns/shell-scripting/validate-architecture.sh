@@ -106,12 +106,16 @@ check_error_handling() {
 
 # Main validation
 main() {
+    # Accept PROJECT_DIR as parameter, default to current directory
+    local PROJECT_DIR="${1:-.}"
+    PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
+    
     local total_issues=0
     local files_checked=0
     
-    echo "Scanning for shell scripts..."
+    echo "Scanning for shell scripts in: $PROJECT_DIR"
     
-    # Find all shell scripts
+    # Find all shell scripts in the project
     while IFS= read -r -d '' script; do
         # Skip scripts-new directory to avoid recursion
         [[ "$script" == *"/scripts-new/"* ]] && continue
@@ -133,7 +137,7 @@ main() {
         fi
         
         ((files_checked++))
-    done < <(find "$CONSTRUCT_ROOT" -name "*.sh" -type f -print0)
+    done < <(find "$PROJECT_DIR" -name "*.sh" -type f -print0)
     
     # Summary
     echo -e "\n${BLUE}Shell Scripting Pattern Summary${NC}"

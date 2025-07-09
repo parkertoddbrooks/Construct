@@ -13,7 +13,6 @@ CONSTRUCT-LAB/PROMOTE-TO-CORE.yaml
 
 ## Markdown Documentation Files
 ```
-CONSTRUCT-LAB/AI/ai-misc-conversations/beyond-claude-code--grok3--2025-07-08--11-14-52.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/claude-ui-opus-feedback.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/combining-construct-w-claude-commands.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/construct-simple-new.md
@@ -21,12 +20,15 @@ CONSTRUCT-LAB/AI/ai-misc-conversations/editing-core-construct.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/how-mutiple-claudeme-rules-work.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/more-on-new-structure.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/naming.md
-CONSTRUCT-LAB/AI/ai-misc-conversations/pattern--language--opus4--2025-07-08--11-16-11.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/sass-business.md
+CONSTRUCT-LAB/AI/ai-misc-conversations/what-is-construct/beyond-claude-code--grok3--2025-07-08--11-14-52.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/what-is-construct/claude-opus4-feedback.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/what-is-construct/gpt-4o-feedback.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/what-is-construct/gpt-o3-feedback.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/what-is-construct/grok-feedback.md
+CONSTRUCT-LAB/AI/ai-misc-conversations/what-is-construct/opus-analysis--2025-07-08--16-57-39.md
+CONSTRUCT-LAB/AI/ai-misc-conversations/what-is-construct/pattern--language--opus4--2025-07-08--11-16-11.md
+CONSTRUCT-LAB/AI/ai-misc-conversations/what-is-construct/what-is-construct-v2.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/what-is-construct/what-is-construct.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/why-is-cool.md
 CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/_archive/quality-report-2025-06-30--14-05-11.md
@@ -128,6 +130,8 @@ CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-08--14-
 CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-08--14-13-42.md
 CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-08--14-15-43.md
 CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-08--16-28-10.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-08--20-36-24.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-08--22-24-53.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate--2025-07-03--09-03-11.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate--2025-07-03--09-06-35.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate--2025-07-03--12-16-19.md
@@ -189,6 +193,8 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--12-28-34.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--12-32-07.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--13-09-46.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--14-13-43.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--16-28-12.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--20-36-25.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-2223-construct-session.md
@@ -256,6 +262,9 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-1232-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-1309-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-1412-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-1413-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-1628-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-2036-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-2039-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -345,6 +354,8 @@ CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.back
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250708-130944
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250708-141341
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250708-162809
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250708-203623
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250708-222453
 CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
 CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
 CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
@@ -447,7 +458,9 @@ CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-08--12-32-06.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-08--13-09-46.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-08--14-12-16.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-08--14-13-43.md
-CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-08--16-28-11.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-08--16-28-11.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-08--20-36-25.md
+CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-08--22-24-54.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
@@ -459,6 +472,7 @@ CONSTRUCT-LAB/AI/todo/_archive/unified-pattern-system-plan-v13.md
 CONSTRUCT-LAB/AI/todo/_archive/unified-pattern-system-plan-v20.md
 CONSTRUCT-LAB/AI/todo/current/context-engineering-integration-prd-v01.md
 CONSTRUCT-LAB/AI/todo/current/dynamic-context-orchestration-prd.md
+CONSTRUCT-LAB/AI/todo/current/howto.md
 CONSTRUCT-LAB/AI/todo/current/older/claude-md-mitigation-strategies.md
 CONSTRUCT-LAB/AI/todo/current/older/CONSTRUCT-RESTRUCTURE-PLAN-04.md
 CONSTRUCT-LAB/AI/todo/current/older/unified-claude-todo.md
@@ -466,6 +480,7 @@ CONSTRUCT-LAB/AI/todo/current/older/unified-pattern-system-plan-adendum.md
 CONSTRUCT-LAB/AI/todo/current/older/unified-pattern-system-plan-v25.md
 CONSTRUCT-LAB/AI/todo/current/older/workspace-import-prd-v01.md
 CONSTRUCT-LAB/AI/todo/current/older/workspace-import-prd-v07.md
+CONSTRUCT-LAB/AI/todo/current/preserve.md
 CONSTRUCT-LAB/AI/todo/current/unified-pattern-system-plan-v32.md
 CONSTRUCT-LAB/AI/todo/current/workspace-import-prd-v11.md
 CONSTRUCT-LAB/AI/todo/future/capture as a doc/how-mutiple-claudeme-rules-work--2025-07-02--09-45-22.md
@@ -592,7 +607,7 @@ File: quality-gates.yaml
 === File Counts ===
 Shell Scripts: 2
 YAML Configs: 1
-Markdown Docs: 389
+Markdown Docs: 402
 Python Files: 0
 
 === Directory Structure ===
@@ -624,4 +639,4 @@ Configuration Files: 2
 - [ ] Validate configuration file schemas
 
 ---
-*Generated by scan_construct_structure.sh on Tue Jul  8 16:28:11 PDT 2025*
+*Generated by scan_construct_structure.sh on Tue Jul  8 22:24:54 PDT 2025*

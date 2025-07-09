@@ -1,95 +1,69 @@
-# CONSTRUCT Scripts - Pattern-Based Architecture
+# CONSTRUCT Scripts
 
-## Overview
+## Purpose
 
-This is the new pattern-based script organization for CONSTRUCT. Scripts are now organized into:
+Core CONSTRUCT tools and master orchestration scripts that coordinate pattern-based validation across projects.
 
-1. **Core Scripts** (root level) - Infrastructure and orchestration
-2. **Pattern Scripts** (patterns/) - Pattern-specific validation and checks
+## Script Categories
 
-## Directory Structure
+### Master Orchestrators
+These scripts coordinate pattern-specific validators:
+- `check-quality.sh` - Orchestrates code quality validation
+- `check-architecture.sh` - Orchestrates architecture validation
+- `check-documentation.sh` - Orchestrates documentation validation
 
-```
-scripts-new/
-├── # Core Infrastructure Scripts (stay at root)
-├── assemble-claude.sh          # Assembles CLAUDE.md from patterns
-├── check-symlinks.sh           # Symlink integrity checking
-├── construct-patterns.sh       # Pattern management interface
-├── create-project.sh           # Project creation with patterns
-├── import-project.sh           # Import projects into workspace
-├── workspace-status.sh         # Multi-project status
-├── update-context.sh           # Context updates
-├── ...
-│
-├── # Master Orchestration Scripts
-├── check-architecture.sh       # Orchestrates pattern architecture checks
-├── check-quality.sh            # Orchestrates pattern quality checks
-│
-└── patterns/                   # Pattern-specific implementations
-    ├── shell-scripting/
-    │   └── validate-architecture.sh
-    ├── construct-development/
-    │   └── validate-architecture.sh
-    ├── shell-quality/
-    │   └── validate-quality.sh
-    ├── swift-language/
-    │   └── validate-quality.sh
-    ├── csharp-language/
-    │   └── validate-quality.sh
-    └── ios-ui-library/
-        └── validate-usage.sh
-```
+### Core Infrastructure
+Essential CONSTRUCT functionality:
+- `assemble-claude.sh` - Assembles CLAUDE.md from patterns
+- `update-context.sh` - Updates project context files
+- `before_coding.sh` - Pre-coding search and discovery
+- `check-symlinks.sh` - Validates symlink integrity
+- `workspace-status.sh` - Multi-project status overview
 
-## How It Works
+### Project Management
+- `create-project.sh` - Create new projects with patterns
+- `import-project.sh` - Import existing projects
+- `construct-patterns.sh` - Pattern management interface
 
-### Master Scripts
+### Development Tools
+- `session-summary.sh` - Creates session summaries
+- `commit-with-review.sh` - Enhanced commit workflow
+- `generate-devupdate.sh` - Generate development updates
 
-The master scripts (`check-architecture.sh`, `check-quality.sh`) now:
-1. Run base checks that apply to all projects
-2. Detect active patterns from `.construct/patterns.yaml`
-3. Delegate to pattern-specific validators
-4. Aggregate results and generate reports
+## How Scripts Work
 
-### Pattern Scripts
+1. **Accept PROJECT_DIR**: All scripts accept a project directory parameter
+2. **Detect Context**: Determine project type and active patterns
+3. **Run Base Checks**: Perform universal validations
+4. **Delegate to Patterns**: Call pattern-specific validators
+5. **Aggregate Results**: Combine and report findings
 
-Each pattern can have:
-- `validate-architecture.sh` - Architecture/structure validation
-- `validate-quality.sh` - Code quality checks
-- `validate-usage.sh` - Pattern usage validation
-- Other pattern-specific scripts
+## Usage Examples
 
-### Example Flow
+```bash
+# Check quality in current directory
+./check-quality.sh
 
-When you run `check-quality.sh`:
+# Check architecture in specific project
+./check-architecture.sh Projects/MyApp/ios
 
-```
-check-quality.sh
-  ├── Runs base quality checks
-  ├── Reads .construct/patterns.yaml
-  ├── Finds active patterns: [swift-language, ios-ui-library]
-  ├── Calls patterns/swift-language/validate-quality.sh
-  ├── Calls patterns/ios-ui-library/validate-usage.sh
-  └── Generates quality report
+# Update context for a project
+./update-context.sh Projects/MyBackend
+
+# Search before creating new code
+./before_coding.sh UserViewModel
 ```
 
-## Benefits
+## Integration with Patterns
 
-1. **Modular** - Each pattern is self-contained
-2. **Extensible** - Easy to add new patterns
-3. **Configurable** - Projects choose which patterns to use
-4. **Maintainable** - Pattern logic is isolated
+Scripts work with `/patterns/` validators:
+- Master scripts orchestrate
+- Pattern validators do specific checks
+- Results are aggregated and reported
 
-## Migration Notes
+## Best Practices
 
-To migrate from the old structure:
-1. Core scripts were copied as-is
-2. Architecture and quality checks were split into base + pattern-specific
-3. Pattern validators were created for common patterns
-4. Master scripts orchestrate pattern execution
-
-## Next Steps
-
-1. Test the new scripts with a sample project
-2. Create corresponding lib/ and config/ structures for patterns
-3. Update pre-commit hooks to use new scripts
-4. Migrate remaining validation logic to patterns
+1. Always run from project root when possible
+2. Use relative paths for portability
+3. Check exit codes for automation
+4. Run before committing changes
