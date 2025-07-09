@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# CONSTRUCT Development Update Generator
-# Generates development update logs based on recent activity
+# Project Development Update Generator
+# Generates development update logs based on recent project activity
 
 set -e
 
@@ -14,17 +14,29 @@ NC='\033[0m' # No Color
 
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../lib/common-patterns.sh"
+SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+source "$SCRIPTS_ROOT/../lib/common-patterns.sh"
 
-# Get project directories using library functions
-CONSTRUCT_ROOT=$(get_construct_root)
-CONSTRUCT_DEV=$(get_construct_dev)
-DEVUPDATE_DIR="$CONSTRUCT_DEV/AI/dev-logs/dev-updates/automated"
-TEMPLATE_FILE="$CONSTRUCT_DEV/AI/dev-logs/dev-updates/_devupdate-prompt.md"
+# Accept PROJECT_DIR as parameter before other flags
+PROJECT_DIR="${1:-.}"
+# Check if first argument is a flag
+if [[ "$1" == --* ]] || [[ "$1" == "-h" ]]; then
+    PROJECT_DIR="."
+else
+    shift # Remove PROJECT_DIR from arguments
+fi
+PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
+
+# Set project-specific directories
+DEVUPDATE_DIR="$PROJECT_DIR/AI/dev-logs/dev-updates/automated"
+TEMPLATE_FILE="$PROJECT_DIR/AI/dev-logs/dev-updates/_devupdate-prompt.md"
 
 # Help function
 show_help() {
-    echo "Usage: $0 [options]"
+    echo "Usage: $0 [PROJECT_DIR] [options]"
+    echo ""
+    echo "Arguments:"
+    echo "  PROJECT_DIR   Project directory (default: current directory)"
     echo ""
     echo "Options:"
     echo "  --auto        Generate dev update automatically based on recent commits"
@@ -33,10 +45,11 @@ show_help() {
     echo "  --help        Show this help message"
     echo ""
     echo "Examples:"
-    echo "  $0            # Interactive mode - show template location"
-    echo "  $0 --auto     # Auto-generate based on recent activity"
-    echo "  $0 --prompt   # Generate Claude prompt for manual creation"
-    echo "  $0 --force    # Force generation regardless of significance"
+    echo "  $0                    # Interactive mode in current directory"
+    echo "  $0 --auto             # Auto-generate for current directory"
+    echo "  $0 ~/myproject --auto # Auto-generate for specific project"
+    echo "  $0 . --prompt         # Generate Claude prompt for current directory"
+    echo "  $0 --force            # Force generation regardless of significance"
 }
 
 # Check if we should generate a dev update
@@ -48,7 +61,7 @@ should_generate_devupdate() {
     fi
     
     # Check for significant changes in last few commits
-    local recent_commits=$(cd "$CONSTRUCT_ROOT" && git log -5 --pretty=format:"%s" 2>/dev/null)
+    local recent_commits=$(cd "$PROJECT_DIR" && git log -5 --pretty=format:"%s" 2>/dev/null)
     
     # Look for significant change indicators
     if echo "$recent_commits" | grep -qE "(feat|fix|refactor|BREAKING|implement|complete|add.*functionality)"; then
@@ -56,7 +69,7 @@ should_generate_devupdate() {
     fi
     
     # Check for files changed count
-    local files_changed=$(cd "$CONSTRUCT_ROOT" && git diff HEAD~3 --name-only 2>/dev/null | wc -l)
+    local files_changed=$(cd "$PROJECT_DIR" && git diff HEAD~3 --name-only 2>/dev/null | wc -l)
     if [ "$files_changed" -gt 10 ]; then
         return 0
     fi
@@ -75,22 +88,38 @@ get_timestamp() {
 generate_comprehensive_devupdate() {
     local timestamp=$(get_timestamp)
     local today=$(date +"%Y-%m-%d")
-    local branch=$(cd "$CONSTRUCT_ROOT" && git branch --show-current 2>/dev/null || echo "main")
+    local branch=$(cd "$PROJECT_DIR" && git branch --show-current 2>/dev/null || echo "main")
     
     # Analyze the actual changes made (like manual analysis)
-    local recent_commits=$(cd "$CONSTRUCT_ROOT" && git log -5 --pretty=format:"- %s (%cr)" 2>/dev/null)
-    local files_changed=$(cd "$CONSTRUCT_ROOT" && git diff HEAD~5 --name-only 2>/dev/null | wc -l)
-    local recent_files=$(cd "$CONSTRUCT_ROOT" && git diff HEAD~5 --name-only 2>/dev/null | head -10)
-    local commit_messages=$(cd "$CONSTRUCT_ROOT" && git log -5 --pretty=format:"%s" 2>/dev/null)
+    local recent_commits=$(cd "$PROJECT_DIR" && git log -5 --pretty=format:"- %s (%cr)" 2>/dev/null)
+    local files_changed=$(cd "$PROJECT_DIR" && git diff HEAD~5 --name-only 2>/dev/null | wc -l)
+    local recent_files=$(cd "$PROJECT_DIR" && git diff HEAD~5 --name-only 2>/dev/null | head -10)
+    local commit_messages=$(cd "$PROJECT_DIR" && git log -5 --pretty=format:"%s" 2>/dev/null)
     
-    # Determine focus based on actual commit analysis
-    local focus="CONSTRUCT development system improvements"
-    if echo "$commit_messages" | grep -q "devupdate\|dev.*update"; then
-        focus="Development update system enhancement and automation"
-    elif echo "$commit_messages" | grep -q "script\|automation"; then
-        focus="Development workflow and script automation improvements"
-    elif echo "$commit_messages" | grep -q "architecture\|refactor"; then
-        focus="Architecture refinement and code organization"
+    # Determine focus based on actual commit analysis and project type
+    local focus="Project development improvements"
+    
+    # Check if this is CONSTRUCT development
+    if [[ "$PROJECT_DIR" == *"CONSTRUCT-LAB"* ]] || [[ "$PROJECT_DIR" == *"CONSTRUCT-CORE"* ]]; then
+        focus="CONSTRUCT development system improvements"
+        if echo "$commit_messages" | grep -q "devupdate\|dev.*update"; then
+            focus="Development update system enhancement and automation"
+        elif echo "$commit_messages" | grep -q "script\|automation"; then
+            focus="Development workflow and script automation improvements"
+        elif echo "$commit_messages" | grep -q "architecture\|refactor"; then
+            focus="Architecture refinement and code organization"
+        fi
+    else
+        # For other projects, detect by patterns
+        if [ -f "$PROJECT_DIR/.construct/patterns.yaml" ] && command -v yq >/dev/null 2>&1; then
+            local patterns=$(yq eval '.plugins[]' "$PROJECT_DIR/.construct/patterns.yaml" 2>/dev/null | head -1)
+            case "$patterns" in
+                *swift*|*ios*) focus="iOS/Swift application development" ;;
+                *web*|*react*|*node*) focus="Web application development" ;;
+                *python*) focus="Python project development" ;;
+                *) focus="Application development improvements" ;;
+            esac
+        fi
     fi
     
     # Create comprehensive dev update following _devupdate-prompt.md exactly
@@ -283,12 +312,12 @@ EOF
 generate_basic_devupdate() {
     local timestamp=$(get_timestamp)
     local today=$(date +"%Y-%m-%d")
-    local branch=$(cd "$CONSTRUCT_ROOT" && git branch --show-current 2>/dev/null || echo "main")
+    local branch=$(cd "$PROJECT_DIR" && git branch --show-current 2>/dev/null || echo "main")
     
     # Get recent commits for context
-    local recent_work=$(cd "$CONSTRUCT_ROOT" && git log -3 --pretty=format:"- %s (%cr)" 2>/dev/null)
-    local files_changed=$(cd "$CONSTRUCT_ROOT" && git diff HEAD~3 --name-only 2>/dev/null | wc -l)
-    local last_commit=$(cd "$CONSTRUCT_ROOT" && git log -1 --pretty=format:"%s" 2>/dev/null)
+    local recent_work=$(cd "$PROJECT_DIR" && git log -3 --pretty=format:"- %s (%cr)" 2>/dev/null)
+    local files_changed=$(cd "$PROJECT_DIR" && git diff HEAD~3 --name-only 2>/dev/null | wc -l)
+    local last_commit=$(cd "$PROJECT_DIR" && git log -1 --pretty=format:"%s" 2>/dev/null)
     
     # Create basic dev update for minor changes
     cat > "$DEVUPDATE_DIR/devupdate--$timestamp.md" << EOF
@@ -324,14 +353,15 @@ EOF
 generate_claude_prompt() {
     local timestamp=$(get_timestamp)
     local today=$(date +"%Y-%m-%d")
-    local branch=$(cd "$CONSTRUCT_ROOT" && git branch --show-current 2>/dev/null || echo "main")
-    local recent_work=$(cd "$CONSTRUCT_ROOT" && git log -10 --pretty=format:"- %s (%cr)" 2>/dev/null)
-    local files_changed=$(cd "$CONSTRUCT_ROOT" && git diff HEAD~10 --name-only 2>/dev/null | wc -l)
+    local branch=$(cd "$PROJECT_DIR" && git branch --show-current 2>/dev/null || echo "main")
+    local recent_work=$(cd "$PROJECT_DIR" && git log -10 --pretty=format:"- %s (%cr)" 2>/dev/null)
+    local files_changed=$(cd "$PROJECT_DIR" && git diff HEAD~10 --name-only 2>/dev/null | wc -l)
     
     cat > "$DEVUPDATE_DIR/devupdate-prompt--$timestamp.md" << EOF
 # Claude: Please create Dev Update
 
 **Context**: Use the template at \`$TEMPLATE_FILE\` to create a comprehensive dev update.
+**Project**: $PROJECT_DIR
 
 **Session Info**:
 - **Date**: $today
@@ -397,7 +427,8 @@ main() {
         esac
     done
     
-    echo -e "${BLUE}📝 CONSTRUCT Development Update Generator${NC}"
+    echo -e "${BLUE}📝 Project Development Update Generator${NC}"
+    echo "Project: $PROJECT_DIR"
     echo ""
     
     # Create devupdate directory if it doesn't exist
@@ -417,14 +448,21 @@ main() {
     else
         # Interactive mode
         echo -e "${YELLOW}📋 Interactive dev update creation${NC}"
-        echo "Template available at: $TEMPLATE_FILE"
+        if [ -f "$TEMPLATE_FILE" ]; then
+            echo "Template available at: $TEMPLATE_FILE"
+        else
+            echo -e "${YELLOW}⚠️ No template found at: $TEMPLATE_FILE${NC}"
+            echo "Creating template directory..."
+            mkdir -p "$(dirname "$TEMPLATE_FILE")"
+            echo "Consider creating a template or using --auto mode"
+        fi
         echo ""
         echo "Options:"
         echo "1. Use --auto to generate automatically"
         echo "2. Use --prompt to generate Claude prompt file"
         echo "3. Manually copy template to devupdate--$(get_timestamp).md"
         echo ""
-        echo "Template location: $TEMPLATE_FILE"
+        echo "Output directory: $DEVUPDATE_DIR"
     fi
 }
 

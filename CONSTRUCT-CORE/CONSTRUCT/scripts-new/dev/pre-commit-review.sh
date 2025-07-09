@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# CONSTRUCT Pre-Commit Review Script
+# Project Pre-Commit Review Script
 # Runs all pre-commit checks individually with full visibility, then asks for commit confirmation
 
 set -e
@@ -14,13 +14,35 @@ NC='\033[0m' # No Color
 
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../lib/common-patterns.sh"
+SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+source "$SCRIPTS_ROOT/../lib/common-patterns.sh"
 
-# Get project directories using library functions
-CONSTRUCT_ROOT=$(get_construct_root)
-CONSTRUCT_DEV=$(get_construct_dev)
+# Show help if requested
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: $0 [PROJECT_DIR]"
+    echo ""
+    echo "Run all pre-commit checks for a project"
+    echo ""
+    echo "Arguments:"
+    echo "  PROJECT_DIR   Project directory (default: current directory)"
+    echo ""
+    echo "This script runs all quality checks before committing:"
+    echo "  - Update context"
+    echo "  - Check architecture"
+    echo "  - Update documentation"
+    echo "  - Check quality"
+    echo "  - Scan structure"
+    echo "  - Generate dev update"
+    echo "  - Create session summary"
+    exit 0
+fi
 
-echo -e "${BLUE}🏗️  CONSTRUCT Pre-Commit Review${NC}"
+# Accept PROJECT_DIR as parameter, default to current directory
+PROJECT_DIR="${1:-.}"
+PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
+
+echo -e "${BLUE}🏗️  Pre-Commit Review${NC}"
+echo "Project: $PROJECT_DIR"
 echo "=================================="
 echo ""
 
@@ -32,20 +54,27 @@ declare -a SCRIPT_NAMES
 run_and_track() {
     local script_name=$1
     local script_path=$2
+    shift 2  # Remove first two arguments, rest are passed to script
     
     echo -e "${YELLOW}Running $script_name...${NC}"
     echo ""
     
-    if "$script_path"; then
-        SCRIPT_RESULTS+=("✅")
-        SCRIPT_NAMES+=("$script_name")
-        echo ""
-        echo -e "${GREEN}✅ $script_name completed successfully${NC}"
+    if [ -f "$script_path" ]; then
+        if "$script_path" "$@"; then
+            SCRIPT_RESULTS+=("✅")
+            SCRIPT_NAMES+=("$script_name")
+            echo ""
+            echo -e "${GREEN}✅ $script_name completed successfully${NC}"
+        else
+            SCRIPT_RESULTS+=("❌")
+            SCRIPT_NAMES+=("$script_name")
+            echo ""
+            echo -e "${RED}❌ $script_name failed${NC}"
+        fi
     else
-        SCRIPT_RESULTS+=("❌")
+        SCRIPT_RESULTS+=("⚠️")
         SCRIPT_NAMES+=("$script_name")
-        echo ""
-        echo -e "${RED}❌ $script_name failed${NC}"
+        echo -e "${YELLOW}⚠️ $script_name not found at: $script_path${NC}"
     fi
     
     echo ""
@@ -53,28 +82,44 @@ run_and_track() {
     echo ""
 }
 
-# Run all scripts individually
-run_and_track "update-context" "$CONSTRUCT_DEV/CONSTRUCT/scripts/update-context.sh"
-run_and_track "check-architecture" "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-architecture.sh"
-run_and_track "update-architecture" "$CONSTRUCT_DEV/CONSTRUCT/scripts/update-architecture.sh"
-run_and_track "check-quality" "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-quality.sh"
-run_and_track "scan-structure" "$CONSTRUCT_DEV/CONSTRUCT/scripts/scan_construct_structure.sh"
-run_and_track "check-documentation" "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-documentation.sh"
-run_and_track "session-summary" "$CONSTRUCT_DEV/CONSTRUCT/scripts/session-summary.sh"
+# Find the scripts directory (could be in PROJECT_DIR/CONSTRUCT or relative to this script)
+if [ -d "$PROJECT_DIR/CONSTRUCT/scripts" ]; then
+    SCRIPTS_DIR="$PROJECT_DIR/CONSTRUCT/scripts"
+elif [ -d "$SCRIPTS_ROOT" ]; then
+    SCRIPTS_DIR="$SCRIPTS_ROOT"
+else
+    echo -e "${RED}❌ Cannot find scripts directory${NC}"
+    exit 1
+fi
+
+# Run all scripts individually with PROJECT_DIR parameter
+run_and_track "update-context" "$SCRIPTS_DIR/construct/update-context.sh" "$PROJECT_DIR"
+run_and_track "check-architecture" "$SCRIPTS_DIR/core/check-architecture.sh" "$PROJECT_DIR"
+run_and_track "update-architecture" "$SCRIPTS_DIR/construct/update-architecture.sh" "$PROJECT_DIR"
+run_and_track "check-quality" "$SCRIPTS_DIR/core/check-quality.sh" "$PROJECT_DIR"
+run_and_track "scan-structure" "$SCRIPTS_DIR/construct/scan_project_structure.sh" "$PROJECT_DIR"
+run_and_track "check-documentation" "$SCRIPTS_DIR/core/check-documentation.sh" "$PROJECT_DIR"
+run_and_track "session-summary" "$SCRIPTS_DIR/dev/session-summary.sh" "$PROJECT_DIR"
 # Handle generate-devupdate with arguments properly
 echo -e "${YELLOW}Running generate-devupdate...${NC}"
 echo ""
 
-if cd "$CONSTRUCT_DEV" && ./CONSTRUCT/scripts/generate-devupdate.sh --auto; then
-    SCRIPT_RESULTS+=("✅")
-    SCRIPT_NAMES+=("generate-devupdate")
-    echo ""
-    echo -e "${GREEN}✅ generate-devupdate completed successfully${NC}"
+if [ -f "$SCRIPTS_DIR/dev/generate-devupdate.sh" ]; then
+    if "$SCRIPTS_DIR/dev/generate-devupdate.sh" "$PROJECT_DIR" --auto; then
+        SCRIPT_RESULTS+=("✅")
+        SCRIPT_NAMES+=("generate-devupdate")
+        echo ""
+        echo -e "${GREEN}✅ generate-devupdate completed successfully${NC}"
+    else
+        SCRIPT_RESULTS+=("❌")
+        SCRIPT_NAMES+=("generate-devupdate")
+        echo ""
+        echo -e "${RED}❌ generate-devupdate failed${NC}"
+    fi
 else
-    SCRIPT_RESULTS+=("❌")
+    SCRIPT_RESULTS+=("⚠️")
     SCRIPT_NAMES+=("generate-devupdate")
-    echo ""
-    echo -e "${RED}❌ generate-devupdate failed${NC}"
+    echo -e "${YELLOW}⚠️ generate-devupdate not found${NC}"
 fi
 
 echo ""
@@ -107,13 +152,13 @@ echo -e "${BLUE}Results: ${GREEN}$PASSED passed${NC}, ${RED}$FAILED failed${NC}"
 echo ""
 
 # Check for uncommitted changes that would be staged
-STAGED_FILES=$(cd "$CONSTRUCT_ROOT" && git status --porcelain | wc -l | tr -d ' ')
+STAGED_FILES=$(cd "$PROJECT_DIR" && git status --porcelain 2>/dev/null | wc -l | tr -d ' ' || echo "0")
 echo -e "${BLUE}📁 Files to be committed: $STAGED_FILES${NC}"
 
 if [ "$STAGED_FILES" -gt 0 ]; then
     echo ""
     echo -e "${YELLOW}Files that will be committed:${NC}"
-    cd "$CONSTRUCT_ROOT" && git status --porcelain | head -10
+    cd "$PROJECT_DIR" && git status --porcelain | head -10
     if [ "$STAGED_FILES" -gt 10 ]; then
         echo "... and $((STAGED_FILES - 10)) more files"
     fi

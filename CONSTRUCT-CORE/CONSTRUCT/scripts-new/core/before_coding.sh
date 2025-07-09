@@ -434,10 +434,10 @@ show_next_steps() {
     case "$PRIMARY_LANGUAGE" in
         shell)
             echo "CONSTRUCT workflow:"
-            echo "  ./CONSTRUCT/scripts/check-architecture.sh    # Verify current state"
+            echo "  ./CONSTRUCT/scripts/core/check-architecture.sh    # Verify current state"
             echo "  # ... make your changes ..."
-            echo "  ./CONSTRUCT/scripts/update-context.sh        # Update development context"
-            echo "  ./CONSTRUCT/scripts/check-quality.sh         # Check quality"
+            echo "  ./CONSTRUCT/scripts/construct/update-context.sh   # Update development context"
+            echo "  ./CONSTRUCT/scripts/core/check-quality.sh         # Check quality"
             echo ""
             echo "Available resources:"
             echo "  - lib/ functions for reusable code"

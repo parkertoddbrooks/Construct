@@ -67,70 +67,106 @@ cd CONSTRUCT-LAB/
 ./CONSTRUCT/scripts/before_coding.sh func   # Search before coding
 \`\`\`
 
-## 📍 Where We Left Off in CONSTRUCT Development
+## 📍 Where We Left Off
 
-### Current CONSTRUCT Task/Feature
+### Current Task/Feature
 Working on: $LAST_COMMIT
 
-### Recent CONSTRUCT Development (Last 10 commits)
+### Recent Development (Last 10 commits)
 $(cd "$CONSTRUCT_ROOT" && git log -10 --pretty=format:"- %s (%cr)" 2>/dev/null | head -10)
 
-### Active CONSTRUCT Files (Recently Modified)
+### Active Files (Recently Modified)
 $(cd "$CONSTRUCT_ROOT" && git status --porcelain 2>/dev/null | grep -E "^( M|M |MM)" | sed 's/^.../- /' | head -10)
 
-### CONSTRUCT Component Status
+### Project Status
+- **Project Type**: $PROJECT_TYPE
+- **Active Patterns**: $PATTERNS
 - **Shell Scripts**: $SCRIPT_COUNT
-- **Library Functions**: $LIB_FUNCTIONS
-- **Configuration Files**: $CONFIG_FILES
+$([ $SWIFT_COUNT -gt 0 ] && echo "- **Swift Files**: $SWIFT_COUNT")
+$([ $JS_COUNT -gt 0 ] && echo "- **JavaScript/TypeScript Files**: $JS_COUNT")
+$([ $PY_COUNT -gt 0 ] && echo "- **Python Files**: $PY_COUNT")
 - **Uncommitted Changes**: $UNCOMMITTED_FILES
 
-## 🔧 CONSTRUCT Development Context
+## 🔧 Development Context
 
 ### Active Development Areas
-$(cd "$CONSTRUCT_DEV" && find . -name "*.sh" -newer "$SESSION_DIR/../.." 2>/dev/null | head -5 | sed 's|^./|- |' || echo "- No recent script changes")
+$(cd "$PROJECT_DIR" && find . -name "*.sh" -newer "$SESSION_DIR/../.." 2>/dev/null | head -5 | sed 's|^./|- |' || echo "- No recent script changes")
 
-### Key CONSTRUCT Scripts Status
-- **update-context.sh**: $([ -f "$CONSTRUCT_DEV/CONSTRUCT/scripts/update-context.sh" ] && echo "✅ Implemented" || echo "❌ Missing")
-- **check-architecture.sh**: $([ -f "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-architecture.sh" ] && echo "✅ Implemented" || echo "❌ Missing")
-- **before_coding.sh**: $([ -f "$CONSTRUCT_DEV/CONSTRUCT/scripts/before_coding.sh" ] && echo "✅ Implemented" || echo "❌ Missing")
+### Key Project Components
+$(if [ -f "$PROJECT_DIR/CLAUDE.md" ]; then echo "- **CLAUDE.md**: ✅ Found"; else echo "- **CLAUDE.md**: ❌ Missing"; fi)
+$(if [ -f "$PROJECT_DIR/README.md" ]; then echo "- **README.md**: ✅ Found"; else echo "- **README.md**: ❌ Missing"; fi)
+$(if [ -d "$PROJECT_DIR/.construct" ]; then echo "- **.construct/**: ✅ CONSTRUCT patterns configured"; else echo "- **.construct/**: ❌ Not a CONSTRUCT project"; fi)
+$(if [ -d "$PROJECT_DIR/AI" ]; then echo "- **AI/**: ✅ AI documentation structure"; else echo "- **AI/**: ❌ AI documentation missing"; fi)
 
-### Template Status
-$(if [ -d "$CONSTRUCT_DEV/Templates" ]; then echo "✅ Templates directory exists"; else echo "❌ Templates directory missing"; fi)
+## 🚀 Next Development Session
 
-## 🚀 Next CONSTRUCT Development Session
-
-### Immediate Priorities
-1. Continue dual development environment implementation
-2. Complete missing template components
-3. Implement USER-project-files script integration
-4. Test template repository workflow
+### Detected Next Steps
+$(if [[ "$PROJECT_DIR" == *"CONSTRUCT"* ]]; then
+    echo "1. Continue CONSTRUCT system development"
+    echo "2. Enhance pattern-based architecture"
+    echo "3. Improve project-aware scripts"
+    echo "4. Test multi-project support"
+else
+    if [ $SWIFT_COUNT -gt 0 ]; then
+        echo "1. Continue iOS/Swift development"
+        echo "2. Review MVVM architecture compliance"
+        echo "3. Update UI components"
+        echo "4. Test on devices"
+    elif [ $JS_COUNT -gt 0 ]; then
+        echo "1. Continue web development"
+        echo "2. Review component architecture"
+        echo "3. Update dependencies"
+        echo "4. Run tests"
+    else
+        echo "1. Continue project development"
+        echo "2. Review architecture"
+        echo "3. Update documentation"
+        echo "4. Run quality checks"
+    fi
+fi)
 
 ### Development Workflow Commands
 \`\`\`bash
-# CONSTRUCT Development Environment
-cd CONSTRUCT-LAB/
-./CONSTRUCT/scripts/update-context.sh      # Update development context
-./CONSTRUCT/scripts/check-architecture.sh  # Validate CONSTRUCT architecture
-./CONSTRUCT/scripts/before_coding.sh xyz   # Search existing before creating
+# Navigate to project
+cd $PROJECT_DIR
 
-# Cross-Environment Analysis (when ready)
-./CONSTRUCT/scripts/analyze-user-project.sh # Analyze USER-project-files patterns
+# Update context and validate
+$(if [ -f "$PROJECT_DIR/CONSTRUCT/scripts/construct/update-context.sh" ]; then
+    echo "./CONSTRUCT/scripts/construct/update-context.sh .    # Update context"
+    echo "./CONSTRUCT/scripts/core/check-architecture.sh .   # Validate architecture"
+    echo "./CONSTRUCT/scripts/core/before_coding.sh search   # Search before creating"
+else
+    echo "# Review project documentation"
+    echo "# Update CLAUDE.md or README.md"
+    echo "# Run project-specific commands"
+fi)
 \`\`\`
 
 ### Key Files for Next Session
-- **CONSTRUCT Context**: CONSTRUCT-LAB/AI/CLAUDE.md
-- **Development Status**: Auto-generated section shows current state
-- **Active PRDs**: construct-template-repository-prd.md
-- **Implementation Plan**: implement-dual-dev-environments.md
+- **Project Context**: $([ -f "$PROJECT_DIR/CLAUDE.md" ] && echo "$PROJECT_DIR/CLAUDE.md" || echo "Create CLAUDE.md for AI context")
+- **Documentation**: $([ -d "$PROJECT_DIR/AI/docs" ] && echo "$PROJECT_DIR/AI/docs/" || echo "No AI documentation found")
+- **Patterns Config**: $([ -f "$PROJECT_DIR/.construct/patterns.yaml" ] && echo "$PROJECT_DIR/.construct/patterns.yaml" || echo "Not a CONSTRUCT project")
+- **Recent Changes**: Review git log and uncommitted files
 
-## 💡 Recent CONSTRUCT Insights
-- Dual development environments working (shell vs Swift domains)
-- Auto-updating context successful for CONSTRUCT development
-- Architecture validation finds real issues in CONSTRUCT itself
-- Recursive improvement: CONSTRUCT improving itself with its own tools
+## 💡 Recent Insights
+$(if [[ "$PROJECT_DIR" == *"CONSTRUCT"* ]]; then
+    echo "- Pattern-based architecture enables flexible project support"
+    echo "- Scripts now work with any project directory"
+    echo "- Context-aware behavior based on .construct/patterns.yaml"
+    echo "- Recursive improvement: CONSTRUCT improving itself"
+else
+    echo "- Development patterns established in current sprint"
+    echo "- Architecture decisions documented"
+    echo "- Code quality maintained through session"
+    echo "- Progress tracked in version control"
+fi)
 
 ## 🤖 For Claude Context Transfer
-This session focused on implementing dual development environments for CONSTRUCT. The system now has parallel AI-assisted workflows for both CONSTRUCT development (shell/Python) and user projects (Swift). Key achievement: CONSTRUCT can now improve itself using its own methodology.
+$(if [[ "$PROJECT_DIR" == *"CONSTRUCT"* ]]; then
+    echo "This session focused on making CONSTRUCT scripts project-aware. Scripts now accept PROJECT_DIR parameters and work with any project structure, not just CONSTRUCT itself. Pattern-based behavior allows scripts to adapt to different project types."
+else
+    echo "This session focused on $PROJECT_NAME development. Key changes include recent commits, file modifications, and architectural decisions. Review the git log and CLAUDE.md for specific implementation details."
+fi)
 
 ---
 **Session preserved at**: $(date)
@@ -138,11 +174,16 @@ This session focused on implementing dual development environments for CONSTRUCT
 **Next Action**: Start new Claude session and run update-context.sh
 EOF
 
-echo -e "${GREEN}✅ CONSTRUCT development session summary saved${NC}"
-echo -e "${BLUE}📁 Location: $SESSION_DIR/$TIMESTAMP-construct-session.md${NC}"
+echo -e "${GREEN}✅ Development session summary saved${NC}"
+echo -e "${BLUE}📁 Location: $SESSION_DIR/$TIMESTAMP-session.md${NC}"
 echo ""
 echo -e "${YELLOW}🔄 For next session:${NC}"
 echo "1. Start fresh Claude session"
-echo "2. Run: cd CONSTRUCT-LAB/ && ./CONSTRUCT/scripts/update-context.sh"
-echo "3. Read: AI/CLAUDE.md for current context"
-echo "4. Continue with dual environment implementation"
+echo "2. Navigate to: cd $PROJECT_DIR"
+if [ -f "$PROJECT_DIR/CONSTRUCT/scripts/construct/update-context.sh" ]; then
+    echo "3. Run: ./CONSTRUCT/scripts/construct/update-context.sh ."
+    echo "4. Read: CLAUDE.md for current context"
+else
+    echo "3. Review: $([ -f "$PROJECT_DIR/CLAUDE.md" ] && echo "CLAUDE.md" || echo "project documentation")"
+    echo "4. Continue development"
+fi

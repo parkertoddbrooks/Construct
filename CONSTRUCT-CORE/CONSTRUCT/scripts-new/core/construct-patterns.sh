@@ -14,14 +14,15 @@ NC='\033[0m' # No Color
 
 # Get script directory and project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+CONSTRUCT_ROOT="$(cd "$SCRIPTS_ROOT/../../.." && pwd)"
 CONSTRUCT_CORE="$CONSTRUCT_ROOT/CONSTRUCT-CORE"
 
 # Parse arguments
 COMMAND="${1:-show}"
 PROJECT_DIR="${2:-.}"
 CONFIG_FILE="$PROJECT_DIR/.construct/patterns.yaml"
-ASSEMBLE_SCRIPT="$SCRIPT_DIR/assemble-claude.sh"
+ASSEMBLE_SCRIPT="$SCRIPTS_ROOT/construct/assemble-claude.sh"
 
 # Show help if requested
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then

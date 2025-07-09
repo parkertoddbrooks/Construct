@@ -14,17 +14,18 @@ NC='\033[0m' # No Color
 
 # Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Accept PROJECT_DIR as first parameter, default to current directory
 PROJECT_DIR="${1:-.}"
 PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
 
 # Detect CONSTRUCT_CORE location (handles both LAB symlink and direct usage)
-if [ -d "$SCRIPT_DIR/../../CONSTRUCT-CORE" ]; then
-    CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../../CONSTRUCT-CORE" && pwd)"
+if [ -d "$SCRIPTS_ROOT/../../CONSTRUCT-CORE" ]; then
+    CONSTRUCT_CORE="$(cd "$SCRIPTS_ROOT/../../CONSTRUCT-CORE" && pwd)"
 else
     # Fallback for different structures
-    CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../.." && pwd)"
+    CONSTRUCT_CORE="$(cd "$SCRIPTS_ROOT/../.." && pwd)"
 fi
 
 # Source common libraries
@@ -116,7 +117,7 @@ main() {
     while IFS= read -r pattern; do
         [ -z "$pattern" ] && continue
         
-        local pattern_script="$SCRIPT_DIR/patterns/$pattern/validate-architecture.sh"
+        local pattern_script="$SCRIPTS_ROOT/patterns/$pattern/validate-architecture.sh"
         
         if [ -f "$pattern_script" ]; then
             echo -e "\n${BLUE}→ Running $pattern architecture checks${NC}"
@@ -168,7 +169,7 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "  $0 Projects/MyApp/ios # Check architecture in specific project"
     echo ""
     echo "Pattern validators are located in:"
-    echo "  $SCRIPT_DIR/patterns/*/validate-architecture.sh"
+    echo "  $SCRIPTS_ROOT/patterns/*/validate-architecture.sh"
     exit 0
 fi
 

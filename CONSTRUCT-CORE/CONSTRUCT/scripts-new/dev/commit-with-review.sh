@@ -14,7 +14,8 @@ NC='\033[0m' # No Color
 
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../lib/common-patterns.sh"
+SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+source "$SCRIPTS_ROOT/../lib/common-patterns.sh"
 
 # Get project directories using library functions
 CONSTRUCT_ROOT=$(get_construct_root)
@@ -69,7 +70,7 @@ echo ""
 echo -e "${BLUE}🔍 Running pre-commit review...${NC}"
 echo ""
 
-if "$CONSTRUCT_DEV/CONSTRUCT/scripts/pre-commit-review.sh"; then
+if "$CONSTRUCT_DEV/CONSTRUCT/scripts/dev/pre-commit-review.sh"; then
     echo ""
     echo -e "${GREEN}✅ Pre-commit review approved${NC}"
     echo ""

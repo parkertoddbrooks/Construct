@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# CONSTRUCT Development Context Updater
-# Updates CONSTRUCT-LAB/AI/CLAUDE.md with current CONSTRUCT development state
+# Project Context Updater
+# Updates PROJECT/CLAUDE.md with current project state
 
 set -e
 
@@ -14,17 +14,21 @@ NC='\033[0m' # No Color
 
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../lib/common-patterns.sh"
-source "$SCRIPT_DIR/../lib/validation.sh"
-source "$SCRIPT_DIR/../lib/file-analysis.sh"
-source "$SCRIPT_DIR/../lib/template-utils.sh"
+SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+source "$SCRIPTS_ROOT/../lib/common-patterns.sh"
+source "$SCRIPTS_ROOT/../lib/validation.sh"
+source "$SCRIPTS_ROOT/../lib/file-analysis.sh"
+source "$SCRIPTS_ROOT/../lib/template-utils.sh"
 
-# Get project directories using library functions
-CONSTRUCT_ROOT=$(get_construct_root)
-CONSTRUCT_DEV=$(get_construct_dev)
-CLAUDE_MD="$CONSTRUCT_DEV/CLAUDE.md"
+# Accept PROJECT_DIR as parameter, default to current directory
+PROJECT_DIR="${1:-.}"
+PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
 
-echo -e "${BLUE}🔄 Updating CONSTRUCT development context...${NC}"
+# Get CLAUDE.md path for this project
+CLAUDE_MD="$PROJECT_DIR/CLAUDE.md"
+
+echo -e "${BLUE}🔄 Updating project context...${NC}"
+echo "Project: $PROJECT_DIR"
 
 
 # Function to update auto-sections in CLAUDE.md
@@ -32,11 +36,11 @@ update_auto_sections() {
     echo -e "${BLUE}🔄 Updating auto-sections in CLAUDE.md...${NC}"
     
     # Compute current state
-    local script_count=$(count_shell_scripts "$CONSTRUCT_DEV")
-    local lib_functions=$(count_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/lib")
-    local config_files=$(count_yaml_files "$CONSTRUCT_DEV/CONSTRUCT/config")
-    local current_branch=$(cd "$CONSTRUCT_ROOT" && git branch --show-current 2>/dev/null || echo "unknown")
-    local last_commit=$(cd "$CONSTRUCT_ROOT" && git log -1 --oneline 2>/dev/null || echo "No commits")
+    local script_count=$(count_shell_scripts "$PROJECT_DIR")
+    local lib_functions=$(count_shell_scripts "$PROJECT_DIR/CONSTRUCT/lib" 2>/dev/null || echo "0")
+    local config_files=$(count_yaml_files "$PROJECT_DIR/CONSTRUCT/config" 2>/dev/null || echo "0")
+    local current_branch=$(cd "$PROJECT_DIR" && git branch --show-current 2>/dev/null || echo "unknown")
+    local last_commit=$(cd "$PROJECT_DIR" && git log -1 --oneline 2>/dev/null || echo "No commits")
     
     # Template status
     local template_status="✅ Valid"
@@ -50,25 +54,29 @@ update_auto_sections() {
     
     # Generate library functions list
     local lib_list=""
-    while IFS= read -r lib; do
-        local name=$(basename "$lib" .sh)
-        local desc="Shell library function"
-        if grep -q "# Purpose:" "$lib" 2>/dev/null; then
-            desc=$(grep "# Purpose:" "$lib" | head -1 | sed 's/# Purpose: //')
-        fi
-        lib_list="${lib_list}- $name.sh - $desc"$'\n'
-    done < <(find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/lib")
+    if [ -d "$PROJECT_DIR/CONSTRUCT/lib" ]; then
+        while IFS= read -r lib; do
+            local name=$(basename "$lib" .sh)
+            local desc="Shell library function"
+            if grep -q "# Purpose:" "$lib" 2>/dev/null; then
+                desc=$(grep "# Purpose:" "$lib" | head -1 | sed 's/# Purpose: //')
+            fi
+            lib_list="${lib_list}- $name.sh - $desc"$'\n'
+        done < <(find_shell_scripts "$PROJECT_DIR/CONSTRUCT/lib")
+    fi
     
     # Generate config files list
     local config_list=""
-    while IFS= read -r config; do
-        local name=$(basename "$config")
-        local desc="Configuration file"
-        if grep -q "# Purpose:" "$config" 2>/dev/null; then
-            desc=$(grep "# Purpose:" "$config" | head -1 | sed 's/# Purpose: //')
-        fi
-        config_list="${config_list}- $name - $desc"$'\n'
-    done < <(find "$CONSTRUCT_DEV/CONSTRUCT/config" -name "*.yaml" -type f)
+    if [ -d "$PROJECT_DIR/CONSTRUCT/config" ]; then
+        while IFS= read -r config; do
+            local name=$(basename "$config")
+            local desc="Configuration file"
+            if grep -q "# Purpose:" "$config" 2>/dev/null; then
+                desc=$(grep "# Purpose:" "$config" | head -1 | sed 's/# Purpose: //')
+            fi
+            config_list="${config_list}- $name - $desc"$'\n'
+        done < <(find "$PROJECT_DIR/CONSTRUCT/config" -name "*.yaml" -type f)
+    fi
     
     # Update CURRENT-STRUCTURE section
     local structure_content="## 📊 Current Project State (Auto-Updated)
@@ -78,7 +86,7 @@ Last updated: $(date '+%Y-%m-%d %H:%M:%S')
 - **Shell Scripts**: $script_count files
 - **Library Functions**: $lib_functions files
 - **Configuration Files**: $config_files files  
-- **Documentation Files**: $(find "$CONSTRUCT_DEV/AI/docs" -name "*.md" 2>/dev/null | wc -l) files
+- **Documentation Files**: $(find "$PROJECT_DIR/AI/docs" -name "*.md" 2>/dev/null | wc -l || echo "0") files
 
 ### Available Resources
 
@@ -95,77 +103,77 @@ $config_list"
 **Last Commit**: $last_commit
 
 ### Current Focus
-- CONSTRUCT development environment (shell/Python tools)
-- USER project environment (Swift MVVM templates)
-- Cross-environment analysis and improvement system
-- Auto-generating documentation and validation
+- Active patterns and development priorities
+- Code quality and architecture compliance
+- Documentation coverage and completeness
+- Development workflow optimization
 
 ### Development Workflow
-1. Work in CONSTRUCT-LAB/ directory
-2. Use CONSTRUCT development context (this file)
-3. Test changes against PROJECT-TEMPLATE/
-4. Ensure template users aren't affected"
+1. Work in project directory
+2. Use project context (this file)
+3. Run pattern-specific validators
+4. Commit changes with confidence"
 
     # Generate documentation links
     local arch_link=""
-    if [ -f "$CONSTRUCT_DEV/AI/docs/automated/architecture-overview-automated.md" ]; then
+    if [ -f "$PROJECT_DIR/AI/docs/automated/architecture-overview-automated.md" ]; then
         arch_link="- [Architecture Overview](AI/docs/automated/architecture-overview-automated.md) - Complete system architecture"
     else
-        arch_link="- Architecture Overview - Run ./CONSTRUCT/scripts/update-architecture.sh to generate"
+        arch_link="- Architecture Overview - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate"
     fi
     
     local script_link=""
-    if [ -f "$CONSTRUCT_DEV/AI/docs/automated/script-reference-automated.md" ]; then
+    if [ -f "$PROJECT_DIR/AI/docs/automated/script-reference-automated.md" ]; then
         script_link="- [Script Reference](AI/docs/automated/script-reference-automated.md) - All available scripts and functions"
     else
-        script_link="- Script Reference - Run ./CONSTRUCT/scripts/update-architecture.sh to generate"
+        script_link="- Script Reference - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate"
     fi
     
     local patterns_link=""
-    if [ -f "$CONSTRUCT_DEV/AI/docs/automated/development-patterns-automated.md" ]; then
+    if [ -f "$PROJECT_DIR/AI/docs/automated/development-patterns-automated.md" ]; then
         patterns_link="- [Development Patterns](AI/docs/automated/development-patterns-automated.md) - Standard patterns and conventions"
     else
-        patterns_link="- Development Patterns - Run ./CONSTRUCT/scripts/update-architecture.sh to generate"
+        patterns_link="- Development Patterns - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate"
     fi
     
     local api_link=""
-    if [ -f "$CONSTRUCT_DEV/AI/docs/automated/api-reference-automated.md" ]; then
+    if [ -f "$PROJECT_DIR/AI/docs/automated/api-reference-automated.md" ]; then
         api_link="- [API Reference](AI/docs/automated/api-reference-automated.md) - Library function documentation"
     else
-        api_link="- API Reference - Run ./CONSTRUCT/scripts/update-architecture.sh to generate"
+        api_link="- API Reference - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate"
     fi
     
     local structure_link=""
-    if [ -f "$CONSTRUCT_DEV/AI/structure/current-structure.md" ]; then
+    if [ -f "$PROJECT_DIR/AI/structure/current-structure.md" ]; then
         structure_link="- [Current Structure](AI/structure/current-structure.md) - Quick reference to current state"
     else
-        structure_link="- Current Structure - Run ./CONSTRUCT/scripts/scan_construct_structure.sh to generate"
+        structure_link="- Current Structure - Run ./CONSTRUCT/scripts/construct/scan_construct_structure.sh to generate"
     fi
     
     local quality_link=""
-    if [ -d "$CONSTRUCT_DEV/AI/dev-logs/check-quality" ]; then
-        local latest_quality=$(ls -t "$CONSTRUCT_DEV/AI/dev-logs/check-quality"/*.md 2>/dev/null | head -1)
+    if [ -d "$PROJECT_DIR/AI/dev-logs/check-quality" ]; then
+        local latest_quality=$(ls -t "$PROJECT_DIR/AI/dev-logs/check-quality"/*.md 2>/dev/null | head -1)
         if [ -n "$latest_quality" ]; then
-            quality_link="- [Latest Quality Report]($(echo "$latest_quality" | sed "s|$CONSTRUCT_DEV/||")) - Most recent quality validation"
+            quality_link="- [Latest Quality Report]($(echo "$latest_quality" | sed "s|$PROJECT_DIR/||")) - Most recent quality validation"
         else
-            quality_link="- Latest Quality Report - Run ./CONSTRUCT/scripts/check-quality.sh to generate"
+            quality_link="- Latest Quality Report - Run ./CONSTRUCT/scripts/core/check-quality.sh to generate"
         fi
     else
-        quality_link="- Latest Quality Report - Run ./CONSTRUCT/scripts/check-quality.sh to generate"
+        quality_link="- Latest Quality Report - Run ./CONSTRUCT/scripts/core/check-quality.sh to generate"
     fi
     
     local session_link=""
-    if [ -d "$CONSTRUCT_DEV/AI/dev-logs/session-states" ]; then
+    if [ -d "$PROJECT_DIR/AI/dev-logs/session-states" ]; then
         session_link="- [Session Summaries](AI/dev-logs/session-states/) - Development session documentation"
     else
-        session_link="- Session Summaries - Run ./CONSTRUCT/scripts/session-summary.sh to generate"
+        session_link="- Session Summaries - Run ./CONSTRUCT/scripts/dev/session-summary.sh to generate"
     fi
     
     local guide_link=""
-    if [ -f "$CONSTRUCT_DEV/AI/docs/automated/improving-CONSTRUCT-guide-automated.md" ]; then
+    if [ -f "$PROJECT_DIR/AI/docs/automated/improving-CONSTRUCT-guide-automated.md" ]; then
         guide_link="- [Improving CONSTRUCT Guide](AI/docs/automated/improving-CONSTRUCT-guide-automated.md) - How to improve CONSTRUCT itself"
     else
-        guide_link="- Improving CONSTRUCT Guide - Run ./CONSTRUCT/scripts/update-architecture.sh to generate"
+        guide_link="- Improving CONSTRUCT Guide - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate"
     fi
     
     # Update DOCUMENTATION-LINKS section  
@@ -199,7 +207,7 @@ $guide_link"
             hardcoded_status="✅ No hardcoded paths found"
         fi
     else
-        hardcoded_status="Run ./CONSTRUCT/scripts/check-quality.sh to see current violations"
+        hardcoded_status="Run ./CONSTRUCT/scripts/core/check-quality.sh to see current violations"
     fi
     
     local missing_docs_status=""
@@ -226,14 +234,14 @@ $guide_link"
             duplication_status="✅ Code duplication within acceptable limits"
         fi
     else
-        duplication_status="Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis"
+        duplication_status="Run ./CONSTRUCT/scripts/core/check-architecture.sh for duplication analysis"
     fi
     
     local template_status_check=""
     if validate_template_integrity >/dev/null 2>&1; then
         template_status_check="✅ Template integrity verified"
     else
-        template_status_check="❌ Template integrity issues - run ./CONSTRUCT/scripts/check-architecture.sh for details"
+        template_status_check="❌ Template integrity issues - run ./CONSTRUCT/scripts/core/check-architecture.sh for details"
     fi
     
     # Update VIOLATIONS section with actual violations
@@ -286,8 +294,8 @@ $git_status_output
 
     # Generate symlinks content
     local symlinks_content=""
-    if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-symlinks.sh" ]; then
-        symlinks_content=$("$CONSTRUCT_DEV/CONSTRUCT/scripts/check-symlinks.sh" --list-markdown 2>/dev/null || echo "Error generating symlink list")
+    if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/construct/check-symlinks.sh" ]; then
+        symlinks_content=$("$CONSTRUCT_DEV/CONSTRUCT/scripts/construct/check-symlinks.sh" --list-markdown 2>/dev/null || echo "Error generating symlink list")
     else
         symlinks_content="### 🔗 Active Symlinks (Auto-Updated)
 Error: check-symlinks.sh not found or not executable"
@@ -405,7 +413,7 @@ Error: check-symlinks.sh not found or not executable"
 
 # Main execution
 main() {
-    echo -e "${GREEN}🚀 Starting CONSTRUCT development context update...${NC}"
+    echo -e "${GREEN}🚀 Starting project context update...${NC}"
     
     # Validate environment
     validate_environment
@@ -419,13 +427,32 @@ main() {
     # Update auto-sections
     update_auto_sections
     
-    echo -e "${GREEN}✅ CONSTRUCT development context updated successfully!${NC}"
+    echo -e "${GREEN}✅ Project context updated successfully!${NC}"
     echo -e "${BLUE}📖 View updated context: $CLAUDE_MD${NC}"
     echo ""
     echo "Next steps:"
-    echo "  ./CONSTRUCT/scripts/check-architecture.sh   # Validate CONSTRUCT patterns"
-    echo "  ./CONSTRUCT/scripts/before_coding.sh func   # Search before coding"
+    echo "  check-architecture $PROJECT_DIR   # Validate patterns"
+    echo "  before_coding $PROJECT_DIR func   # Search before coding"
 }
+
+# Show help if requested
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: $0 [PROJECT_DIR]"
+    echo ""
+    echo "Update project's CLAUDE.md with current state"
+    echo ""
+    echo "Arguments:"
+    echo "  PROJECT_DIR   Directory containing project (default: current directory)"
+    echo ""
+    echo "This script updates the CLAUDE.md file in the specified project directory"
+    echo "with current project state including:"
+    echo "  - Git status and recent commits"
+    echo "  - Active patterns from .construct/patterns.yaml"
+    echo "  - Code quality violations"
+    echo "  - Documentation status"
+    echo "  - Working location context"
+    exit 0
+fi
 
 # Run main function
 main "$@"
