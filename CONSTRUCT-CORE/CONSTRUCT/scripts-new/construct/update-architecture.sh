@@ -14,7 +14,8 @@ NC='\033[0m' # No Color
 
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../lib/common-patterns.sh"
+SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+source "$SCRIPTS_ROOT/../lib/common-patterns.sh"
 
 # Get project directories using library functions
 CONSTRUCT_ROOT=$(get_construct_root)
@@ -92,6 +93,11 @@ CONSTRUCT/
 │   ├── orchestrator/           # Language detection and routing
 │   ├── adapters/              # Language-specific implementations
 │   ├── scripts/               # Core workflow scripts
+│   │   ├── core/             # General-purpose orchestrators
+│   │   ├── construct/        # CONSTRUCT-specific tools
+│   │   ├── workspace/        # Workspace management
+│   │   ├── dev/              # Development tools
+│   │   └── patterns/         # Pattern validators
 │   ├── lib/                   # Shared library functions
 │   ├── config/                # Core configuration
 │   └── VERSION                # Semantic versioning
@@ -228,7 +234,7 @@ Each environment has parallel AI-assisted workflow scripts:
 
 ---
 
-*This document is auto-generated. To update, run: ./CONSTRUCT/scripts/update-architecture.sh*
+*This document is auto-generated. To update, run: ./CONSTRUCT/scripts/construct/update-architecture.sh*
 EOF
 
     echo -e "${GREEN}✅ Architecture overview generated: $output_file${NC}"
@@ -252,8 +258,10 @@ generate_script_documentation() {
 
 EOF
 
-    # Document each script in CONSTRUCT/scripts/
-    find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | sort | while read -r script; do
+    # Document each script by category
+    echo "### Core Scripts (General-purpose orchestrators)" >> "$output_file"
+    echo "" >> "$output_file"
+    find "$CONSTRUCT_DEV/CONSTRUCT/scripts/core" -name "*.sh" -type f 2>/dev/null | sort | while read -r script; do
         local script_name=$(basename "$script")
         echo "#### $script_name" >> "$output_file"
         echo "" >> "$output_file"
@@ -276,6 +284,65 @@ EOF
             echo "$features" >> "$output_file"
         else
             echo "- Automated validation and reporting" >> "$output_file"
+        fi
+        
+        echo "" >> "$output_file"
+    done
+
+    # Document CONSTRUCT scripts
+    echo "" >> "$output_file"
+    echo "### CONSTRUCT Scripts (CONSTRUCT-specific tools)" >> "$output_file"
+    echo "" >> "$output_file"
+    find "$CONSTRUCT_DEV/CONSTRUCT/scripts/construct" -name "*.sh" -type f 2>/dev/null | sort | while read -r script; do
+        local script_name=$(basename "$script")
+        echo "#### $script_name" >> "$output_file"
+        echo "" >> "$output_file"
+        
+        # Extract description from script header
+        local description=$(head -10 "$script" | grep "^# .*[A-Za-z]" | head -1 | sed 's/^# //')
+        if [ -n "$description" ]; then
+            echo "**Purpose**: $description" >> "$output_file"
+        fi
+        
+        # Check if script has usage/help
+        if grep -q "usage\|Usage\|--help" "$script"; then
+            echo "**Usage**: Run with --help for detailed usage" >> "$output_file"
+        fi
+        
+        echo "" >> "$output_file"
+    done
+
+    # Document Workspace scripts
+    echo "" >> "$output_file"
+    echo "### Workspace Scripts (Multi-project management)" >> "$output_file"
+    echo "" >> "$output_file"
+    find "$CONSTRUCT_DEV/CONSTRUCT/scripts/workspace" -name "*.sh" -type f 2>/dev/null | sort | while read -r script; do
+        local script_name=$(basename "$script")
+        echo "#### $script_name" >> "$output_file"
+        echo "" >> "$output_file"
+        
+        # Extract description from script header
+        local description=$(head -10 "$script" | grep "^# .*[A-Za-z]" | head -1 | sed 's/^# //')
+        if [ -n "$description" ]; then
+            echo "**Purpose**: $description" >> "$output_file"
+        fi
+        
+        echo "" >> "$output_file"
+    done
+
+    # Document Dev scripts
+    echo "" >> "$output_file"
+    echo "### Development Tools (Workflow helpers)" >> "$output_file"
+    echo "" >> "$output_file"
+    find "$CONSTRUCT_DEV/CONSTRUCT/scripts/dev" -name "*.sh" -type f 2>/dev/null | sort | while read -r script; do
+        local script_name=$(basename "$script")
+        echo "#### $script_name" >> "$output_file"
+        echo "" >> "$output_file"
+        
+        # Extract description from script header
+        local description=$(head -10 "$script" | grep "^# .*[A-Za-z]" | head -1 | sed 's/^# //')
+        if [ -n "$description" ]; then
+            echo "**Purpose**: $description" >> "$output_file"
         fi
         
         echo "" >> "$output_file"
@@ -556,7 +623,7 @@ test_script_functionality() {
 
 ---
 
-*This document is auto-generated. To update, run: ./CONSTRUCT/scripts/update-architecture.sh*
+*This document is auto-generated. To update, run: ./CONSTRUCT/scripts/construct/update-architecture.sh*
 EOF
 
     echo -e "${GREEN}✅ Development patterns generated: $output_file${NC}"
@@ -576,7 +643,7 @@ update_main_architecture() {
     fi
     
     # Get current statistics
-    local script_count=$(find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f | wc -l | tr -d ' ')
+    local script_count=$(find "$CONSTRUCT_DEV/CONSTRUCT/scripts" -name "*.sh" -type f 2>/dev/null | grep -v "/patterns/" | wc -l | tr -d ' ')
     local lib_count=$(find "$CONSTRUCT_DEV/CONSTRUCT/lib" -name "*.sh" -type f | wc -l | tr -d ' ')
     local config_count=$(find "$CONSTRUCT_DEV/CONSTRUCT/config" -name "*.yaml" -type f | wc -l | tr -d ' ')
     
@@ -606,9 +673,9 @@ update_main_architecture() {
 - **Phase 5**: Shell aliases and polish - In progress
 
 ### Quality Metrics
-- **Script Quality**: Run \`./CONSTRUCT/scripts/check-quality.sh\` for current status
-- **Documentation Coverage**: Run \`./CONSTRUCT/scripts/check-documentation.sh\` for analysis
-- **Architecture Compliance**: Run \`./CONSTRUCT/scripts/check-architecture.sh\` for validation
+- **Script Quality**: Run \`./CONSTRUCT/scripts/core/check-quality.sh\` for current status
+- **Documentation Coverage**: Run \`./CONSTRUCT/scripts/core/check-documentation.sh\` for analysis
+- **Architecture Compliance**: Run \`./CONSTRUCT/scripts/core/check-architecture.sh\` for validation
 
 ### Recent Architecture Changes
 - Dual development environment implementation complete
@@ -626,21 +693,21 @@ update_main_architecture() {
 ### Development Commands
 \`\`\`bash
 # Update all architecture documentation
-./CONSTRUCT/scripts/update-architecture.sh
+./CONSTRUCT/scripts/construct/update-architecture.sh
 
 # Check overall CONSTRUCT development health
-./CONSTRUCT/scripts/check-quality.sh && ./CONSTRUCT/scripts/check-documentation.sh
+./CONSTRUCT/scripts/core/check-quality.sh && ./CONSTRUCT/scripts/core/check-documentation.sh
 
 # Analyze current structure
-./CONSTRUCT/scripts/scan_construct_structure.sh
+./CONSTRUCT/scripts/construct/scan_construct_structure.sh
 
 # Update development context for AI
-./CONSTRUCT/scripts/update-context.sh
+./CONSTRUCT/scripts/construct/update-context.sh
 \`\`\`
 
 ---
 
-*This section auto-updates when you run ./CONSTRUCT/scripts/update-architecture.sh*
+*This section auto-updates when you run ./CONSTRUCT/scripts/construct/update-architecture.sh*
 EOF
 
     echo -e "${GREEN}✅ Main architecture guide updated: $output_file${NC}"
@@ -744,8 +811,8 @@ main() {
     echo "  - $DOCS_DIR/api-reference-automated.md"
     echo ""
     echo "Next steps:"
-    echo "  ./CONSTRUCT/scripts/update-context.sh      # Update development context"
-    echo "  ./CONSTRUCT/scripts/check-quality.sh       # Validate documentation quality"
+    echo "  ./CONSTRUCT/scripts/construct/update-context.sh      # Update development context"
+    echo "  ./CONSTRUCT/scripts/core/check-quality.sh       # Validate documentation quality"
 }
 
 # Show help if requested

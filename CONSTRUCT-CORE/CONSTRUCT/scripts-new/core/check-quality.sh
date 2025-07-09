@@ -36,44 +36,51 @@ echo "======================================="
 echo "Project: $PROJECT_DIR"
 echo ""
 
-# Function to get active patterns
+# Function to get active patterns from patterns.yaml
 get_active_patterns() {
     local project_dir="$1"
     local patterns_file="$project_dir/.construct/patterns.yaml"
     
-    if [ -f "$patterns_file" ]; then
-        yq eval '.plugins[]' "$patterns_file" 2>/dev/null || echo ""
+    if [ ! -f "$patterns_file" ]; then
+        echo -e "${RED}❌ Error: No .construct/patterns.yaml found${NC}" >&2
+        echo -e "${YELLOW}Run 'construct-patterns init' to create one${NC}" >&2
+        return 1
     fi
     
-    # Always include base quality patterns
-    echo "shell-quality"
-    echo "code-quality"
+    # Check for yq
+    if ! command -v yq >/dev/null 2>&1; then
+        echo -e "${RED}❌ Error: yq is required to read patterns.yaml${NC}" >&2
+        echo -e "${YELLOW}Install yq: https://github.com/mikefarah/yq${NC}" >&2
+        return 1
+    fi
+    
+    # Extract active plugins
+    yq eval '.plugins[]' "$patterns_file" 2>/dev/null || echo ""
 }
 
 # Run base quality checks
-run_base_quality_checks() {
+run_base_checks() {
     echo -e "\n${YELLOW}Running base quality checks...${NC}"
     
     local project_dir="$1"
     local issues_found=0
     
-    # Check for TODO/FIXME without context
-    echo -n "Checking for undocumented TODOs... "
-    local todos=$(grep -r "TODO\|FIXME" "$project_dir" --include="*.sh" --include="*.swift" --include="*.cs" 2>/dev/null | grep -v "TODO.*:" | wc -l)
-    if [ "$todos" -gt 0 ]; then
-        echo -e "${YELLOW}⚠️  Found $todos TODOs without descriptions${NC}"
+    # Check if patterns.yaml exists
+    echo -n "Checking for patterns.yaml... "
+    if [ ! -f "$project_dir/.construct/patterns.yaml" ]; then
+        echo -e "${RED}❌ Missing .construct/patterns.yaml${NC}"
         ((issues_found++))
     else
-        echo -e "${GREEN}✅ All TODOs documented${NC}"
+        echo -e "${GREEN}✅ patterns.yaml exists${NC}"
     fi
     
-    # Check for debugging artifacts
-    echo -n "Checking for debug code... "
-    if grep -r "console\.log\|print(\|echo.*DEBUG" "$project_dir" --include="*.sh" --include="*.swift" --include="*.js" 2>/dev/null | grep -v "^#"; then
-        echo -e "${YELLOW}⚠️  Found debugging artifacts${NC}"
-        ((issues_found++))
+    # Check for TODO/FIXME comments
+    echo -n "Checking for TODOs and FIXMEs... "
+    local todos=$(grep -r "TODO\|FIXME" "$project_dir" --include="*.sh" --include="*.swift" --include="*.cs" --include="*.py" 2>/dev/null | wc -l || echo "0")
+    if [ "$todos" -gt 0 ]; then
+        echo -e "${YELLOW}⚠️  Found $todos TODO/FIXME comments${NC}"
     else
-        echo -e "${GREEN}✅ No debug code found${NC}"
+        echo -e "${GREEN}✅ No TODOs found${NC}"
     fi
     
     return $issues_found
@@ -84,26 +91,28 @@ main() {
     local total_issues=0
     local patterns_checked=0
     
-    # Run base quality checks
-    if ! run_base_quality_checks "$PROJECT_DIR"; then
-        ((total_issues+=$?))
+    # Run base checks first
+    run_base_checks "$PROJECT_DIR"
+    local base_exit=$?
+    if [ $base_exit -gt 0 ]; then
+        ((total_issues+=base_exit))
     fi
     
     # Get active patterns
-    echo -e "\n${YELLOW}Detecting active quality patterns...${NC}"
+    echo -e "\n${YELLOW}Detecting active patterns...${NC}"
     local active_patterns=$(get_active_patterns "$PROJECT_DIR")
     
     if [ -z "$active_patterns" ]; then
         echo -e "${YELLOW}No patterns configured, running default checks only${NC}"
     else
-        echo "Active quality patterns:"
+        echo "Active patterns:"
         echo "$active_patterns" | while read -r pattern; do
             echo "  - $pattern"
         done
     fi
     
-    # Run pattern-specific quality checks
-    echo -e "\n${YELLOW}Running pattern-specific quality checks...${NC}"
+    # Run pattern-specific checks
+    echo -e "\n${YELLOW}Running pattern-specific checks...${NC}"
     while IFS= read -r pattern; do
         [ -z "$pattern" ] && continue
         
@@ -112,8 +121,10 @@ main() {
         if [ -f "$pattern_script" ]; then
             echo -e "\n${BLUE}→ Running $pattern quality checks${NC}"
             # Pass PROJECT_DIR as parameter to pattern validators
-            if ! bash "$pattern_script" "$PROJECT_DIR"; then
-                ((total_issues+=$?))
+            bash "$pattern_script" "$PROJECT_DIR"
+            local pattern_exit=$?
+            if [ $pattern_exit -gt 0 ]; then
+                ((total_issues+=pattern_exit))
             fi
             ((patterns_checked++))
         else
@@ -123,22 +134,32 @@ main() {
     
     # Generate quality report in project's AI directory
     local report_dir="$PROJECT_DIR/AI/quality-reports"
-    mkdir -p "$report_dir"
-    local report_file="$report_dir/quality-report-$(date +%Y-%m-%d--%H-%M-%S).md"
+    mkdir -p "$report_dir" 2>/dev/null || true
     
-    {
-        echo "# Quality Report"
-        echo "Generated: $(date)"
+    if [ -d "$report_dir" ]; then
+        local report_file="$report_dir/quality-report-$(date +%Y-%m-%d--%H-%M-%S).md"
+        {
+            echo "# Quality Report"
+            echo "Generated: $(date)"
+            echo ""
+            echo "## Summary"
+            echo "- Project: $PROJECT_DIR"
+            echo "- Patterns checked: $patterns_checked"
+            echo "- Total issues: $total_issues"
+            echo ""
+            echo "## Active Patterns"
+            if [ -n "$active_patterns" ]; then
+                echo "$active_patterns" | while read -r pattern; do
+                    echo "- $pattern"
+                done
+            else
+                echo "No patterns configured"
+            fi
+        } > "$report_file"
+        
         echo ""
-        echo "## Summary"
-        echo "- Patterns checked: $patterns_checked"
-        echo "- Total issues: $total_issues"
-        echo ""
-        echo "## Active Patterns"
-        echo "$active_patterns" | while read -r pattern; do
-            echo "- $pattern"
-        done
-    } > "$report_file"
+        echo -e "${GREEN}📄 Quality report saved to: $report_file${NC}"
+    fi
     
     # Summary
     echo -e "\n${BLUE}═══════════════════════════════════════════════${NC}"
@@ -146,13 +167,13 @@ main() {
     echo -e "${BLUE}═══════════════════════════════════════════════${NC}"
     echo "Patterns checked: $patterns_checked"
     echo "Total issues found: $total_issues"
-    echo "Report generated: $report_file"
     
     if [ $total_issues -eq 0 ]; then
         echo -e "${GREEN}✅ All quality checks passed!${NC}"
         exit 0
     else
         echo -e "${RED}❌ Quality validation found $total_issues issues${NC}"
+        echo -e "${YELLOW}Run individual pattern validators for details${NC}"
         exit 1
     fi
 }

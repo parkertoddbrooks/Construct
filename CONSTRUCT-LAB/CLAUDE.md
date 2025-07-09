@@ -139,7 +139,7 @@ After commits, you may see deletions of structure files - this is normal cleanup
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-08 22:24:55
+Last updated: 2025-07-08 23:05:16
 
 ### Active Components
 - **Shell Scripts**: 2 files
@@ -166,7 +166,7 @@ Last updated: 2025-07-08 22:24:55
 **Date**: 2025-07-08
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 69e71ef feat: Implement pattern-based script architecture
+**Last Commit**: d2090c1 refactor: Update scripts to be context-aware and pattern-based
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -273,29 +273,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/assemble-claude.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/before_coding.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-architecture.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-documentation.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-quality.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-symlinks.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/commit-with-review.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct-patterns.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/README.md
+- CLAUDE.md
+- CONSTRUCT-CORE/CONSTRUCT/migrate-scripts.sh
+- CONSTRUCT-CORE/CONSTRUCT/orchestrator/README.md
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/assemble-claude.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/before_coding.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-architecture.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-documentation.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-quality.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-symlinks.sh
+- CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/README.md
 
 
 ### Git Status
 ```
-A  CLAUDE.md
-A  CONSTRUCT-CORE/CONSTRUCT/migrate-scripts.sh
-A  CONSTRUCT-CORE/CONSTRUCT/orchestrator/README.md
-A  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/README.md
-A  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/assemble-claude.sh
-A  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/before_coding.sh
-A  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-architecture.sh
-A  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-documentation.sh
-A  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-quality.sh
-A  CONSTRUCT-CORE/CONSTRUCT/scripts--2025-07-08--20-17-09/check-symlinks.sh
+M  CONSTRUCT-CORE/CONSTRUCT/migrate-scripts.sh
+M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/README.md
+D  CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-documentation.sh
+D  CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-symlinks.sh.bak
+R  CONSTRUCT-CORE/CONSTRUCT/scripts-new/assemble-claude.sh -> CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/assemble-claude.sh
+R  CONSTRUCT-CORE/CONSTRUCT/scripts-new/check-symlinks.sh -> CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/check-symlinks.sh
+R  CONSTRUCT-CORE/CONSTRUCT/scripts-new/scan_construct_structure.sh -> CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/scan_construct_structure.sh
+R  CONSTRUCT-CORE/CONSTRUCT/scripts-new/update-architecture.sh -> CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/update-architecture.sh
+R  CONSTRUCT-CORE/CONSTRUCT/scripts-new/update-context.sh -> CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/update-context.sh
+R  CONSTRUCT-CORE/CONSTRUCT/scripts-new/before_coding.sh -> CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/before_coding.sh
 ```
 
 ### Active Development Areas

@@ -8,6 +8,7 @@ CONSTRUCT-LAB/tools/validate-promotion.sh
 
 ## YAML Configuration Files
 ```
+CONSTRUCT-LAB/.construct/patterns.yaml
 CONSTRUCT-LAB/PROMOTE-TO-CORE.yaml
 ```
 
@@ -131,6 +132,7 @@ CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-08--14-
 CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-08--14-15-43.md
 CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-08--16-28-10.md
 CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-08--20-36-24.md
+CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-08--22-24-53.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate--2025-07-03--09-03-11.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate--2025-07-03--09-06-35.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/_archive/devupdate--2025-07-03--12-16-19.md
@@ -193,6 +195,8 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--12-32-07.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--13-09-46.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--14-13-43.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--16-28-12.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--20-36-25.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-08--22-24-55.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-2223-construct-session.md
@@ -261,6 +265,9 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-1309-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-1412-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-1413-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-1628-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-2036-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-2039-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-08-2224-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -351,6 +358,7 @@ CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.back
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250708-141341
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250708-162809
 CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250708-203623
+CONSTRUCT-LAB/AI/docs/automated/_old/improving-CONSTRUCT-guide-automated.md.backup-20250708-222453
 CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
 CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
 CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
@@ -362,6 +370,7 @@ CONSTRUCT-LAB/AI/PRDs/future/claude-code-hooks-integration-prd.md
 CONSTRUCT-LAB/AI/PRDs/prd-updates-2025-06-28.md
 CONSTRUCT-LAB/AI/PRDs/swift-claude-starter-template-prd-info.md
 CONSTRUCT-LAB/AI/PRDs/swift-claude-starter-template-prd.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-08--22-39-03.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -454,7 +463,9 @@ CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-08--13-09-46.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-08--14-12-16.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-08--14-13-43.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-08--16-28-11.md
-CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-08--20-36-25.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-08--20-36-25.md
+CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-08--22-24-54.md
+CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-08--23-00-00.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
@@ -512,7 +523,13 @@ None found
 ```
 === Script Categories ===
 
-AI Scripts:
+Core Scripts:
+
+CONSTRUCT Scripts:
+
+Workspace Scripts:
+
+Dev Scripts:
 
 Library Functions:
 
@@ -528,6 +545,7 @@ validation.sh: 9 functions
 ## Complete CONSTRUCT Development Tree
 ```
   .
+  .construct
   AI
   AI/ai-misc-conversations
   AI/ai-misc-conversations/what-is-construct
@@ -552,6 +570,7 @@ validation.sh: 9 functions
   AI/PRDs/current-sprint
   AI/PRDs/full-app
   AI/PRDs/future
+  AI/quality-reports
   AI/structure
   AI/todo
   AI/todo/_archive
@@ -600,15 +619,15 @@ File: quality-gates.yaml
 ```
 === File Counts ===
 Shell Scripts: 2
-YAML Configs: 1
-Markdown Docs: 397
+YAML Configs: 2
+Markdown Docs: 406
 Python Files: 0
 
 === Directory Structure ===
-Total Directories: 44
+Total Directories: 46
 
 === CONSTRUCT Development Health ===
-Working AI Scripts: 5/9
+Working Scripts: 0/9 key scripts
 Library Files: 4
 Configuration Files: 2
 ```
@@ -616,21 +635,21 @@ Configuration Files: 2
 ## Development Insights
 
 ### Current State
-- CONSTRUCT development environment is 55% complete
+- CONSTRUCT development environment is 0% complete
 - Infrastructure libraries are established (4 files)
 - Configuration-driven validation is active (2 configs)
 
 ### Next Development Priorities
-- [ ] Complete remaining 4 AI scripts
+- [ ] Complete remaining 9 AI scripts
 - [ ] Add more library functions for common operations
 - [ ] Expand configuration-driven validation rules
 - [ ] Create cross-environment analysis tools
 
 ### Architecture Quality
-- [ ] Run ./CONSTRUCT/scripts/check-architecture.sh for current quality status
+- [ ] Architecture validation not yet available
 - [ ] Verify all scripts follow error handling patterns
 - [ ] Ensure proper path resolution in all scripts
 - [ ] Validate configuration file schemas
 
 ---
-*Generated by scan_construct_structure.sh on Tue Jul  8 20:36:25 PDT 2025*
+*Generated by scan_construct_structure.sh on Tue Jul  8 23:00:00 PDT 2025*

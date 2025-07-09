@@ -14,7 +14,8 @@ NC='\033[0m' # No Color
 
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../lib/common-patterns.sh"
+SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+source "$SCRIPTS_ROOT/../lib/common-patterns.sh"
 
 # Get project directories using library functions
 CONSTRUCT_ROOT=$(get_construct_root)
@@ -73,8 +74,26 @@ analyze_shell_scripts() {
         
         # Categorize by directory
         echo "" >> "$OUTPUT_FILE"
-        echo "AI Scripts:" >> "$OUTPUT_FILE"
-        echo "$shell_scripts" | grep "CONSTRUCT/scripts/" | while read -r file; do
+        echo "Core Scripts:" >> "$OUTPUT_FILE"
+        echo "$shell_scripts" | grep "CONSTRUCT/scripts/core/" | while read -r file; do
+            basename "$file" >> "$OUTPUT_FILE"
+        done
+        
+        echo "" >> "$OUTPUT_FILE"
+        echo "CONSTRUCT Scripts:" >> "$OUTPUT_FILE"
+        echo "$shell_scripts" | grep "CONSTRUCT/scripts/construct/" | while read -r file; do
+            basename "$file" >> "$OUTPUT_FILE"
+        done
+        
+        echo "" >> "$OUTPUT_FILE"
+        echo "Workspace Scripts:" >> "$OUTPUT_FILE"
+        echo "$shell_scripts" | grep "CONSTRUCT/scripts/workspace/" | while read -r file; do
+            basename "$file" >> "$OUTPUT_FILE"
+        done
+        
+        echo "" >> "$OUTPUT_FILE"
+        echo "Dev Scripts:" >> "$OUTPUT_FILE"
+        echo "$shell_scripts" | grep "CONSTRUCT/scripts/dev/" | while read -r file; do
             basename "$file" >> "$OUTPUT_FILE"
         done
         
@@ -199,13 +218,21 @@ echo "=== CONSTRUCT Development Health ===" >> "$OUTPUT_FILE"
 
 # Count working scripts
 working_scripts=0
-if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/update-context.sh" ]; then ((working_scripts++)); fi
-if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-architecture.sh" ]; then ((working_scripts++)); fi
-if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/before_coding.sh" ]; then ((working_scripts++)); fi
-if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/session-summary.sh" ]; then ((working_scripts++)); fi
-if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-documentation.sh" ]; then ((working_scripts++)); fi
+# Core scripts
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/core/check-architecture.sh" ]; then ((working_scripts++)); fi
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/core/check-quality.sh" ]; then ((working_scripts++)); fi
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/core/check-documentation.sh" ]; then ((working_scripts++)); fi
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/core/before_coding.sh" ]; then ((working_scripts++)); fi
+# CONSTRUCT scripts
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/construct/update-context.sh" ]; then ((working_scripts++)); fi
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/construct/check-symlinks.sh" ]; then ((working_scripts++)); fi
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/construct/assemble-claude.sh" ]; then ((working_scripts++)); fi
+# Dev scripts
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/dev/session-summary.sh" ]; then ((working_scripts++)); fi
+# Workspace scripts
+if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/workspace/create-project.sh" ]; then ((working_scripts++)); fi
 
-echo "Working AI Scripts: $working_scripts/9" >> "$OUTPUT_FILE"
+echo "Working Scripts: $working_scripts/9 key scripts" >> "$OUTPUT_FILE"
 
 # Library completeness
 lib_files=$(count_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/lib")
@@ -237,8 +264,8 @@ echo "" >> "$OUTPUT_FILE"
 
 echo "### Architecture Quality" >> "$OUTPUT_FILE"
 # Check if architecture validation exists
-if [ -f "$CONSTRUCT_DEV/CONSTRUCT/scripts/check-architecture.sh" ]; then
-    echo "- [ ] Run ./CONSTRUCT/scripts/check-architecture.sh for current quality status" >> "$OUTPUT_FILE"
+if [ -f "$CONSTRUCT_DEV/CONSTRUCT/scripts/core/check-architecture.sh" ]; then
+    echo "- [ ] Run ./CONSTRUCT/scripts/core/check-architecture.sh for current quality status" >> "$OUTPUT_FILE"
 else
     echo "- [ ] Architecture validation not yet available" >> "$OUTPUT_FILE"
 fi
@@ -259,8 +286,19 @@ QUICK_REF="$CONSTRUCT_DEV/AI/structure/current-structure.md"
 echo "# Current CONSTRUCT Development Components ($(date +%Y-%m-%d))" > "$QUICK_REF"
 echo "" >> "$QUICK_REF"
 
-echo "## Working AI Scripts" >> "$QUICK_REF"
-find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts" | xargs -I {} basename {} | sort >> "$QUICK_REF"
+echo "## Working Scripts by Category" >> "$QUICK_REF"
+echo "" >> "$QUICK_REF"
+echo "### Core Scripts" >> "$QUICK_REF"
+find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts/core" 2>/dev/null | xargs -I {} basename {} | sort >> "$QUICK_REF" || echo "None found" >> "$QUICK_REF"
+echo "" >> "$QUICK_REF"
+echo "### CONSTRUCT Scripts" >> "$QUICK_REF"
+find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts/construct" 2>/dev/null | xargs -I {} basename {} | sort >> "$QUICK_REF" || echo "None found" >> "$QUICK_REF"
+echo "" >> "$QUICK_REF"
+echo "### Workspace Scripts" >> "$QUICK_REF"
+find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts/workspace" 2>/dev/null | xargs -I {} basename {} | sort >> "$QUICK_REF" || echo "None found" >> "$QUICK_REF"
+echo "" >> "$QUICK_REF"
+echo "### Dev Scripts" >> "$QUICK_REF"
+find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts/dev" 2>/dev/null | xargs -I {} basename {} | sort >> "$QUICK_REF" || echo "None found" >> "$QUICK_REF"
 
 echo "" >> "$QUICK_REF"
 echo "## Library Functions" >> "$QUICK_REF"
@@ -273,5 +311,5 @@ find "$CONSTRUCT_DEV/CONSTRUCT/config" -name "*.yaml" -type f | xargs -I {} base
 echo -e "${BLUE}📄 Quick reference saved to: $QUICK_REF${NC}"
 echo ""
 echo "Next steps:"
-echo "  ./CONSTRUCT/scripts/update-context.sh      # Update development context"
-echo "  ./CONSTRUCT/scripts/check-architecture.sh  # Validate current architecture"
+echo "  ./CONSTRUCT/scripts/construct/update-context.sh      # Update development context"
+echo "  ./CONSTRUCT/scripts/core/check-architecture.sh      # Validate current architecture"
