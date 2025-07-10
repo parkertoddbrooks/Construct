@@ -27,9 +27,58 @@ if [[ "${@: -1}" == "--dry-run" ]]; then
     DRY_RUN=true
 fi
 
+# Handle special commands first
+case "$1" in
+    "--list-plugins")
+        # List available plugins from registry
+        REGISTRY_FILE="$CONSTRUCT_CORE/patterns/plugins/registry.yaml"
+        if [ -f "$REGISTRY_FILE" ] && command -v yq &> /dev/null; then
+            echo -e "${BLUE}📦 Available CONSTRUCT Plugins:${NC}"
+            echo ""
+            echo -e "${GREEN}CORE Plugins:${NC}"
+            yq eval '.plugins.core | to_entries | .[] | "  \(.key) - \(.value.description)"' "$REGISTRY_FILE" 2>/dev/null
+            echo ""
+            if yq eval '.plugins.lab' "$REGISTRY_FILE" &>/dev/null; then
+                echo -e "${GREEN}LAB Plugins:${NC}"
+                yq eval '.plugins.lab | to_entries | .[] | "  \(.key) - \(.value.description)"' "$REGISTRY_FILE" 2>/dev/null
+            fi
+        else
+            echo -e "${RED}❌ Registry not found or yq not installed${NC}"
+            exit 1
+        fi
+        exit 0
+        ;;
+    "--list-sets")
+        # List available project template sets
+        PROJECT_SETS_FILE="$CONSTRUCT_CORE/patterns/templates/project-sets.yaml"
+        if [ -f "$PROJECT_SETS_FILE" ] && command -v yq &> /dev/null; then
+            echo -e "${BLUE}📋 Available Project Template Sets:${NC}"
+            echo ""
+            yq eval '.project_sets | to_entries | .[] | "  \(.key) - \(.value.description)"' "$PROJECT_SETS_FILE" 2>/dev/null
+        else
+            echo -e "${RED}❌ Project sets not found or yq not installed${NC}"
+            exit 1
+        fi
+        exit 0
+        ;;
+    "--refresh-registry")
+        # Run registry refresh script
+        REFRESH_SCRIPT="$SCRIPT_DIR/refresh-plugin-registry.sh"
+        if [ -x "$REFRESH_SCRIPT" ]; then
+            echo -e "${BLUE}🔄 Refreshing plugin registry...${NC}"
+            "$REFRESH_SCRIPT"
+        else
+            echo -e "${RED}❌ Registry refresh script not found: $REFRESH_SCRIPT${NC}"
+            exit 1
+        fi
+        exit 0
+        ;;
+esac
+
 # Show help if requested
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "Usage: $0 <project-dir> <plugins> [--languages lang1,lang2] [--dry-run]"
+    echo "       $0 --list-plugins | --list-sets | --refresh-registry"
     echo ""
     echo "Assembles CLAUDE.md from base patterns + selected plugins"
     echo ""
@@ -38,13 +87,18 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "  plugins        Comma-separated list of pattern plugins"
     echo ""
     echo "Options:"
-    echo "  --languages    Auto-include language patterns"
-    echo "  --dry-run      Generate hash only (for validation)"
-    echo "  --help, -h     Show this help"
+    echo "  --languages       Auto-include language patterns"
+    echo "  --dry-run         Generate hash only (for validation)"
+    echo "  --list-plugins    Show available plugins from registry"
+    echo "  --list-sets       Show available project template sets"
+    echo "  --refresh-registry Update the plugin registry"
+    echo "  --help, -h        Show this help"
     echo ""
     echo "Examples:"
     echo "  $0 ./MyProject swift-language,mvvm --languages swift"
     echo "  $0 ./MyProject construct-dev --dry-run"
+    echo "  $0 --list-plugins"
+    echo "  $0 --refresh-registry"
     exit 0
 fi
 

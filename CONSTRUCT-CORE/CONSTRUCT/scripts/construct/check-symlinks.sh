@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../lib/common-patterns.sh"
+source "$SCRIPT_DIR/../../lib/common-patterns.sh"
 
 # Get project directories using library functions
 CONSTRUCT_ROOT=$(get_construct_root)

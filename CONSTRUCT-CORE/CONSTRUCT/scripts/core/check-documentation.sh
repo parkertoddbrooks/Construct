@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# CONSTRUCT Architecture Checker - Master Script
-# Orchestrates pattern-specific architecture validation
+# CONSTRUCT Documentation Checker - Master Script
+# Orchestrates pattern-specific documentation validation
 
 set -e
 
@@ -15,6 +15,24 @@ NC='\033[0m' # No Color
 # Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Show help if requested
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: $0 [PROJECT_DIR]"
+    echo ""
+    echo "Check project documentation completeness"
+    echo ""
+    echo "Arguments:"
+    echo "  PROJECT_DIR   Directory to check (default: current directory)"
+    echo ""
+    echo "This script validates documentation by:"
+    echo "  - Checking README files exist"
+    echo "  - Validating function documentation"
+    echo "  - Running pattern-specific doc validators"
+    echo ""
+    echo "Exit code: Number of issues found (0 = success)"
+    exit 0
+fi
 
 # Accept PROJECT_DIR as first parameter, default to current directory
 PROJECT_DIR="${1:-.}"
@@ -32,7 +50,7 @@ fi
 source "$CONSTRUCT_CORE/CONSTRUCT/lib/common-patterns.sh"
 source "$CONSTRUCT_CORE/CONSTRUCT/lib/validation.sh"
 
-echo -e "${BLUE}🏗️  CONSTRUCT Architecture Validation${NC}"
+echo -e "${BLUE}📚 CONSTRUCT Documentation Validation${NC}"
 echo "================================================"
 echo "Project: $PROJECT_DIR"
 echo ""
@@ -59,9 +77,9 @@ get_active_patterns() {
     yq eval '.plugins[]' "$patterns_file" 2>/dev/null || echo ""
 }
 
-# Run base architecture checks
+# Run base documentation checks
 run_base_checks() {
-    echo -e "\n${YELLOW}Running base architecture checks...${NC}"
+    echo -e "\n${YELLOW}Running base documentation checks...${NC}"
     
     local project_dir="$1"
     local issues_found=0
@@ -95,8 +113,10 @@ main() {
     local patterns_checked=0
     
     # Run base checks first
-    if ! run_base_checks "$PROJECT_DIR"; then
-        ((total_issues+=$?))
+    run_base_checks "$PROJECT_DIR"
+    local base_exit=$?
+    if [ $base_exit -gt 0 ]; then
+        ((total_issues+=base_exit))
     fi
     
     # Get active patterns
@@ -118,9 +138,9 @@ main() {
         [ -z "$pattern" ] && continue
         
         # Try new plugin structure first
-        local plugin_validator="$CONSTRUCT_CORE/patterns/plugins/$pattern/validators/architecture.sh"
+        local plugin_validator="$CONSTRUCT_CORE/patterns/plugins/$pattern/validators/documentation.sh"
         # Fallback to old location for backward compatibility
-        local old_validator="$SCRIPTS_ROOT/patterns/$pattern/validate-architecture.sh"
+        local old_validator="$SCRIPTS_ROOT/patterns/$pattern/validate-documentation.sh"
         
         local validator_script=""
         if [ -f "$plugin_validator" ]; then
@@ -131,58 +151,35 @@ main() {
         fi
         
         if [ -n "$validator_script" ]; then
-            echo -e "\n${BLUE}→ Running $pattern architecture checks${NC}"
+            echo -e "\n${BLUE}→ Running $pattern documentation checks${NC}"
             # Pass PROJECT_DIR as parameter to pattern validators
-            if ! bash "$validator_script" "$PROJECT_DIR"; then
-                ((total_issues+=$?))
+            bash "$validator_script" "$PROJECT_DIR"
+            local pattern_exit=$?
+            if [ $pattern_exit -gt 0 ]; then
+                ((total_issues+=pattern_exit))
             fi
             ((patterns_checked++))
         else
-            echo -e "${YELLOW}→ No architecture checks for pattern: $pattern${NC}"
+            echo -e "${YELLOW}→ No documentation checks for pattern: $pattern${NC}"
         fi
     done <<< "$active_patterns"
     
     # Summary
     echo -e "\n${BLUE}═══════════════════════════════════════════════${NC}"
-    echo -e "${BLUE}Architecture Check Summary${NC}"
+    echo -e "${BLUE}Documentation Check Summary${NC}"
     echo -e "${BLUE}═══════════════════════════════════════════════${NC}"
     echo "Patterns checked: $patterns_checked"
     echo "Total issues found: $total_issues"
     
     if [ $total_issues -eq 0 ]; then
-        echo -e "${GREEN}✅ All architecture checks passed!${NC}"
+        echo -e "${GREEN}✅ All documentation checks passed!${NC}"
         exit 0
     else
-        echo -e "${RED}❌ Architecture validation failed with $total_issues issues${NC}"
+        echo -e "${RED}❌ Documentation validation failed with $total_issues issues${NC}"
         echo -e "${YELLOW}Run individual pattern validators for details${NC}"
         exit 1
     fi
 }
-
-# Show help if requested
-if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-    echo "Usage: $0 [PROJECT_DIR]"
-    echo ""
-    echo "CONSTRUCT Architecture Validation - Master Script"
-    echo ""
-    echo "This script orchestrates architecture validation across all active patterns."
-    echo "It runs base checks and then delegates to pattern-specific validators."
-    echo ""
-    echo "Arguments:"
-    echo "  PROJECT_DIR   Directory to check architecture in (default: current directory)"
-    echo ""
-    echo "Options:"
-    echo "  -h, --help    Show this help message"
-    echo ""
-    echo "Examples:"
-    echo "  $0                    # Check architecture in current directory"
-    echo "  $0 .                  # Check architecture in current directory"
-    echo "  $0 Projects/MyApp/ios # Check architecture in specific project"
-    echo ""
-    echo "Pattern validators are located in:"
-    echo "  $SCRIPTS_ROOT/patterns/*/validate-architecture.sh"
-    exit 0
-fi
 
 # Run main function
 main "$@"

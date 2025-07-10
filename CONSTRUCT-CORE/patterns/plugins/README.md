@@ -89,18 +89,104 @@ plugins:
 
 ## Validators
 
-Plugins can include validators that check code against the pattern rules:
+Plugins can include validators that check code against the pattern rules.
 
-- **quality.sh** - Code quality and style checks
-- **architecture.sh** - Structural and architectural validation
-- **documentation.sh** - Documentation completeness and format
-- **usage.sh** - Proper pattern implementation
+### How Pattern Validators Work
 
-Validators:
+1. **Called by Master Scripts**: Receive PROJECT_DIR as parameter from orchestrator scripts
+2. **Pattern-Specific Logic**: Implement checks specific to their domain
+3. **Return Exit Codes**: Number of issues found (0 = success)
+4. **Focused Validation**: Only check what's relevant to the pattern
+5. **Integration**: Results bubble up through exit codes to master scripts
+
+### Validator Types
+
+#### Architecture Validators (`architecture.sh`)
+- Structural patterns and organization
+- Dependency management
+- Module boundaries
+- Naming conventions
+
+#### Quality Validators (`quality.sh`)
+- Code style and formatting
+- Language-specific best practices
+- Performance patterns
+- Security considerations
+
+#### Documentation Validators (`documentation.sh`)
+- Comment standards for the language
+- API documentation
+- README requirements
+- Example usage
+
+#### Usage Validators (`usage.sh`)
+- Correct pattern implementation
+- Framework compliance
+- Library usage patterns
+
+### Validator Requirements
+
 - Accept `PROJECT_DIR` as first parameter
 - Return exit code = number of issues (0 = success)
 - Provide colored, informative output
 - Are called by core orchestrator scripts
+- Use consistent error reporting format
+
+### Example Pattern Validator
+
+```bash
+#!/bin/bash
+# Pattern-Specific Validator
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+PROJECT_DIR="${1:-.}"
+ISSUES=0
+
+echo -e "${BLUE}🔍 Checking your-pattern compliance...${NC}"
+
+# Pattern-specific checks
+if ! check_something "$PROJECT_DIR"; then
+    echo -e "${YELLOW}⚠️  Issue found: description${NC}"
+    ((ISSUES++))
+fi
+
+# Summary
+if [ $ISSUES -eq 0 ]; then
+    echo -e "${GREEN}✅ Pattern validation passed${NC}"
+else
+    echo -e "${YELLOW}⚠️  Found $ISSUES pattern issues${NC}"
+fi
+
+exit $ISSUES
+```
+
+## Generators
+
+Plugins can also include generators that create documentation or scaffolding based on patterns.
+
+### Generator Types
+
+- **architecture.sh** - Generate architecture documentation
+- **scaffolding.sh** - Create boilerplate code following patterns
+- **documentation.sh** - Generate pattern-specific docs
+
+### Generator Structure
+
+Generators live in the `generators/` directory:
+```
+plugins/[category]/[plugin-name]/
+└── generators/
+    └── architecture.sh
+```
+
+Generators follow the same conventions as validators but output content instead of validation results.
 
 ## Creating New Plugins
 

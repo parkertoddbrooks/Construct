@@ -42,7 +42,7 @@ These files in LAB are symlinks to CORE - NEVER edit them directly:
 # AI/todo/README-sym.md -> ../../../CONSTRUCT-CORE/AI/todo/README.md
 
 # To check symlink integrity:
-./CONSTRUCT/scripts/check-symlinks.sh
+./CONSTRUCT/scripts/construct/check-symlinks.sh
 
 # If you need to modify these files:
 # 1. Create new version in LAB
@@ -113,9 +113,9 @@ These files in LAB are symlinks to CORE - NEVER edit them directly:
 
 ### Before Writing ANY Code:
 ```bash
-./CONSTRUCT/scripts/before_coding.sh ComponentName    # Shows what exists
-./CONSTRUCT/scripts/check-architecture.sh             # Validates patterns
-./CONSTRUCT/scripts/update-context.sh                 # Updates this context
+./CONSTRUCT/scripts/core/before_coding.sh ComponentName    # Shows what exists
+./CONSTRUCT/scripts/core/check-architecture.sh             # Validates patterns
+./CONSTRUCT/scripts/construct/update-context.sh            # Updates this context
 ```
 
 ### When Making Commits:
@@ -239,13 +239,13 @@ CONSTRUCT is a dual-environment development system where:
 ## ⚠️ Active Violations (Auto-Updated)
 
 ### Hardcoded Paths
-Run ./CONSTRUCT/scripts/check-quality.sh to see current violations
+Run ./CONSTRUCT/scripts/core/check-quality.sh to see current violations
 
 ### Missing Documentation
 ✅ All scripts have documentation headers
 
 ### Code Duplication
-Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
+Run ./CONSTRUCT/scripts/core/check-architecture.sh for duplication analysis
 
 ### Template Issues
 ✅ Template integrity verified
@@ -579,7 +579,7 @@ validate_template_structure() {
     # Check for required template files
     local required_files=(
         "USER-CHOSEN-NAME/AI/CLAUDE.md"
-        "USER-CHOSEN-NAME/AI/scripts/update-context.sh"
+        "USER-CHOSEN-NAME/AI/scripts/construct/update-context.sh"
     )
     
     for file in "${required_files[@]}"; do
@@ -617,7 +617,7 @@ analyze_dual_environment() {
 ### Symlink Management Pattern
 ```bash
 # Check symlink integrity
-./CONSTRUCT/scripts/check-symlinks.sh
+./CONSTRUCT/scripts/construct/check-symlinks.sh
 
 # What's symlinked (from LAB to CORE):
 # - CONSTRUCT/ (entire directory)
@@ -631,7 +631,7 @@ analyze_dual_environment() {
 # - Development work files
 
 # Generate symlink documentation for CLAUDE.md:
-./CONSTRUCT/scripts/check-symlinks.sh --list-markdown
+./CONSTRUCT/scripts/construct/check-symlinks.sh --list-markdown
 ```
 
 ### LAB-to-CORE Promotion Pattern
@@ -657,10 +657,10 @@ analyze_dual_environment() {
 ### Where Code Belongs - Quick Reference
 
 **Scripts** (CONSTRUCT/scripts/):
-- Workflow automation and validation
-- Quality checking and architecture enforcement
-- Documentation generation and updates
-- Cross-environment analysis
+- `core/` - Core functionality (check-quality, check-architecture, etc.)
+- `construct/` - CONSTRUCT-specific tools (update-context, check-symlinks, etc.)
+- `dev/` - Development workflows (session-summary, setup-aliases, etc.)
+- `workspace/` - Workspace management (create-project, import-project, etc.)
 
 **Library Functions** (CONSTRUCT/lib/):
 - Reusable functions across scripts
@@ -721,43 +721,43 @@ analyze_dual_environment() {
 
 ### 🛠️ CONSTRUCT Development Workflow
 
-1. **`construct-update`** (or `./CONSTRUCT/scripts/update-context.sh`)
+1. **`construct-update`** (or `./CONSTRUCT/scripts/construct/update-context.sh`)
    - Updates CLAUDE.md with current project state
    - Run before starting a Claude session
    - Shows what components exist, violations, recent work
 
-2. **`construct-check`** (or `./CONSTRUCT/scripts/check-architecture.sh`)
+2. **`construct-check`** (or `./CONSTRUCT/scripts/core/check-architecture.sh`)
    - Checks for architecture violations
    - Verifies development patterns automatically
    - Shows hardcoded paths, duplication, template issues
    - **Use this to check development progress!**
 
-3. **`construct-before ComponentName`** (or `./CONSTRUCT/scripts/before_coding.sh`)
+3. **`construct-before ComponentName`** (or `./CONSTRUCT/scripts/core/before_coding.sh`)
    - Run before creating any new component
    - Shows what already exists
    - Prevents duplicates
    - Checks architectural alignment
 
-4. **`construct-scan`** (or `./CONSTRUCT/scripts/scan_construct_structure.sh`)
+4. **`construct-scan`** (or `./CONSTRUCT/scripts/construct/scan_project_structure.sh`)
    - Documents current CONSTRUCT structure
    - Creates timestamped snapshots
    - Archives old scans to `_old/`
 
-5. **`construct-arch`** (or `./CONSTRUCT/scripts/update-architecture.sh`)
+5. **`construct-arch`** (or `./CONSTRUCT/scripts/construct/update-architecture.sh`)
    - Updates architecture documentation
    - Refreshes file trees and metrics
 
-6. **`construct-quality`** (or `./CONSTRUCT/scripts/check-quality.sh`)
+6. **`construct-quality`** (or `./CONSTRUCT/scripts/core/check-quality.sh`)
    - Checks shell script quality standards
    - Looks for common issues and anti-patterns
    - Validates configuration files
 
-7. **`construct-docs`** (or `./CONSTRUCT/scripts/check-documentation.sh`)
+7. **`construct-docs`** (or `./CONSTRUCT/scripts/core/check-documentation.sh`)
    - Validates documentation coverage
    - Checks for missing function docs
    - Ensures README files exist
 
-8. **`construct-session-summary`** (or `./CONSTRUCT/scripts/session-summary.sh`)
+8. **`construct-session-summary`** (or `./CONSTRUCT/scripts/dev/session-summary.sh`)
    - Creates session summary when context is ~90%
    - Preserves work for next session
 

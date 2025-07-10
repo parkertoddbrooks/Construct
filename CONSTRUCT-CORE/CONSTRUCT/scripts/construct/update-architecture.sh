@@ -17,6 +17,29 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 source "$CONSTRUCT_CORE/CONSTRUCT/lib/common-patterns.sh"
 
+# Show help if requested
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: $0 [PROJECT_DIR]"
+    echo ""
+    echo "Update project architecture documentation"
+    echo ""
+    echo "This script generates architecture documentation based on active patterns."
+    echo "It reads patterns from PROJECT_DIR/.construct/patterns.yaml and runs"
+    echo "pattern-specific architecture generators."
+    echo ""
+    echo "Arguments:"
+    echo "  PROJECT_DIR   Project directory to document (default: current directory)"
+    echo ""
+    echo "Pattern generators should be located at:"
+    echo "  patterns/[pattern-name]/generate-architecture.sh"
+    echo ""
+    echo "Examples:"
+    echo "  $0                    # Document current directory"
+    echo "  $0 .                  # Document current directory"
+    echo "  $0 Projects/MyApp/ios # Document iOS project"
+    exit 0
+fi
+
 # Accept PROJECT_DIR as parameter, default to current directory
 PROJECT_DIR="${1:-.}"
 PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
@@ -123,14 +146,19 @@ run_pattern_generators() {
         [ -z "$pattern" ] && continue
         
         # Look for pattern-specific architecture generator
-        # Try new plugin structure first
-        local plugin_generator="$CONSTRUCT_CORE/patterns/plugins/$pattern/validators/generate-architecture.sh"
-        # Fallback to old location
+        # Try new generators directory first
+        local generators_path="$CONSTRUCT_CORE/patterns/plugins/$pattern/generators/architecture.sh"
+        # Then check validators directory (temporary backward compatibility)
+        local validators_path="$CONSTRUCT_CORE/patterns/plugins/$pattern/validators/generate-architecture.sh"
+        # Finally check old location
         local old_generator="$SCRIPTS_ROOT/patterns/$pattern/generate-architecture.sh"
         
         local generator=""
-        if [ -f "$plugin_generator" ]; then
-            generator="$plugin_generator"
+        if [ -f "$generators_path" ]; then
+            generator="$generators_path"
+        elif [ -f "$validators_path" ]; then
+            generator="$validators_path"
+            echo -e "${YELLOW}  ⚠️  Generator in validators/ directory for $pattern (should be in generators/)${NC}"
         elif [ -f "$old_generator" ]; then
             generator="$old_generator"
             echo -e "${YELLOW}  ⚠️  Using legacy generator location for $pattern${NC}"
@@ -236,29 +264,6 @@ main() {
     echo "  update-context $PROJECT_DIR      # Update project context"
     echo "  check-quality $PROJECT_DIR       # Validate documentation quality"
 }
-
-# Show help if requested
-if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-    echo "Usage: $0 [PROJECT_DIR]"
-    echo ""
-    echo "Update project architecture documentation"
-    echo ""
-    echo "This script generates architecture documentation based on active patterns."
-    echo "It reads patterns from PROJECT_DIR/.construct/patterns.yaml and runs"
-    echo "pattern-specific architecture generators."
-    echo ""
-    echo "Arguments:"
-    echo "  PROJECT_DIR   Project directory to document (default: current directory)"
-    echo ""
-    echo "Pattern generators should be located at:"
-    echo "  patterns/[pattern-name]/generate-architecture.sh"
-    echo ""
-    echo "Examples:"
-    echo "  $0                    # Document current directory"
-    echo "  $0 .                  # Document current directory"
-    echo "  $0 Projects/MyApp/ios # Document iOS project"
-    exit 0
-fi
 
 # Run main function
 main "$@"

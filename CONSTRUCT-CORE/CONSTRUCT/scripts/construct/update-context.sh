@@ -20,6 +20,25 @@ source "$SCRIPTS_ROOT/../lib/validation.sh"
 source "$SCRIPTS_ROOT/../lib/file-analysis.sh"
 source "$SCRIPTS_ROOT/../lib/template-utils.sh"
 
+# Show help if requested
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: $0 [PROJECT_DIR]"
+    echo ""
+    echo "Update project's CLAUDE.md with current state"
+    echo ""
+    echo "Arguments:"
+    echo "  PROJECT_DIR   Directory containing project (default: current directory)"
+    echo ""
+    echo "This script updates the CLAUDE.md file in the specified project directory"
+    echo "with current project state including:"
+    echo "  - Git status and recent commits"
+    echo "  - Active patterns from .construct/patterns.yaml"
+    echo "  - Code quality violations"
+    echo "  - Documentation status"
+    echo "  - Working location context"
+    exit 0
+fi
+
 # Accept PROJECT_DIR as parameter, default to current directory
 PROJECT_DIR="${1:-.}"
 PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
@@ -434,25 +453,6 @@ main() {
     echo "  check-architecture $PROJECT_DIR   # Validate patterns"
     echo "  before_coding $PROJECT_DIR func   # Search before coding"
 }
-
-# Show help if requested
-if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-    echo "Usage: $0 [PROJECT_DIR]"
-    echo ""
-    echo "Update project's CLAUDE.md with current state"
-    echo ""
-    echo "Arguments:"
-    echo "  PROJECT_DIR   Directory containing project (default: current directory)"
-    echo ""
-    echo "This script updates the CLAUDE.md file in the specified project directory"
-    echo "with current project state including:"
-    echo "  - Git status and recent commits"
-    echo "  - Active patterns from .construct/patterns.yaml"
-    echo "  - Code quality violations"
-    echo "  - Documentation status"
-    echo "  - Working location context"
-    exit 0
-fi
 
 # Run main function
 main "$@"

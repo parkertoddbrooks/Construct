@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# CONSTRUCT Quality Checker - Master Script
-# Orchestrates pattern-specific quality validation
+# CONSTRUCT Architecture Checker - Master Script
+# Orchestrates pattern-specific architecture validation
 
 set -e
 
@@ -16,9 +16,23 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# Source common patterns library
-CONSTRUCT_CORE_PATH="$(cd "$SCRIPTS_ROOT/../.." && pwd)"
-source "$CONSTRUCT_CORE_PATH/CONSTRUCT/lib/common-patterns.sh"
+# Show help if requested
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: $0 [PROJECT_DIR]"
+    echo ""
+    echo "Check project architecture against CONSTRUCT patterns"
+    echo ""
+    echo "Arguments:"
+    echo "  PROJECT_DIR   Directory to check (default: current directory)"
+    echo ""
+    echo "This script validates project architecture by:"
+    echo "  - Checking base architecture rules"
+    echo "  - Running pattern-specific validators"
+    echo "  - Detecting issues and violations"
+    echo ""
+    echo "Exit code: Number of issues found (0 = success)"
+    exit 0
+fi
 
 # Accept PROJECT_DIR as first parameter, default to current directory
 PROJECT_DIR="${1:-.}"
@@ -36,8 +50,8 @@ fi
 source "$CONSTRUCT_CORE/CONSTRUCT/lib/common-patterns.sh"
 source "$CONSTRUCT_CORE/CONSTRUCT/lib/validation.sh"
 
-echo -e "${BLUE}🔍 CONSTRUCT Quality Validation${NC}"
-echo "======================================="
+echo -e "${BLUE}🏗️  CONSTRUCT Architecture Validation${NC}"
+echo "================================================"
 echo "Project: $PROJECT_DIR"
 echo ""
 
@@ -63,9 +77,9 @@ get_active_patterns() {
     yq eval '.plugins[]' "$patterns_file" 2>/dev/null || echo ""
 }
 
-# Run base quality checks
+# Run base architecture checks
 run_base_checks() {
-    echo -e "\n${YELLOW}Running base quality checks...${NC}"
+    echo -e "\n${YELLOW}Running base architecture checks...${NC}"
     
     local project_dir="$1"
     local issues_found=0
@@ -79,14 +93,16 @@ run_base_checks() {
         echo -e "${GREEN}✅ patterns.yaml exists${NC}"
     fi
     
-    # Check for TODO/FIXME comments
-    echo -n "Checking for TODOs and FIXMEs... "
-    local todos=$(grep -r "TODO\|FIXME" "$project_dir" --include="*.sh" --include="*.swift" --include="*.cs" --include="*.py" 2>/dev/null | wc -l || echo "0")
-    if [ "$todos" -gt 0 ]; then
-        echo -e "${YELLOW}⚠️  Found $todos TODO/FIXME comments${NC}"
+    # Check if project has basic structure
+    echo -n "Checking project structure... "
+    if [ ! -d "$project_dir/AI" ] && [ ! -d "$project_dir/.construct" ]; then
+        echo -e "${YELLOW}⚠️  No AI or .construct directory found${NC}"
+        ((issues_found++))
     else
-        echo -e "${GREEN}✅ No TODOs found${NC}"
+        echo -e "${GREEN}✅ Project structure looks good${NC}"
     fi
+    
+    # Note: All language-specific checks moved to pattern validators
     
     return $issues_found
 }
@@ -97,10 +113,8 @@ main() {
     local patterns_checked=0
     
     # Run base checks first
-    run_base_checks "$PROJECT_DIR"
-    local base_exit=$?
-    if [ $base_exit -gt 0 ]; then
-        ((total_issues+=base_exit))
+    if ! run_base_checks "$PROJECT_DIR"; then
+        ((total_issues+=$?))
     fi
     
     # Get active patterns
@@ -122,9 +136,9 @@ main() {
         [ -z "$pattern" ] && continue
         
         # Try new plugin structure first
-        local plugin_validator="$CONSTRUCT_CORE/patterns/plugins/$pattern/validators/quality.sh"
+        local plugin_validator="$CONSTRUCT_CORE/patterns/plugins/$pattern/validators/architecture.sh"
         # Fallback to old location for backward compatibility
-        local old_validator="$SCRIPTS_ROOT/patterns/$pattern/validate-quality.sh"
+        local old_validator="$SCRIPTS_ROOT/patterns/$pattern/validate-architecture.sh"
         
         local validator_script=""
         if [ -f "$plugin_validator" ]; then
@@ -135,95 +149,34 @@ main() {
         fi
         
         if [ -n "$validator_script" ]; then
-            echo -e "\n${BLUE}→ Running $pattern quality checks${NC}"
+            echo -e "\n${BLUE}→ Running $pattern architecture checks${NC}"
             # Pass PROJECT_DIR as parameter to pattern validators
-            bash "$validator_script" "$PROJECT_DIR"
-            local pattern_exit=$?
-            if [ $pattern_exit -gt 0 ]; then
-                ((total_issues+=pattern_exit))
+            if ! bash "$validator_script" "$PROJECT_DIR"; then
+                ((total_issues+=$?))
             fi
             ((patterns_checked++))
         else
-            echo -e "${YELLOW}→ No quality checks for pattern: $pattern${NC}"
+            echo -e "${YELLOW}→ No architecture checks for pattern: $pattern${NC}"
         fi
     done <<< "$active_patterns"
     
-    # Generate quality report in project's AI directory
-    local report_dir="$PROJECT_DIR/AI/quality-reports"
-    mkdir -p "$report_dir" 2>/dev/null || true
-    
-    # Get repository info
-    eval $(get_repo_info "$PROJECT_DIR")
-    
-    if [ -d "$report_dir" ]; then
-        local report_file="$report_dir/quality-report-$(date +%Y-%m-%d--%H-%M-%S).md"
-        {
-            echo "# Quality Report"
-            echo "**Generated**: $(date)"
-            echo "**Repo**: $REPO_NAME"
-            echo "**Remote**: $REMOTE_URL"
-            echo "**Branch**: $(cd "$PROJECT_DIR" && git branch --show-current 2>/dev/null || echo "unknown")"
-            echo ""
-            echo "## Summary"
-            echo "- Project: $PROJECT_DIR"
-            echo "- Patterns checked: $patterns_checked"
-            echo "- Total issues: $total_issues"
-            echo ""
-            echo "## Active Patterns"
-            if [ -n "$active_patterns" ]; then
-                echo "$active_patterns" | while read -r pattern; do
-                    echo "- $pattern"
-                done
-            else
-                echo "No patterns configured"
-            fi
-        } > "$report_file"
-        
-        echo ""
-        echo -e "${GREEN}📄 Quality report saved to: $report_file${NC}"
-    fi
-    
     # Summary
     echo -e "\n${BLUE}═══════════════════════════════════════════════${NC}"
-    echo -e "${BLUE}Quality Check Summary${NC}"
+    echo -e "${BLUE}Architecture Check Summary${NC}"
     echo -e "${BLUE}═══════════════════════════════════════════════${NC}"
     echo "Patterns checked: $patterns_checked"
     echo "Total issues found: $total_issues"
     
     if [ $total_issues -eq 0 ]; then
-        echo -e "${GREEN}✅ All quality checks passed!${NC}"
+        echo -e "${GREEN}✅ All architecture checks passed!${NC}"
         exit 0
     else
-        echo -e "${RED}❌ Quality validation found $total_issues issues${NC}"
+        echo -e "${RED}❌ Architecture validation failed with $total_issues issues${NC}"
         echo -e "${YELLOW}Run individual pattern validators for details${NC}"
         exit 1
     fi
 }
 
-# Show help if requested
-if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-    echo "Usage: $0 [PROJECT_DIR]"
-    echo ""
-    echo "CONSTRUCT Quality Validation - Master Script"
-    echo ""
-    echo "This script orchestrates quality validation across all active patterns."
-    echo "It runs base checks and then delegates to pattern-specific validators."
-    echo ""
-    echo "Arguments:"
-    echo "  PROJECT_DIR   Directory to check quality in (default: current directory)"
-    echo ""
-    echo "Options:"
-    echo "  -h, --help    Show this help message"
-    echo ""
-    echo "Examples:"
-    echo "  $0                    # Check quality in current directory"
-    echo "  $0 .                  # Check quality in current directory"
-    echo "  $0 Projects/MyApp/ios # Check quality in specific project"
-    echo ""
-    echo "Pattern validators are located in:"
-    echo "  $SCRIPTS_ROOT/patterns/*/validate-quality.sh"
-    exit 0
-fi
 
 # Run main function
 main "$@"

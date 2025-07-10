@@ -128,13 +128,13 @@ add_construct_aliases() {
     
     # Core CONSTRUCT development workflow
     echo "# Core CONSTRUCT Development Workflow" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-update='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/update-context.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-check='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/check-architecture.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-quality='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/check-quality.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-before='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/before_coding.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-scan='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/scan_construct_structure.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-docs='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/check-documentation.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-dev-session='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/session-summary.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-update='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/construct/update-context.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-check='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/core/check-architecture.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-quality='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/core/check-quality.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-before='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/core/before_coding.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-scan='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/construct/scan_project_structure.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-docs='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/core/check-documentation.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-dev-session='cd \"$CONSTRUCT_ROOT\" && ./CONSTRUCT-LAB/CONSTRUCT/scripts/dev/session-summary.sh'" >> "$SHELL_CONFIG"
     echo "" >> "$SHELL_CONFIG"
     
     # Navigation aliases
@@ -148,10 +148,10 @@ add_construct_aliases() {
     
     # User project aliases (for template testing)
     echo "# User Project Development (Template Testing)" >> "$SHELL_CONFIG"
-    echo "alias construct-user-update='cd \"$CONSTRUCT_ROOT/USER-project-files\" && ./CONSTRUCT/scripts/update-context.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-user-check='cd \"$CONSTRUCT_ROOT/USER-project-files\" && ./CONSTRUCT/scripts/check-architecture.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-user-quality='cd \"$CONSTRUCT_ROOT/USER-project-files\" && ./CONSTRUCT/scripts/check-quality.sh'" >> "$SHELL_CONFIG"
-    echo "alias construct-user-before='cd \"$CONSTRUCT_ROOT/USER-project-files\" && ./CONSTRUCT/scripts/before_coding.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-user-update='cd \"$CONSTRUCT_ROOT/USER-project-files\" && ./CONSTRUCT/scripts/construct/update-context.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-user-check='cd \"$CONSTRUCT_ROOT/USER-project-files\" && ./CONSTRUCT/scripts/core/check-architecture.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-user-quality='cd \"$CONSTRUCT_ROOT/USER-project-files\" && ./CONSTRUCT/scripts/core/check-quality.sh'" >> "$SHELL_CONFIG"
+    echo "alias construct-user-before='cd \"$CONSTRUCT_ROOT/USER-project-files\" && ./CONSTRUCT/scripts/core/before_coding.sh'" >> "$SHELL_CONFIG"
     echo "alias construct-user-scan='cd \"$CONSTRUCT_ROOT/USER-project-files\" && ./CONSTRUCT/scripts/scan_mvvm_structure.sh'" >> "$SHELL_CONFIG"
     echo "alias construct-user-access='cd \"$CONSTRUCT_ROOT/USER-project-files\" && ./CONSTRUCT/scripts/check-accessibility.sh'" >> "$SHELL_CONFIG"
     echo "" >> "$SHELL_CONFIG"

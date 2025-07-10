@@ -84,9 +84,9 @@
 
 ### Before Writing ANY Code:
 ```bash
-./CONSTRUCT/scripts/before_coding.sh ComponentName    # Shows what exists
-./CONSTRUCT/scripts/check-architecture.sh             # Validates patterns
-./CONSTRUCT/scripts/update-context.sh                 # Updates this context
+./CONSTRUCT/scripts/core/before_coding.sh ComponentName    # Shows what exists
+./CONSTRUCT/scripts/core/check-architecture.sh             # Validates patterns
+./CONSTRUCT/scripts/construct/update-context.sh            # Updates this context
 ```
 
 ### When Making Commits:

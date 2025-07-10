@@ -45,9 +45,6 @@ if should_show_prompts "$@"; then
     exit 0
 fi
 
-PROJECT_DIR="${1:-.}"
-PROJECT_TYPE="${2:-interactive}"
-
 # Show help if requested
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "Usage: $0 [project-dir] [project-type]"
@@ -73,6 +70,9 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "  $0 ../NewProject interactive"
     exit 0
 fi
+
+PROJECT_DIR="${1:-.}"
+PROJECT_TYPE="${2:-interactive}"
 
 # Validate project directory
 if [ ! -d "$PROJECT_DIR" ]; then
@@ -114,37 +114,34 @@ if [[ "$PROJECT_TYPE" == "interactive" ]]; then
     esac
 fi
 
+# Load project sets configuration
+PROJECT_SETS_FILE="$CONSTRUCT_CORE/patterns/templates/project-sets.yaml"
+
 # Configure patterns based on project type
-case $PROJECT_TYPE in
-    "ios")
-        LANGUAGES="swift"
-        SUGGESTED_PLUGINS="tooling/shell-scripting"
-        DESCRIPTION="iOS App with Swift and MVVM patterns"
-        ;;
-    "web")
-        LANGUAGES="typescript"
-        SUGGESTED_PLUGINS="tooling/shell-scripting"
-        DESCRIPTION="Web application with TypeScript/React"
-        ;;
-    "api")
-        LANGUAGES="csharp"
-        SUGGESTED_PLUGINS="tooling/shell-scripting"
-        DESCRIPTION="Backend API with C#/.NET"
-        ;;
-    "fullstack")
-        if is_interactive; then
-            echo "Which languages will this project use?"
-            echo "Enter comma-separated list (e.g., swift,csharp,typescript):"
-        fi
-        LANGUAGES=$(get_input_with_default "Languages" "swift,csharp,typescript")
-        SUGGESTED_PLUGINS="cross-platform/model-sync,tooling/shell-scripting"
-        DESCRIPTION="Full-stack application with multiple languages"
-        ;;
-    "existing")
-        echo -e "${BLUE}🔍 Analyzing existing project...${NC}"
-        
-        # Detect languages from file extensions
-        DETECTED_LANGUAGES=""
+if [ -f "$PROJECT_SETS_FILE" ] && command -v yq &> /dev/null; then
+    # Read from project-sets.yaml
+    case $PROJECT_TYPE in
+        "ios"|"web"|"api"|"construct-dev"|"run-app")
+            LANGUAGES=$(yq eval ".project_sets.$PROJECT_TYPE.languages[]" "$PROJECT_SETS_FILE" 2>/dev/null | tr '\n' ',' | sed 's/,$//')
+            SUGGESTED_PLUGINS=$(yq eval ".project_sets.$PROJECT_TYPE.plugins[]" "$PROJECT_SETS_FILE" 2>/dev/null | tr '\n' ',' | sed 's/,$//')
+            DESCRIPTION=$(yq eval ".project_sets.$PROJECT_TYPE.description" "$PROJECT_SETS_FILE" 2>/dev/null)
+            ;;
+        "fullstack")
+            # Special handling for fullstack - still interactive
+            if is_interactive; then
+                echo "Which languages will this project use?"
+                echo "Enter comma-separated list (e.g., swift,csharp,typescript):"
+            fi
+            DEFAULT_LANGUAGES=$(yq eval ".project_sets.fullstack.languages[]" "$PROJECT_SETS_FILE" 2>/dev/null | tr '\n' ',' | sed 's/,$//')
+            LANGUAGES=$(get_input_with_default "Languages" "$DEFAULT_LANGUAGES")
+            SUGGESTED_PLUGINS=$(yq eval ".project_sets.fullstack.plugins[]" "$PROJECT_SETS_FILE" 2>/dev/null | tr '\n' ',' | sed 's/,$//')
+            DESCRIPTION=$(yq eval ".project_sets.fullstack.description" "$PROJECT_SETS_FILE" 2>/dev/null)
+            ;;
+        "existing")
+            echo -e "${BLUE}🔍 Analyzing existing project...${NC}"
+            
+            # Detect languages from file extensions
+            DETECTED_LANGUAGES=""
         if find "$PROJECT_DIR" -name "*.swift" -type f | head -1 | grep -q .; then
             DETECTED_LANGUAGES="swift"
         fi
@@ -189,22 +186,43 @@ esac
 echo ""
 echo -e "${BLUE}📦 Available Pattern Plugins:${NC}"
 
-if [ -d "$CONSTRUCT_CORE/patterns/plugins" ]; then
-    # List by category
-    for category in languages architectural cross-platform tooling; do
+# Use registry if available, otherwise scan directories
+REGISTRY_FILE="$CONSTRUCT_CORE/patterns/plugins/registry.yaml"
+if [ -f "$REGISTRY_FILE" ] && command -v yq &> /dev/null; then
+    # Show from registry
+    echo -e "${GREEN}From Plugin Registry:${NC}"
+    
+    # Get all plugin paths and descriptions
+    yq eval '.plugins.core | to_entries | .[] | "\(.key)|\(.value.description)"' "$REGISTRY_FILE" 2>/dev/null | while IFS='|' read -r plugin desc; do
+        if [ -n "$plugin" ]; then
+            echo "  - $plugin"
+            [ -n "$desc" ] && [ "$desc" != "null" ] && echo "    $desc"
+        fi
+    done
+    
+    # Check for LAB plugins
+    if yq eval '.plugins.lab' "$REGISTRY_FILE" &>/dev/null; then
+        echo ""
+        echo -e "${GREEN}Project-specific (LAB):${NC}"
+        yq eval '.plugins.lab | to_entries | .[] | "\(.key)|\(.value.description)"' "$REGISTRY_FILE" 2>/dev/null | while IFS='|' read -r plugin desc; do
+            if [ -n "$plugin" ]; then
+                echo "  - $plugin"
+                [ -n "$desc" ] && [ "$desc" != "null" ] && echo "    $desc"
+            fi
+        done
+    fi
+elif [ -d "$CONSTRUCT_CORE/patterns/plugins" ]; then
+    # Fallback: scan directories
+    echo -e "${YELLOW}(Registry not available, scanning directories)${NC}"
+    for category in languages architectural cross-platform frameworks platforms tooling; do
         category_dir="$CONSTRUCT_CORE/patterns/plugins/$category"
         if [ -d "$category_dir" ] && [ "$(ls -A "$category_dir" 2>/dev/null)" ]; then
             echo -e "${GREEN}$category:${NC}"
-            find "$category_dir" -name "*.md" -type f | while read -r plugin; do
-                plugin_name=$(basename "$plugin" .md)
-                # Extract description from first line if it exists
-                description=$(head -1 "$plugin" 2>/dev/null | sed 's/^# \[.*\] //' || echo "")
+            for plugin_dir in "$category_dir"/*; do
+                [ -d "$plugin_dir" ] || continue
+                plugin_name=$(basename "$plugin_dir")
                 echo "  - $category/$plugin_name"
-                if [ -n "$description" ] && [ "$description" != "$(head -1 "$plugin")" ]; then
-                    echo "    $description"
-                fi
             done
-            echo ""
         fi
     done
 else
