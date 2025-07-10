@@ -1,125 +1,175 @@
 # CONSTRUCT
 
-An intelligent development system for Apple platforms that transforms how teams build Swift applications with AI assistance.
+**Supercharge Claude Code with intelligent context engineering**
 
-## What is CONSTRUCT?
+## The Missing Piece for Claude Code
 
-CONSTRUCT provides a living development environment that grows smarter with every line of code you write. Unlike static templates or rule files, CONSTRUCT actively learns from your project's evolution and ensures your AI coding assistant always has perfect context.
+Claude Code is incredible - developers are [building entire apps](https://www.indragie.com/blog/i-shipped-a-macos-app-built-entirely-by-claude-code) with it, writing less than 5% of the code by hand. But there's a hidden friction: **context switching**.
 
-### The Problem with Current AI Development
+Real projects aren't monoliths. You're writing SwiftUI one moment, fixing bash scripts the next, then diving into backend APIs. Claude Code is brilliant at each task individually, but it doesn't know when to switch contexts. You ask for help with a pre-commit hook and get Swift patterns. Sound familiar?
 
-When using AI tools like Claude Code or Cursor for Swift development:
-- **Static rules get stale** - Your `.cursorrules` or templates don't evolve with your project
-- **AI lacks context** - Each session starts fresh, missing your project's specific patterns
-- **Team knowledge silos** - AI interactions are per-user and invisible to the team
-- **Architecture drift** - No enforcement of patterns across AI-assisted development
+## Enter CONSTRUCT: Context Engineering for Claude Code
 
-### How CONSTRUCT Solves This
+CONSTRUCT solves this elegantly through what Andrej Karpathy calls ["context engineering"](https://x.com/karpathy/status/1937902205765607626) - the art of filling the context window with exactly the right information for the task at hand.
 
-CONSTRUCT creates a **living development system** that:
-- Automatically updates AI context as your codebase evolves
-- Enforces Swift best practices and MVVM architecture in real-time
-- Captures team discoveries and makes them permanent
-- Provides transparency for all AI-assisted development
+### How It Works
+
+```yaml
+# .construct/patterns.yaml
+plugins:
+  - languages/swift
+  - tooling/shell-scripting
+  - architectural/mvvm
+  - custom/team-conventions
+```
+
+CONSTRUCT dynamically assembles the perfect context for Claude Code based on:
+- What file you're editing
+- What patterns your project uses
+- What task you're performing
+
+No more wrong-language suggestions. No more context bloat. Just the right patterns at the right time.
+
+## Pattern System
+
+Think of patterns as LEGO blocks for AI context:
+
+```
+📦 Pattern Plugin
+├── 📄 pattern.md        # The rules and examples
+├── 🔧 validators/       # Scripts to check compliance
+├── 🏗️ generators/       # Scripts to generate docs/code
+└── 📋 metadata.yaml     # Pattern description
+```
+
+### Core Features
+
+**🎯 Smart Context Assembly**
+- Detects what you're working on
+- Loads only relevant patterns
+- Keeps context window efficient
+
+**🔌 Plugin Ecosystem**
+- Discover patterns: `construct registry search swift`
+- Install patterns: `construct registry add languages/swift`
+- Share your patterns with the community
+
+**🚀 Interactive Scripts**
+- Scripts that work seamlessly with Claude Code
+- Natural conversation flow ("Rails mode")
+- No more copy-pasting commands
+
+**📁 Multi-Repo Support**
+- Manage complex projects with ease
+- Preserve git history on import
+- Works with any project structure
 
 ## Quick Start
 
-[Installation instructions coming soon]
+```bash
+# Create a new project
+construct create MyApp ios
 
-## Core Features
+# Or enhance an existing project
+cd my-project
+construct init
 
-### 1. Living AI Context
-Your `CLAUDE.md` file auto-updates with:
-- Current component inventory (prevents duplicates)
-- Architecture violations to avoid
-- Team-discovered patterns and solutions
-- Project-specific conventions
-
-### 2. Architecture Enforcement
-Real-time validation of:
-- MVVM pattern compliance
-- SwiftUI best practices
-- Design token usage
-- Dependency management
-
-### 3. Team Transparency
-- All architectural decisions are visible
-- AI discoveries become team knowledge
-- Quality standards travel with the code
-- Every fork maintains the same standards
-
-## How It Works
-
-### With Static Templates (Traditional)
+# Add patterns for your stack
+construct registry add languages/typescript
+construct registry add frameworks/react
 ```
-Template → Copy → Diverge → Drift → Inconsistency
+
+## Real-World Example
+
+Working on a full-stack app? CONSTRUCT adapts as you switch contexts:
+
 ```
-Your AI assistant only knows generic Swift patterns.
+Morning: Working on iOS views
+✓ swift-patterns
+✓ swiftui-patterns
+✓ mvvm-architecture
+✗ backend-patterns
 
-### With CONSTRUCT (Living System)
+Afternoon: Fixing API endpoints
+✗ swift-patterns
+✓ typescript-patterns
+✓ express-patterns
+✓ rest-api-patterns
 ```
-Template → Initialize → Develop → Learn → Improve
+
+Claude Code automatically gets the right context for each task.
+
+## Why Developers Love CONSTRUCT
+
+**"It's like having a senior dev configure Claude Code for each file I touch"**
+- No manual context switching
+- Consistent patterns across your team
+- AI suggestions that actually match your architecture
+
+**"Finally, my bash scripts get bash help, not Swift code"**
+- Language-aware context
+- Framework-specific patterns
+- Tool-specific guidance
+
+## Beyond Cursor Rules
+
+Inspired by tools like [SwiftCatalyst](https://github.com/danielraffel/SwiftCatalyst) but evolved beyond static rules:
+
+| Approach | Setup | Maintenance | Multi-Language | Context Switching |
+|----------|-------|-------------|----------------|-------------------|
+| `.cursorrules` | Simple | Manual edits | Single context | None |
+| SwiftCatalyst | Template | Fork & modify | Swift only | None |
+| **CONSTRUCT** | Dynamic | Self-updating | Any language | Automatic |
+
+## Community-Driven
+
+CONSTRUCT patterns grow organically:
+1. **Discover** patterns while building
+2. **Extract** them as plugins
+3. **Share** with the community
+4. **Benefit** from others' discoveries
+
+No committees. No "official" patterns. Just what works.
+
+## Philosophy
+
+- **Don't edit the binary**: Generated contexts are read-only
+- **Patterns over prompts**: Reusable, testable, shareable
+- **Progressive enhancement**: Start simple, add patterns as needed
+- **Community first**: Best patterns come from real developers
+
+## Get Started
+
+```bash
+# Install CONSTRUCT
+curl -fsSL https://construct.dev/install.sh | bash
+
+# Initialize in your project
+construct init
+
+# Browse available patterns
+construct registry browse
 ```
-Your AI assistant learns your specific patterns and enforces them.
-
-## Integration with Claude Code
-
-CONSTRUCT complements Claude Code's features:
-
-| Claude Code Feature | CONSTRUCT Enhancement |
-|-------------------|---------------------|
-| `/init` command | Pre-configured with your project patterns |
-| Custom hooks | Architecture validation hooks included |
-| Context management | Auto-updating context files |
-| Team settings | Shared architectural decisions |
-
-## For Development Teams
-
-CONSTRUCT ensures that whether developers use Claude Code, Cursor, or GitHub Copilot:
-- Everyone follows the same architectural patterns
-- AI suggestions align with team standards
-- Knowledge discovered by one developer benefits all
-- Code quality remains consistent
-
-## Technical Architecture
-
-### Three-Layer System
-- **CONSTRUCT-CORE**: Stable tools and templates
-- **CONSTRUCT-LAB**: Experimentation and improvement space
-- **TEMPLATES**: Production-ready Swift project templates
-
-### Quality Control
-Every change goes through:
-1. Local development and testing
-2. Automated validation
-3. Explicit promotion to stable
-4. Team-wide propagation
-
-## Comparison with Alternatives
-
-| Approach | Initial Setup | Ongoing Maintenance | Team Sync | AI Context |
-|----------|--------------|-------------------|-----------|------------|
-| Static templates (SwiftCatalyst) | Quick | Manual updates | Copy/paste | Generic |
-| `.cursorrules` | Simple | Edit per project | Git conflicts | Static |
-| **CONSTRUCT** | Guided | Self-updating | Automatic | Evolving |
 
 ## Documentation
 
-[Documentation coming soon]
+- [Pattern Creation Guide](docs/patterns/creating-patterns.md)
+- [Interactive Scripts](docs/features/interactive-scripts.md)
+- [Multi-Repo Projects](docs/workspace-management.md)
+- [Plugin Development](docs/plugins/README.md)
 
 ## Requirements
 
-- macOS 12.0+
-- Xcode 14.0+
-- Swift 5.7+
+- macOS 12.0+ or Linux
 - Git
+- Claude Code (or any AI coding assistant)
 
-## Support
+## The Future of AI-Assisted Development
 
-- **Issues**: [GitHub Issues](https://github.com/parkertoddbrooks/CONSTRUCT/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/parkertoddbrooks/CONSTRUCT/discussions)
-- **Documentation**: [Full Docs](docs/README.md)
+CONSTRUCT isn't just about making Claude Code better - it's about establishing context engineering as a discipline. As AI models get smarter, the teams that master context engineering will ship faster, with higher quality, and better consistency.
+
+Join us in building the context engineering platform for the AI-first era.
 
 ---
 
-CONSTRUCT is not just another template—it's a development philosophy that makes AI-assisted coding more intelligent, consistent, and team-friendly.
+**Ready to supercharge your Claude Code experience?** Star this repo and join our [Discord](https://discord.gg/construct) to share patterns and shape the future of AI-assisted development.
