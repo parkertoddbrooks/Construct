@@ -16,6 +16,14 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 CONSTRUCT_ROOT="$(cd "$CONSTRUCT_CORE/.." && pwd)"
 
+# Check for required dependencies
+if ! command -v yq &> /dev/null; then
+    echo -e "${RED}❌ Error: yq is required but not installed${NC}"
+    echo "Please install yq: brew install yq"
+    echo "See requirements.md for more information"
+    exit 1
+fi
+
 # Show help if requested
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "Usage: $0"

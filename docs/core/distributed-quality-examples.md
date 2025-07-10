@@ -129,7 +129,7 @@ vim ../PROMOTE-TO-CORE.yaml
 ```bash
 cd CONSTRUCT-LAB
 # Tries to edit CORE directly
-cd ../CONSTRUCT-CORE/scripts/
+cd ../CONSTRUCT-CORE/CONSTRUCT/scripts/
 vim something.sh  # Feels wrong...
 ```
 

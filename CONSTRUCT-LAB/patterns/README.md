@@ -102,13 +102,13 @@ Once you've created a pattern plugin, test it:
 
 ```bash
 # Run quality checks (if you have a quality validator)
-./CONSTRUCT/scripts-new/core/check-quality.sh
+./CONSTRUCT/scripts/core/check-quality.sh
 
 # Run architecture checks (if you have an architecture validator)  
-./CONSTRUCT/scripts-new/core/check-architecture.sh
+./CONSTRUCT/scripts/core/check-architecture.sh
 
 # Run documentation checks (if you have a documentation validator)
-./CONSTRUCT/scripts-new/core/check-documentation.sh
+./CONSTRUCT/scripts/core/check-documentation.sh
 ```
 
 The core scripts will automatically find and run your validators based on your `.construct/patterns.yaml` configuration.

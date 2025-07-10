@@ -118,8 +118,8 @@ main() {
     
     # Find all shell scripts in the project
     while IFS= read -r -d '' script; do
-        # Skip scripts-new directory to avoid recursion
-        [[ "$script" == *"/scripts-new/"* ]] && continue
+        # Skip scripts-backup directory to avoid recursion
+        [[ "$script" == *"/scripts-backup"* ]] && continue
         
         echo -e "\n${YELLOW}Checking: $(basename "$script")${NC}"
         

@@ -119,8 +119,8 @@ main() {
     
     # Find all shell scripts in the project
     while IFS= read -r -d '' script; do
-        # Skip scripts-new directory
-        [[ "$script" == *"/scripts-new/"* ]] && continue
+        # Skip scripts-backup directory
+        [[ "$script" == *"/scripts-backup"* ]] && continue
         
         echo -e "\n${YELLOW}Documentation check: $(basename "$script")${NC}"
         

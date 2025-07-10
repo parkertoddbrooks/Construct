@@ -355,10 +355,9 @@ if [ -f "$PROJECT_DIR/.construct/patterns.yaml" ]; then
 fi
 
 # Scripts by category if CONSTRUCT scripts exist
-if [ -d "$PROJECT_DIR/CONSTRUCT/scripts" ] || [ -d "$PROJECT_DIR/CONSTRUCT/scripts-new" ]; then
+if [ -d "$PROJECT_DIR/CONSTRUCT/scripts" ]; then
     echo "### Scripts" >> "$QUICK_REF"
     SCRIPTS_DIR="$PROJECT_DIR/CONSTRUCT/scripts"
-    [ -d "$PROJECT_DIR/CONSTRUCT/scripts-new" ] && SCRIPTS_DIR="$PROJECT_DIR/CONSTRUCT/scripts-new"
     find "$SCRIPTS_DIR" -name "*.sh" -type f 2>/dev/null | xargs -I {} basename {} | sort >> "$QUICK_REF" || echo "None found" >> "$QUICK_REF"
     echo "" >> "$QUICK_REF"
 fi

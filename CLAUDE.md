@@ -58,7 +58,7 @@ cd CONSTRUCT-LAB
 ./CONSTRUCT/scripts/before_coding.sh ComponentName
 
 # Promote tested changes to CORE
-./tools/promote-to-core.sh
+./CONSTRUCT-LAB/tools/promote-to-core.sh
 ```
 
 ### For User Projects (Using CONSTRUCT)
@@ -128,7 +128,7 @@ AI/docs/README-sym.md -> ../../../CONSTRUCT-CORE/AI/docs/README.md
 ### Promotion Process
 1. Develop and test in LAB
 2. Add to `PROMOTE-TO-CORE.yaml`
-3. Run `./tools/promote-to-core.sh`
+3. Run `./CONSTRUCT-LAB/tools/promote-to-core.sh`
 4. Validate changes in CORE
 5. Commit and clear manifest
 
