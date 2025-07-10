@@ -40,13 +40,14 @@ Pre-flight check before running promotions. Catches common issues early.
 
 ### 1. Develop and Test in LAB
 ```bash
-# Create new feature in experiments/
-cd CONSTRUCT-LAB/experiments/
-vim my-awesome-feature.sh
-chmod +x my-awesome-feature.sh
+# Create new feature in appropriate directory
+cd CONSTRUCT-LAB/
+# For example, a new script:
+vim CONSTRUCT/scripts/dev/my-awesome-feature.sh
+chmod +x CONSTRUCT/scripts/dev/my-awesome-feature.sh
 
 # Test thoroughly
-./my-awesome-feature.sh
+./CONSTRUCT/scripts/dev/my-awesome-feature.sh
 ```
 
 ### 2. Add to Promotion Manifest
@@ -58,8 +59,8 @@ vim PROMOTE-TO-CORE.yaml
 # Add your promotion entry:
 promotions:
   - type: file
-    source: experiments/my-awesome-feature.sh
-    dest: CONSTRUCT-CORE/CONSTRUCT/scripts/my-awesome-feature.sh
+    source: CONSTRUCT/scripts/dev/my-awesome-feature.sh
+    dest: CONSTRUCT-CORE/CONSTRUCT/scripts/dev/my-awesome-feature.sh
     description: "Awesome feature that does X"
     bump_version: minor
 ```

@@ -51,5 +51,5 @@ plugins:
 
 Then run validators:
 ```bash
-./scripts-new/core/check-quality.sh
+./CONSTRUCT/scripts/core/check-quality.sh .
 ```

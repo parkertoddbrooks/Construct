@@ -28,7 +28,7 @@ AI/docs/
 ## Key Files
 
 ### Auto-Generated Documentation (`automated/`)
-These files are **automatically generated** by `./CONSTRUCT/scripts/update-architecture.sh`:
+These files are **automatically generated** by `./CONSTRUCT/scripts/construct/update-architecture.sh`:
 
 - **`architecture-overview-automated.md`** - Complete system architecture and design principles
 - **`script-reference-automated.md`** - Documentation of all scripts and library functions  
@@ -67,7 +67,7 @@ The main AI context file that auto-updates with current development state.
 - **Content**: Technical implementation details, coding standards, current state
 - **Updates**: Mostly auto-generated, kept current with implementation
 
-### CONSTRUCT-docs/ (Human Documentation)  
+### /docs/ (Human Documentation)  
 - **Audience**: Human developers
 - **Purpose**: Help humans use and contribute to CONSTRUCT
 - **Content**: User guides, tutorials, setup instructions, conceptual explanations
@@ -78,7 +78,7 @@ The main AI context file that auto-updates with current development state.
 ### Automatic Updates
 The `automated/` directory is kept current by:
 ```bash
-./CONSTRUCT/scripts/update-architecture.sh
+./CONSTRUCT/scripts/construct/update-architecture.sh
 ```
 Run automatically during git pre-commit hooks.
 
