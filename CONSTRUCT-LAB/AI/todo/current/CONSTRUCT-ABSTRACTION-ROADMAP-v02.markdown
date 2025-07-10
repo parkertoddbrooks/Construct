@@ -5,19 +5,25 @@ CONSTRUCT, originally built for RUN (an iOS/Watch app), is being abstracted into
 
 ## Current State
 - **CONSTRUCT/CLAUDE.md**: Created by `/init`, to be enhanced as the system orchestrator with dynamic context loading.
-- **CONSTRUCT-CORE/CLAUDE.md**: Legacy iOS-specific rules from RUN, needs extraction.
-- **CONSTRUCT-CORE/CLAUDE-BASE.md**: Template for project `CLAUDE.md` files, includes universal principles, pattern integration, and language-specific scripts.
-- **CONSTRUCT-LAB/CLAUDE.md**: Unnecessary, to be removed.
-- **Projects/*/CLAUDE.md**: Generated per project using `CLAUDE-BASE.md` + `patterns.yaml`.
+- **CONSTRUCT-CORE/CLAUDE.md**: Legacy iOS-specific rules from RUN, needs extraction to pattern files.
+- **CONSTRUCT-CORE/CLAUDE-BASE.md**: Template for project `CLAUDE.md` files, will contain universal principles after iOS extraction.
+- **CONSTRUCT-LAB/CLAUDE.md**: Does not exist (correct).
+- **Projects/*/CLAUDE.md**: Generated per project using `CLAUDE-BASE.md` + selected patterns.
+- **Pattern System**: Organized under `CONSTRUCT-CORE/patterns/`:
+  - `plugins/` - Contains all pattern files by category
+  - `lib/` - Pattern utilities (planned)
+  - `templates/` - Configuration templates
 
 ## Abstraction Todos
 ### Priority 0 (P0): Critical for RUN (4-Day Sprint)
 - [ ] **Extract iOS Patterns** (`v32.md`, conversation):
-  - Move iOS-specific rules from `CONSTRUCT-CORE/CLAUDE.md` to:
-    - `patterns/languages/swift.md`
-    - `patterns/frameworks/swiftui.md`
-    - `patterns/architecture/mvvm-ios.md`
-  - Example: Swift concurrency, MVVM rules, token-based UI.
+  - Pattern files already exist in `patterns/plugins/`:
+    - ✅ `languages/swift.md` (merge with swift-new.md)
+    - ✅ `frameworks/swiftui.md`
+    - ✅ `architectural/mvvm-ios.md`
+    - ✅ `platforms/ios.md`
+  - Task: Review `CONSTRUCT-CORE/CLAUDE.md` for any remaining iOS content not in patterns
+  - Task: Merge `languages/swift-new.md` into `languages/swift.md`
 - [ ] **Convert CLAUDE-BASE.md** (`v32.md`, conversation):
   - Update `CONSTRUCT-CORE/CLAUDE-BASE.md` to be a universal template:
     ```markdown
@@ -34,7 +40,8 @@ CONSTRUCT, originally built for RUN (an iOS/Watch app), is being abstracted into
     ```
   - Remove iOS-specific content.
 - [ ] **Remove Redundant CLAUDE.md Files** (`v11.md`, conversation):
-  - Delete `CONSTRUCT-CORE/CLAUDE.md` and `CONSTRUCT-LAB/CLAUDE.md` after extraction.
+  - Delete `CONSTRUCT-CORE/CLAUDE.md` after extraction complete
+  - Note: `CONSTRUCT-LAB/CLAUDE.md` doesn't exist (correct)
 - [ ] **Update Context Engineering Scripts** (`v01.md`):
   - Modify `assemble-claude.sh` to preserve dynamic sections (`<!-- START:DYNAMIC-CONTEXT -->`).
   - Update `update-context.sh` to detect pattern-based projects and append dynamic sections (e.g., `CURRENT-STRUCTURE`).
@@ -110,8 +117,9 @@ EOF
 
 ## Key Clarifications
 - **One `CONSTRUCT/CLAUDE.md`**: Enhanced post-`/init` as the system orchestrator.
-- **Project `CLAUDE.md` Generation**: Uses `CLAUDE-BASE.md` + `patterns.yaml`.
-- **No `CLAUDE.md` in CORE/LAB**: Only `CLAUDE-BASE.md` in CORE.
+- **Project `CLAUDE.md` Generation**: Uses `CLAUDE-BASE.md` + patterns from `plugins/`.
+- **No `CLAUDE.md` in CORE/LAB**: Only `CLAUDE-BASE.md` in CORE (after removing legacy CLAUDE.md).
+- **Pattern Organization**: All patterns in `CONSTRUCT-CORE/patterns/plugins/` by category.
 - **Context Engineering**: Preserves dynamic sections and scripts, integrates with patterns.
 - **Interactive Scripts**: Support Claude Code with `--show-prompts` for all scripts.
 

@@ -139,7 +139,7 @@ After commits, you may see deletions of structure files - this is normal cleanup
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-09 17:11:45
+Last updated: 2025-07-09 18:32:48
 
 ### Active Components
 - **Shell Scripts**: 2 files
@@ -168,7 +168,7 @@ Last updated: 2025-07-09 17:11:45
 **Date**: 2025-07-09
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: c6bcc34 feat: Complete interactive rails implementation and add repository context
+**Last Commit**: 2c0ca23 docs: Update interactive scripts documentation and add CONSTRUCT architecture cheatsheet
 
 ### Current Focus
 - CONSTRUCT development environment (shell/Python tools)
@@ -275,30 +275,30 @@ Run ./CONSTRUCT/scripts/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-CORE/CONSTRUCT/lib/common-patterns.sh
-- CONSTRUCT-CORE/CONSTRUCT/lib/interactive-support.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/assemble-claude.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/scan_project_structure.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/update-architecture.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-quality.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/construct-patterns.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/generate-devupdate.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/pre-commit-review.sh
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/dev/session-summary.sh
+- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-09--17-11-44.md
+- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--17-11-45.md
+- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-09-1711-construct-session.md
+- CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
+- CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
+- CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-09--10-42-50.md
+- CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--17-11-45.md
 
 
 ### Git Status
 ```
+A  CONSTRUCT-CORE/patterns/README.md
+A  CONSTRUCT-CORE/patterns/lib/README.md
+A  CONSTRUCT-CORE/patterns/plugins/README.md
+A  CONSTRUCT-CORE/patterns/plugins/architectural/mvvm-ios.md
+A  CONSTRUCT-CORE/patterns/plugins/frameworks/swiftui.md
+A  CONSTRUCT-CORE/patterns/plugins/languages/swift-new.md
+A  CONSTRUCT-CORE/patterns/plugins/platforms/ios.md
+A  CONSTRUCT-CORE/patterns/templates/README.md
  M CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
  M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
- M CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-D  CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--08-39-14.md
- D CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--10-42-50.md
-A  CONSTRUCT-LAB/AI/todo/current/CONSTRUCT-ABSTRACTION-ROADMAP-v01.markdown
-A  CONSTRUCT-LAB/AI/todo/current/CONSTRUCT-ABSTRACTION-ROADMAP-v02.markdown
-A  docs/CONSTRUCT-ARCHITECTURE-CHEATSHEET--grok-see-feedback.md
 ```
 
 ### Active Development Areas

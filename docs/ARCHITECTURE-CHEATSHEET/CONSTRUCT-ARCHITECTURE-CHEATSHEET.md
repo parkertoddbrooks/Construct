@@ -11,6 +11,22 @@
 | `CONSTRUCT-CORE/CLAUDE.md` | Legacy iOS-specific (from RUN) | TO BE REMOVED - content moved to patterns |
 | `Projects/*/CLAUDE.md` | Project-specific context | Generated: CLAUDE-BASE.md + patterns |
 
+### Pattern System Structure
+
+```
+CONSTRUCT-CORE/patterns/
+├── lib/                    # Pattern utilities (planned)
+├── plugins/               # Modular pattern files
+│   ├── architectural/     # Architecture patterns (MVVM, etc.)
+│   ├── cross-platform/    # Multi-platform patterns
+│   ├── frameworks/        # Framework patterns (SwiftUI, etc.)
+│   ├── languages/         # Language patterns (Swift, etc.)
+│   ├── platforms/         # Platform patterns (iOS, Android, etc.)
+│   └── tooling/           # Development tool patterns
+└── templates/             # Configuration templates
+    └── patterns.yaml      # Project pattern config template
+```
+
 ### Pattern System Flow
 
 ```
@@ -20,7 +36,7 @@ Reads: .construct/patterns.yaml
 ↓
 Loads: CLAUDE-BASE.md (template)
 ↓
-Adds: Pattern files (swift.md, mvvm.md, etc.)
+Adds: Pattern files from plugins/ based on config
 ↓
 Adds: Language-specific scripts
 ↓
@@ -34,11 +50,13 @@ CONSTRUCT/
 ├── CLAUDE.md                    # CONSTRUCT system docs (from /init)
 ├── CONSTRUCT-CORE/
 │   ├── CLAUDE-BASE.md          # Template for project CLAUDE.md files
-│   ├── patterns/               # Built-in patterns
+│   ├── patterns/               # Pattern system
+│   │   ├── lib/               # Pattern utilities (future)
+│   │   ├── plugins/           # All pattern files
+│   │   └── templates/         # Config templates
 │   └── CONSTRUCT/scripts/      # All the tools
 ├── CONSTRUCT-LAB/
-│   ├── patterns/               # Plugin patterns
-│   └── [NO CLAUDE.md needed]
+│   └── [NO CLAUDE.md needed]   # Development/testing area
 └── Projects/
     └── MyApp/
         ├── .construct/patterns.yaml  # Project config
@@ -90,13 +108,19 @@ The root `/CONSTRUCT/CLAUDE.md` acts as an orchestrator that teaches Claude how 
 2. Load the appropriate pattern-generated context
 3. Switch contexts within a single conversation
 
-### What Needs Extraction
+### Pattern File Status
 
-From `CONSTRUCT-CORE/CLAUDE.md` → Pattern files:
-- iOS Configuration Rules → `patterns/platforms/ios.md`
-- Swift 6 Concurrency → `patterns/languages/swift.md`
-- SwiftUI patterns → `patterns/frameworks/swiftui.md`
-- MVVM patterns → `patterns/architecture/mvvm-ios.md`
+Current pattern files in `CONSTRUCT-CORE/patterns/plugins/`:
+- ✅ `languages/swift.md` - Swift patterns (has duplicate swift-new.md to merge)
+- ✅ `frameworks/swiftui.md` - SwiftUI patterns  
+- ✅ `architectural/mvvm-ios.md` - MVVM architecture
+- ✅ `platforms/ios.md` - iOS platform specifics
+- ✅ `cross-platform/model-sync.md` - Multi-platform sync
+- ✅ `tooling/*` - Shell scripting, error handling, etc.
+
+Extraction needed from `CONSTRUCT-CORE/CLAUDE.md`:
+- Remaining iOS-specific content → appropriate pattern files
+- Universal principles → `CLAUDE-BASE.md`
 
 ---
 **Remember**: CONSTRUCT is becoming language-agnostic. iOS was just the beginning.
