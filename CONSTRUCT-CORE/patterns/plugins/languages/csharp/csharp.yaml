@@ -1,0 +1,14 @@
+name: csharp-language
+version: 1.0.0
+description: C# language patterns and modern .NET best practices
+author: CONSTRUCT Team
+category: languages
+validators:
+  - quality
+tags:
+  - csharp
+  - dotnet
+  - async-await
+  - nullable
+  - linq
+min_construct_version: 2.0.0

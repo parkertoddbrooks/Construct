@@ -22,31 +22,36 @@ CONSTRUCT/
 │   │   ├── config/
 │   │   ├── lib/
 │   │   ├── orchestrator/
-│   │   ├── scripts/                    # (shown as scripts, actually scripts-new)
+│   │   ├── scripts-new/
 │   │   │   ├── construct/
 │   │   │   ├── core/
 │   │   │   ├── dev/
-│   │   │   ├── patterns/
-│   │   │   │   ├── code-quality/
-│   │   │   │   ├── construct-development/
-│   │   │   │   ├── csharp-language/
-│   │   │   │   ├── ios-ui-library/
-│   │   │   │   ├── mvvm-architecture/
-│   │   │   │   ├── python-development/
-│   │   │   │   ├── shell-quality/
-│   │   │   │   ├── shell-scripting/
-│   │   │   │   └── swift-language/
+│   │   │   ├── patterns/               # (MIGRATED - validators moved to patterns/plugins/*/validators/)
 │   │   │   └── workspace/
 │   │   └── scripts/ (legacy)
 │   ├── patterns/
 │   │   ├── lib/
-│   │   ├── plugins/
+│   │   ├── plugins/                    # Complete pattern plugins with validators
 │   │   │   ├── architectural/
+│   │   │   │   ├── mvvm/              # Generic MVVM pattern
+│   │   │   │   └── mvvm-ios/          # iOS-specific MVVM
 │   │   │   ├── cross-platform/
+│   │   │   │   └── model-sync/
 │   │   │   ├── frameworks/
+│   │   │   │   ├── ios-ui-library/
+│   │   │   │   └── swiftui/
 │   │   │   ├── languages/
+│   │   │   │   ├── csharp/
+│   │   │   │   ├── python/
+│   │   │   │   └── swift/
 │   │   │   ├── platforms/
+│   │   │   │   └── ios/
 │   │   │   └── tooling/
+│   │   │       ├── construct-dev/
+│   │   │       ├── error-handling/
+│   │   │       ├── shell-quality/
+│   │   │       ├── shell-scripting/
+│   │   │       └── unix-philosophy/
 │   │   └── templates/
 │   └── TEMPLATES/
 │       ├── component-templates/
@@ -102,11 +107,11 @@ CONSTRUCT/
 │   ├── CONSTRUCT -> ../CONSTRUCT-CORE/CONSTRUCT
 │   ├── docs/
 │   ├── experiments/
-│   ├── patterns/
-│   │   ├── community/
-│   │   ├── experiments/
-│   │   ├── parker/
-│   │   └── plugins/
+│   ├── patterns/                       # Local pattern development
+│   │   ├── community/                  # (Legacy - being removed)
+│   │   ├── experiments/                # Experimental patterns
+│   │   ├── parker/                     # (Legacy - being removed)
+│   │   └── plugins/                    # Project-specific pattern plugins
 │   └── tools/
 └── docs/
     ├── ARCHITECTURE-CHEATSHEET/
@@ -167,8 +172,9 @@ CONSTRUCT/
 24. `./CONSTRUCT-CORE/TEMPLATES/project-templates/swift-ios+watch/Watch-App/Tests/README.md`
 
 ### CONSTRUCT-LAB
-25. `./CONSTRUCT-LAB/patterns/README.md` - LAB patterns directory
-26. `./CONSTRUCT-LAB/tools/README.md` - LAB tools directory
+25. `./CONSTRUCT-LAB/patterns/README.md` - LAB patterns directory (local development)
+26. `./CONSTRUCT-LAB/patterns/plugins/README.md` - LAB pattern plugins guide
+27. `./CONSTRUCT-LAB/tools/README.md` - LAB tools directory
 
 ---
 
@@ -336,4 +342,5 @@ CONSTRUCT/
 23. `./CONSTRUCT-CORE/TEMPLATES/project-templates/swift-ios+watch/Watch-App/Shared/Services/README.md`
 24. `./CONSTRUCT-CORE/TEMPLATES/project-templates/swift-ios+watch/Watch-App/Tests/README.md`
 25. `./CONSTRUCT-LAB/patterns/README.md`
-26. `./CONSTRUCT-LAB/tools/README.md`
+26. `./CONSTRUCT-LAB/patterns/plugins/README.md`
+27. `./CONSTRUCT-LAB/tools/README.md`

@@ -1,0 +1,14 @@
+name: mvvm-architecture
+version: 1.0.0
+description: Model-View-ViewModel architectural pattern for clean separation of concerns
+author: CONSTRUCT Team
+category: architectural
+validators:
+  - architecture
+tags:
+  - mvvm
+  - architecture
+  - separation-of-concerns
+  - testability
+  - patterns
+min_construct_version: 2.0.0

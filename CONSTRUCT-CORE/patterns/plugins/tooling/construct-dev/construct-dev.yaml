@@ -1,0 +1,19 @@
+name: construct-dev
+version: 1.0.0
+description: CONSTRUCT development patterns for building and maintaining CONSTRUCT itself
+author: CONSTRUCT Team
+category: tooling
+validators:
+  - architecture
+  - documentation
+  - generate-architecture
+dependencies:
+  - tooling/shell-scripting
+  - tooling/unix-philosophy
+tags:
+  - construct
+  - development
+  - tooling
+  - meta
+  - self-improvement
+min_construct_version: 2.0.0

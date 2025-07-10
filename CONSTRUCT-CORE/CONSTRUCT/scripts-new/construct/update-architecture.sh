@@ -123,9 +123,20 @@ run_pattern_generators() {
         [ -z "$pattern" ] && continue
         
         # Look for pattern-specific architecture generator
-        local generator="$SCRIPTS_ROOT/patterns/$pattern/generate-architecture.sh"
+        # Try new plugin structure first
+        local plugin_generator="$CONSTRUCT_CORE/patterns/plugins/$pattern/validators/generate-architecture.sh"
+        # Fallback to old location
+        local old_generator="$SCRIPTS_ROOT/patterns/$pattern/generate-architecture.sh"
         
-        if [ -f "$generator" ]; then
+        local generator=""
+        if [ -f "$plugin_generator" ]; then
+            generator="$plugin_generator"
+        elif [ -f "$old_generator" ]; then
+            generator="$old_generator"
+            echo -e "${YELLOW}  ⚠️  Using legacy generator location for $pattern${NC}"
+        fi
+        
+        if [ -n "$generator" ]; then
             echo -e "${GREEN}→ Running $pattern architecture generator${NC}"
             
             # Create temp file for pattern output

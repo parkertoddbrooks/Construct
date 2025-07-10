@@ -1,0 +1,17 @@
+name: mvvm-ios
+version: 1.0.0
+description: MVVM architecture pattern specifically for iOS applications with SwiftUI
+author: CONSTRUCT Team
+category: architectural
+dependencies:
+  - architectural/mvvm
+  - frameworks/swiftui
+  - languages/swift
+  - platforms/ios
+tags:
+  - mvvm
+  - ios
+  - swiftui
+  - architecture
+  - mobile
+min_construct_version: 2.0.0

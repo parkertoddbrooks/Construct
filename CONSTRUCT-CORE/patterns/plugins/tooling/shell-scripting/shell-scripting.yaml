@@ -1,0 +1,18 @@
+name: shell-scripting
+version: 1.0.0
+description: Shell scripting patterns and best practices for CONSTRUCT development
+author: CONSTRUCT Team
+category: tooling
+validators:
+  - architecture
+  - documentation
+dependencies:
+  - tooling/unix-philosophy
+  - tooling/error-handling
+tags:
+  - shell
+  - bash
+  - scripting
+  - automation
+  - devops
+min_construct_version: 2.0.0

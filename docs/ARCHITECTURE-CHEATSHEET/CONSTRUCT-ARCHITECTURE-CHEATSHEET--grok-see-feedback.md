@@ -11,6 +11,22 @@
 | `CONSTRUCT-CORE/CLAUDE.md` | Legacy iOS-specific (from RUN) | TO BE REMOVED - content moved to patterns |
 | `Projects/*/CLAUDE.md` | Project-specific context | Generated: CLAUDE-BASE.md + patterns |
 
+### Pattern Plugin System
+
+```
+CONSTRUCT-CORE/patterns/
+├── plugins/               # Complete pattern plugins
+│   └── [category]/
+│       └── [plugin-name]/
+│           ├── [plugin-name].md     # Pattern rules (required)
+│           ├── [plugin-name].yaml   # Metadata (required)
+│           └── validators/          # Validation scripts (optional)
+│               ├── quality.sh
+│               ├── architecture.sh
+│               └── documentation.sh
+└── templates/             # Configuration templates
+```
+
 ### Pattern System Flow
 
 ```
@@ -20,11 +36,27 @@ Reads: .construct/patterns.yaml
 ↓
 Loads: CLAUDE-BASE.md (template)
 ↓
-Adds: Pattern files (swift.md, mvvm.md, etc.)
+Adds: Pattern files from plugins/[category]/[plugin]/[plugin].md
 ↓
 Adds: Language-specific scripts
 ↓
 Creates: Project's CLAUDE.md
+```
+
+### Pattern Validation Flow
+
+```
+Run: check-quality.sh Projects/MyApp
+↓
+Reads: Projects/MyApp/.construct/patterns.yaml
+↓
+For each pattern (e.g., languages/swift):
+↓
+Checks: patterns/plugins/languages/swift/validators/quality.sh
+↓
+Runs validator with PROJECT_DIR parameter
+↓
+Reports combined results
 ```
 
 ### Key Directories
@@ -34,10 +66,17 @@ CONSTRUCT/
 ├── CLAUDE.md                    # CONSTRUCT system docs (from /init)
 ├── CONSTRUCT-CORE/
 │   ├── CLAUDE-BASE.md          # Template for project CLAUDE.md files
-│   ├── patterns/               # Built-in patterns
-│   └── CONSTRUCT/scripts/      # All the tools
+│   ├── patterns/               # Pattern system
+│   │   ├── plugins/           # Complete pattern plugins
+│   │   │   └── [category]/[plugin-name]/
+│   │   │       ├── [plugin].md
+│   │   │       ├── [plugin].yaml
+│   │   │       └── validators/
+│   │   └── templates/         # Config templates
+│   └── CONSTRUCT/scripts-new/  # All the tools
 ├── CONSTRUCT-LAB/
-│   ├── patterns/               # Plugin patterns
+│   ├── patterns/               # Local pattern development
+│   │   └── plugins/           # Project-specific patterns
 │   └── [NO CLAUDE.md needed]
 └── Projects/
     └── MyApp/
@@ -47,11 +86,14 @@ CONSTRUCT/
 
 ### Context Engineering Scripts
 - `update-context.sh`: Refreshes dynamic sections in `CLAUDE.md` (e.g., project state).
-- `check-architecture.sh`: Validates patterns, feeds into `VIOLATIONS`.
+- `check-architecture.sh`: Runs pattern architecture validators, feeds into `VIOLATIONS`.
+- `check-quality.sh`: Runs pattern quality validators against code.
+- `check-documentation.sh`: Runs pattern documentation validators.
 - `session-summary.sh`: Tracks pattern changes across sessions.
 - `pre-commit`: Ensures fresh context before commits.
-- `check-quality.sh`: Validates code against pattern standards.
 - `workspace-status.sh`: Shows pattern usage across projects.
+
+**Pattern Validators**: Located in `patterns/plugins/[category]/[plugin]/validators/`
 
 ### The Abstraction Story
 

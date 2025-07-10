@@ -94,25 +94,32 @@ Project-aware helper scripts for development workflow:
 ./dev/setup-aliases.sh                           # Install shortcuts
 ```
 
-## Pattern Validators (`patterns/`)
+## Pattern Validators (Migrated)
 
-Language and framework-specific validators called by core orchestrators:
+**⚠️ MIGRATION NOTICE**: Pattern validators have been moved to the plugin structure.
 
-### Available Patterns
-- `shell-scripting/` - Shell script validation
-- `shell-quality/` - Shell script quality checks
-- `construct-development/` - CONSTRUCT-specific validation
-  - Also contains `generate-architecture.sh` for CONSTRUCT-specific docs
-- `python-development/` - Python code validation
-- `swift-language/` - Swift code validation
-- `csharp-language/` - C# code validation
-- `mvvm-architecture/` - MVVM pattern validation
-- `ios-ui-library/` - iOS UI component validation
+### New Location
+Pattern validators now live with their pattern plugins:
+```
+CONSTRUCT-CORE/patterns/plugins/[category]/[plugin-name]/validators/
+```
 
-Each pattern contains:
-- `validate-architecture.sh` - Architecture checks
-- `validate-quality.sh` - Quality checks
-- `validate-documentation.sh` - Documentation checks
+### Migration Status
+The following validators have been migrated:
+- `languages/swift/validators/quality.sh`
+- `languages/python/validators/quality.sh`
+- `languages/csharp/validators/quality.sh`
+- `tooling/shell-scripting/validators/` (architecture.sh, documentation.sh)
+- `tooling/shell-quality/validators/quality.sh`
+- `tooling/construct-dev/validators/` (architecture.sh, documentation.sh, generate-architecture.sh)
+- `frameworks/ios-ui-library/validators/usage.sh`
+
+### Backward Compatibility
+Core orchestrator scripts (check-quality.sh, etc.) support both locations:
+1. First checks new plugin location
+2. Falls back to legacy location with warning
+
+See `CONSTRUCT-CORE/patterns/plugins/README.md` for complete plugin documentation.
 
 ## How It All Works Together
 

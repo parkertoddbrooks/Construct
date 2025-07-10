@@ -11,21 +11,25 @@
 | `CONSTRUCT-CORE/CLAUDE.md` | Legacy iOS-specific (from RUN) | TO BE REMOVED - content moved to patterns |
 | `Projects/*/CLAUDE.md` | Project-specific context | Generated: CLAUDE-BASE.md + patterns |
 
-### Pattern System Structure
+### Pattern Plugin System
 
 ```
 CONSTRUCT-CORE/patterns/
 ├── lib/                    # Pattern utilities (planned)
-├── plugins/               # Modular pattern files
-│   ├── architectural/     # Architecture patterns (MVVM, etc.)
-│   ├── cross-platform/    # Multi-platform patterns
-│   ├── frameworks/        # Framework patterns (SwiftUI, etc.)
-│   ├── languages/         # Language patterns (Swift, etc.)
-│   ├── platforms/         # Platform patterns (iOS, Android, etc.)
-│   └── tooling/           # Development tool patterns
+├── plugins/               # Complete pattern plugins
+│   └── [category]/
+│       └── [plugin-name]/
+│           ├── [plugin-name].md     # Pattern rules (required)
+│           ├── [plugin-name].yaml   # Metadata (required)
+│           └── validators/          # Validation scripts (optional)
+│               ├── quality.sh
+│               ├── architecture.sh
+│               └── documentation.sh
 └── templates/             # Configuration templates
     └── patterns.yaml      # Project pattern config template
 ```
+
+**Categories**: architectural, cross-platform, frameworks, languages, platforms, tooling
 
 ### Pattern System Flow
 
@@ -41,6 +45,22 @@ Adds: Pattern files from plugins/ based on config
 Adds: Language-specific scripts
 ↓
 Creates: Project's CLAUDE.md
+```
+
+### Pattern Validation Flow
+
+```
+Run: check-quality.sh Projects/MyApp
+↓
+Reads: Projects/MyApp/.construct/patterns.yaml
+↓
+For each pattern (e.g., languages/swift):
+↓
+Checks: patterns/plugins/languages/swift/validators/quality.sh
+↓
+Runs validator with PROJECT_DIR parameter
+↓
+Reports combined results
 ```
 
 ### Key Directories

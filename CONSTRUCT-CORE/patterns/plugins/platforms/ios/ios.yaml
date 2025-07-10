@@ -1,0 +1,15 @@
+name: ios
+version: 1.0.0
+description: iOS platform-specific patterns and conventions
+author: CONSTRUCT Team
+category: platforms
+dependencies:
+  - languages/swift
+tags:
+  - ios
+  - apple
+  - mobile
+  - platform
+  - iphone
+  - ipad
+min_construct_version: 2.0.0

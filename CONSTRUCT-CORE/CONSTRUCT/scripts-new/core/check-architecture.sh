@@ -117,12 +117,23 @@ main() {
     while IFS= read -r pattern; do
         [ -z "$pattern" ] && continue
         
-        local pattern_script="$SCRIPTS_ROOT/patterns/$pattern/validate-architecture.sh"
+        # Try new plugin structure first
+        local plugin_validator="$CONSTRUCT_CORE/patterns/plugins/$pattern/validators/architecture.sh"
+        # Fallback to old location for backward compatibility
+        local old_validator="$SCRIPTS_ROOT/patterns/$pattern/validate-architecture.sh"
         
-        if [ -f "$pattern_script" ]; then
+        local validator_script=""
+        if [ -f "$plugin_validator" ]; then
+            validator_script="$plugin_validator"
+        elif [ -f "$old_validator" ]; then
+            validator_script="$old_validator"
+            echo -e "${YELLOW}  ⚠️  Using legacy validator location for $pattern${NC}"
+        fi
+        
+        if [ -n "$validator_script" ]; then
             echo -e "\n${BLUE}→ Running $pattern architecture checks${NC}"
             # Pass PROJECT_DIR as parameter to pattern validators
-            if ! bash "$pattern_script" "$PROJECT_DIR"; then
+            if ! bash "$validator_script" "$PROJECT_DIR"; then
                 ((total_issues+=$?))
             fi
             ((patterns_checked++))
