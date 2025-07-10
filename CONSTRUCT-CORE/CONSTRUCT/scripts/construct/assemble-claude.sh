@@ -128,24 +128,27 @@ IFS=',' read -ra PLUGIN_ARRAY <<< "$PLUGINS"
 for plugin in "${PLUGIN_ARRAY[@]}"; do
     plugin=$(echo "$plugin" | xargs) # Trim whitespace
     if [ -n "$plugin" ]; then
-        # Check CORE first
-        core_plugin_path="$CONSTRUCT_CORE/patterns/plugins/$plugin.md"
+        # Extract plugin name from path (e.g., tooling/construct-dev -> construct-dev)
+        plugin_name=$(basename "$plugin")
+        
+        # Check CORE first - look for pattern file in plugin directory
+        core_plugin_path="$CONSTRUCT_CORE/patterns/plugins/$plugin/$plugin_name.md"
         # Check LAB second
-        lab_plugin_path="$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/$plugin.md"
+        lab_plugin_path="$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/plugins/$plugin/$plugin_name.md"
         
         if [ -f "$core_plugin_path" ]; then
             continue # Found in CORE
         elif [ -f "$lab_plugin_path" ]; then
             continue # Found in LAB
         else
-            echo -e "${RED}❌ Error: Plugin not found: $plugin.md${NC}"
-            echo -e "${YELLOW}   Looking in:${NC}"
-            echo -e "${YELLOW}     CORE: $CONSTRUCT_CORE/patterns/plugins/${NC}"
-            echo -e "${YELLOW}     LAB:  $CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/${NC}"
+            echo -e "${RED}❌ Error: Plugin not found: $plugin${NC}"
+            echo -e "${YELLOW}   Looking for:${NC}"
+            echo -e "${YELLOW}     CORE: $core_plugin_path${NC}"
+            echo -e "${YELLOW}     LAB:  $lab_plugin_path${NC}"
             echo -e "${YELLOW}   Available CORE plugins:${NC}"
             find "$CONSTRUCT_CORE/patterns/plugins" -name "*.md" -type f | sed "s|$CONSTRUCT_CORE/patterns/plugins/||" | sed 's|\.md$||' | sort
             echo -e "${YELLOW}   Available LAB plugins:${NC}"
-            find "$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns" -name "*.md" -type f | sed "s|$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/||" | sed 's|\.md$||' | sort
+            find "$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/plugins" -name "*.md" -type f 2>/dev/null | sed "s|$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/plugins/||" | sed 's|\.md$||' | sort
             exit 1
         fi
     fi
@@ -239,10 +242,13 @@ echo -e "${BLUE}🔄 Assembling patterns...${NC}"
 for plugin in "${PLUGIN_ARRAY[@]}"; do
     plugin=$(echo "$plugin" | xargs) # Trim whitespace
     if [ -n "$plugin" ]; then
-        # Check CORE first
-        core_plugin_path="$CONSTRUCT_CORE/patterns/plugins/$plugin.md"
+        # Extract plugin name from path (e.g., tooling/construct-dev -> construct-dev)
+        plugin_name=$(basename "$plugin")
+        
+        # Check CORE first - look for pattern file in plugin directory
+        core_plugin_path="$CONSTRUCT_CORE/patterns/plugins/$plugin/$plugin_name.md"
         # Check LAB second
-        lab_plugin_path="$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/$plugin.md"
+        lab_plugin_path="$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/plugins/$plugin/$plugin_name.md"
         
         if [ -f "$core_plugin_path" ]; then
             echo -e "${YELLOW}  Adding: $plugin ${BLUE}(CORE)${NC}"

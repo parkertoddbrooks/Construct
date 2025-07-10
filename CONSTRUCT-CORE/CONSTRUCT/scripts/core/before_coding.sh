@@ -15,6 +15,28 @@ NC='\033[0m' # No Color
 # Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Show help if requested
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: $0 [PROJECT_DIR] <search-term>"
+    echo "       $0 <search-term>"
+    echo ""
+    echo "Search for existing functionality before creating new code"
+    echo ""
+    echo "Arguments:"
+    echo "  PROJECT_DIR   Directory to search (default: current directory)"
+    echo "  search-term   What to search for (component name, function, etc.)"
+    echo ""
+    echo "This script helps prevent duplication by showing:"
+    echo "  - Existing components with similar names"
+    echo "  - Related functions and services"
+    echo "  - Pattern-specific guidance"
+    echo ""
+    echo "Examples:"
+    echo "  $0 PaymentView          # Search in current directory"
+    echo "  $0 ./MyApp UserService  # Search in specific project"
+    exit 0
+fi
+
 # Accept PROJECT_DIR as first parameter, search term as second
 # Or just search term if only one parameter
 if [ $# -eq 2 ]; then

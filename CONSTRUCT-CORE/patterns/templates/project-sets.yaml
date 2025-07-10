@@ -47,7 +47,6 @@ project_sets:
   construct-dev:
     description: "CONSTRUCT development environment"
     languages:
-      - bash
       - python
     plugins:
       - tooling/construct-dev

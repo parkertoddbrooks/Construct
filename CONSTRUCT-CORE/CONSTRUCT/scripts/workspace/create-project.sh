@@ -171,16 +171,66 @@ if [ -f "$PROJECT_SETS_FILE" ] && command -v yq &> /dev/null; then
         
         DESCRIPTION="Existing project with detected patterns"
         ;;
-    "custom")
-        LANGUAGES=$(get_input_with_default "Languages (comma-separated)" "")
-        SUGGESTED_PLUGINS="tooling/shell-scripting"
-        DESCRIPTION="Custom project configuration"
-        ;;
-    *)
-        echo -e "${RED}❌ Unknown project type: $PROJECT_TYPE${NC}"
-        exit 1
-        ;;
-esac
+        "custom")
+            LANGUAGES=$(get_input_with_default "Languages (comma-separated)" "")
+            SUGGESTED_PLUGINS="tooling/shell-scripting"
+            DESCRIPTION="Custom project configuration"
+            ;;
+        *)
+            echo -e "${RED}❌ Unknown project type: $PROJECT_TYPE${NC}"
+            exit 1
+            ;;
+    esac
+else
+    # Fallback when yq is not available
+    echo -e "${YELLOW}⚠️  yq not found - using defaults${NC}"
+    case $PROJECT_TYPE in
+        "ios")
+            LANGUAGES="swift"
+            SUGGESTED_PLUGINS="languages/swift,architectural/mvvm-ios,frameworks/swiftui,platforms/ios,tooling/shell-scripting"
+            DESCRIPTION="iOS App with Swift and MVVM patterns"
+            ;;
+        "web")
+            LANGUAGES="typescript"
+            SUGGESTED_PLUGINS="languages/typescript,frameworks/react,tooling/shell-scripting,tooling/error-handling"
+            DESCRIPTION="Web application with TypeScript/React"
+            ;;
+        "api")
+            LANGUAGES="csharp"
+            SUGGESTED_PLUGINS="languages/csharp,tooling/shell-scripting,tooling/error-handling"
+            DESCRIPTION="Backend API with C#/.NET"
+            ;;
+        "construct-dev")
+            LANGUAGES="python"
+            SUGGESTED_PLUGINS="tooling/construct-dev,tooling/shell-scripting,tooling/shell-quality,tooling/unix-philosophy"
+            DESCRIPTION="CONSTRUCT development environment"
+            ;;
+        "fullstack")
+            if is_interactive; then
+                echo "Which languages will this project use?"
+                echo "Enter comma-separated list (e.g., swift,csharp,typescript):"
+            fi
+            LANGUAGES=$(get_input_with_default "Languages" "swift,csharp,typescript")
+            SUGGESTED_PLUGINS="languages/swift,languages/csharp,cross-platform/model-sync,tooling/shell-scripting"
+            DESCRIPTION="Full-stack application with multiple languages"
+            ;;
+        "existing")
+            echo -e "${BLUE}🔍 Analyzing existing project...${NC}"
+            LANGUAGES=$(get_input_with_default "Languages (comma-separated)" "")
+            SUGGESTED_PLUGINS="tooling/shell-scripting"
+            DESCRIPTION="Existing project"
+            ;;
+        "custom")
+            LANGUAGES=$(get_input_with_default "Languages (comma-separated)" "")
+            SUGGESTED_PLUGINS="tooling/shell-scripting"
+            DESCRIPTION="Custom project configuration"
+            ;;
+        *)
+            echo -e "${RED}❌ Unknown project type: $PROJECT_TYPE${NC}"
+            exit 1
+            ;;
+    esac
+fi
 
 # Show available additional plugins
 echo ""
@@ -307,8 +357,8 @@ fi
 
 # Generate CLAUDE.md with selected patterns and languages
 echo -e "${YELLOW}⚙️ Generating CLAUDE.md...${NC}"
-if [ -x "$CONSTRUCT_CORE/CONSTRUCT/scripts/assemble-claude.sh" ]; then
-    "$CONSTRUCT_CORE/CONSTRUCT/scripts/assemble-claude.sh" "$PROJECT_DIR" "$ALL_PLUGINS" --languages "$LANGUAGES"
+if [ -x "$CONSTRUCT_CORE/CONSTRUCT/scripts/construct/assemble-claude.sh" ]; then
+    "$CONSTRUCT_CORE/CONSTRUCT/scripts/construct/assemble-claude.sh" "$PROJECT_DIR" "$ALL_PLUGINS" --languages "$LANGUAGES"
     echo -e "${GREEN}✅ CLAUDE.md generated with selected patterns${NC}"
 else
     echo -e "${YELLOW}⚠️ assemble-claude.sh not found, CLAUDE.md not generated${NC}"

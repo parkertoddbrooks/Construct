@@ -16,6 +16,22 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 CONSTRUCT_ROOT="$(cd "$CONSTRUCT_CORE/.." && pwd)"
 
+# Show help if requested
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: $0"
+    echo ""
+    echo "Refresh the CONSTRUCT plugin registry"
+    echo ""
+    echo "This script scans all plugin directories and generates registry.yaml"
+    echo "with metadata about available plugins including:"
+    echo "  - Plugin descriptions"
+    echo "  - Version information"
+    echo "  - Available validators and generators"
+    echo ""
+    echo "The registry is used by create-project.sh and assemble-claude.sh"
+    exit 0
+fi
+
 echo -e "${BLUE}🔄 Refreshing plugin registry...${NC}"
 
 # Output file

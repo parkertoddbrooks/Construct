@@ -17,6 +17,25 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONSTRUCT_CORE="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 source "$CONSTRUCT_CORE/CONSTRUCT/lib/common-patterns.sh"
 
+# Show help if requested
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: $0 [PROJECT_DIR]"
+    echo ""
+    echo "Generate a development session summary for CONSTRUCT projects"
+    echo ""
+    echo "Arguments:"
+    echo "  PROJECT_DIR   Directory to analyze (default: current directory)"
+    echo ""
+    echo "This script creates a session summary including:"
+    echo "  - Git status and recent commits"
+    echo "  - Active patterns and languages"
+    echo "  - Recent work and changes"
+    echo "  - Next steps for continuation"
+    echo ""
+    echo "The summary is saved to AI/dev-logs/session-states/"
+    exit 0
+fi
+
 # Accept PROJECT_DIR as parameter, default to CONSTRUCT-LAB
 PROJECT_DIR="${1:-.}"
 PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"

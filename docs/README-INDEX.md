@@ -1,11 +1,16 @@
 # CONSTRUCT README Index
 
-This file provides a comprehensive map of the CONSTRUCT project structure, including all directories, symlinks, and README documentation.
+This file lists all README files in the CONSTRUCT project. For complete documentation, see [DOCS-INDEX.md](DOCS-INDEX.md).
 
 ## Table of Contents
-1. [Directory Structure](#directory-structure)
-2. [README Files Index](#readme-files-index)
-3. [Complete README Contents](#complete-readme-contents)
+1. [Quick Links](#quick-links)
+2. [Directory Structure](#directory-structure)
+3. [README Files Index](#readme-files-index)
+
+## Quick Links
+- [📚 All Documentation](DOCS-INDEX.md) - Complete documentation index
+- [🏗️ Directory Structure](STRUCTURE.md) - Current project structure
+- [🆕 What's New](DOCS-INDEX.md#-whats-new-2025-07-10) - Recent updates
 
 ---
 
@@ -22,16 +27,15 @@ CONSTRUCT/
 │   │   ├── config/
 │   │   ├── lib/
 │   │   ├── orchestrator/
-│   │   ├── scripts-new/
-│   │   │   ├── construct/
-│   │   │   ├── core/
-│   │   │   ├── dev/
-│   │   │   ├── patterns/               # (MIGRATED - validators moved to patterns/plugins/*/validators/)
-│   │   │   └── workspace/
-│   │   └── scripts/ (legacy)
+│   │   └── scripts/                    # All CONSTRUCT scripts (organized)
+│   │       ├── construct/              # CONSTRUCT-specific tools
+│   │       ├── core/                   # Core validation scripts
+│   │       ├── dev/                    # Development workflow
+│   │       └── workspace/              # Project management
 │   ├── patterns/
 │   │   ├── lib/
 │   │   ├── plugins/                    # Complete pattern plugins with validators
+│   │   │   ├── registry.yaml          # Auto-generated plugin catalog
 │   │   │   ├── architectural/
 │   │   │   │   ├── mvvm/              # Generic MVVM pattern
 │   │   │   │   └── mvvm-ios/          # iOS-specific MVVM
@@ -53,6 +57,8 @@ CONSTRUCT/
 │   │   │       ├── shell-scripting/
 │   │   │       └── unix-philosophy/
 │   │   └── templates/
+│   │       ├── patterns.yaml          # Template for project configs
+│   │       └── project-sets.yaml      # Pre-configured project types
 │   └── TEMPLATES/
 │       ├── component-templates/
 │       │   ├── ai-structure/
@@ -86,7 +92,7 @@ CONSTRUCT/
 │                   ├── Shared/
 │                   └── Tests/
 ├── CONSTRUCT-LAB/
-│   ├── .construct/
+│   ├── .construct/                    # LAB's pattern configuration
 │   ├── AI/
 │   │   ├── ai-misc-conversations/
 │   │   ├── ai-raw-cli/
@@ -120,18 +126,10 @@ CONSTRUCT/
 ```
 
 ### Key Symlinks
-**⚠️ WARNING: The symlinks below are currently broken - they point to:**
-- `CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/...` (doesn't exist)
-**But should point to:**
-- `CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/...`
 
-**Current symlinks:**
-- `CONSTRUCT-LAB/CONSTRUCT` -> `../CONSTRUCT-CORE/CONSTRUCT`
-- `CONSTRUCT-LAB/AI/dev-logs/check-quality/README-sym.md` -> Should point to CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/...
-- `CONSTRUCT-LAB/AI/dev-logs/dev-updates/devupdate-prompt-sym.md` -> Should point to CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/...
-- `CONSTRUCT-LAB/AI/dev-logs/dev-updates/README-sym.md` -> Should point to CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/...
-- `CONSTRUCT-LAB/AI/docs/README-sym.md` -> Should point to CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/...
-- `CONSTRUCT-LAB/AI/todo/README-sym.md` -> Should point to CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/...
+**Active symlinks:**
+- `CONSTRUCT-LAB/CONSTRUCT` -> `../CONSTRUCT-CORE/CONSTRUCT` (Scripts and tools)
+- Various README-sym.md files in LAB link to templates in CORE/TEMPLATES/component-templates/ai-structure/
 
 ---
 
@@ -143,21 +141,19 @@ CONSTRUCT/
 ### CONSTRUCT-CORE
 2. `./CONSTRUCT-CORE/CONSTRUCT/README.md` - CONSTRUCT core system documentation
 3. `./CONSTRUCT-CORE/CONSTRUCT/orchestrator/README.md` - Orchestrator component
-4. `./CONSTRUCT-CORE/CONSTRUCT/scripts/README.md` - Legacy scripts directory
-5. `./CONSTRUCT-CORE/CONSTRUCT/scripts-new/README.md` - Active scripts directory
-6. `./CONSTRUCT-CORE/CONSTRUCT/scripts-new/patterns/README.md` - Pattern scripts
+4. `./CONSTRUCT-CORE/CONSTRUCT/scripts/README.md` - Script usage guide and organization
 
 ### Patterns System
-7. `./CONSTRUCT-CORE/patterns/README.md` - Pattern system root
-8. `./CONSTRUCT-CORE/patterns/lib/README.md` - Pattern utilities library
-9. `./CONSTRUCT-CORE/patterns/plugins/README.md` - Pattern plugins directory
-10. `./CONSTRUCT-CORE/patterns/templates/README.md` - Pattern configuration templates
+5. `./CONSTRUCT-CORE/patterns/README.md` - Pattern system root
+6. `./CONSTRUCT-CORE/patterns/lib/README.md` - Pattern utilities library
+7. `./CONSTRUCT-CORE/patterns/plugins/README.md` - Pattern plugins directory
+8. `./CONSTRUCT-CORE/patterns/templates/README.md` - Pattern configuration templates
 
 ### Templates
-11. `./CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/dev-logs/check-quality/README.md`
-12. `./CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/dev-logs/dev-updates/README.md`
-13. `./CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/docs/README.md`
-14. `./CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/todo/README.md`
+9. `./CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/dev-logs/check-quality/README.md`
+10. `./CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/dev-logs/dev-updates/README.md`
+11. `./CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/docs/README.md`
+12. `./CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/todo/README.md`
 
 ### Swift iOS+Watch Template
 15. `./CONSTRUCT-CORE/TEMPLATES/project-templates/swift-ios+watch/iOS-App/Features/README.md`
@@ -344,3 +340,6 @@ CONSTRUCT/
 25. `./CONSTRUCT-LAB/patterns/README.md`
 26. `./CONSTRUCT-LAB/patterns/plugins/README.md`
 27. `./CONSTRUCT-LAB/tools/README.md`
+
+### Documentation
+28. `./docs/core/README.md` - Core documentation index ⭐ NEW
