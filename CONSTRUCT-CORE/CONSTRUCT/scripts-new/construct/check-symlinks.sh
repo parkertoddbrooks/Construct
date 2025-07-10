@@ -36,11 +36,11 @@ SYMLINK_PATHS=(
 
 SYMLINK_TARGETS=(
     "../CONSTRUCT-CORE/CONSTRUCT"
-    "../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/_devupdate-prompt.md"
-    "../../../../CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md"
-    "../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/README.md"
-    "../../../CONSTRUCT-CORE/AI/docs/README.md"
-    "../../../CONSTRUCT-CORE/AI/todo/README.md"
+    "../../../../CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md"
+    "../../../../CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/dev-logs/check-quality/README.md"
+    "../../../../CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/dev-logs/dev-updates/README.md"
+    "../../../CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/docs/README.md"
+    "../../../CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/todo/README.md"
 )
 
 check_symlink() {

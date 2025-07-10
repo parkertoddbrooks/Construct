@@ -105,10 +105,7 @@ Every change goes through:
 
 ## Documentation
 
-- [Getting Started Guide](docs/getting-started.md)
-- [Architecture Patterns](docs/architecture.md)
-- [Team Workflow](docs/team-workflow.md)
-- [AI Integration](docs/ai-integration.md)
+[Documentation coming soon]
 
 ## Requirements
 

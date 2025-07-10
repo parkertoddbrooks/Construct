@@ -1,6 +1,6 @@
-# Pattern Plugins
+# Pattern Plugins Directory
 
-Modular, reusable patterns that can be mixed and matched for different project types.
+This directory contains the actual pattern files - modular, reusable guidelines that can be mixed and matched for different project types. Each .md file here is a "pattern plugin" (or simply "pattern") that can be included in a project's configuration.
 
 ## Categories
 - `architectural/` - Architecture patterns (MVVM, etc.)
