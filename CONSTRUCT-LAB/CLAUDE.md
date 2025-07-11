@@ -31,24 +31,7 @@
 
 <!-- START:ACTIVE-SYMLINKS -->
 ### 🔗 Active Symlinks (Auto-Updated)
-
-These files in LAB are symlinks to CORE - NEVER edit them directly:
-```bash
-# CONSTRUCT -> ../CONSTRUCT-CORE/CONSTRUCT
-# AI/dev-logs/dev-updates/devupdate-prompt-sym.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/_devupdate-prompt.md
-# AI/dev-logs/check-quality/README-sym.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/check-quality/README.md
-# AI/dev-logs/dev-updates/README-sym.md -> ../../../../CONSTRUCT-CORE/AI/dev-logs/dev-updates/README.md
-# AI/docs/README-sym.md -> ../../../CONSTRUCT-CORE/AI/docs/README.md
-# AI/todo/README-sym.md -> ../../../CONSTRUCT-CORE/AI/todo/README.md
-
-# To check symlink integrity:
-./CONSTRUCT/scripts/construct/check-symlinks.sh
-
-# If you need to modify these files:
-# 1. Create new version in LAB
-# 2. Test thoroughly
-# 3. Use promote-to-core.sh to update CORE
-```
+Error: check-symlinks.sh not found or not executable
 <!-- END:ACTIVE-SYMLINKS -->
 
 ### Shell/Python Architecture Rules
@@ -139,70 +122,62 @@ After commits, you may see deletions of structure files - this is normal cleanup
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-09 22:55:29
+Last updated: 2025-07-11 11:59:14
 
 ### Active Components
-- **Shell Scripts**: 2 files
-- **Library Functions**: 6 files
-- **Configuration Files**: 2 files  
-- **Documentation Files**:        6 files
+- **Shell Scripts**: 186 files
+- **Library Functions**: 0 files
+- **Configuration Files**: 0 files  
+- **Documentation Files**:        0 files
 
 ### Available Resources
 
 #### 🧩 Library Functions
-- common-patterns.sh - Shell library function
-- file-analysis.sh - Shell library function
-- interactive-support.sh - Shell library function
-- template-location.sh - Shell library function
-- template-utils.sh - Shell library function
-- validation.sh - Shell library function
 
 #### ⚙️ Configuration Files
-- mvvm-rules.yaml - Configuration file
-- quality-gates.yaml - Configuration file
 
 <!-- END:CURRENT-STRUCTURE -->
 
 <!-- START:SPRINT-CONTEXT -->
 ## 🎯 Current Development Context (Auto-Updated)
-**Date**: 2025-07-09
+**Date**: 2025-07-11
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: ef8f777 docs: Fix documentation issues and add plugin system PRD
+**Last Commit**: 9f80239 fix: Add construct-dev documentation generators to update-architecture.sh
 
 ### Current Focus
-- CONSTRUCT development environment (shell/Python tools)
-- USER project environment (Swift MVVM templates)
-- Cross-environment analysis and improvement system
-- Auto-generating documentation and validation
+- Active patterns and development priorities
+- Code quality and architecture compliance
+- Documentation coverage and completeness
+- Development workflow optimization
 
 ### Development Workflow
-1. Work in CONSTRUCT-LAB/ directory
-2. Use CONSTRUCT development context (this file)
-3. Test changes against PROJECT-TEMPLATE/
-4. Ensure template users aren't affected
+1. Work in project directory
+2. Use project context (this file)
+3. Run pattern-specific validators
+4. Commit changes with confidence
 <!-- END:SPRINT-CONTEXT -->
 
 <!-- START:DOCUMENTATION-LINKS -->
 ## 📚 Documentation Resources (Auto-Updated)
 
 ### Architecture Documentation
-- [Architecture Overview](AI/docs/automated/architecture-overview-automated.md) - Complete system architecture
-- [Script Reference](AI/docs/automated/script-reference-automated.md) - All available scripts and functions
-- [Development Patterns](AI/docs/automated/development-patterns-automated.md) - Standard patterns and conventions
-- [API Reference](AI/docs/automated/api-reference-automated.md) - Library function documentation
+- Architecture Overview - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate
+- Script Reference - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate
+- Development Patterns - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate
+- API Reference - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate
 
 ### Structure Analysis
-- [Current Structure](AI/structure/current-structure.md) - Quick reference to current state
+- Current Structure - Run ./CONSTRUCT/scripts/construct/scan_construct_structure.sh to generate
 - [Latest Structure Scan](AI/structure/) - Timestamped structure analysis files
 - [Structure Archive](AI/structure/_old/) - Previous structure snapshots
 
 ### Quality Reports
-- [Latest Quality Report](AI/dev-logs/check-quality/README-sym.md) - Most recent quality validation
-- [Session Summaries](AI/dev-logs/session-states/) - Development session documentation
+- Latest Quality Report - Run ./CONSTRUCT/scripts/core/check-quality.sh to generate
+- Session Summaries - Run ./CONSTRUCT/scripts/dev/session-summary.sh to generate
 
 ### Development Process
-- [Improving CONSTRUCT Guide](AI/docs/automated/improving-CONSTRUCT-guide-automated.md) - How to improve CONSTRUCT itself
+- Improving CONSTRUCT Guide - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate
 <!-- END:DOCUMENTATION-LINKS -->
 
 <!-- START:ACTIVE-PRDS -->
@@ -275,30 +250,30 @@ Run ./CONSTRUCT/scripts/core/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/check-symlinks.sh
-- CONSTRUCT-CORE/patterns/plugins/README.md
-- CONSTRUCT-CORE/patterns/README.md
-- CONSTRUCT-LAB/AI/dev-logs/check-quality/automated/quality-report-2025-07-09--21-56-20.md
-- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--21-56-23.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-09-2156-construct-session.md
-- CONSTRUCT-LAB/AI/docs/automated/api-reference-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
-- CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
+- AI/dev-logs/session-states/automated/2025-07-10-1020-construct-session.md
+- AI/dev-logs/session-states/automated/2025-07-10-1204-construct-session.md
+- AI/dev-logs/session-states/automated/2025-07-10-1214-construct-session.md
+- AI/dev-logs/session-states/automated/2025-07-10-1225-construct-session.md
+- AI/docs/automated/architecture-overview-automated.md
+- AI/quality-reports/quality-report-2025-07-10--10-20-43.md
+- AI/quality-reports/quality-report-2025-07-10--12-04-46.md
+- AI/quality-reports/quality-report-2025-07-10--12-14-22.md
+- AI/quality-reports/quality-report-2025-07-10--12-25-02.md
+- AI/quality-reports/quality-report-2025-07-10--16-16-10.md
 
 
 ### Git Status
 ```
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/README.md
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/construct/update-architecture.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-architecture.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-documentation.sh
-M  CONSTRUCT-CORE/CONSTRUCT/scripts-new/core/check-quality.sh
-M  CONSTRUCT-CORE/patterns/plugins/README.md
-R  CONSTRUCT-CORE/patterns/plugins/architectural/mvvm-ios.md -> CONSTRUCT-CORE/patterns/plugins/architectural/mvvm-ios/mvvm-ios.md
-A  CONSTRUCT-CORE/patterns/plugins/architectural/mvvm-ios/mvvm-ios.yaml
-A  CONSTRUCT-CORE/patterns/plugins/architectural/mvvm/mvvm.md
-A  CONSTRUCT-CORE/patterns/plugins/architectural/mvvm/mvvm.yaml
+ M CONSTRUCT-CORE/CONSTRUCT/scripts/construct/update-context.sh
+A  CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md
+ M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
+ M CONSTRUCT-LAB/AI/structure/current-structure.md
+ D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-10--21-25-37.md
+ D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-10--21-51-31.md
+ M CONSTRUCT-LAB/CLAUDE.md
+ D CONSTRUCT-LAB/docs/DOCUMENTATION-STRUCTURE.md
+ D CONSTRUCT-LAB/docs/promotion-quick-reference.md
+ M CONSTRUCT-LAB/patterns/plugins/registry.yaml
 ```
 
 ### Active Development Areas
