@@ -42,8 +42,17 @@ fi
 PROJECT_DIR="${1:-.}"
 PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
 
+# Determine where to write AI artifacts (fixes GitHub issue #1)
+if [ -d "$PROJECT_DIR/CONSTRUCT-CORE" ] && [ -d "$PROJECT_DIR/CONSTRUCT-LAB" ]; then
+    # This is CONSTRUCT itself - use CONSTRUCT-LAB/AI/
+    AI_DIR="$PROJECT_DIR/CONSTRUCT-LAB/AI"
+else
+    # Regular project - use PROJECT_DIR/AI/
+    AI_DIR="$PROJECT_DIR/AI"
+fi
+
 # Set structure directory for this project
-STRUCTURE_DIR="$PROJECT_DIR/AI/structure"
+STRUCTURE_DIR="$AI_DIR/structure"
 
 # Create structure directories using library function
 OLD_DIR=$(create_structure_dirs "$STRUCTURE_DIR")
@@ -317,8 +326,8 @@ else
     echo "- ❌ CLAUDE.md missing" >> "$OUTPUT_FILE"
 fi
 
-if [ -d "$PROJECT_DIR/AI/docs" ]; then
-    doc_count=$(find "$PROJECT_DIR/AI/docs" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+if [ -d "$AI_DIR/docs" ]; then
+    doc_count=$(find "$AI_DIR/docs" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
     echo "- AI documentation: $doc_count files" >> "$OUTPUT_FILE"
 else
     echo "- AI documentation directory missing" >> "$OUTPUT_FILE"
@@ -333,7 +342,7 @@ echo -e "${GREEN}✅ Structure scan complete!${NC}"
 echo "Output saved to: $OUTPUT_FILE"
 
 # Also create a simplified current structure for quick reference
-QUICK_REF="$PROJECT_DIR/AI/structure/current-structure.md"
+QUICK_REF="$AI_DIR/structure/current-structure.md"
 echo "# Current Project Structure ($(date +%Y-%m-%d))" > "$QUICK_REF"
 echo "Project: $PROJECT_DIR" >> "$QUICK_REF"
 echo "" >> "$QUICK_REF"

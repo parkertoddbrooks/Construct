@@ -1,35 +1,15 @@
-# Current CONSTRUCT Development Components (2025-07-09)
+# Current Project Structure (2025-07-10)
+Project: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT
 
-## Working AI Scripts
-assemble-claude.sh
-before_coding.sh
-check-architecture.sh
-check-documentation.sh
-check-quality.sh
-check-symlinks.sh
-commit-with-review.sh
-construct-patterns.sh
-create-project.sh
-generate-devupdate.sh
-import-component.sh
-import-project.sh
-pre-commit-review.sh
-scan_construct_structure.sh
-session-summary.sh
-setup-aliases.sh
-update-architecture.sh
-update-context.sh
-workspace-status.sh
-workspace-update.sh
+## Project Components
 
-## Library Functions
-common-patterns.sh
-file-analysis.sh
-interactive-support.sh
-template-location.sh
-template-utils.sh
-validation.sh
+### Active Patterns
+- tooling/construct-dev
+- tooling/shell-scripting
+- tooling/shell-quality
+- tooling/unix-philosophy
 
-## Configuration Files
-mvvm-rules.yaml
-quality-gates.yaml
+### Key Files
+- README.md
+- CLAUDE.md
+- .gitignore

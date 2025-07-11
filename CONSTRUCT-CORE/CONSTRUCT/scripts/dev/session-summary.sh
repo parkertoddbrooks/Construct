@@ -40,16 +40,25 @@ fi
 PROJECT_DIR="${1:-.}"
 PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
 
+# Fix for GitHub issue #1: CONSTRUCT should use CONSTRUCT-LAB/AI/
+if [ -d "$PROJECT_DIR/CONSTRUCT-CORE" ] && [ -d "$PROJECT_DIR/CONSTRUCT-LAB" ]; then
+    # This is CONSTRUCT itself - use CONSTRUCT-LAB/AI/
+    AI_DIR="$PROJECT_DIR/CONSTRUCT-LAB/AI"
+else
+    # Regular project - use PROJECT_DIR/AI/
+    AI_DIR="$PROJECT_DIR/AI"
+fi
+
 # Determine if this is a project or CONSTRUCT development
 if [ -f "$PROJECT_DIR/.construct/patterns.yaml" ]; then
     # This is a project
-    SESSION_DIR="$PROJECT_DIR/AI/dev-logs/session-states/automated"
+    SESSION_DIR="$AI_DIR/dev-logs/session-states/automated"
     IS_PROJECT=true
 else
     # This is CONSTRUCT development
     CONSTRUCT_ROOT=$(get_construct_root)
     CONSTRUCT_DEV=$(get_construct_dev)
-    SESSION_DIR="$CONSTRUCT_DEV/AI/dev-logs/session-states/automated"
+    SESSION_DIR="$AI_DIR/dev-logs/session-states/automated"
     PROJECT_DIR="$CONSTRUCT_ROOT"
     IS_PROJECT=false
 fi
@@ -143,7 +152,7 @@ $(cd "$PROJECT_DIR" && find . -name "*.sh" -newer "$SESSION_DIR/../.." 2>/dev/nu
 $(if [ -f "$PROJECT_DIR/CLAUDE.md" ]; then echo "- **CLAUDE.md**: ✅ Found"; else echo "- **CLAUDE.md**: ❌ Missing"; fi)
 $(if [ -f "$PROJECT_DIR/README.md" ]; then echo "- **README.md**: ✅ Found"; else echo "- **README.md**: ❌ Missing"; fi)
 $(if [ -d "$PROJECT_DIR/.construct" ]; then echo "- **.construct/**: ✅ CONSTRUCT patterns configured"; else echo "- **.construct/**: ❌ Not a CONSTRUCT project"; fi)
-$(if [ -d "$PROJECT_DIR/AI" ]; then echo "- **AI/**: ✅ AI documentation structure"; else echo "- **AI/**: ❌ AI documentation missing"; fi)
+$(if [ -d "$AI_DIR" ]; then echo "- **AI/**: ✅ AI documentation structure"; else echo "- **AI/**: ❌ AI documentation missing"; fi)
 
 ## 🚀 Next Development Session
 
@@ -191,7 +200,7 @@ fi)
 
 ### Key Files for Next Session
 - **Project Context**: $([ -f "$PROJECT_DIR/CLAUDE.md" ] && echo "$PROJECT_DIR/CLAUDE.md" || echo "Create CLAUDE.md for AI context")
-- **Documentation**: $([ -d "$PROJECT_DIR/AI/docs" ] && echo "$PROJECT_DIR/AI/docs/" || echo "No AI documentation found")
+- **Documentation**: $([ -d "$AI_DIR/docs" ] && echo "$AI_DIR/docs/" || echo "No AI documentation found")
 - **Patterns Config**: $([ -f "$PROJECT_DIR/.construct/patterns.yaml" ] && echo "$PROJECT_DIR/.construct/patterns.yaml" || echo "Not a CONSTRUCT project")
 - **Recent Changes**: Review git log and uncommitted files
 

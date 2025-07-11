@@ -6,7 +6,12 @@ category: tooling
 validators:
   - architecture
   - documentation
-  - generate-architecture
+generators:
+  - architecture
+  - script-reference
+  - development-patterns
+  - improving-guide
+  - api-reference
 dependencies:
   - tooling/shell-scripting
   - tooling/unix-philosophy

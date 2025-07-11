@@ -51,8 +51,17 @@ echo -e "${BLUE}📚 Updating Project Architecture Documentation...${NC}"
 echo "Project: $PROJECT_DIR"
 echo ""
 
+# Determine where to write AI artifacts (fixes GitHub issue #1)
+if [ -d "$PROJECT_DIR/CONSTRUCT-CORE" ] && [ -d "$PROJECT_DIR/CONSTRUCT-LAB" ]; then
+    # This is CONSTRUCT itself - use CONSTRUCT-LAB/AI/
+    AI_DIR="$PROJECT_DIR/CONSTRUCT-LAB/AI"
+else
+    # Regular project - use PROJECT_DIR/AI/
+    AI_DIR="$PROJECT_DIR/AI"
+fi
+
 # Create docs directory if it doesn't exist
-DOCS_DIR="$PROJECT_DIR/AI/docs/automated"
+DOCS_DIR="$AI_DIR/docs/automated"
 mkdir -p "$DOCS_DIR"
 mkdir -p "$DOCS_DIR/_old"
 
@@ -187,8 +196,6 @@ run_pattern_generators() {
             echo -e "${YELLOW}→ No architecture generator for pattern: $pattern${NC}"
         fi
     done <<< "$patterns"
-    
-    return $patterns_run
 }
 
 # Generate pattern-specific documentation list
@@ -198,8 +205,8 @@ generate_pattern_documentation_list() {
     # Check what pattern-specific docs exist
     local has_docs=false
     
-    if [ -d "$PROJECT_DIR/AI/docs/patterns" ]; then
-        local pattern_docs=$(find "$PROJECT_DIR/AI/docs/patterns" -name "*.md" -type f 2>/dev/null)
+    if [ -d "$AI_DIR/docs/patterns" ]; then
+        local pattern_docs=$(find "$AI_DIR/docs/patterns" -name "*.md" -type f 2>/dev/null)
         if [ -n "$pattern_docs" ]; then
             echo "" >> "$output_file"
             echo "## Additional Documentation" >> "$output_file"
@@ -233,20 +240,14 @@ main() {
     
     # Run pattern-specific generators
     run_pattern_generators
-    local patterns_run=$?
     
-    # If no pattern generators ran, add generic content
-    if [ $patterns_run -eq 0 ]; then
-        echo -e "${YELLOW}No pattern-specific architecture generators found${NC}"
-        echo "" >> "$DOCS_DIR/architecture-overview-automated.md"
-        echo "## Project Structure" >> "$DOCS_DIR/architecture-overview-automated.md"
-        echo "" >> "$DOCS_DIR/architecture-overview-automated.md"
-        echo "This project does not have pattern-specific architecture documentation." >> "$DOCS_DIR/architecture-overview-automated.md"
-        echo "Add patterns to .construct/patterns.yaml to enable specialized documentation." >> "$DOCS_DIR/architecture-overview-automated.md"
-    fi
+    # Pattern generators already ran, skip generic content
     
     # Add documentation list
     generate_pattern_documentation_list
+    
+    # Run construct-dev generators if active
+    run_construct_dev_generators
     
     # Add footer
     echo "" >> "$DOCS_DIR/architecture-overview-automated.md"
@@ -259,10 +260,63 @@ main() {
     echo ""
     echo "Generated documentation:"
     echo "  - $DOCS_DIR/architecture-overview-automated.md"
+    
+    # List additional construct-dev docs if generated
+    if [ -f "$DOCS_DIR/script-reference-automated.md" ]; then
+        echo "  - $DOCS_DIR/script-reference-automated.md"
+    fi
+    if [ -f "$DOCS_DIR/development-patterns-automated.md" ]; then
+        echo "  - $DOCS_DIR/development-patterns-automated.md"
+    fi
+    if [ -f "$DOCS_DIR/api-reference-automated.md" ]; then
+        echo "  - $DOCS_DIR/api-reference-automated.md"
+    fi
+    if [ -f "$DOCS_DIR/improving-CONSTRUCT-guide-automated.md" ]; then
+        echo "  - $DOCS_DIR/improving-CONSTRUCT-guide-automated.md"
+    fi
+    
     echo ""
     echo "Next steps:"
     echo "  update-context $PROJECT_DIR      # Update project context"
     echo "  check-quality $PROJECT_DIR       # Validate documentation quality"
+}
+
+# Run construct-dev specific generators if active
+run_construct_dev_generators() {
+    local patterns=$(get_active_patterns "$PATTERNS_FILE")
+    
+    # Check if construct-dev pattern is active
+    if echo "$patterns" | grep -q "tooling/construct-dev"; then
+        echo -e "${BLUE}Running CONSTRUCT development documentation generators...${NC}"
+        
+        local generators_dir="$CONSTRUCT_CORE/patterns/plugins/tooling/construct-dev/generators"
+        
+        # Run script reference generator
+        if [ -f "$generators_dir/script-reference.sh" ]; then
+            echo -e "${GREEN}→ Generating script reference${NC}"
+            bash "$generators_dir/script-reference.sh" "$PROJECT_DIR" > "$DOCS_DIR/script-reference-automated.md"
+        fi
+        
+        # Run development patterns generator
+        if [ -f "$generators_dir/development-patterns.sh" ]; then
+            echo -e "${GREEN}→ Generating development patterns${NC}"
+            bash "$generators_dir/development-patterns.sh" "$PROJECT_DIR" > "$DOCS_DIR/development-patterns-automated.md"
+        fi
+        
+        # Run API reference generator
+        if [ -f "$generators_dir/api-reference.sh" ]; then
+            echo -e "${GREEN}→ Generating API reference${NC}"
+            bash "$generators_dir/api-reference.sh" "$PROJECT_DIR" > "$DOCS_DIR/api-reference-automated.md"
+        fi
+        
+        # Run improving guide generator
+        if [ -f "$generators_dir/improving-guide.sh" ]; then
+            echo -e "${GREEN}→ Generating improving CONSTRUCT guide${NC}"
+            bash "$generators_dir/improving-guide.sh" "$PROJECT_DIR" > "$DOCS_DIR/improving-CONSTRUCT-guide-automated.md"
+        fi
+        
+        echo -e "${GREEN}✅ CONSTRUCT development documentation generated${NC}"
+    fi
 }
 
 # Run main function

@@ -118,6 +118,27 @@ CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-09--23-24-52/updat
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-09--23-24-52/update-context.sh
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-09--23-24-52/workspace-status.sh
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-09--23-24-52/workspace-update.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/assemble-claude.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/before_coding.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/check-architecture.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/check-documentation.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/check-quality.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/check-symlinks.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/check-symlinks.sh.bak
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/commit-with-review.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/construct-patterns.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/create-project.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/generate-devupdate.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/import-component.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/import-project.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/pre-commit-review.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/scan_construct_structure.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/session-summary.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/setup-aliases.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/update-architecture.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/update-context.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/workspace-status.sh
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/workspace-update.sh
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54/_git-ignore/check-symlinks.sh.bak
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54/construct/assemble-claude.sh
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54/construct/check-symlinks.sh
@@ -202,7 +223,11 @@ CONSTRUCT-CORE/patterns/plugins/frameworks/ios-ui-library/validators/usage.sh
 CONSTRUCT-CORE/patterns/plugins/languages/csharp/validators/quality.sh
 CONSTRUCT-CORE/patterns/plugins/languages/python/validators/quality.sh
 CONSTRUCT-CORE/patterns/plugins/languages/swift/validators/quality.sh
+CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/generators/api-reference.sh
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/generators/architecture.sh
+CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/generators/development-patterns.sh
+CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/generators/improving-guide.sh
+CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/generators/script-reference.sh
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/validators/architecture.sh
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/validators/documentation.sh
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-quality/validators/quality.sh
@@ -210,9 +235,9 @@ CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/validators/architecture.
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/validators/documentation.sh
 CONSTRUCT-LAB/tools/promote-to-core.sh
 CONSTRUCT-LAB/tools/validate-promotion.sh
+Projects/_ai-ignore_not-used/test003/.construct/CLAUDE.md.sha256
 Projects/_ai-ignore_not-used/test01/.construct/CLAUDE.md.sha256
 Projects/_ai-ignore_not-used/TestPatternProject/.construct/CLAUDE.md.sha256
-Projects/test003/.construct/CLAUDE.md.sha256
 ```
 
 ## YAML Configuration Files
@@ -222,6 +247,7 @@ _ai-ignore_not-used/_old-file-system/CONSTRUCT-dev/CONSTRUCT/config/quality-gate
 _trash/test-ios-project/.construct/patterns.yaml
 _trash/test-project/.construct/patterns.yaml
 .construct-workspace/registry.yaml
+.construct/patterns.yaml
 CONSTRUCT-CORE/CONSTRUCT/config/mvvm-rules.yaml
 CONSTRUCT-CORE/CONSTRUCT/config/quality-gates.yaml
 CONSTRUCT-CORE/patterns/plugins/architectural/mvvm-ios/mvvm-ios.yaml
@@ -242,11 +268,12 @@ CONSTRUCT-CORE/patterns/plugins/tooling/unix-philosophy/unix-philosophy.yaml
 CONSTRUCT-CORE/patterns/templates/patterns.yaml
 CONSTRUCT-CORE/patterns/templates/project-sets.yaml
 CONSTRUCT-LAB/.construct/patterns.yaml
+CONSTRUCT-LAB/patterns/plugins/registry.yaml
 CONSTRUCT-LAB/PROMOTE-TO-CORE.yaml
+Projects/_ai-ignore_not-used/test003/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/test01/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/TestPatternProject/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/TestProject/.construct/patterns.yaml
-Projects/test003/.construct/patterns.yaml
 ```
 
 ## Markdown Documentation Files
@@ -466,7 +493,45 @@ _ai-ignore_not-used/_old-file-system/PROJECT-TEMPLATE/USER-CHOSEN-NAME/USER-CHOS
 _ai-ignore_not-used/_old-file-system/PROJECT-TEMPLATE/USER-CHOSEN-NAME/USER-CHOSEN-NAME-Project/Watch-App/Shared/Services/README.md
 _ai-ignore_not-used/_old-file-system/PROJECT-TEMPLATE/USER-CHOSEN-NAME/USER-CHOSEN-NAME-Project/Watch-App/Tests/README.md
 _ai-ignore_not-used/_old-file-system/README.md
+_ai-ignore_not-used/AI - 2/dev-logs/session-states/automated/2025-07-10-1020-construct-session.md
+_ai-ignore_not-used/AI - 2/dev-logs/session-states/automated/2025-07-10-1204-construct-session.md
+_ai-ignore_not-used/AI - 2/dev-logs/session-states/automated/2025-07-10-1214-construct-session.md
+_ai-ignore_not-used/AI - 2/dev-logs/session-states/automated/2025-07-10-1225-construct-session.md
+_ai-ignore_not-used/AI - 2/dev-logs/session-states/automated/2025-07-10-1616-construct-session.md
+_ai-ignore_not-used/AI - 2/dev-logs/session-states/automated/2025-07-10-2027-construct-session.md
+_ai-ignore_not-used/AI - 2/dev-logs/session-states/automated/2025-07-10-2038-construct-session.md
+_ai-ignore_not-used/AI - 2/docs/automated/architecture-overview-automated.md
+_ai-ignore_not-used/AI - 2/quality-reports/quality-report-2025-07-10--10-20-43.md
+_ai-ignore_not-used/AI - 2/quality-reports/quality-report-2025-07-10--12-04-46.md
+_ai-ignore_not-used/AI - 2/quality-reports/quality-report-2025-07-10--12-14-22.md
+_ai-ignore_not-used/AI - 2/quality-reports/quality-report-2025-07-10--12-25-02.md
+_ai-ignore_not-used/AI - 2/quality-reports/quality-report-2025-07-10--16-16-10.md
+_ai-ignore_not-used/AI - 2/quality-reports/quality-report-2025-07-10--20-27-06.md
+_ai-ignore_not-used/AI - 2/quality-reports/quality-report-2025-07-10--20-38-19.md
+_ai-ignore_not-used/AI - 2/structure/_old/project-structure-2025-07-10--10-14-19.md
+_ai-ignore_not-used/AI - 2/structure/_old/project-structure-2025-07-10--10-20-43.md
+_ai-ignore_not-used/AI - 2/structure/_old/project-structure-2025-07-10--12-04-46.md
+_ai-ignore_not-used/AI - 2/structure/_old/project-structure-2025-07-10--12-14-22.md
+_ai-ignore_not-used/AI - 2/structure/_old/project-structure-2025-07-10--12-25-02.md
+_ai-ignore_not-used/AI - 2/structure/_old/project-structure-2025-07-10--16-16-10.md
+_ai-ignore_not-used/AI - 2/structure/_old/project-structure-2025-07-10--20-27-06.md
+_ai-ignore_not-used/AI - 2/structure/current-structure.md
+_ai-ignore_not-used/AI - 2/structure/project-structure-2025-07-10--20-38-19.md
 _ai-ignore_not-used/CLAUDE.md
+_ai-ignore_not-used/README-ARCHIVE/README--2025-07-10--12-15-04.md
+_ai-ignore_not-used/README-ARCHIVE/README--2025-07-10--15-21-37.md
+_ai-ignore_not-used/README-ARCHIVE/README--2025-07-10--15-41-17.md
+_ai-ignore_not-used/README-ARCHIVE/README--2025-07-10--15-49-22.md
+_ai-ignore_not-used/README-ARCHIVE/README--2025-07-10--16-14-33.md
+_ai-ignore_not-used/README-ARCHIVE/readme-future--2025-07-10--15-34-21.md
+_ai-ignore_not-used/README-ARCHIVE/readme-future-02--2025-07-10--15-33-38.md
+_ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--15-59-10.md
+_ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-04-41.md
+_ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-06-46.md
+_ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-10-25.md
+_ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-10-58.md
+_ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-14-31.md
+_ai-ignore_not-used/README-ARCHIVE/README.md
 _trash/CONSTRUCT-CORE/AI/todo/README.md
 _trash/CONSTRUCT-CORE/AI/todo/test-file.md
 _trash/test-ios-project/AI/dev-logs/check-quality/README.md
@@ -476,8 +541,6 @@ _trash/test-ios-project/AI/docs/README.md
 _trash/test-ios-project/AI/todo/README.md
 _trash/test-ios-project/CLAUDE.md
 _trash/test-project/CLAUDE.md
-AI/docs/automated/architecture-overview-automated.md
-AI/structure/project-structure-2025-07-10--10-14-19.md
 CLAUDE.md
 CONSTRUCT-CORE/_ai-ignore_not-used/CLAUDE--2025-07-09--18-03-27.md
 CONSTRUCT-CORE/CLAUDE-BASE.md
@@ -485,6 +548,8 @@ CONSTRUCT-CORE/CLAUDE.md
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-08--20-17-09/README.md
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-09--23-24-52/DEV-NOTICE.md
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-09--23-24-52/README.md
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/DEV-NOTICE.md
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/README.md
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54/DEV-NOTICE.md
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54/INTERACTIVE-SUPPORT-STATUS.md
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54/patterns/README.md
@@ -537,6 +602,7 @@ CONSTRUCT-CORE/TEMPLATES/project-templates/swift-ios+watch/Watch-App/Shared/Serv
 CONSTRUCT-CORE/TEMPLATES/project-templates/swift-ios+watch/Watch-App/Tests/README.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/claude-ui-opus-feedback.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/combining-construct-w-claude-commands.md
+CONSTRUCT-LAB/AI/ai-misc-conversations/construct-feedback-opus-07-10-2025.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/construct-simple-new.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/editing-core-construct.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/how-mutiple-claudeme-rules-work.md
@@ -738,6 +804,14 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--17-11-45.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--18-32-48.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--21-56-23.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--22-55-28.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--10-14-21.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--10-20-45.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--12-04-48.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--12-14-24.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--12-25-04.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--16-16-13.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--20-27-08.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--20-38-21.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-2223-construct-session.md
@@ -818,6 +892,8 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-09-1711-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-09-1832-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-09-2156-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-09-2255-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-10-1014-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-10-2125-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -930,6 +1006,7 @@ CONSTRUCT-LAB/AI/PRDs/prd-updates-2025-06-28.md
 CONSTRUCT-LAB/AI/PRDs/swift-claude-starter-template-prd-info.md
 CONSTRUCT-LAB/AI/PRDs/swift-claude-starter-template-prd.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-08--22-39-03.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-10--21-51-31.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -1033,8 +1110,10 @@ CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-09--10-42-50.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-09--17-11-45.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-09--18-32-47.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-09--21-56-22.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-10--21-25-37.md
 CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--22-55-28.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
+CONSTRUCT-LAB/AI/structure/project-structure-2025-07-10--21-51-31.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-03.md
@@ -1097,10 +1176,44 @@ docs/ARCHITECTURE-CHEATSHEET/CONSTRUCT-ARCHITECTURE-CHEATSHEET.md
 docs/core/distributed-quality-examples.md
 docs/core/distributed-quality-philosophy.md
 docs/core/promotion-system-guide.md
+docs/core/README.md
 docs/core/symlink-promotion-rules.md
+docs/core/workspace-management.md
+docs/DOCS-INDEX.md
 docs/features/interactive-scripts.md
 docs/features/repository-context.md
 docs/README-INDEX.md
+docs/README.md
+docs/STRUCTURE.md
+Projects/_ai-ignore_not-used/test003/.construct/CLAUDE.md.sha256
+Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI/dev-logs/check-quality/README.md
+Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md
+Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/README.md
+Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI/docs/README.md
+Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI/todo/README.md
+Projects/_ai-ignore_not-used/test003/AI/dev-logs/check-quality/README.md
+Projects/_ai-ignore_not-used/test003/AI/dev-logs/dev-updates/_devupdate-prompt.md
+Projects/_ai-ignore_not-used/test003/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--10-14-11.md
+Projects/_ai-ignore_not-used/test003/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--10-16-46.md
+Projects/_ai-ignore_not-used/test003/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--10-20-55.md
+Projects/_ai-ignore_not-used/test003/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--10-22-58.md
+Projects/_ai-ignore_not-used/test003/AI/dev-logs/dev-updates/README.md
+Projects/_ai-ignore_not-used/test003/AI/dev-logs/session-states/automated/2025-07-09-1020-construct-session.md
+Projects/_ai-ignore_not-used/test003/AI/dev-logs/session-states/automated/2025-07-09-1022-construct-session.md
+Projects/_ai-ignore_not-used/test003/AI/dev-logs/session-states/automated/2025-07-09-1041-construct-session.md
+Projects/_ai-ignore_not-used/test003/AI/docs/automated/architecture-overview-automated.md
+Projects/_ai-ignore_not-used/test003/AI/docs/README.md
+Projects/_ai-ignore_not-used/test003/AI/quality-reports/quality-report-2025-07-09--10-14-11.md
+Projects/_ai-ignore_not-used/test003/AI/quality-reports/quality-report-2025-07-09--10-16-46.md
+Projects/_ai-ignore_not-used/test003/AI/quality-reports/quality-report-2025-07-09--10-20-54.md
+Projects/_ai-ignore_not-used/test003/AI/quality-reports/quality-report-2025-07-09--10-22-57.md
+Projects/_ai-ignore_not-used/test003/AI/structure/_old/project-structure-2025-07-09--10-14-11.md
+Projects/_ai-ignore_not-used/test003/AI/structure/_old/project-structure-2025-07-09--10-16-46.md
+Projects/_ai-ignore_not-used/test003/AI/structure/_old/project-structure-2025-07-09--10-20-54.md
+Projects/_ai-ignore_not-used/test003/AI/structure/current-structure.md
+Projects/_ai-ignore_not-used/test003/AI/structure/project-structure-2025-07-09--10-22-58.md
+Projects/_ai-ignore_not-used/test003/AI/todo/README.md
+Projects/_ai-ignore_not-used/test003/CLAUDE.md
 Projects/_ai-ignore_not-used/test01/.construct/CLAUDE.md.sha256
 Projects/_ai-ignore_not-used/test01/AI/_git-ignore/template-structure/AI/dev-logs/check-quality/README.md
 Projects/_ai-ignore_not-used/test01/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md
@@ -1115,35 +1228,6 @@ Projects/_ai-ignore_not-used/test01/AI/todo/README.md
 Projects/_ai-ignore_not-used/test01/CLAUDE.md
 Projects/_ai-ignore_not-used/TestPatternProject/.construct/CLAUDE.md.sha256
 Projects/_ai-ignore_not-used/TestPatternProject/CLAUDE.md
-Projects/test003/.construct/CLAUDE.md.sha256
-Projects/test003/AI/_git-ignore/template-structure/AI/dev-logs/check-quality/README.md
-Projects/test003/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md
-Projects/test003/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/README.md
-Projects/test003/AI/_git-ignore/template-structure/AI/docs/README.md
-Projects/test003/AI/_git-ignore/template-structure/AI/todo/README.md
-Projects/test003/AI/dev-logs/check-quality/README.md
-Projects/test003/AI/dev-logs/dev-updates/_devupdate-prompt.md
-Projects/test003/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--10-14-11.md
-Projects/test003/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--10-16-46.md
-Projects/test003/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--10-20-55.md
-Projects/test003/AI/dev-logs/dev-updates/automated/devupdate--2025-07-09--10-22-58.md
-Projects/test003/AI/dev-logs/dev-updates/README.md
-Projects/test003/AI/dev-logs/session-states/automated/2025-07-09-1020-construct-session.md
-Projects/test003/AI/dev-logs/session-states/automated/2025-07-09-1022-construct-session.md
-Projects/test003/AI/dev-logs/session-states/automated/2025-07-09-1041-construct-session.md
-Projects/test003/AI/docs/automated/architecture-overview-automated.md
-Projects/test003/AI/docs/README.md
-Projects/test003/AI/quality-reports/quality-report-2025-07-09--10-14-11.md
-Projects/test003/AI/quality-reports/quality-report-2025-07-09--10-16-46.md
-Projects/test003/AI/quality-reports/quality-report-2025-07-09--10-20-54.md
-Projects/test003/AI/quality-reports/quality-report-2025-07-09--10-22-57.md
-Projects/test003/AI/structure/_old/project-structure-2025-07-09--10-14-11.md
-Projects/test003/AI/structure/_old/project-structure-2025-07-09--10-16-46.md
-Projects/test003/AI/structure/_old/project-structure-2025-07-09--10-20-54.md
-Projects/test003/AI/structure/current-structure.md
-Projects/test003/AI/structure/project-structure-2025-07-09--10-22-58.md
-Projects/test003/AI/todo/README.md
-Projects/test003/CLAUDE.md
 README.md
 requirements.md
 ```
@@ -1239,6 +1323,26 @@ _ai-ignore_not-used/_old-file-system/PROJECT-TEMPLATE/USER-CHOSEN-NAME/CONSTRUCT
   - update-context.sh
 
 CONSTRUCT-CORE/CONSTRUCT/:
+  - assemble-claude.sh
+  - before_coding.sh
+  - check-architecture.sh
+  - check-documentation.sh
+  - check-quality.sh
+  - check-symlinks.sh
+  - commit-with-review.sh
+  - construct-patterns.sh
+  - create-project.sh
+  - generate-devupdate.sh
+  - import-component.sh
+  - import-project.sh
+  - pre-commit-review.sh
+  - scan_construct_structure.sh
+  - session-summary.sh
+  - setup-aliases.sh
+  - update-architecture.sh
+  - update-context.sh
+  - workspace-status.sh
+  - workspace-update.sh
   - assemble-claude.sh
   - before_coding.sh
   - check-architecture.sh
@@ -1401,6 +1505,28 @@ CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-09--23-24-52/:
   - workspace-status.sh
   - workspace-update.sh
 
+CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41/:
+  - assemble-claude.sh
+  - before_coding.sh
+  - check-architecture.sh
+  - check-documentation.sh
+  - check-quality.sh
+  - check-symlinks.sh
+  - commit-with-review.sh
+  - construct-patterns.sh
+  - create-project.sh
+  - generate-devupdate.sh
+  - import-component.sh
+  - import-project.sh
+  - pre-commit-review.sh
+  - scan_construct_structure.sh
+  - session-summary.sh
+  - setup-aliases.sh
+  - update-architecture.sh
+  - update-context.sh
+  - workspace-status.sh
+  - workspace-update.sh
+
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54/construct/:
   - assemble-claude.sh
   - check-symlinks.sh
@@ -1522,7 +1648,11 @@ CONSTRUCT-CORE/patterns/plugins/languages/swift/validators/:
   - quality.sh
 
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/generators/:
+  - api-reference.sh
   - architecture.sh
+  - development-patterns.sh
+  - improving-guide.sh
+  - script-reference.sh
 
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/validators/:
   - architecture.sh
@@ -1563,10 +1693,20 @@ test-runner.sh
   .
   _ai-ignore_not-used
   _ai-ignore_not-used/AI
+  _ai-ignore_not-used/AI - 2
+  _ai-ignore_not-used/AI - 2/dev-logs
+  _ai-ignore_not-used/AI - 2/dev-logs/session-states
+  _ai-ignore_not-used/AI - 2/dev-logs/session-states/automated
+  _ai-ignore_not-used/AI - 2/docs
+  _ai-ignore_not-used/AI - 2/docs/automated
+  _ai-ignore_not-used/AI - 2/quality-reports
+  _ai-ignore_not-used/AI - 2/structure
   _ai-ignore_not-used/CONSTRUCT
   _ai-ignore_not-used/CONSTRUCT-LAB
   _ai-ignore_not-used/CONSTRUCT-LAB/AI
   _ai-ignore_not-used/CONSTRUCT-LAB/AI/todo
+  _ai-ignore_not-used/README-ARCHIVE
+  _ai-ignore_not-used/readme-backups
   _ai-ignore_not-used/swift
   _ai-ignore_not-used/swift/iOS-App
   _ai-ignore_not-used/swift/Watch-App
@@ -1606,18 +1746,16 @@ test-runner.sh
   _trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/docs
   _trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/todo
   .claude
+  .construct
   .construct-workspace
   .construct-workspace/import-history
-  AI
-  AI/docs
-  AI/docs/automated
-  AI/structure
   CONSTRUCT-CORE
   CONSTRUCT-CORE/_ai-ignore_not-used
   CONSTRUCT-CORE/CONSTRUCT
   CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used
   CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-08--20-17-09
   CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-09--23-24-52
+  CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-backup-20250710-094133--2025-07-10--21-33-41
   CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54
   CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54/_git-ignore
   CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54/construct
@@ -1805,6 +1943,39 @@ test-runner.sh
   docs/features
   Projects
   Projects/_ai-ignore_not-used
+  Projects/_ai-ignore_not-used/test003
+  Projects/_ai-ignore_not-used/test003/.construct
+  Projects/_ai-ignore_not-used/test003/AI
+  Projects/_ai-ignore_not-used/test003/AI/_git-ignore
+  Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure
+  Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI
+  Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI/dev-logs
+  Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI/dev-logs/check-quality
+  Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates
+  Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI/docs
+  Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI/todo
+  Projects/_ai-ignore_not-used/test003/AI/ai-misc-conversations
+  Projects/_ai-ignore_not-used/test003/AI/ai-raw-cli
+  Projects/_ai-ignore_not-used/test003/AI/dev-logs
+  Projects/_ai-ignore_not-used/test003/AI/dev-logs/check-quality
+  Projects/_ai-ignore_not-used/test003/AI/dev-logs/check-quality/automated
+  Projects/_ai-ignore_not-used/test003/AI/dev-logs/dev-updates
+  Projects/_ai-ignore_not-used/test003/AI/dev-logs/dev-updates/automated
+  Projects/_ai-ignore_not-used/test003/AI/dev-logs/session-states
+  Projects/_ai-ignore_not-used/test003/AI/dev-logs/session-states/automated
+  Projects/_ai-ignore_not-used/test003/AI/docs
+  Projects/_ai-ignore_not-used/test003/AI/docs/automated
+  Projects/_ai-ignore_not-used/test003/AI/docs/automated/_archive
+  Projects/_ai-ignore_not-used/test003/AI/examples
+  Projects/_ai-ignore_not-used/test003/AI/PRDs
+  Projects/_ai-ignore_not-used/test003/AI/PRDs/_archive
+  Projects/_ai-ignore_not-used/test003/AI/PRDs/current-sprint
+  Projects/_ai-ignore_not-used/test003/AI/PRDs/full-app
+  Projects/_ai-ignore_not-used/test003/AI/PRDs/future
+  Projects/_ai-ignore_not-used/test003/AI/quality-reports
+  Projects/_ai-ignore_not-used/test003/AI/structure
+  Projects/_ai-ignore_not-used/test003/AI/todo
+  Projects/_ai-ignore_not-used/test003/AI/todo/_done
   Projects/_ai-ignore_not-used/test01
   Projects/_ai-ignore_not-used/test01/.construct
   Projects/_ai-ignore_not-used/test01/AI
@@ -1842,39 +2013,6 @@ test-runner.sh
   Projects/_ai-ignore_not-used/TestProject
   Projects/_ai-ignore_not-used/TestProject/.construct
   Projects/_ai-ignore_not-used/TestProject2
-  Projects/test003
-  Projects/test003/.construct
-  Projects/test003/AI
-  Projects/test003/AI/_git-ignore
-  Projects/test003/AI/_git-ignore/template-structure
-  Projects/test003/AI/_git-ignore/template-structure/AI
-  Projects/test003/AI/_git-ignore/template-structure/AI/dev-logs
-  Projects/test003/AI/_git-ignore/template-structure/AI/dev-logs/check-quality
-  Projects/test003/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates
-  Projects/test003/AI/_git-ignore/template-structure/AI/docs
-  Projects/test003/AI/_git-ignore/template-structure/AI/todo
-  Projects/test003/AI/ai-misc-conversations
-  Projects/test003/AI/ai-raw-cli
-  Projects/test003/AI/dev-logs
-  Projects/test003/AI/dev-logs/check-quality
-  Projects/test003/AI/dev-logs/check-quality/automated
-  Projects/test003/AI/dev-logs/dev-updates
-  Projects/test003/AI/dev-logs/dev-updates/automated
-  Projects/test003/AI/dev-logs/session-states
-  Projects/test003/AI/dev-logs/session-states/automated
-  Projects/test003/AI/docs
-  Projects/test003/AI/docs/automated
-  Projects/test003/AI/docs/automated/_archive
-  Projects/test003/AI/examples
-  Projects/test003/AI/PRDs
-  Projects/test003/AI/PRDs/_archive
-  Projects/test003/AI/PRDs/current-sprint
-  Projects/test003/AI/PRDs/full-app
-  Projects/test003/AI/PRDs/future
-  Projects/test003/AI/quality-reports
-  Projects/test003/AI/structure
-  Projects/test003/AI/todo
-  Projects/test003/AI/todo/_done
 ```
 
 ## Configuration Analysis
@@ -1885,16 +2023,21 @@ No config directory found
 ## Summary Statistics
 ```
 === File Counts ===
-Shell Scripts: 162
-YAML Configs: 30
-Markdown Docs: 759
+Shell Scripts: 186
+YAML Configs: 32
+Markdown Docs: 816
 Python Files: 0
 
 === Directory Structure ===
-Total Directories: 463
+Total Directories: 471
 
 === Project Health ===
-Pattern Configuration: Not found (.construct/patterns.yaml)
+Pattern Configuration: Found
+Active Patterns:
+  - tooling/construct-dev
+  - tooling/shell-scripting
+  - tooling/shell-quality
+  - tooling/unix-philosophy
 ```
 
 ## Project Insights
@@ -1905,8 +2048,8 @@ Pattern Configuration: Not found (.construct/patterns.yaml)
 ### Documentation Status
 - ✅ README.md found
 - ✅ CLAUDE.md found
-- AI documentation: 1 files
+- AI documentation: 5 files
 
 ---
-*Generated by scan_project_structure.sh on Thu Jul 10 10:14:21 PDT 2025*
+*Generated by scan_project_structure.sh on Thu Jul 10 21:51:33 PDT 2025*
 *Project: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT*

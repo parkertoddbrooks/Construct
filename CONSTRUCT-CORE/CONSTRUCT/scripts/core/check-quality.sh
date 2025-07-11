@@ -42,6 +42,15 @@ fi
 PROJECT_DIR="${1:-.}"
 PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
 
+# Fix for GitHub issue #1: CONSTRUCT should use CONSTRUCT-LAB/AI/
+if [ -d "$PROJECT_DIR/CONSTRUCT-CORE" ] && [ -d "$PROJECT_DIR/CONSTRUCT-LAB" ]; then
+    # This is CONSTRUCT itself - use CONSTRUCT-LAB/AI/
+    AI_DIR="$PROJECT_DIR/CONSTRUCT-LAB/AI"
+else
+    # Regular project - use PROJECT_DIR/AI/
+    AI_DIR="$PROJECT_DIR/AI"
+fi
+
 # Detect CONSTRUCT_CORE location (handles both LAB symlink and direct usage)
 if [ -d "$SCRIPTS_ROOT/../../CONSTRUCT-CORE" ]; then
     CONSTRUCT_CORE="$(cd "$SCRIPTS_ROOT/../../CONSTRUCT-CORE" && pwd)"
@@ -167,7 +176,7 @@ main() {
     done <<< "$active_patterns"
     
     # Generate quality report in project's AI directory
-    local report_dir="$PROJECT_DIR/AI/quality-reports"
+    local report_dir="$AI_DIR/quality-reports"
     mkdir -p "$report_dir" 2>/dev/null || true
     
     # Get repository info
