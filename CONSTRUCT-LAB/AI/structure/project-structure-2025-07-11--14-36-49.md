@@ -1,5 +1,5 @@
 # Project Structure Scan
-**Date**: 2025-07-10
+**Date**: 2025-07-11
 **Repo**: Construct
 **Remote**: git@github.com:parkertoddbrooks/Construct.git
 **Branch**: refactor/core-lab-templates
@@ -244,8 +244,8 @@ Projects/_ai-ignore_not-used/TestPatternProject/.construct/CLAUDE.md.sha256
 ```
 _ai-ignore_not-used/_old-file-system/CONSTRUCT-dev/CONSTRUCT/config/mvvm-rules.yaml
 _ai-ignore_not-used/_old-file-system/CONSTRUCT-dev/CONSTRUCT/config/quality-gates.yaml
-_trash/test-ios-project/.construct/patterns.yaml
-_trash/test-project/.construct/patterns.yaml
+_ai-ignore_not-used/_trash/test-ios-project/.construct/patterns.yaml
+_ai-ignore_not-used/_trash/test-project/.construct/patterns.yaml
 .construct-workspace/registry.yaml
 .construct/patterns.yaml
 CONSTRUCT-CORE/CONSTRUCT/config/mvvm-rules.yaml
@@ -493,6 +493,15 @@ _ai-ignore_not-used/_old-file-system/PROJECT-TEMPLATE/USER-CHOSEN-NAME/USER-CHOS
 _ai-ignore_not-used/_old-file-system/PROJECT-TEMPLATE/USER-CHOSEN-NAME/USER-CHOSEN-NAME-Project/Watch-App/Shared/Services/README.md
 _ai-ignore_not-used/_old-file-system/PROJECT-TEMPLATE/USER-CHOSEN-NAME/USER-CHOSEN-NAME-Project/Watch-App/Tests/README.md
 _ai-ignore_not-used/_old-file-system/README.md
+_ai-ignore_not-used/_trash/CONSTRUCT-CORE/AI/todo/README.md
+_ai-ignore_not-used/_trash/CONSTRUCT-CORE/AI/todo/test-file.md
+_ai-ignore_not-used/_trash/test-ios-project/AI/dev-logs/check-quality/README.md
+_ai-ignore_not-used/_trash/test-ios-project/AI/dev-logs/dev-updates/_devupdate-prompt.md
+_ai-ignore_not-used/_trash/test-ios-project/AI/dev-logs/dev-updates/README.md
+_ai-ignore_not-used/_trash/test-ios-project/AI/docs/README.md
+_ai-ignore_not-used/_trash/test-ios-project/AI/todo/README.md
+_ai-ignore_not-used/_trash/test-ios-project/CLAUDE.md
+_ai-ignore_not-used/_trash/test-project/CLAUDE.md
 _ai-ignore_not-used/AI - 2/dev-logs/session-states/automated/2025-07-10-1020-construct-session.md
 _ai-ignore_not-used/AI - 2/dev-logs/session-states/automated/2025-07-10-1204-construct-session.md
 _ai-ignore_not-used/AI - 2/dev-logs/session-states/automated/2025-07-10-1214-construct-session.md
@@ -532,15 +541,6 @@ _ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-10-25.md
 _ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-10-58.md
 _ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-14-31.md
 _ai-ignore_not-used/README-ARCHIVE/README.md
-_trash/CONSTRUCT-CORE/AI/todo/README.md
-_trash/CONSTRUCT-CORE/AI/todo/test-file.md
-_trash/test-ios-project/AI/dev-logs/check-quality/README.md
-_trash/test-ios-project/AI/dev-logs/dev-updates/_devupdate-prompt.md
-_trash/test-ios-project/AI/dev-logs/dev-updates/README.md
-_trash/test-ios-project/AI/docs/README.md
-_trash/test-ios-project/AI/todo/README.md
-_trash/test-ios-project/CLAUDE.md
-_trash/test-project/CLAUDE.md
 CLAUDE.md
 CONSTRUCT-CORE/_ai-ignore_not-used/CLAUDE--2025-07-09--18-03-27.md
 CONSTRUCT-CORE/CLAUDE-BASE.md
@@ -812,6 +812,8 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--12-25-04.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--16-16-13.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--20-27-08.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--20-38-21.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--21-51-33.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-11--11-59-14.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-2223-construct-session.md
@@ -894,6 +896,8 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-09-2156-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-09-2255-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-10-1014-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-10-2125-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-10-2151-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-11-1159-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -1002,11 +1006,16 @@ CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
 CONSTRUCT-LAB/AI/PRDs/construct-template-repository-prd.md
 CONSTRUCT-LAB/AI/PRDs/future/ai-enhanced-construct-intelligence-prd.md
 CONSTRUCT-LAB/AI/PRDs/future/claude-code-hooks-integration-prd.md
+CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md
+CONSTRUCT-LAB/AI/PRDs/future/PRD-Self-Learning-Pattern-System-Complete.md
+CONSTRUCT-LAB/AI/PRDs/future/smoke-test-orchestrator-prd.md
 CONSTRUCT-LAB/AI/PRDs/prd-updates-2025-06-28.md
 CONSTRUCT-LAB/AI/PRDs/swift-claude-starter-template-prd-info.md
 CONSTRUCT-LAB/AI/PRDs/swift-claude-starter-template-prd.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-08--22-39-03.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-10--21-51-31.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-11--11-59-12.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-11--14-36-49.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -1111,9 +1120,11 @@ CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-09--17-11-45.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-09--18-32-47.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-09--21-56-22.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-10--21-25-37.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-10--21-51-31.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-11--11-59-12.md
 CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--22-55-28.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
-CONSTRUCT-LAB/AI/structure/project-structure-2025-07-10--21-51-31.md
+CONSTRUCT-LAB/AI/structure/project-structure-2025-07-11--14-36-49.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-03.md
@@ -1162,17 +1173,14 @@ CONSTRUCT-LAB/AI/todo/future/using-promotion-system.md
 CONSTRUCT-LAB/AI/todo/misc/context-engineering-karpathy.md
 CONSTRUCT-LAB/AI/todo/misc/context-engineering.md
 CONSTRUCT-LAB/CLAUDE--2025-07-08--14-39-51.md
+CONSTRUCT-LAB/CLAUDE--2025-07-10--21-56-11.md
 CONSTRUCT-LAB/CLAUDE.md
 CONSTRUCT-LAB/CLAUDE.md.backup-before-pattern-integration
-CONSTRUCT-LAB/docs/_ai-ignore/ai-commit-pattern.md
-CONSTRUCT-LAB/docs/DOCUMENTATION-STRUCTURE.md
-CONSTRUCT-LAB/docs/promotion-quick-reference.md
 CONSTRUCT-LAB/patterns/plugins/README.md
 CONSTRUCT-LAB/patterns/README.md
 CONSTRUCT-LAB/tools/README.md
 docs/ARCHITECTURE-CHEATSHEET/cheet-feedback.md
 docs/ARCHITECTURE-CHEATSHEET/CONSTRUCT-ARCHITECTURE-CHEATSHEET--grok-see-feedback.md
-docs/ARCHITECTURE-CHEATSHEET/CONSTRUCT-ARCHITECTURE-CHEATSHEET.md
 docs/core/distributed-quality-examples.md
 docs/core/distributed-quality-philosophy.md
 docs/core/promotion-system-guide.md
@@ -1185,6 +1193,10 @@ docs/features/repository-context.md
 docs/README-INDEX.md
 docs/README.md
 docs/STRUCTURE.md
+docs/to-review/_ai-ignore/ai-commit-pattern.md
+docs/to-review/CONSTRUCT-ARCHITECTURE-CHEATSHEET-og.md
+docs/to-review/DOCUMENTATION-STRUCTURE.md
+docs/to-review/promotion-quick-reference.md
 Projects/_ai-ignore_not-used/test003/.construct/CLAUDE.md.sha256
 Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI/dev-logs/check-quality/README.md
 Projects/_ai-ignore_not-used/test003/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md
@@ -1692,6 +1704,38 @@ test-runner.sh
 ```
   .
   _ai-ignore_not-used
+  _ai-ignore_not-used/_trash
+  _ai-ignore_not-used/_trash/_archive
+  _ai-ignore_not-used/_trash/CONSTRUCT-CORE
+  _ai-ignore_not-used/_trash/CONSTRUCT-CORE/AI
+  _ai-ignore_not-used/_trash/CONSTRUCT-CORE/AI/todo
+  _ai-ignore_not-used/_trash/dev-udpates
+  _ai-ignore_not-used/_trash/dev-udpates/automated
+  _ai-ignore_not-used/_trash/dev-udpates/automated/_archive
+  _ai-ignore_not-used/_trash/Projects
+  _ai-ignore_not-used/_trash/Projects/Another-Project
+  _ai-ignore_not-used/_trash/Projects/Project-Name
+  _ai-ignore_not-used/_trash/Projects/Project-Name/REPO-Name
+  _ai-ignore_not-used/_trash/Projects/Project-Name/REPO-Name-02
+  _ai-ignore_not-used/_trash/test-ios-project
+  _ai-ignore_not-used/_trash/test-ios-project/.construct
+  _ai-ignore_not-used/_trash/test-ios-project/AI
+  _ai-ignore_not-used/_trash/test-ios-project/AI/dev-logs
+  _ai-ignore_not-used/_trash/test-ios-project/AI/dev-logs/check-quality
+  _ai-ignore_not-used/_trash/test-ios-project/AI/dev-logs/dev-updates
+  _ai-ignore_not-used/_trash/test-ios-project/AI/docs
+  _ai-ignore_not-used/_trash/test-ios-project/AI/todo
+  _ai-ignore_not-used/_trash/test-project
+  _ai-ignore_not-used/_trash/test-project/.construct
+  _ai-ignore_not-used/_trash/test-project/CONSTRUCT-CORE
+  _ai-ignore_not-used/_trash/test-project/CONSTRUCT-CORE/AI
+  _ai-ignore_not-used/_trash/test-project/CONSTRUCT-CORE/AI/template-structure
+  _ai-ignore_not-used/_trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI
+  _ai-ignore_not-used/_trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/dev-logs
+  _ai-ignore_not-used/_trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/check-quality
+  _ai-ignore_not-used/_trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/dev-updates
+  _ai-ignore_not-used/_trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/docs
+  _ai-ignore_not-used/_trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/todo
   _ai-ignore_not-used/AI
   _ai-ignore_not-used/AI - 2
   _ai-ignore_not-used/AI - 2/dev-logs
@@ -1713,38 +1757,6 @@ test-runner.sh
   _ai-ignore_not-used/USER-CHOSEN-NAME
   _ai-ignore_not-used/USER-CHOSEN-NAME-Project
   _git-ignore
-  _trash
-  _trash/_archive
-  _trash/CONSTRUCT-CORE
-  _trash/CONSTRUCT-CORE/AI
-  _trash/CONSTRUCT-CORE/AI/todo
-  _trash/dev-udpates
-  _trash/dev-udpates/automated
-  _trash/dev-udpates/automated/_archive
-  _trash/Projects
-  _trash/Projects/Another-Project
-  _trash/Projects/Project-Name
-  _trash/Projects/Project-Name/REPO-Name
-  _trash/Projects/Project-Name/REPO-Name-02
-  _trash/test-ios-project
-  _trash/test-ios-project/.construct
-  _trash/test-ios-project/AI
-  _trash/test-ios-project/AI/dev-logs
-  _trash/test-ios-project/AI/dev-logs/check-quality
-  _trash/test-ios-project/AI/dev-logs/dev-updates
-  _trash/test-ios-project/AI/docs
-  _trash/test-ios-project/AI/todo
-  _trash/test-project
-  _trash/test-project/.construct
-  _trash/test-project/CONSTRUCT-CORE
-  _trash/test-project/CONSTRUCT-CORE/AI
-  _trash/test-project/CONSTRUCT-CORE/AI/template-structure
-  _trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI
-  _trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/dev-logs
-  _trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/check-quality
-  _trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/dev-updates
-  _trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/docs
-  _trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/todo
   .claude
   .construct
   .construct-workspace
@@ -1927,8 +1939,6 @@ test-runner.sh
   CONSTRUCT-LAB/AI/todo/future
   CONSTRUCT-LAB/AI/todo/future/capture as a doc
   CONSTRUCT-LAB/AI/todo/misc
-  CONSTRUCT-LAB/docs
-  CONSTRUCT-LAB/docs/_ai-ignore
   CONSTRUCT-LAB/experiments
   CONSTRUCT-LAB/patterns
   CONSTRUCT-LAB/patterns/_ai-ignore_not-used
@@ -1941,6 +1951,8 @@ test-runner.sh
   docs/ARCHITECTURE-CHEATSHEET
   docs/core
   docs/features
+  docs/to-review
+  docs/to-review/_ai-ignore
   Projects
   Projects/_ai-ignore_not-used
   Projects/_ai-ignore_not-used/test003
@@ -2025,7 +2037,7 @@ No config directory found
 === File Counts ===
 Shell Scripts: 186
 YAML Configs: 32
-Markdown Docs: 816
+Markdown Docs: 828
 Python Files: 0
 
 === Directory Structure ===
@@ -2051,5 +2063,5 @@ Active Patterns:
 - AI documentation: 5 files
 
 ---
-*Generated by scan_project_structure.sh on Thu Jul 10 21:51:33 PDT 2025*
+*Generated by scan_project_structure.sh on Fri Jul 11 14:36:51 PDT 2025*
 *Project: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT*

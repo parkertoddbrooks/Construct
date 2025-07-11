@@ -44,7 +44,14 @@ PROJECT_DIR="${1:-.}"
 PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
 
 # Get CLAUDE.md path for this project
-CLAUDE_MD="$PROJECT_DIR/CLAUDE.md"
+# Fix for CONSTRUCT: Use CONSTRUCT-LAB/CLAUDE.md when in CONSTRUCT repository
+if [ -d "$PROJECT_DIR/CONSTRUCT-CORE" ] && [ -d "$PROJECT_DIR/CONSTRUCT-LAB" ]; then
+    # This is CONSTRUCT itself - use CONSTRUCT-LAB/CLAUDE.md
+    CLAUDE_MD="$PROJECT_DIR/CONSTRUCT-LAB/CLAUDE.md"
+else
+    # Regular project - use PROJECT_DIR/CLAUDE.md
+    CLAUDE_MD="$PROJECT_DIR/CLAUDE.md"
+fi
 
 echo -e "${BLUE}🔄 Updating project context...${NC}"
 echo "Project: $PROJECT_DIR"
