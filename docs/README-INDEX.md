@@ -190,7 +190,7 @@ CONSTRUCT/
 │   │   ├── lib/
 │   │   ├── orchestrator/
 │   │   │   └── README.md ◄──────────────────────────── Orchestrator component
-│   │   ├── scripts/ (shown as scripts, actually scripts-new)
+│   │   ├── scripts/
 │   │   │   ├── README.md ◄──────────────────────────── Active scripts directory
 │   │   │   ├── construct/
 │   │   │   ├── core/
@@ -316,8 +316,8 @@ CONSTRUCT/
 1. `./README.md`
 2. `./CONSTRUCT-CORE/CONSTRUCT/README.md`
 3. `./CONSTRUCT-CORE/CONSTRUCT/orchestrator/README.md`
-4. `./CONSTRUCT-CORE/CONSTRUCT/scripts-new/README.md`
-5. `./CONSTRUCT-CORE/CONSTRUCT/scripts-new/patterns/README.md`
+4. `./CONSTRUCT-CORE/CONSTRUCT/scripts/README.md`
+5. `./CONSTRUCT-CORE/patterns/plugins/README.md`
 6. `./CONSTRUCT-CORE/CONSTRUCT/scripts/README.md`
 7. `./CONSTRUCT-CORE/patterns/README.md`
 8. `./CONSTRUCT-CORE/patterns/lib/README.md`

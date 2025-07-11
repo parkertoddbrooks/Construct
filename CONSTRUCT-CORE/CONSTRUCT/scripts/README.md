@@ -144,9 +144,9 @@ Script reads: Projects/MyApp/ios/.construct/patterns.yaml
            ↓
 Finds patterns: [swift-language, ios-ui-library, mvvm-architecture]
            ↓
-Runs validators: patterns/swift-language/validate-quality.sh
-                patterns/ios-ui-library/validate-quality.sh
-                patterns/mvvm-architecture/validate-quality.sh
+Runs validators: patterns/plugins/languages/swift/validators/quality.sh
+                patterns/plugins/frameworks/ios-ui-library/validators/usage.sh
+                patterns/plugins/architectural/mvvm-ios/validators/architecture.sh
            ↓
 Reports: Combined results with total issue count
 ```

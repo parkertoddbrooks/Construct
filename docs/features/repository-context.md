@@ -43,7 +43,7 @@ For local repositories without a remote:
 
 ## Scripts with Repository Context
 
-The following scripts in `/scripts-new/` include repository context:
+The following scripts in `/scripts/` include repository context:
 
 ### Development Logs
 - **session-summary.sh** - Session summaries with repo context
