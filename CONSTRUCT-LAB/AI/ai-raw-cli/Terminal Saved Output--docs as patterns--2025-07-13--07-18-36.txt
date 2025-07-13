@@ -1,0 +1,1201 @@
+╭─────────────────────────────────────────────────────────────────────────╮
+│ ✻ Welcome to Claude Code!                                               │
+│                                                                         │
+│   /help for help, /status for your current setup                        │
+│                                                                         │
+│   cwd: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT  │
+╰─────────────────────────────────────────────────────────────────────────╯
+
+
+ ※ Tip: Want Claude to remember something? Hit # to add preferences, tools, and instructions to Claude's memory
+
+> Hi, how are you?
+
+⏺ I'm doing well, thank you! How can I help you today?
+
+> Can you read: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT/CONSTRUCT-CORE/CLAUDE.md 
+  /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT/CONSTRUCT-CORE/CLAUDE-BASE.md 
+  /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT/CLAUDE.md 
+  /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT/CONSTRUCT-LAB/CLAUDE.md
+
+⏺ I'll read those files for you.
+
+⏺ Read(CONSTRUCT-CORE/CLAUDE.md)
+  ⎿  Read 534 lines (ctrl+r to expand)
+
+⏺ Read(CONSTRUCT-CORE/CLAUDE-BASE.md)
+  ⎿  Read 110 lines (ctrl+r to expand)
+
+⏺ Read(CLAUDE.md)
+  ⎿  Read 330 lines (ctrl+r to expand)
+
+⏺ Read(CONSTRUCT-LAB/CLAUDE.md)
+  ⎿  Read 860 lines (ctrl+r to expand)
+
+⏺ I've successfully read all four CLAUDE.md files. Here's a summary of what each contains:
+
+  1. CONSTRUCT-CORE/CLAUDE.md - Template for user projects with Swift/iOS development patterns
+  2. CONSTRUCT-CORE/CLAUDE-BASE.md - Universal development principles that apply to all projects
+  3. CONSTRUCT/CLAUDE.md (root) - CONSTRUCT development guide explaining the system architecture
+  4. CONSTRUCT-LAB/CLAUDE.md - Development context for working on CONSTRUCT itself
+
+  The files show that CONSTRUCT is a dual-environment development system with:
+  - CONSTRUCT-CORE: Stable, production-ready patterns and tools
+  - CONSTRUCT-LAB: Development and experimentation environment
+  - Pattern System: Modular, reusable development patterns
+  - Context Engineering: Auto-updating documentation
+  - Promotion Workflow: Safe path from LAB to CORE
+
+  Is there something specific you'd like me to help you with regarding these files or the CONSTRUCT system?
+
+> ok, CONSTRUCT makes sense to you? /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT/README.md
+
+⏺ I'll read the README to get a complete understanding of CONSTRUCT.
+
+⏺ Read(README.md)
+  ⎿  Read 230 lines (ctrl+r to expand)
+
+⏺ Yes, CONSTRUCT makes perfect sense! It's a brilliant solution to the context management problem in AI-powered development. Here's my
+  understanding:
+
+  Core Insight: CONSTRUCT recognizes that Claude Code fundamentally changed development from "editing code" to "managing context". The problem
+  isn't writing better prompts - it's dynamically assembling the right context for what you're actually doing.
+
+  Key Innovation: Instead of static rules that you paste at the start of every session, CONSTRUCT provides:
+  - Dynamic pattern loading based on current task
+  - Pattern plugin ecosystem (like Homebrew for AI context)
+  - Self-improving patterns that learn from usage
+  - Architecture-aware integrations that match your style
+
+  Architecture:
+  - CONSTRUCT-CORE: Stable, proven patterns (like brew formulae)
+  - CONSTRUCT-LAB: Pattern development/experimentation (like brew taps)
+  - Projects: Your managed projects with pattern configurations
+
+  Practical Impact: Instead of spending hours integrating Stripe and refactoring to match your architecture, just run construct add 
+  integration/stripe and get properly architected code that looks hand-written.
+
+  The philosophy resonates strongly - "Context > Prompts", "Dynamic > Static", "Patterns > Templates", "Community > Committee". It's solving a real
+   pain point that every Claude Code user faces: teaching the AI your patterns every single session.
+
+  Is there something specific about CONSTRUCT you'd like to explore or work on?
+
+> yes. we need to clean this up so there is one... but you get this jist. ok, so I want to add the ability to add docs to projects. how would you  
+         │
+  │   approach this?  eg. sdk docs for third party stuff.
+
+⏺ I'll help you add a docs system to CONSTRUCT for SDK/third-party documentation. Let me think through this systematically.
+
+⏺ Update Todos
+  ⎿  ☐ Analyze existing CONSTRUCT pattern system to understand integration points
+     ☐ Design docs pattern structure (metadata, storage, retrieval)
+     ☐ Create docs management scripts (add, list, update, remove)
+     ☐ Implement pattern assembly integration for docs context
+     ☐ Create example docs patterns for common SDKs
+     ☐ Test with real project scenarios
+
+⏺ Update Todos
+  ⎿  ☐ Analyze existing CONSTRUCT pattern system to understand integration points
+     ☐ Design docs pattern structure (metadata, storage, retrieval)
+     ☐ Create docs management scripts (add, list, update, remove)
+     ☐ Implement pattern assembly integration for docs context
+     ☐ Create example docs patterns for common SDKs
+     ☐ Test with real project scenarios
+
+⏺ Let me first understand the existing pattern system better:
+
+⏺ Task(Analyze pattern structure)
+  ⎿  Done (15 tool uses · 32.4k tokens · 1m 38.3s)                                                                                                 
+
+⏺ Now let me look at how patterns are currently added to projects:
+
+⏺ Search(pattern: "construct add")
+  ⎿  Found 9 files (ctrl+r to expand)
+
+⏺ Let me check if there's already a construct add command or similar:
+
+⏺ Search(pattern: "**/construct-add*.sh")
+  ⎿  Found 0 files 
+
+⏺ Update Todos
+  ⎿  ☒ Analyze existing CONSTRUCT pattern system to understand integration points
+     ☐ Design docs pattern structure (metadata, storage, retrieval)
+     ☐ Create docs management scripts (add, list, update, remove)
+     ☐ Implement pattern assembly integration for docs context
+     ☐ Create example docs patterns for common SDKs
+     ☐ Test with real project scenarios
+
+⏺ Based on my analysis, here's how I'd approach adding docs to CONSTRUCT:
+
+  Design Approach for SDK/Third-Party Docs
+
+  1. New Pattern Category: docs/
+
+  Create a new pattern category specifically for documentation:
+  patterns/docs/
+  ├── stripe/
+  │   ├── stripe-docs.md      # Key Stripe SDK patterns
+  │   ├── stripe-docs.yaml    # Metadata & version info
+  │   └── full/               # Full SDK reference (optional)
+  │       └── stripe-api.md
+  ├── revenuecat/
+  ├── firebase/
+  └── registry.yaml           # Docs registry
+
+  2. Smart Context Loading
+
+  Docs should be context-aware:
+  - When working on StripeService.swift → Load Stripe docs
+  - When editing payment features → Load relevant payment SDK docs
+  - Configurable verbosity levels (key patterns vs full reference)
+
+  3. Doc Pattern Structure
+
+  # stripe-docs.yaml
+  name: stripe-docs
+  version: 2024.1
+  sdk_version: "5.0+"
+  description: "Stripe iOS SDK patterns and best practices"
+  tags: ["payments", "ios", "swift"]
+  context_triggers:
+    - files: ["**/Stripe*.swift", "**/Payment*.swift"]
+    - mentions: ["stripe", "payment", "subscription"]
+  sections:
+    - quick_reference    # Always loaded
+    - full_api          # Loaded on demand
+
+  4. Integration Commands
+
+  # Add docs to project
+  construct docs add stripe
+  construct docs add revenuecat --full
+
+  # List available docs
+  construct docs list
+
+  # Update docs to latest
+  construct docs update stripe
+
+  # Show what docs are active
+  construct docs status
+
+  5. Pattern Assembly Integration
+
+  Modify assemble-claude.sh to:
+  1. Check for docs patterns in .construct/patterns.yaml
+  2. Include quick reference by default
+  3. Add full docs when explicitly requested or context triggers match
+  4. Keep docs at end of CLAUDE.md for easy reference
+
+  6. Storage Options
+
+  - Lightweight: Store key patterns/examples in pattern files
+  - Full Reference: Link to external docs or store in full/ subdirectory
+  - Version Tracking: Track SDK versions to ensure docs match code
+
+  Want me to start implementing this? I'd begin with creating the docs pattern structure and a construct-docs.sh script.
+
+> ok review this. /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT/CONSTRUCT-LAB/AI/todo/misc/context-engineering-karpathy.md 
+  /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT/CONSTRUCT-LAB/AI/todo/misc/context-engineering.md - and think through the lens of
+   the /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT/CONSTRUCT-CORE/patterns/plugins/tooling/unix-philosophy/unix-philosophy.md 
+  -- is this the most elegant and novel way that will actually work really well?
+
+✻ Thinking…
+
+  The user wants me to review some documents about context engineering and think about the docs feature through the lens of the Unix philosophy. 
+  Let me read these files first to understand the context and constraints.
+
+⏺ I'll review those files to understand the context engineering philosophy and Unix principles, then reconsider the docs approach.
+
+⏺ Read(CONSTRUCT-LAB/AI/todo/misc/context-engineering-karpathy.md)
+  ⎿  Read 18 lines (ctrl+r to expand)
+
+⏺ Read(CONSTRUCT-LAB/AI/todo/misc/context-engineering.md)
+  ⎿  Read 55 lines (ctrl+r to expand)
+
+⏺ Read(CONSTRUCT-CORE/patterns/plugins/tooling/unix-philosophy/unix-philosophy.md)
+  ⎿  Read 185 lines (ctrl+r to expand)
+
+✻ Thinking…
+
+  After reading these files, I need to reconsider my docs approach through the lens of:
+
+  1. Context Engineering principles from Karpathy:
+    - Fill context window with just the right information
+    - Too little = poor performance
+    - Too much = increased costs and decreased performance
+    - It's about managing "working memory" like RAM
+  2. Context Engineering techniques:
+    - Writing Context (save for later)
+    - Selecting Context (pull only what's relevant)
+    - Compressing Context (summarize/trim)
+    - Isolating Context (split across agents)
+  3. Unix Philosophy:
+    - Do one thing well
+    - Use standard tools
+    - Simple > Clever
+    - Text streams are universal
+    - Don't reinvent the wheel
+
+  My initial approach was over-engineered. Let me think of a more elegant, Unix-style approach that actually works with context engineering 
+  principles.
+
+  Instead of building a complex docs management system, what if we:
+  1. Use the existing pattern system (don't reinvent)
+  2. Keep docs as simple text files (Unix way)
+  3. Let context triggers naturally include relevant docs
+  4. Use standard tools like grep/find to manage
+
+  The key insight: SDK docs should just be another type of pattern that gets included when relevant, not a separate system.
+
+⏺ After reviewing the context engineering philosophy and Unix principles, I realize my initial approach was over-engineered. Let me propose a much
+  more elegant solution:
+
+⏺ Update Todos
+  ⎿  ☒ Analyze existing CONSTRUCT pattern system to understand integration points
+     ☒ Design docs pattern structure (metadata, storage, retrieval)
+     ☐ Create simple docs-as-patterns implementation
+     ☐ Test with real SDK documentation
+
+✻ Thinking…
+
+  I need to articulate my new design based on Unix philosophy and context engineering principles.
+
+⏺ Elegant Unix-Style Docs Solution
+
+  Following the Unix philosophy and context engineering principles, here's a radically simpler approach:
+
+  Docs ARE Patterns
+
+  No new system needed. SDK docs are just another pattern type:
+
+  patterns/integration/stripe/
+  ├── stripe.md           # Integration patterns (existing)
+  └── stripe-api.md       # SDK reference patterns (new)
+
+  patterns/integration/firebase/
+  ├── firebase.md         # Integration patterns
+  └── firebase-api.md     # SDK reference patterns
+
+  Context-Aware Loading
+
+  The existing pattern system already has everything we need:
+
+  # stripe-api.yaml
+  name: stripe-api
+  triggers:
+    files: ["**/Stripe*.swift", "**/Payment*.swift"]
+    mentions: ["stripe.create", "PaymentIntent", "Customer"]
+
+  When you type stripe.customers.create, the relevant Stripe API docs automatically appear in context.
+
+  Simple Text Files
+
+  Following Unix philosophy - just markdown files with the key SDK patterns:
+
+  # Stripe API Patterns
+
+  ## Payment Intents
+  ```swift
+  // Create payment intent
+  let intent = try await stripe.paymentIntents.create(
+      amount: 2000,  // In cents
+      currency: "usd",
+      metadata: ["order_id": "12345"]
+  )
+
+  Customers
+
+  ...
+
+  ### **No New Commands**
+  Use existing pattern commands:
+
+  ```bash
+  # View available SDK docs
+  construct-patterns list | grep api
+
+  # Add SDK docs to project
+  echo 'plugins: ["integration/stripe-api"]' >> .construct/patterns.yaml
+  construct-patterns regenerate
+
+  Smart Context Selection
+
+  Following Karpathy's principle - only load what's needed:
+  - Working on payments? Stripe API patterns load
+  - Working on analytics? Mixpanel API patterns load
+  - Not working on integrations? No SDK docs in context
+
+  Implementation
+
+  Just create pattern files - the system already does everything else:
+
+  1. Create patterns/integration/*/‹name›-api.md files
+  2. Add minimal YAML metadata for triggers
+  3. Let existing pattern assembly handle the rest
+
+  This approach:
+  - ✅ Uses existing tools (Unix way)
+  - ✅ Fills context with just what's needed (Karpathy)
+  - ✅ Simple text files, no complex systems
+  - ✅ Works with current workflows
+  - ✅ Zero new infrastructure
+
+  Want me to create an example Stripe API pattern to demonstrate?
+
+> this is pretty close to what you said before. what are the differences?
+
+⏺ You're right - the core concept is similar. Let me highlight the key differences:
+
+  Initial Approach (Over-engineered)
+
+  - New category: patterns/docs/ separate from integrations
+  - New commands: construct docs add, construct docs list, etc.
+  - Complex structure: Sections, verbosity levels, full vs quick reference
+  - New scripts: construct-docs.sh management system
+  - Storage options: Multiple ways to store docs
+  - Version tracking: SDK version management
+
+  Unix-Style Approach (Elegant)
+
+  - No new category: Docs live WITH integrations (stripe.md + stripe-api.md)
+  - No new commands: Use existing construct-patterns
+  - Simple files: Just markdown, no sections or verbosity
+  - No new scripts: Existing system handles everything
+  - One way: Text files, period
+  - No version complexity: Just update the markdown
+
+  The fundamental shift is:
+  1. Before: "Docs are special, need their own system"
+  2. After: "Docs are just patterns, use what exists"
+
+  The Unix way revealed that I was creating unnecessary abstraction. The pattern system already does context-aware loading, so why build a parallel
+   system for docs? Just put the SDK reference next to the integration pattern and let the existing machinery work.
+
+  It's the difference between:
+  - Creating a new tool (❌)
+  - Using grep/sed/awk that already exist (✅)
+
+> right, the only difference IMO is dir location, we could visually make it clear.
+
+⏺ Update Todos
+  ⎿  ☒ Analyze existing CONSTRUCT pattern system to understand integration points
+     ☒ Design docs pattern structure (metadata, storage, retrieval)
+     ☐ Create simple docs-as-patterns implementation
+     ☐ Test with real SDK documentation
+
+⏺ Exactly! The only real difference is making it visually clear. Here's the simplest approach:
+
+  Visual Clarity Through Naming
+
+  patterns/
+  ├── docs/                      # Clear category name
+  │   ├── stripe-sdk/           # SDK documentation patterns
+  │   ├── firebase-sdk/
+  │   └── revenuecat-sdk/
+  └── integration/              # Integration patterns
+      ├── stripe/
+      ├── firebase/
+      └── revenuecat/
+
+  Or even simpler with a naming convention:
+
+  patterns/integration/
+  ├── stripe/
+  │   ├── stripe.md          # Integration patterns
+  │   └── stripe.docs.md     # SDK docs (visual suffix)
+  ├── firebase/
+  │   ├── firebase.md
+  │   └── firebase.docs.md
+
+  The .docs.md suffix makes it instantly clear what's documentation vs integration patterns, while keeping everything in the existing system.
+
+  That's it. No new infrastructure, just a naming convention that makes docs obvious. Want me to create an example?
+
+> I like this better: Or even simpler with a naming convention:
+
+    patterns/integration/
+    ├── stripe/
+    │   ├── stripe.md          # Integration patterns
+    │   └── stripe.docs.md     # SDK docs (visual suffix)
+    ├── firebase/
+    │   ├── firebase.md
+    │   └── firebase.docs.md
+
+
+  ok, let's do this. can you write a PRD that explains what needs to happen? we also need a todo next which a tool to make   │   ├── stripe.md     
+       # Integration patterns                                                                                                │
+  │     │   └── stripe.docs.md     # SDK docs (visual suffix)  for each thing... but that can come later. just note we need that. add it here: 
+  /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT/CONSTRUCT-LAB/AI/PRDs/future - maybe uncommon with a real PRD, please make sure 
+  to not only make PRD, but provide step step by guide to build and test. also, does it need a validator?
+
+⏺ I'll create a comprehensive PRD for the docs-as-patterns feature.
+
+⏺ Write(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Wrote 240 lines to CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md                                                                       
+     # PRD: Documentation as Patterns
+     ## Overview
+     Enable SDK and third-party documentation to be seamlessly integrated into CONSTRUCT's pattern system using a simple naming convention.
+     ## Problem Statement
+     Developers using CONSTRUCT need SDK documentation in their context when working with third-party integrations. Currently, they must manually
+     search and paste relevant docs. This breaks the flow and adds friction to development with AI assistants.
+     ## Solution
+     Use the existing pattern system with a `.docs.md` naming convention to automatically load relevant SDK documentation based on context.
+     … +230 lines (ctrl+r to expand)
+
+⏺ Update Todos
+  ⎿  ☒ Analyze existing CONSTRUCT pattern system to understand integration points
+     ☒ Design docs pattern structure (metadata, storage, retrieval)
+     ☒ Create simple docs-as-patterns implementation
+     ☐ Test with real SDK documentation
+
+⏺ I've created a comprehensive PRD that includes:
+
+  1. Clear problem/solution - SDK docs need to be in context
+  2. Simple implementation - Just .docs.md naming convention
+  3. Step-by-step guide - 5 phases over 4 days with specific tasks
+  4. Testing scenarios - How to validate it works
+  5. Future tool note - Acknowledged need for construct-docs tool
+  6. Validation approach - No new validators needed, docs are just text
+
+  The key insight is that we don't need validators for documentation - they're reference material, not enforceable patterns. The existing
+  check-architecture.sh can verify files exist, but we don't need to validate the content of docs.
+
+  The implementation is deliberately minimal:
+  - Modify assemble-claude.sh to recognize .docs.md files
+  - Add trigger detection for smart loading
+  - Create doc patterns as simple markdown
+  - Test with real projects
+
+  Want me to start implementing Phase 1 by modifying the pattern assembly script?
+
+> ### Overall Impression
+  This PRD is a solid, pragmatic extension of CONSTRUCT's core philosophy as outlined in the README. It directly addresses the "context problem" by
+   making documentation dynamic and context-aware, aligning perfectly with the emphasis on "dynamic context assembly" and reducing friction in 
+  AI-assisted development. The approach is minimalist—leveraging existing systems without new infrastructure—which embodies the Unix philosophy 
+  mentioned in both documents. It's concise, actionable, and shows thoughtful planning. That said, since the README is only about 50% complete, 
+  some feedback here ties into potential gaps in the broader ecosystem (e.g., how this fits with pattern plugins or validators). Overall, this 
+  could be implemented quickly and deliver immediate value, but it could benefit from more depth on edge cases, scalability, and integration with 
+  upcoming features like the pattern browser or CLI tool.
+
+  ### Strengths
+  - **Alignment with CONSTRUCT's Vision**: The PRD nails the dynamic context engineering angle. By tying docs to triggers (e.g., file patterns or 
+  mentions), it ensures docs load "only when relevant," preventing context bloat—just like how CONSTRUCT switches patterns based on tasks (e.g., 
+  editing Swift vs. shell files). This extends the pattern system naturally, treating docs as "read-only reference material" without 
+  overcomplicating things.
+    
+  - **Simplicity and Reusability**: Using `.docs.md` as a naming convention is elegant and fits the existing directory structure. No new tools or 
+  paradigms needed upfront, which keeps it true to "zero new infrastructure." The YAML triggers for selective loading are a smart evolution of the 
+  patterns.yaml in the README.
+
+  - **Implementation Roadmap**: The phased approach (e.g., Day 1 updates to `assemble-claude.sh`, testing scenarios) is clear and realistic. 
+  Including code snippets for modifications makes it developer-friendly. The success criteria and validation requirements are well-defined, 
+  emphasizing performance and ease of maintenance.
+
+  - **Forward-Thinking Elements**: Mentioning a future `construct-docs` tool shows scalability, tying into the README's "Coming Soon" items like 
+  automatic updates and a CLI. It also addresses real pain points, like manually searching SDK docs, which resonates with the README's critique of 
+  static rules.
+
+  - **Open Questions Section**: This is a great inclusion—it invites discussion and shows you've anticipated debates (e.g., default inclusion vs. 
+  triggers). Recommending "only on triggers" is spot-on to avoid overwhelming the context window.
+
+  ### Areas for Improvement
+  - **Depth on Triggers and Detection**: The triggers in the YAML example are good, but the PRD could elaborate on how they interact with broader 
+  CONSTRUCT features. For instance, how do these docs triggers play with the "smart detection" or "pattern learning" mentioned in the README? What 
+  if multiple integrations are active (e.g., Stripe + Firebase)—does it load all docs, or prioritize? Edge cases like false positives (e.g., a file
+   named "PaymentHelper.swift" that's unrelated to Stripe) aren't addressed, which could lead to unnecessary loading.
+
+  - **Documentation Format and Quality**: The sample `.docs.md` is focused on code examples, which is great for actionability, but it could specify
+   guidelines for consistency across patterns. For example, should all docs include sections like "Common Gotchas," "Error Handling," or 
+  "Version-Specific Notes"? Without this, community-contributed docs (as per the README's plugin ecosystem) might vary in quality, undermining the 
+  "patterns that look hand-written" goal.
+
+  - **Integration with Validators and Generators**: The README highlights validators and generators as key pattern components, but the PRD 
+  dismisses validators for docs ("No, because docs are read-only"). This feels like a missed opportunity—why not optional validators to check code 
+  examples in `.docs.md` for syntax errors or outdated APIs? Similarly, could generators pull from docs to auto-generate stubs (e.g., a Stripe 
+  PaymentIntent boilerplate)? This would strengthen ties to the "real architecture support" in the README.
+
+  - **Scalability and Maintenance**: Handling versioning is noted as manual, which is fine for starters, but with the README's vision of "version 
+  management" and "automatic pattern updates," this could evolve. Open questions on multiple SDK versions are raised but not explored deeply—e.g., 
+  how to handle conflicts if a project uses Stripe v4 but docs are for v5? Also, performance testing is mentioned, but what about large docs files 
+  bloating CLAUDE.md in big projects?
+
+  - **Testing and Rollout Gaps**: The test scenarios are solid, but they could include AI interaction tests (e.g., "Query Claude about 
+  PaymentIntent—does it reference the docs correctly?"). The rollout plan assumes a 4-week timeline, but without metrics (e.g., "Reduce doc-pasting
+   by 80% in user tests"), success is hard to quantify. Tie this more to the README's "real impact" section.
+
+  - **README Context Integration**: Since the README is incomplete, the PRD could reference how this fits into the "pattern plugin ecosystem." For 
+  example, will `.docs.md` be installable via `construct add integration/stripe`? If community taps include docs, how to ensure they're up-to-date?
+   This would make the PRD feel more holistic.
+
+  ### Specific Suggestions
+  - **Enhance Triggers with Examples**: Add a table for trigger types:
+
+    | Trigger Type | Example | When It Loads Docs |
+    |--------------|---------|--------------------|
+    | File Patterns | `**/Stripe*.swift` | When editing matching files |
+    | Mentions | `stripe.`, `PaymentIntent` | When keywords appear in recent changes or queries |
+    | Dependencies | If `integration/stripe` is active | Always for base patterns, docs on demand |
+
+    This would clarify logic and help with implementation.
+
+  - **Expand Documentation Format Guidelines**: Suggest a template for `.docs.md` files, e.g.:
+    ```
+    # [SDK] Patterns
+    ## [Feature/Category]
+    - Description
+    - Code Example
+    - Best Practices
+    - Common Errors
+    ```
+    This ensures consistency and makes it easier for the future `construct-docs` tool to parse/generate.
+
+  - **Add Edge Case Handling**: In the implementation details, include pseudocode for conflict resolution, like:
+    ```bash
+    if multiple_docs_triggered; then
+        prioritize_by_relevance # e.g., based on git diff mentions
+    fi
+    ```
+
+  - **Tie to AI Feedback Loops**: Since the README stresses "self-improving patterns," suggest logging how often docs are used (e.g., via pattern 
+  analytics) to refine triggers automatically.
+
+  - **Future-Proofing**: For the `construct-docs` tool, outline basic specs now (e.g., inputs: URL/repo; outputs: formatted Markdown with extracted
+   examples). This bridges to the README's "Coming Soon" web-based browser.
+
+  - **Minor Polish**: Fix small inconsistencies, like the directory structure showing `revenuecat/` without subfiles, or the bash snippets using 
+  `CLAUDE_MD` (assuming it's `CLAUDE.md`). Ensure all paths are relative to CONSTRUCT's architecture (CORE/LAB/Projects).
+
+  ### Conclusion
+  This PRD is already a strong foundation that could ship as-is and iterate based on feedback, much like the evolutionary pattern system in the 
+  README. It enhances CONSTRUCT's value proposition by making third-party integrations smoother, potentially saving developers hours per session. 
+  With refinements around triggers, scalability, and deeper README ties, it could become a flagship feature. If you're open to it, I'd love to hear
+   more about how this interacts with the pattern learning aspect—does it auto-suggest adding docs based on repeated SDK queries? Great work 
+  overall! - can you update with this feeback?
+
+⏺ I'll update the PRD with this excellent feedback.
+
+⏺ Read(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Read 240 lines (ctrl+r to expand)
+
+⏺ Update(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Updated CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md with 10 additions and 3 removals                                                 
+        1    # PRD: Documentation as Patterns
+        2    
+        3    ## Overview
+        4 -  Enable SDK and third-party documentation to be seamlessly integrated into CONSTRUCT's pattern system using a simple naming convention.
+        4 +  Enable SDK and third-party documentation to be seamlessly integrated into CONSTRUCT's pattern system using a simple naming convention, 
+     extending CONSTRUCT's dynamic context assembly to include reference material exactly when developers need it.
+          + extending CONSTRUCT's dynamic context assembly to include reference material exactly when developers need it.
+        5    
+        6    ## Problem Statement
+        7 -  Developers using CONSTRUCT need SDK documentation in their context when working with third-party integrations. Currently, they must 
+     manually search and paste relevant docs. This breaks the flow and adds friction to development with AI assistants.
+          - manually search and paste relevant docs. This breaks the flow and adds friction to development with AI assistants.
+        7 +  Developers using CONSTRUCT need SDK documentation in their context when working with third-party integrations. Currently, they must 
+     manually search and paste relevant docs, breaking the flow and adding friction to development with AI assistants. This contradicts CONSTRUCT's 
+     vision of "context > prompts" where the right information should automatically appear based on what you're doing.
+          + manually search and paste relevant docs, breaking the flow and adding friction to development with AI assistants. This contradicts 
+          + CONSTRUCT's vision of "context > prompts" where the right information should automatically appear based on what you're doing.
+        8    
+        9    ## Solution
+       10 -  Use the existing pattern system with a `.docs.md` naming convention to automatically load relevant SDK documentation based on context.
+       10 +  Use the existing pattern system with a `.docs.md` naming convention to automatically load relevant SDK documentation based on context 
+     triggers, treating docs as specialized patterns that provide reference material rather than enforceable rules.
+          + triggers, treating docs as specialized patterns that provide reference material rather than enforceable rules.
+       11    
+       12 +  ## Strategic Alignment
+       13 +  This feature directly supports CONSTRUCT's core philosophy:
+       14 +  - **Dynamic > Static**: Docs load based on current work, not manual inclusion
+       15 +  - **Context Engineering**: Fills context window with precisely needed SDK references
+       16 +  - **Pattern Ecosystem**: Extends the plugin system naturally to documentation
+       17 +  - **Zero Friction**: Eliminates manual doc searching during AI sessions
+       18 +  
+       19    ## Implementation Details
+       20    
+       21    ### Directory Structure
+
+⏺ Update(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Updated CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md with 32 additions                                 
+       42    # stripe.yaml
+       43    name: stripe
+       44    version: 1.0.0
+       45 +  sdk_version: "5.0+"
+       46    description: "Stripe integration patterns and SDK documentation"
+       47    tags: ["payments", "ios", "swift"]
+       48    dependencies: []
+     ...
+       53      docs:
+       54        files: ["**/Stripe*.swift", "**/Payment*.swift"]
+       55        mentions: ["stripe.", "PaymentIntent", "Customer", "Subscription"]
+       56 +      priority: 2  # Lower priority than base patterns
+       57    ```
+       58    
+       59 +  ### Trigger Types and Behavior
+       60 +  
+       61 +  | Trigger Type | Example | When It Loads Docs | Priority |
+       62 +  |--------------|---------|-------------------|----------|
+       63 +  | File Patterns | `**/Stripe*.swift` | When editing matching files | High |
+       64 +  | Mentions | `stripe.`, `PaymentIntent` | When keywords appear in recent changes | Medium |
+       65 +  | Dependencies | If `integration/stripe` is active | Always for base patterns, docs on demand | Low |
+       66 +  | Git Context | Recent commits touching payment code | When working in payment-related areas | Medium |
+       67 +  
+       68 +  ### Conflict Resolution
+       69 +  When multiple integrations trigger docs loading:
+       70 +  ```bash
+       71 +  # Pseudocode for prioritization
+       72 +  if multiple_docs_triggered; then
+       73 +      # 1. Check file being edited
+       74 +      prioritize_by_current_file
+       75 +      
+       76 +      # 2. Check recent git mentions
+       77 +      if still_multiple; then
+       78 +          prioritize_by_git_diff_mentions
+       79 +      fi
+       80 +      
+       81 +      # 3. Use priority scores from YAML
+       82 +      if still_multiple; then
+       83 +          sort_by_priority_score
+       84 +          load_top_2_only  # Prevent context bloat
+       85 +      fi
+       86 +  fi
+       87 +  ```
+       88 +  
+       89    ### Documentation Format
+       90    SDK docs follow the same pattern format but focus on API reference:
+       91    
+
+⏺ Update(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Updated CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md with 31 additions and 11 removals        
+        87    fi
+        88    ```
+        89    
+        90 -  ### Documentation Format
+        91 -  SDK docs follow the same pattern format but focus on API reference:
+        90 +  ### Documentation Format Template
+        91 +  All `.docs.md` files should follow this consistent structure for quality and maintainability:
+        92    
+        93    ```markdown
+        94 -  # Stripe SDK Patterns
+        94 +  # [SDK Name] SDK Patterns
+        95    
+        96 -  ## Payment Intents
+        96 +  ## Overview
+        97 +  Brief description of the SDK and its primary use cases
+        98 +  
+        99 +  ## Quick Reference
+       100 +  Most commonly used methods and patterns
+       101 +  
+       102 +  ## [Feature/Category Name]
+       103 +  ### Description
+       104 +  What this feature does and when to use it
+       105 +  
+       106 +  ### Code Example
+       107    ```swift
+       108    // Create a payment intent
+       109    let paymentIntent = try await stripe.paymentIntents.create(
+     ...
+       101        currency: "usd",
+       102        metadata: ["order_id": "12345"]
+       103    )
+       104 -  
+       105 -  // Confirm payment
+       106 -  try await stripe.paymentIntents.confirm(
+       107 -      paymentIntent.id,
+       108 -      paymentMethod: paymentMethodId
+       109 -  )
+       104    ```
+       105    
+       106 -  ## Common Patterns
+       106 +  ### Best Practices
+       107    - Always handle STPError for Stripe-specific errors
+       108    - Use idempotency keys for critical operations
+       109    - Store customer IDs, not payment methods
+       110 +  
+       111 +  ### Common Errors
+       112 +  - `invalid_request_error`: Missing required parameters
+       113 +  - `authentication_error`: Invalid API key
+       114 +  - `rate_limit_error`: Too many requests
+       115 +  
+       116 +  ### Version-Specific Notes
+       117 +  - v5.0+: Uses async/await patterns
+       118 +  - v4.x: Uses completion handlers (deprecated)
+       119    ```
+       120    
+       121 +  This template ensures:
+       122 +  - Consistent structure across all SDK docs
+       123 +  - Quick access to common patterns
+       124 +  - Error handling guidance
+       125 +  - Version compatibility notes
+       126 +  - Easy parsing for future automation
+       127 +  
+       128    ## Step-by-Step Implementation Guide
+       129    
+       130    ### Phase 1: Update Pattern Assembly (Day 1)
+
+⏺ Update(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Updated CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md with 24 additions and 2 removals
+       193       if find . -name "*.swift" -newer "$CLAUDE_MD" | grep -qE "(Stripe|Payment)"; then
+       194           include_stripe_docs=true
+       195       fi
+       196 +     
+       197 +     # Handle false positives
+       198 +     # Exclude generic names like PaymentHelper unless they import Stripe
+       199 +     if [ "$include_stripe_docs" = true ]; then
+       200 +         if ! grep -r "import Stripe" --include="*.swift" .; then
+       201 +             include_stripe_docs=false
+       202 +         fi
+       203 +     fi
+       204       ```
+       205    
+       206 -  2. **Add mention detection**:
+       206 +  2. **Add mention detection with context**:
+       207       ```bash
+       208       # Check recent git changes for SDK mentions
+       209       if git diff --cached | grep -qE "stripe\.|PaymentIntent|Customer"; then
+       210           include_stripe_docs=true
+       211       fi
+       212 +     
+       213 +     # Also check current working file
+       214 +     if [ -n "$CLAUDE_CURRENT_FILE" ]; then
+       215 +         if grep -qE "stripe\.|PaymentIntent" "$CLAUDE_CURRENT_FILE"; then
+       216 +             include_stripe_docs=true
+       217 +         fi
+       218 +     fi
+       219       ```
+       220    
+       221 -  3. **Implement selective loading**:
+       221 +  3. **Implement selective loading with analytics**:
+       222       - Only load docs when triggers match
+       223       - Keep base patterns always active
+       224       - Add docs at end of context for easy reference
+       225 +     - Log usage for pattern learning:
+       226 +     ```bash
+       227 +     # Track doc usage for self-improvement
+       228 +     if [ "$include_stripe_docs" = true ]; then
+       229 +         echo "$(date): stripe-docs loaded" >> .construct/analytics/doc-usage.log
+       230 +     fi
+       231 +     ```
+       232    
+       233    ### Phase 4: Testing & Validation (Day 4)
+       234    
+
+⏺ Update(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Updated CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md with 30 additions and 8 removals
+       232    
+       233    ### Phase 4: Testing & Validation (Day 4)
+       234    
+       235 -  1. **Create test scenarios**:
+       235 +  1. **Create comprehensive test scenarios**:
+       236       ```bash
+       237       # Scenario 1: Working on Stripe integration
+       238       touch PaymentService.swift
+       239 +     echo "import Stripe" >> PaymentService.swift
+       240       construct-patterns regenerate
+       241       # Verify: Stripe docs should be included
+       242       
+     ...
+       243       touch UserProfile.swift
+       244       construct-patterns regenerate
+       245       # Verify: Stripe docs should NOT be included
+       246 +     
+       247 +     # Scenario 3: False positive test
+       248 +     touch PaymentHelper.swift  # Generic name
+       249 +     construct-patterns regenerate
+       250 +     # Verify: Stripe docs NOT included without import
+       251 +     
+       252 +     # Scenario 4: Multiple SDK conflict
+       253 +     touch StripeService.swift FirebaseAnalytics.swift
+       254 +     construct-patterns regenerate
+       255 +     # Verify: Both docs loaded with proper prioritization
+       256       ```
+       257    
+       258 -  2. **Test with real project**:
+       259 -     - Import project using Stripe
+       260 -     - Edit payment-related files
+       261 -     - Verify docs appear in context
+       262 -     - Confirm AI assistant uses SDK patterns correctly
+       258 +  2. **AI interaction testing**:
+       259 +     - Query: "How do I create a PaymentIntent?"
+       260 +     - Verify: AI references the loaded Stripe docs correctly
+       261 +     - Query: "What's the error handling pattern?"
+       262 +     - Verify: AI uses the Common Errors section from docs
+       263 +     - Track response quality metrics
+       264    
+       265 -  3. **Performance testing**:
+       265 +  3. **Performance and scalability testing**:
+       266       - Measure CLAUDE.md size with/without docs
+       267 -     - Ensure assembly time remains fast
+       267 +     - Test with large docs (>10k lines)
+       268 +     - Ensure assembly time <2 seconds
+       269       - Verify no impact on non-integration work
+       270 +     - Set context size limits:
+       271 +     ```bash
+       272 +     # Prevent context bloat
+       273 +     MAX_DOC_SIZE=5000  # lines
+       274 +     if [ $(wc -l < "$docs_file") -gt $MAX_DOC_SIZE ]; then
+       275 +         # Load summary version instead
+       276 +         use_summary_docs=true
+       277 +     fi
+       278 +     ```
+       279    
+       280    ### Phase 5: Documentation Tool (Future)
+       281    
+
+⏺ Update(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Updated CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md with 25 additions and 9 removals                  
+       278       fi
+       279       ```
+       280    
+       281 -  ### Phase 5: Documentation Tool (Future)
+       281 +  ### Phase 5: Documentation Tool & Pattern Learning (Future)
+       282    
+       283 -  **Note**: Need to create `construct-docs` tool for easy doc pattern creation:
+       283 +  **Initial Implementation**: Basic doc management
+       284    ```bash
+       285 -  # Future tool usage:
+       285 +  # Future tool specifications:
+       286    construct-docs create stripe --from-url https://stripe.com/docs/api
+       287    construct-docs update stripe --version 5.0
+       288 -  construct-docs extract firebase --from-repo
+       288 +  construct-docs extract firebase --from-repo https://github.com/firebase/firebase-ios-sdk
+       289 +  construct-docs validate stripe  # Check code examples still compile
+       290    ```
+       291    
+       292 -  This tool would:
+       293 -  - Parse official SDK docs
+       294 -  - Extract key patterns and examples
+       295 -  - Format as `.docs.md` files
+       296 -  - Update version information
+       292 +  **Tool Architecture**:
+       293 +  - **Input Sources**: URL scraping, GitHub repos, PDF parsing
+       294 +  - **Output Format**: Structured `.docs.md` following template
+       295 +  - **Extraction Logic**: 
+       296 +    - Identify code examples and their context
+       297 +    - Extract method signatures and parameters
+       298 +    - Capture error codes and handling patterns
+       299 +    - Parse version-specific changes
+       300 +  - **Validation**: Optionally compile code examples to ensure accuracy
+       301    
+       302 +  **Pattern Learning Integration**:
+       303 +  ```bash
+       304 +  # Auto-suggest docs based on usage
+       305 +  construct-patterns analyze
+       306 +  # Output: "Detected 15 uses of Firebase Auth without docs. Add with: construct add docs/firebase-auth"
+       307 +  
+       308 +  # Track which docs sections are most accessed
+       309 +  construct-analytics report docs
+       310 +  # Output: "Stripe PaymentIntent section accessed 45 times this week"
+       311 +  ```
+       312 +  
+       313    ## Success Criteria
+       314    
+       315    1. **Zero new infrastructure** - Uses existing pattern system
+
+⏺ Update(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Updated CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md with 11 additions and 3 removals               
+       310    # Output: "Stripe PaymentIntent section accessed 45 times this week"
+       311    ```
+       312    
+       313 -  ## Success Criteria
+       313 +  ## Success Criteria & Metrics
+       314    
+       315 +  ### Quantitative Metrics
+       316 +  1. **Performance Impact**: Assembly time remains <2 seconds
+       317 +  2. **Context Efficiency**: Docs add <20% to CLAUDE.md size when loaded
+       318 +  3. **Accuracy**: >90% precision in loading relevant docs (no false positives)
+       319 +  4. **Developer Time Saved**: 80% reduction in manual doc searching
+       320 +  5. **Adoption Rate**: 50% of projects using SDK integrations adopt docs patterns within first month
+       321 +  
+       322 +  ### Qualitative Goals
+       323    1. **Zero new infrastructure** - Uses existing pattern system
+       324    2. **Context-aware loading** - Docs only appear when relevant
+       325    3. **Simple format** - Plain markdown, no complex structure
+       326 -  4. **Fast performance** - No noticeable slowdown
+       327 -  5. **Easy maintenance** - Update docs by editing text files
+       326 +  4. **Easy maintenance** - Update docs by editing text files
+       327 +  5. **AI Response Quality** - Measurable improvement in SDK-related queries
+       328    
+       329    ## Validation Requirements
+       330    
+
+⏺ Update(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Updated CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md with 34 additions and 10 removals                                       
+       328    
+       329    ## Validation Requirements
+       330    
+       331 -  ### Do we need a validator?
+       331 +  ### Core Validation Philosophy
+       332 +  While docs are primarily read-only reference material, optional validation can enhance quality and enable advanced features.
+       333    
+       334 -  **No**, because:
+       335 -  1. Docs are read-only reference material
+       336 -  2. They don't enforce code structure
+       337 -  3. Existing pattern validators already check integration code
+       338 -  4. Unix philosophy: docs are just text to read
+       339 -  
+       340 -  However, we should validate:
+       334 +  ### Minimal Required Validation
+       335 +  In `check-architecture.sh`:
+       336    - `.docs.md` files exist when `.yaml` references them
+       337    - File format is valid markdown
+       338 -  - No broken code examples (optional)
+       338 +  - Basic structure follows template
+       339    
+       340 -  This can be done in existing `check-architecture.sh` validation.
+       340 +  ### Optional Advanced Validators
+       341 +  Create as separate tools in pattern directories:
+       342 +  ```bash
+       343 +  patterns/integration/stripe/validators/
+       344 +  ├── validate-code-examples.sh    # Compile Swift examples
+       345 +  ├── validate-api-versions.sh     # Check SDK version compatibility
+       346 +  └── generate-summary.sh          # Create condensed version for large docs
+       347 +  ```
+       348    
+       349 +  Benefits of optional validators:
+       350 +  - **Code Example Validation**: Ensures examples compile with current SDK
+       351 +  - **Version Checking**: Alerts when SDK updates might invalidate docs
+       352 +  - **Summary Generation**: Auto-creates condensed versions for context efficiency
+       353 +  
+       354 +  ### Integration with Generators
+       355 +  Validators can enable generators:
+       356 +  ```bash
+       357 +  # If code examples are valid, generator can create:
+       358 +  patterns/integration/stripe/generators/
+       359 +  ├── create-payment-stub.sh       # Generate PaymentIntent boilerplate
+       360 +  ├── create-error-handler.sh      # Generate error handling from docs
+       361 +  └── visualize-payment-flow.sh    # Create diagram from docs
+       362 +  ```
+       363 +  
+       364 +  This approach:
+       365 +  - Maintains Unix philosophy (simple text files)
+       366 +  - Enables optional sophistication
+       367 +  - Ties to README's validator/generator pattern
+       368 +  - Supports future automation
+       369 +  
+       370    ## Rollout Plan
+       371    
+       372    1. **Week 1**: Implement core functionality in LAB
+
+⏺ Update(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Updated CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md with 44 additions and 6 removals         
+       367    - Ties to README's validator/generator pattern
+       368    - Supports future automation
+       369    
+       370 -  ## Rollout Plan
+       370 +  ## Rollout Plan & Integration Strategy
+       371    
+       372 -  1. **Week 1**: Implement core functionality in LAB
+       373 -  2. **Week 2**: Create initial doc patterns (Stripe, Firebase, RevenueCat)
+       374 -  3. **Week 3**: Test with real projects, gather feedback
+       375 -  4. **Week 4**: Refine trigger logic based on usage
+       376 -  5. **Future**: Build extraction tool for automated updates
+       372 +  ### Phase 1: Core Implementation (Week 1)
+       373 +  - Modify `assemble-claude.sh` for `.docs.md` recognition
+       374 +  - Implement basic trigger detection
+       375 +  - Create first doc pattern (Stripe) as proof of concept
+       376 +  - **Integration**: Works with existing `construct-patterns regenerate`
+       377    
+       378 +  ### Phase 2: Pattern Creation (Week 2)
+       379 +  - Create doc patterns for top 5 integrations (Stripe, Firebase, RevenueCat, Mixpanel, Sentry)
+       380 +  - Test trigger accuracy and refine detection logic
+       381 +  - **Integration**: Available via pattern plugin system
+       382 +  
+       383 +  ### Phase 3: Real-World Testing (Week 3)
+       384 +  - Deploy to 3-5 active projects using these SDKs
+       385 +  - Measure performance impact and false positive rate
+       386 +  - Gather developer feedback on doc quality and relevance
+       387 +  - **Integration**: Community can start creating their own `.docs.md` patterns
+       388 +  
+       389 +  ### Phase 4: Optimization & Learning (Week 4)
+       390 +  - Refine triggers based on usage analytics
+       391 +  - Implement conflict resolution for multiple SDKs
+       392 +  - Add pattern learning suggestions
+       393 +  - **Integration**: Ties into future pattern analytics dashboard
+       394 +  
+       395 +  ### Phase 5: Automation Tools (Month 2+)
+       396 +  - Build `construct-docs` extraction tool
+       397 +  - Create validators for code example checking
+       398 +  - Implement auto-update notifications for SDK changes
+       399 +  - **Integration**: Part of broader CLI tool ecosystem
+       400 +  
+       401 +  ### How This Fits the Pattern Ecosystem
+       402 +  ```bash
+       403 +  # Installing docs with patterns
+       404 +  construct add integration/stripe          # Gets stripe.md + stripe.docs.md
+       405 +  construct add integration/stripe --no-docs # Just integration patterns
+       406 +  
+       407 +  # Community taps can include docs
+       408 +  construct tap add company/internal
+       409 +  construct add @company/internal-sdk      # Includes private SDK docs
+       410 +  
+       411 +  # Future web browser integration
+       412 +  # Pattern browser shows "includes SDK docs" badge
+       413 +  # Can preview doc quality before installing
+       414 +  ```
+       415 +  
+       416    ## Open Questions
+       417    
+       418    1. Should docs be included by default or only on triggers?
+
+⏺ Update(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Updated CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md with 39 additions and 6 removals                                                 
+       413    # Can preview doc quality before installing
+       414    ```
+       415    
+       416 -  ## Open Questions
+       416 +  ## Open Questions & Edge Cases
+       417    
+       418 -  1. Should docs be included by default or only on triggers?
+       418 +  ### Primary Questions
+       419 +  
+       420 +  1. **Default inclusion vs. trigger-based?**
+       421       - **Recommendation**: Only on triggers to avoid context bloat
+       422 +     - **Rationale**: Aligns with Karpathy's "fill context with just the right information"
+       423 +     - **Future**: Could add `always_include: true` flag for critical docs
+       424    
+       425 -  2. How to handle versioning of SDK docs?
+       426 -     - **Recommendation**: Version in YAML, update markdown manually
+       425 +  2. **SDK version handling?**
+       426 +     - **Recommendation**: Start with single version in YAML, manual updates
+       427 +     - **Evolution Path**: 
+       428 +       - Phase 1: `sdk_version: "5.0+"` in YAML
+       429 +       - Phase 2: Multiple versions with subdirectories
+       430 +       - Phase 3: Auto-detection from package.json/Podfile
+       431 +     - **Conflict Resolution**: Warn if project uses v4 but docs are v5
+       432    
+       433 -  3. Should we support multiple SDK versions?
+       434 -     - **Recommendation**: Start with latest only, add if needed
+       433 +  3. **Multiple active SDKs?**
+       434 +     - **Recommendation**: Load top 2 by priority to prevent bloat
+       435 +     - **Configuration Option**: `max_docs_loaded: 2` in patterns.yaml
+       436 +     - **Smart Loading**: Prioritize based on current file > recent commits > mentions
+       437    
+       438 +  ### Edge Cases to Consider
+       439 +  
+       440 +  4. **Large documentation files?**
+       441 +     - Create `.docs-summary.md` for quick reference
+       442 +     - Full docs load only with explicit flag
+       443 +     - Auto-generate summaries with future tooling
+       444 +  
+       445 +  5. **Conflicting information across SDKs?**
+       446 +     - Example: Both Stripe and PayPal have "Customer" objects
+       447 +     - Solution: Prefix sections with SDK name in context
+       448 +     - Future: Namespace awareness in AI responses
+       449 +  
+       450 +  6. **Offline/private documentation?**
+       451 +     - Support local file references in YAML
+       452 +     - Enable private company taps with internal docs
+       453 +     - Respect IP and licensing constraints
+       454 +  
+       455 +  7. **Non-code documentation?**
+       456 +     - Architecture diagrams, flow charts, etc.
+       457 +     - Recommendation: Support markdown-embedded diagrams
+       458 +     - Future: Generate visualizations from docs
+       459 +  
+       460    ## Summary
+       461    
+       462    This PRD describes adding SDK documentation to CONSTRUCT using the existing pattern system with a simple `.docs.md` naming 
+     convention.
+              The implementation requires minimal changes to existing code, follows Unix philosophy, and provides immediate value to developers 
+             using third-party integrations.
+       463   \ No newline at end of file
+
+⏺ Update(CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  Updated CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md with 16 additions and 1 removal                                                  
+       459    
+       460    ## Summary
+       461    
+       462 -  This PRD describes adding SDK documentation to CONSTRUCT using the existing pattern system with a simple `.docs.md` naming 
+     convention.
+           -  The implementation requires minimal changes to existing code, follows Unix philosophy, and provides immediate value to developers 
+           - using third-party integrations.
+       462   \ No newline at end of file
+       463 +  This PRD extends CONSTRUCT's dynamic context engineering to SDK documentation through a simple `.docs.md` naming convention. By 
+           + treating docs as specialized patterns, we enable automatic loading of relevant API references exactly when developers need them, 
+           + eliminating manual documentation searches during AI-assisted development.
+       464 +  
+       465 +  ### Key Innovations
+       466 +  - **Zero Infrastructure**: Leverages existing pattern system completely
+       467 +  - **Context-Aware Triggers**: Docs appear based on actual work, not manual inclusion
+       468 +  - **Unix Simplicity**: Just text files with smart loading logic
+       469 +  - **Pattern Learning**: Analytics drive continuous improvement
+       470 +  - **Community Scalable**: Anyone can contribute docs patterns
+       471 +  
+       472 +  ### Expected Impact
+       473 +  - 80% reduction in time spent searching SDK documentation
+       474 +  - Immediate improvement in AI response quality for integration work
+       475 +  - Natural extension of CONSTRUCT's pattern plugin ecosystem
+       476 +  - Foundation for future automation and intelligence features
+       477 +  
+       478 +  This implementation embodies CONSTRUCT's core philosophy: the future of development isn't about editing code, it's about managing 
+           + context. By making SDK documentation dynamically available based on what you're actually doing, we move closer to truly intelligent 
+           + development environments.
+       479   \ No newline at end of file
+
+⏺ I've significantly enhanced the PRD based on the comprehensive feedback. Here are the key improvements:
+
+  Major Enhancements:
+
+  1. Strategic Alignment - Added explicit ties to CONSTRUCT's vision and philosophy
+  2. Trigger Details - Added table showing trigger types, priorities, and conflict resolution
+  3. Documentation Template - Provided consistent structure for all .docs.md files
+  4. Edge Case Handling - Added false positive detection, multi-SDK conflicts, and size limits
+  5. Testing Depth - Included AI interaction tests and performance metrics
+  6. Pattern Learning - Integrated analytics and auto-suggestion features
+  7. Validation Philosophy - Optional validators that enable generators
+  8. Quantitative Metrics - Added measurable success criteria
+  9. Integration Strategy - Showed how this fits the broader ecosystem
+
+  Key Additions:
+
+  - Conflict resolution pseudocode for multiple SDK scenarios
+  - Performance safeguards (MAX_DOC_SIZE limits)
+  - Analytics tracking for self-improvement
+  - Future tool specifications with clear architecture
+  - Edge cases like version conflicts and private docs
+  - Community integration showing how it works with taps
+
+  The PRD now provides a complete implementation guide while maintaining the Unix philosophy of simplicity. It shows how docs-as-patterns is a
+  natural extension of CONSTRUCT's existing architecture rather than a bolt-on feature.
+
+> can you commit that change.
+
+⏺ I'll commit the updated PRD for you.
+
+⏺ Bash(git add CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md)
+  ⎿  (No content)
+
+⏺ Bash(git commit -m "feat: Add comprehensive PRD for documentation as patterns…)
+  ⎿  [refactor/core-lab-templates a78211c] feat: Add comprehensive PRD for documentation as patterns
+      8 files changed, 4921 insertions(+), 71 deletions(-)
+      create mode 100644 CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md
+     … +232 lines (ctrl+r to expand)
+
+⏺ Bash(git status --short)
+  ⎿   M CONSTRUCT-CORE/CONSTRUCT/scripts/construct/update-context.sh        
+      D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-10--21-25-37.md
+      D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-10--21-51-31.md
+     … +8 lines (ctrl+r to expand)
+
+⏺ The commit was successful! The pre-commit hooks ran automatically and:
+
+  1. Created the docs-as-patterns PRD in CONSTRUCT-LAB/AI/PRDs/future/
+  2. Generated development updates including session summaries and quality reports
+  3. Updated architecture documentation automatically
+  4. Refreshed the project context in CLAUDE.md
+
+  The system also auto-staged generated files as part of the commit. The remaining unstaged files are mostly deletions of old structure files
+  (which is normal cleanup) and some new quality reports that were generated.
+
+  The PRD is now committed and ready for implementation!
+
+╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ >                                                                                                                                                    │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+  ⏵⏵ auto-accept edits on (shift+tab to cycle)
+
+
+
+
+
