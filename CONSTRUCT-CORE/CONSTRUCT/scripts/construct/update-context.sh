@@ -130,8 +130,7 @@ Last updated: $(date '+%Y-%m-%d %H:%M:%S')
 - Pattern Plugins: $patterns_count
 - Templates: $templates_count
 - Documentation Files: $docs_count
-- **Configuration Files**: $config_files files  
-- **Documentation Files**: $(find "$PROJECT_DIR/AI/docs" -name "*.md" 2>/dev/null | wc -l || echo "0") files
+- Configuration Files: $config_files
 
 ### Available Resources
 
@@ -245,7 +244,7 @@ $guide_link"
     # Generate violations content
     local hardcoded_status=""
     if command -v rg &>/dev/null; then
-        local hardcoded=$(rg -n "/Users/|/home/" "$CONSTRUCT_DEV/CONSTRUCT" --type sh 2>/dev/null | head -5)
+        local hardcoded=$(rg -n "/Users/|/home/" "$PROJECT_DIR/CONSTRUCT-CORE/CONSTRUCT" --type sh 2>/dev/null | head -5)
         if [ -n "$hardcoded" ]; then
             hardcoded_status=$(echo "$hardcoded" | while read -r line; do echo "- $line"; done)
         else
@@ -264,7 +263,7 @@ $guide_link"
             fi
             missing_docs_count=$((missing_docs_count + 1))
         fi
-    done < <(find_shell_scripts "$CONSTRUCT_DEV/CONSTRUCT/scripts")
+    done < <(find_shell_scripts "$PROJECT_DIR/CONSTRUCT-CORE/CONSTRUCT/scripts")
     
     if [ $missing_docs_count -eq 0 ]; then
         missing_docs_status="✅ All scripts have documentation headers"
@@ -272,7 +271,7 @@ $guide_link"
     
     local duplication_status=""
     if command -v rg &>/dev/null; then
-        local dup_patterns=$(rg -c "cd.*dirname.*BASH_SOURCE" "$CONSTRUCT_DEV/CONSTRUCT" --type sh 2>/dev/null | wc -l | tr -d ' ')
+        local dup_patterns=$(rg -c "cd.*dirname.*BASH_SOURCE" "$PROJECT_DIR/CONSTRUCT-CORE/CONSTRUCT" --type sh 2>/dev/null | wc -l | tr -d ' ')
         if [ "$dup_patterns" -gt 5 ]; then
             duplication_status="⚠️ Path resolution pattern used in $dup_patterns files - consider library function"
         else

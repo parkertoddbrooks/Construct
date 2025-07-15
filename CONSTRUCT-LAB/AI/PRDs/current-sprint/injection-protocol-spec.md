@@ -99,17 +99,33 @@ Content for this pattern...
 
 ## Dynamic Sections
 
-### Auto-Updated Sections
-These sections use existing CONSTRUCT tooling:
+### Base Template Sections
+These sections are part of CLAUDE-BASE.md and populated by update-context.sh:
 ```markdown
 <!-- START:CURRENT-STRUCTURE -->
 <!-- END:CURRENT-STRUCTURE -->
+```
+
+### Context Injection Sections
+These sections are injected via {{CONSTRUCT:CONTEXT}} and populated by update-context.sh:
+```markdown
+<!-- START:ACTIVE-SYMLINKS -->
+<!-- END:ACTIVE-SYMLINKS -->
 
 <!-- START:SPRINT-CONTEXT -->
 <!-- END:SPRINT-CONTEXT -->
 
 <!-- START:VIOLATIONS -->
 <!-- END:VIOLATIONS -->
+
+<!-- START:WORKING-LOCATION -->
+<!-- END:WORKING-LOCATION -->
+
+<!-- START:DOCUMENTATION-LINKS -->
+<!-- END:DOCUMENTATION-LINKS -->
+
+<!-- START:ACTIVE-PRDS -->
+<!-- END:ACTIVE-PRDS -->
 ```
 
 ### Pattern-Specific Dynamic Sections
