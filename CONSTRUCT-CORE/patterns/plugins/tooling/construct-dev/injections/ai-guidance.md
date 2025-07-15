@@ -131,28 +131,41 @@ When AI is asked about CONSTRUCT development:
    - Configuration belongs in config/ not scripts
    - Pre-commit hooks enforce standards
 
-### Interactive Rails Mode
+### 🔧 Interactive Rails Mode
 
-When working with interactive scripts that use the Rails pattern:
+When working with CONSTRUCT scripts that source `interactive-support.sh`:
 
-1. **Rails Pattern Explanation**:
-   - Scripts run interactively to guide users through complex tasks
-   - Present prompts naturally like "What component are you creating?"
-   - Accept user input and provide smart responses
+#### Rails Pattern
+1. **Follow script structure** - Scripts define the conversation flow
+2. **Natural prompts** - Present script prompts conversationally 
+3. **Smart responses**:
+   - Direct answers (ios, default, yes) → Continue script flow
+   - Questions (what? how? list options?) → Provide help, then return to flow
+4. **Minimal context** - Stay on rails unless user needs help
 
-2. **Example Flow**:
-   ```
-   Script: "🔍 What component are you creating?"
-   User: "payment processing service"
-   Script: "✅ Found related patterns: PaymentService, TransactionHandler"
-   Script: "📋 Would you like to see existing payment components? (y/n)"
-   ```
+#### Example Flow
+```
+User: Create a new project
+Claude: What's the project name and type? (ios, web, api, or fullstack)
+User: MyApp ios
+Claude: Use default plugins or would you like to customize?
+User: What plugins are available?
+Claude: [HELP MODE] Available plugins include:
+- languages/swift - Swift language patterns
+- tooling/shell-scripting - Shell automation
+- cross-platform/model-sync - Multi-platform support
+Would you like default or custom?
+User: default
+[Execute: echo '' | ./create-project.sh MyApp ios]
+```
 
-3. **When AI Encounters Rails Scripts**:
-   - Let the script guide the conversation
-   - Provide natural responses to prompts
-   - Don't try to bypass the interactive flow
-   - Trust the script's decision logic
+#### When AI Encounters Rails Scripts:
+- Let the script guide the conversation
+- Provide natural responses to prompts
+- Present help when user asks questions
+- Return to script flow after help
+- Don't try to bypass the interactive flow
+- Trust the script's decision logic
 
 ### Remember
 

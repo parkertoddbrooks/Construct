@@ -313,6 +313,63 @@ check_template_consistency() {
 }
 ```
 
+### ❌ Anti-Pattern Examples (Never Do This)
+
+```bash
+# ❌ BAD: Hardcoded paths
+SCRIPT_DIR="/Users/username/project/scripts"  # Breaks for other users
+
+# ❌ BAD: No error handling
+#!/bin/bash
+# Missing: set -e
+command_that_might_fail
+next_command  # Runs even if previous failed
+
+# ❌ BAD: No validation
+cp "$1" "$2"  # No check if parameters exist
+
+# ❌ BAD: Silent operations
+find . -name "*.tmp" -delete  # No feedback to user
+
+# ❌ BAD: Global variables without clear naming
+result="some value"  # Should be RESULT or local
+
+# ❌ BAD: Functions without documentation
+process_files() {
+    # What does this do? What parameters? What returns?
+}
+```
+
+### Template Structure Validation Pattern
+
+```bash
+# Always check template health before modifications
+validate_template_structure() {
+    local template_dir="$CONSTRUCT_ROOT/PROJECT-TEMPLATE"
+    
+    if [ ! -d "$template_dir" ]; then
+        echo -e "${RED}❌ Template directory not found${NC}"
+        return 1
+    fi
+    
+    # Check for required template files
+    local required_files=(
+        "USER-CHOSEN-NAME/AI/CLAUDE.md"
+        "USER-CHOSEN-NAME/AI/scripts/construct/update-context.sh"
+    )
+    
+    for file in "${required_files[@]}"; do
+        if [ ! -f "$template_dir/$file" ]; then
+            echo -e "${RED}❌ Missing template file: $file${NC}"
+            return 1
+        fi
+    done
+    
+    echo -e "${GREEN}✅ Template structure valid${NC}"
+    return 0
+}
+```
+
 ### Pattern Validation Examples
 
 ```bash

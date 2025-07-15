@@ -122,3 +122,34 @@
 6. **Quality gates catch issues early**: Pre-commit hooks prevent drift
 7. **Session summaries preserve context**: Large changes need documentation
 8. **Template testing required**: Changes must work for both CONSTRUCT and users
+
+### When Manual Updates ARE Acceptable
+
+```bash
+# ✅ CORRECT: Manual configuration
+# Manual strategic decisions, architectural choices
+# User-specific goals and priorities
+
+# ❌ WRONG: Manual status tracking
+# File counts, git status, structure analysis
+# These should auto-update via scripts
+```
+
+### 📚 Authoritative Standards Documents
+
+**Shell Standards**: `AI/docs/automated/development-patterns-automated.md`
+- Complete script patterns, error handling, library usage
+- Configuration-driven validation, quality gates
+
+**Architecture Overview**: `AI/docs/automated/architecture-overview-automated.md`
+- Dual-environment design, component relationships
+
+**Script Reference**: `AI/docs/automated/script-reference-automated.md`
+- All available scripts and library functions
+
+### 🗄️ Historical Context (Deprecated but Kept for Reference)
+
+- **Previous single-environment approach** (replaced by dual-environment)
+- **Hardcoded path patterns** (replaced by relative path resolution)
+- **Manual documentation updates** (replaced by auto-generation)
+- **Inline validation** (replaced by configuration-driven rules)
