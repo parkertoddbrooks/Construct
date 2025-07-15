@@ -44,6 +44,11 @@ These universal principles apply to ALL development work:
 
 ## Current Context
 
+<!-- START:CURRENT-STRUCTURE -->
+### 📊 Current Project State (Auto-Updated)
+*Run `construct-update` to populate*
+<!-- END:CURRENT-STRUCTURE -->
+
 {{CONSTRUCT:CONTEXT}}
 
 ## AI Assistance
