@@ -1,8 +1,10 @@
-# CONSTRUCT Development Context
+# Development Context
 
-## Universal Development Principles
+{{CONSTRUCT:HEADER}}
 
-These core principles apply to ALL development work, regardless of language or platform:
+## Core Development Principles
+
+These universal principles apply to ALL development work:
 
 ### ✅ DO: Foundation Rules
 - **Never break existing tests** - Changes must maintain backward compatibility
@@ -10,6 +12,7 @@ These core principles apply to ALL development work, regardless of language or p
 - **Error handling is mandatory** - All failure modes must be handled gracefully
 - **Security first** - Never expose secrets, validate all inputs, follow security best practices
 - **Performance awareness** - Consider impact of changes on system performance
+- **Version control discipline** - Clear commits, meaningful messages, atomic changes
 
 ### ❌ DON'T: Universal Anti-patterns
 - Hardcoded values that should be configurable
@@ -17,94 +20,36 @@ These core principles apply to ALL development work, regardless of language or p
 - Breaking changes without proper versioning
 - Security vulnerabilities (exposed secrets, unvalidated inputs)
 - Code without proper testing
+- Undocumented complex logic
 
-## Multi-Context Awareness
+## Pattern System
 
-This context system understands your entire project ecosystem. When you mention files, entities, or tasks, I'll automatically apply the appropriate patterns based on:
+{{CONSTRUCT:PATTERNS}}
 
-- **File extensions** (*.swift, *.cs, *.ts, *.sh, etc.)
-- **Directory structure** (CONSTRUCT/**, Models/, Services/, etc.)
-- **Project type** (iOS app, web API, full-stack application)
-- **Task context** (adding features, fixing bugs, refactoring)
+## Development Guidelines
 
-## Pattern System Overview
+{{CONSTRUCT:GUIDELINES}}
 
-Your development patterns are organized as plugins that can be mixed and matched based on your project needs:
+## Project Structure
 
-### Base Patterns (Always Active)
-- Universal development principles
-- Security and performance standards
-- Documentation requirements
-- Testing standards
+{{CONSTRUCT:STRUCTURE}}
 
-### Language Patterns
-- Swift/iOS development patterns
-- C#/.NET backend patterns
-- TypeScript/JavaScript patterns
-- Shell scripting standards
+## Code Examples
 
-### Architectural Patterns
-- MVVM for client applications
-- Clean Architecture for backends
-- Microservices patterns
-- API design standards
+{{CONSTRUCT:EXAMPLES}}
 
-### Cross-Platform Patterns
-- Model synchronization across stack
-- API contract management
-- Multi-language coordination
+## Quick Commands
 
-### Tooling Patterns
-- CONSTRUCT development workflow
-- CI/CD pipeline standards
-- Development tools and scripts
+{{CONSTRUCT:COMMANDS}}
 
-## How Pattern Selection Works
+## Current Context
 
-Patterns are automatically activated based on your project configuration and the files you're working with. You can also explicitly enable/disable patterns by updating your project's pattern configuration.
+{{CONSTRUCT:CONTEXT}}
 
-### Dynamic Context Application
-When you mention specific tasks or files, I'll automatically focus on the relevant patterns:
+## AI Assistance
 
-- Working on a Swift View → Swift language + MVVM patterns
-- Updating an API endpoint → Backend patterns + cross-platform considerations
-- Writing shell scripts → Shell scripting + tooling patterns
-- CONSTRUCT development → CONSTRUCT-specific workflow patterns
+{{CONSTRUCT:AI_GUIDANCE}}
 
-## Development Quality Standards
+---
 
-### Code Quality
-- All code must be readable and maintainable
-- Follow language-specific style guides and conventions
-- Use appropriate design patterns for the context
-- Implement proper error handling and logging
-
-### Testing Requirements
-- Unit tests for business logic
-- Integration tests for API endpoints
-- UI tests for critical user flows
-- Performance tests for bottlenecks
-
-### Documentation Standards
-- README files for all projects and major components
-- API documentation for public interfaces
-- Architectural decision records for significant choices
-- Code comments for complex logic or business rules
-
-### Security Standards
-- Never commit secrets or API keys
-- Validate all user inputs
-- Use parameterized queries for database access
-- Implement proper authentication and authorization
-- Follow OWASP guidelines for web applications
-
-## Pattern Configuration
-
-Below you'll see which patterns are currently active for your project. You can toggle patterns on/off by editing your project's `.construct/patterns.yaml` file and regenerating this context.
-
-To modify patterns:
-1. Edit `.construct/patterns.yaml` for project-specific rules
-2. Create new plugins in `CONSTRUCT-LAB/patterns/plugins/` for reusable patterns
-3. Run `construct-patterns regenerate` to update this file
-
-**Remember**: This file is generated automatically. Don't edit it directly - use the pattern configuration system instead.
+*This context is dynamically generated based on active patterns. To update, run the appropriate context refresh command for your project.*

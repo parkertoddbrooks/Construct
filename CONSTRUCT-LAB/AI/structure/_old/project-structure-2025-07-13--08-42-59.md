@@ -1,5 +1,5 @@
 # Project Structure Scan
-**Date**: 2025-07-11
+**Date**: 2025-07-13
 **Repo**: Construct
 **Remote**: git@github.com:parkertoddbrooks/Construct.git
 **Branch**: refactor/core-lab-templates
@@ -814,6 +814,7 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--20-27-08.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--20-38-21.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--21-51-33.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-11--11-59-14.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-11--14-36-51.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-2223-construct-session.md
@@ -898,6 +899,7 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-10-1014-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-10-2125-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-10-2151-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-11-1159-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-11-1436-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -1003,19 +1005,23 @@ CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
 CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
 CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
 CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
-CONSTRUCT-LAB/AI/PRDs/construct-template-repository-prd.md
 CONSTRUCT-LAB/AI/PRDs/future/ai-enhanced-construct-intelligence-prd.md
 CONSTRUCT-LAB/AI/PRDs/future/claude-code-hooks-integration-prd.md
+CONSTRUCT-LAB/AI/PRDs/future/CONSTRUCT-Abstraction-Roadmap-v02.md
+CONSTRUCT-LAB/AI/PRDs/future/CONSTRUCT-Abstraction-Roadmap.md
+CONSTRUCT-LAB/AI/PRDs/future/construct-template-repository-prd.md
 CONSTRUCT-LAB/AI/PRDs/future/docs-as-patterns-prd.md
 CONSTRUCT-LAB/AI/PRDs/future/PRD-Self-Learning-Pattern-System-Complete.md
+CONSTRUCT-LAB/AI/PRDs/future/PRD-Tracking-System-Evolution.md
+CONSTRUCT-LAB/AI/PRDs/future/prd-updates-2025-06-28.md
 CONSTRUCT-LAB/AI/PRDs/future/smoke-test-orchestrator-prd.md
-CONSTRUCT-LAB/AI/PRDs/prd-updates-2025-06-28.md
-CONSTRUCT-LAB/AI/PRDs/swift-claude-starter-template-prd-info.md
-CONSTRUCT-LAB/AI/PRDs/swift-claude-starter-template-prd.md
+CONSTRUCT-LAB/AI/PRDs/future/swift-claude-starter-template-prd-info.md
+CONSTRUCT-LAB/AI/PRDs/future/swift-claude-starter-template-prd.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-08--22-39-03.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-10--21-51-31.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-11--11-59-12.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-11--14-36-49.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-13--08-42-59.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -1122,9 +1128,10 @@ CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-07-09--21-56-22.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-10--21-25-37.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-10--21-51-31.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-11--11-59-12.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-11--14-36-49.md
 CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--22-55-28.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
-CONSTRUCT-LAB/AI/structure/project-structure-2025-07-11--14-36-49.md
+CONSTRUCT-LAB/AI/structure/project-structure-2025-07-13--08-42-59.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-03.md
@@ -1907,6 +1914,7 @@ test-runner.sh
   CONSTRUCT-LAB/AI/ai-misc-conversations
   CONSTRUCT-LAB/AI/ai-misc-conversations/what-is-construct
   CONSTRUCT-LAB/AI/ai-raw-cli
+  CONSTRUCT-LAB/AI/ai-raw-cli/archive
   CONSTRUCT-LAB/AI/ai-raw-cli/RUN
   CONSTRUCT-LAB/AI/dev-logs
   CONSTRUCT-LAB/AI/dev-logs/check-quality
@@ -1927,6 +1935,7 @@ test-runner.sh
   CONSTRUCT-LAB/AI/PRDs/current-sprint
   CONSTRUCT-LAB/AI/PRDs/full-app
   CONSTRUCT-LAB/AI/PRDs/future
+  CONSTRUCT-LAB/AI/PRDs/recover
   CONSTRUCT-LAB/AI/quality-reports
   CONSTRUCT-LAB/AI/structure
   CONSTRUCT-LAB/AI/todo
@@ -2037,11 +2046,11 @@ No config directory found
 === File Counts ===
 Shell Scripts: 186
 YAML Configs: 32
-Markdown Docs: 828
+Markdown Docs: 835
 Python Files: 0
 
 === Directory Structure ===
-Total Directories: 471
+Total Directories: 473
 
 === Project Health ===
 Pattern Configuration: Found
@@ -2063,5 +2072,5 @@ Active Patterns:
 - AI documentation: 5 files
 
 ---
-*Generated by scan_project_structure.sh on Fri Jul 11 14:36:51 PDT 2025*
+*Generated by scan_project_structure.sh on Sun Jul 13 08:43:02 PDT 2025*
 *Project: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT*

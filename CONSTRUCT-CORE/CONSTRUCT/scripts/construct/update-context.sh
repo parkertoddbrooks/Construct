@@ -15,6 +15,8 @@ NC='\033[0m' # No Color
 # Source library functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
+CONSTRUCT_CORE="$CONSTRUCT_ROOT/CONSTRUCT-CORE"
 source "$SCRIPTS_ROOT/../lib/common-patterns.sh"
 source "$SCRIPTS_ROOT/../lib/validation.sh"
 source "$SCRIPTS_ROOT/../lib/file-analysis.sh"
@@ -44,14 +46,8 @@ PROJECT_DIR="${1:-.}"
 PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
 
 # Get CLAUDE.md path for this project
-# Fix for CONSTRUCT: Use CONSTRUCT-LAB/CLAUDE.md when in CONSTRUCT repository
-if [ -d "$PROJECT_DIR/CONSTRUCT-CORE" ] && [ -d "$PROJECT_DIR/CONSTRUCT-LAB" ]; then
-    # This is CONSTRUCT itself - use CONSTRUCT-LAB/CLAUDE.md
-    CLAUDE_MD="$PROJECT_DIR/CONSTRUCT-LAB/CLAUDE.md"
-else
-    # Regular project - use PROJECT_DIR/CLAUDE.md
-    CLAUDE_MD="$PROJECT_DIR/CLAUDE.md"
-fi
+# All projects now use root CLAUDE.md (created by /init and enhanced by construct-init)
+CLAUDE_MD="$PROJECT_DIR/CLAUDE.md"
 
 echo -e "${BLUE}🔄 Updating project context...${NC}"
 echo "Project: $PROJECT_DIR"
@@ -104,13 +100,36 @@ update_auto_sections() {
         done < <(find "$PROJECT_DIR/CONSTRUCT/config" -name "*.yaml" -type f)
     fi
     
+    # Count additional components
+    local patterns_count=0
+    local templates_count=0
+    local docs_count=0
+    
+    # Count patterns
+    if [ -d "$PROJECT_DIR/CONSTRUCT-CORE/patterns/plugins" ]; then
+        patterns_count=$(find "$PROJECT_DIR/CONSTRUCT-CORE/patterns/plugins" -name "pattern.yaml" -type f 2>/dev/null | wc -l | tr -d ' ')
+    fi
+    
+    # Count templates
+    if [ -d "$PROJECT_DIR/CONSTRUCT-CORE/TEMPLATES" ]; then
+        templates_count=$(find "$PROJECT_DIR/CONSTRUCT-CORE/TEMPLATES" -maxdepth 2 -type d 2>/dev/null | wc -l | tr -d ' ')
+    fi
+    
+    # Count documentation files
+    if [ -d "$PROJECT_DIR/CONSTRUCT-LAB/AI/docs" ]; then
+        docs_count=$(find "$PROJECT_DIR/CONSTRUCT-LAB/AI/docs" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+    fi
+    
     # Update CURRENT-STRUCTURE section
     local structure_content="## 📊 Current Project State (Auto-Updated)
 Last updated: $(date '+%Y-%m-%d %H:%M:%S')
 
 ### Active Components
-- **Shell Scripts**: $script_count files
-- **Library Functions**: $lib_functions files
+- Shell Scripts: $script_count
+- Library Functions: $lib_functions
+- Pattern Plugins: $patterns_count
+- Templates: $templates_count
+- Documentation Files: $docs_count
 - **Configuration Files**: $config_files files  
 - **Documentation Files**: $(find "$PROJECT_DIR/AI/docs" -name "*.md" 2>/dev/null | wc -l || echo "0") files
 
@@ -320,11 +339,61 @@ $git_status_output
 
     # Generate symlinks content
     local symlinks_content=""
-    if [ -x "$CONSTRUCT_DEV/CONSTRUCT/scripts/construct/check-symlinks.sh" ]; then
-        symlinks_content=$("$CONSTRUCT_DEV/CONSTRUCT/scripts/construct/check-symlinks.sh" --list-markdown 2>/dev/null || echo "Error generating symlink list")
+    if [ -x "$CONSTRUCT_CORE/CONSTRUCT/scripts/construct/check-symlinks.sh" ]; then
+        symlinks_content=$("$CONSTRUCT_CORE/CONSTRUCT/scripts/construct/check-symlinks.sh" --list-markdown 2>/dev/null || echo "Error generating symlink list")
     else
         symlinks_content="### 🔗 Active Symlinks (Auto-Updated)
 Error: check-symlinks.sh not found or not executable"
+    fi
+
+    # Generate PRDs content (CONSTRUCT-specific)
+    local prds_content=""
+    if [ -d "$PROJECT_DIR/CONSTRUCT-CORE" ] && [ -d "$PROJECT_DIR/CONSTRUCT-LAB" ]; then
+        prds_content="### 📋 Active Product Requirements (Auto-Updated)
+
+#### Current Sprint PRDs
+"
+        # List PRDs in current sprint directory
+        if [ -d "$PROJECT_DIR/CONSTRUCT-LAB/AI/PRDs/current-sprint" ]; then
+            local prd_count=0
+            while IFS= read -r prd_file; do
+                if [ -f "$prd_file" ]; then
+                    local prd_name=$(basename "$prd_file")
+                    prds_content="${prds_content}- [$prd_name](CONSTRUCT-LAB/AI/PRDs/current-sprint/$prd_name)
+"
+                    prd_count=$((prd_count + 1))
+                fi
+            done < <(find "$PROJECT_DIR/CONSTRUCT-LAB/AI/PRDs/current-sprint" -name "*.md" -type f 2>/dev/null | sort)
+            
+            if [ $prd_count -eq 0 ]; then
+                prds_content="${prds_content}*No active PRDs in current sprint*
+"
+            fi
+        fi
+
+        prds_content="${prds_content}
+#### Active Todos
+"
+        # List todo items
+        if [ -d "$PROJECT_DIR/CONSTRUCT-LAB/AI/todo/current" ]; then
+            local todo_count=0
+            while IFS= read -r todo_file; do
+                if [ -f "$todo_file" ]; then
+                    local todo_name=$(basename "$todo_file")
+                    prds_content="${prds_content}- [$todo_name](CONSTRUCT-LAB/AI/todo/current/$todo_name)
+"
+                    todo_count=$((todo_count + 1))
+                fi
+            done < <(find "$PROJECT_DIR/CONSTRUCT-LAB/AI/todo/current" -maxdepth 1 \( -name "*.md" -o -name "*.markdown" -o -name "*.txt" \) -type f 2>/dev/null | sort)
+            
+            if [ $todo_count -eq 0 ]; then
+                prds_content="${prds_content}*No active todos*
+"
+            fi
+        fi
+    else
+        prds_content="### 📋 Active Product Requirements (Auto-Updated)
+*Run \`construct-update\` to refresh PRD tracking*"
     fi
 
     # Write each section to temporary files
@@ -334,6 +403,7 @@ Error: check-symlinks.sh not found or not executable"
     echo "$violations_content" > "$temp_dir/violations.txt"
     echo "$working_content" > "$temp_dir/working.txt"
     echo "$symlinks_content" > "$temp_dir/symlinks.txt"
+    echo "$prds_content" > "$temp_dir/prds.txt"
     
     # Create temporary file with updated content
     local temp_file="$temp_dir/claude_updated.md"
@@ -424,6 +494,20 @@ Error: check-symlinks.sh not found or not executable"
         in_section = 0
         next
     }
+    /<!-- START:ACTIVE-PRDS -->/ {
+        print $0
+        while ((getline line < "'$temp_dir'/prds.txt") > 0) {
+            print line
+        }
+        close("'$temp_dir'/prds.txt")
+        in_section = 7
+        next
+    }
+    /<!-- END:ACTIVE-PRDS -->/ && in_section == 7 {
+        print $0
+        in_section = 0
+        next
+    }
     in_section > 0 { next }
     { print }
     ' > "$temp_file"
@@ -432,7 +516,7 @@ Error: check-symlinks.sh not found or not executable"
     mv "$temp_file" "$CLAUDE_MD"
     
     # Clean up temporary files
-    rm -f "$temp_dir/structure.txt" "$temp_dir/sprint.txt" "$temp_dir/docs.txt" "$temp_dir/violations.txt" "$temp_dir/working.txt"
+    rm -f "$temp_dir/structure.txt" "$temp_dir/sprint.txt" "$temp_dir/docs.txt" "$temp_dir/violations.txt" "$temp_dir/working.txt" "$temp_dir/symlinks.txt" "$temp_dir/prds.txt"
     
     echo -e "${GREEN}✅ Auto-sections updated successfully${NC}"
 }

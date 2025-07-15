@@ -1,0 +1,51 @@
+name: construct-dev
+description: CONSTRUCT framework development patterns
+version: 1.0.0
+author: CONSTRUCT Team
+
+provides:
+  guidelines: 
+    - Symlink management rules
+    - LAB-to-CORE promotion workflow
+    - Dual-environment architecture
+    - Shell scripting standards
+  
+  examples:
+    - Shell script templates
+    - Library function patterns
+    - Configuration examples
+    - Before-coding workflows
+  
+  validators:
+    - Architecture compliance
+    - Symlink integrity
+    - Path validation
+    - Quality gates
+  
+  generators:
+    - Context updates
+    - Architecture documentation
+    - Session summaries
+    - Quality reports
+  
+  commands:
+    - construct-before
+    - construct-check
+    - construct-update
+    - construct-scan
+    - construct-quality
+    - construct-session
+
+tags:
+  - construct
+  - development
+  - shell
+  - architecture
+
+requires:
+  - tooling/shell-scripting
+  - tooling/unix-philosophy
+
+compatible_with:
+  languages: ["bash", "python"]
+  platforms: ["darwin", "linux"]
