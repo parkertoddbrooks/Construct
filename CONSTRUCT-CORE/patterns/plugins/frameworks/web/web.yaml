@@ -1,0 +1,17 @@
+name: web
+version: 1.0.0
+description: Universal web framework patterns for modern web development
+author: CONSTRUCT Team
+category: frameworks
+dependencies: []  # Framework-agnostic, works with any language
+tags:
+  - web
+  - frontend
+  - javascript
+  - typescript
+  - html
+  - css
+  - react
+  - vue
+  - angular
+min_construct_version: 2.0.0

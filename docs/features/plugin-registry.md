@@ -51,6 +51,36 @@ plugins:
     # Project-specific plugins in CONSTRUCT-LAB
 ```
 
+## Available Plugin Categories
+
+### Architectural Patterns (`architectural/`)
+- **mvvm** - Model-View-ViewModel pattern
+- **mvvm-ios** - iOS-specific MVVM implementation
+
+### Cross-Platform (`cross-platform/`)
+- **model-sync** - Multi-platform model synchronization
+
+### Frameworks (`frameworks/`)
+- **swiftui** - SwiftUI best practices
+- **ios-ui-library** - iOS UI component patterns
+- **web** - Universal web framework patterns (React, Vue, Angular, vanilla JS)
+
+### Languages (`languages/`)
+- **swift** - Swift 6 patterns
+- **python** - Python PEP 8 patterns
+- **csharp** - C# modern patterns
+
+### Platforms (`platforms/`)
+- **ios** - iOS platform conventions
+- **web** - Web platform patterns (PWA, SEO, browser APIs)
+
+### Tooling (`tooling/`)
+- **shell-scripting** - Shell script patterns
+- **shell-quality** - Script quality standards
+- **construct-dev** - CONSTRUCT development
+- **error-handling** - Error handling patterns
+- **unix-philosophy** - Unix design principles
+
 ## Plugin Structure
 
 ### Required Files

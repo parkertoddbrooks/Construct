@@ -30,6 +30,11 @@ plugins:
       version: "1.0.0"
       has_validators: true
       has_generators: false
+    frameworks/web:
+      description: "Universal web framework patterns for modern web development"
+      version: "1.0.0"
+      has_validators: true
+      has_generators: false
     languages/csharp:
       description: "C# language patterns and modern .NET best practices"
       version: "1.0.0"
@@ -47,6 +52,11 @@ plugins:
       has_generators: false
     platforms/ios:
       description: "iOS platform-specific patterns and conventions"
+      version: "1.0.0"
+      has_validators: true
+      has_generators: false
+    platforms/web:
+      description: "Web platform-specific patterns for PWAs, SEO, and browser APIs"
       version: "1.0.0"
       has_validators: true
       has_generators: false

@@ -1,5 +1,5 @@
 # Project Structure Scan
-**Date**: 2025-07-15
+**Date**: 2025-07-16
 **Repo**: Construct
 **Remote**: git@github.com:parkertoddbrooks/Construct.git
 **Branch**: refactor/core-lab-templates
@@ -221,9 +221,12 @@ CONSTRUCT-CORE/CONSTRUCT/scripts/workspace/import-project.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/workspace/workspace-status.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/workspace/workspace-update.sh
 CONSTRUCT-CORE/patterns/plugins/frameworks/ios-ui-library/validators/usage.sh
+CONSTRUCT-CORE/patterns/plugins/frameworks/web/validators/performance-check.sh
+CONSTRUCT-CORE/patterns/plugins/frameworks/web/validators/security-check.sh
 CONSTRUCT-CORE/patterns/plugins/languages/csharp/validators/quality.sh
 CONSTRUCT-CORE/patterns/plugins/languages/python/validators/quality.sh
 CONSTRUCT-CORE/patterns/plugins/languages/swift/validators/quality.sh
+CONSTRUCT-CORE/patterns/plugins/platforms/web/validators/accessibility-check.sh
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/generators/api-reference.sh
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/generators/architecture.sh
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/generators/development-patterns.sh
@@ -258,10 +261,12 @@ CONSTRUCT-CORE/patterns/plugins/architectural/mvvm/mvvm.yaml
 CONSTRUCT-CORE/patterns/plugins/cross-platform/model-sync/model-sync.yaml
 CONSTRUCT-CORE/patterns/plugins/frameworks/ios-ui-library/ios-ui-library.yaml
 CONSTRUCT-CORE/patterns/plugins/frameworks/swiftui/swiftui.yaml
+CONSTRUCT-CORE/patterns/plugins/frameworks/web/web.yaml
 CONSTRUCT-CORE/patterns/plugins/languages/csharp/csharp.yaml
 CONSTRUCT-CORE/patterns/plugins/languages/python/python.yaml
 CONSTRUCT-CORE/patterns/plugins/languages/swift/swift.yaml
 CONSTRUCT-CORE/patterns/plugins/platforms/ios/ios.yaml
+CONSTRUCT-CORE/patterns/plugins/platforms/web/web.yaml
 CONSTRUCT-CORE/patterns/plugins/registry.yaml
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/_git-ignore/pattern.yaml
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/construct-dev.yaml
@@ -278,6 +283,7 @@ Projects/_ai-ignore_not-used/test003/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/test01/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/TestPatternProject/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/TestProject/.construct/patterns.yaml
+Projects/grok-code/grok-code-python/.construct/patterns.yaml
 ```
 
 ## Markdown Documentation Files
@@ -581,11 +587,13 @@ CONSTRUCT-CORE/patterns/plugins/frameworks/ios-ui-library/ios-ui-library.md
 CONSTRUCT-CORE/patterns/plugins/frameworks/swiftui/injections/performance.md
 CONSTRUCT-CORE/patterns/plugins/frameworks/swiftui/injections/visual-quality.md
 CONSTRUCT-CORE/patterns/plugins/frameworks/swiftui/swiftui.md
+CONSTRUCT-CORE/patterns/plugins/frameworks/web/web.md
 CONSTRUCT-CORE/patterns/plugins/languages/csharp/csharp.md
 CONSTRUCT-CORE/patterns/plugins/languages/python/python.md
 CONSTRUCT-CORE/patterns/plugins/languages/swift/swift.md
 CONSTRUCT-CORE/patterns/plugins/platforms/ios/injections/accessibility.md
 CONSTRUCT-CORE/patterns/plugins/platforms/ios/ios.md
+CONSTRUCT-CORE/patterns/plugins/platforms/web/web.md
 CONSTRUCT-CORE/patterns/plugins/README.md
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/construct-dev.md
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/ai-guidance.md
@@ -852,6 +860,8 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--20-53-19.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--21-00-32.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--21-54-13.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--22-19-36.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--23-25-10.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--23-34-06.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-2223-construct-session.md
@@ -949,6 +959,8 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2053-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2100-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2154-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2219-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2325-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2334-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -1092,6 +1104,8 @@ CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--21-00-30.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--21-54-11.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--22-19-34.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--23-25-07.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--23-34-04.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-16--07-59-00.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -1211,9 +1225,11 @@ CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--20-53-17.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--21-00-30.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--21-54-11.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--22-19-34.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--23-25-07.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--23-34-04.md
 CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--22-55-28.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
-CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--23-25-07.md
+CONSTRUCT-LAB/AI/structure/project-structure-2025-07-16--07-59-00.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-03.md
@@ -1331,6 +1347,7 @@ Projects/_ai-ignore_not-used/TestPatternProject/.construct/CLAUDE.md.sha256
 Projects/_ai-ignore_not-used/TestPatternProject/CLAUDE.md
 Projects/grok-code/grok-code-python/Claude-Eng-v2/readme.md
 Projects/grok-code/grok-code-python/CLAUDE.md
+Projects/grok-code/grok-code-python/CLAUDE.md.backup
 Projects/grok-code/grok-code-python/readme.md
 Projects/RUN/patterns/run-specific.md
 README.md
@@ -1765,6 +1782,10 @@ CONSTRUCT-CORE/CONSTRUCT/scripts/workspace/:
 CONSTRUCT-CORE/patterns/plugins/frameworks/ios-ui-library/validators/:
   - usage.sh
 
+CONSTRUCT-CORE/patterns/plugins/frameworks/web/validators/:
+  - performance-check.sh
+  - security-check.sh
+
 CONSTRUCT-CORE/patterns/plugins/languages/csharp/validators/:
   - quality.sh
 
@@ -1773,6 +1794,9 @@ CONSTRUCT-CORE/patterns/plugins/languages/python/validators/:
 
 CONSTRUCT-CORE/patterns/plugins/languages/swift/validators/:
   - quality.sh
+
+CONSTRUCT-CORE/patterns/plugins/platforms/web/validators/:
+  - accessibility-check.sh
 
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/generators/:
   - api-reference.sh
@@ -1929,6 +1953,8 @@ test-runner.sh
   CONSTRUCT-CORE/patterns/plugins/frameworks/swiftui
   CONSTRUCT-CORE/patterns/plugins/frameworks/swiftui/injections
   CONSTRUCT-CORE/patterns/plugins/frameworks/swiftui/validators
+  CONSTRUCT-CORE/patterns/plugins/frameworks/web
+  CONSTRUCT-CORE/patterns/plugins/frameworks/web/validators
   CONSTRUCT-CORE/patterns/plugins/languages
   CONSTRUCT-CORE/patterns/plugins/languages/csharp
   CONSTRUCT-CORE/patterns/plugins/languages/csharp/validators
@@ -1940,6 +1966,8 @@ test-runner.sh
   CONSTRUCT-CORE/patterns/plugins/platforms/ios
   CONSTRUCT-CORE/patterns/plugins/platforms/ios/injections
   CONSTRUCT-CORE/patterns/plugins/platforms/ios/validators
+  CONSTRUCT-CORE/patterns/plugins/platforms/web
+  CONSTRUCT-CORE/patterns/plugins/platforms/web/validators
   CONSTRUCT-CORE/patterns/plugins/tooling
   CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev
   CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/_git-ignore
@@ -2156,6 +2184,7 @@ test-runner.sh
   Projects/_ai-ignore_not-used/TestProject2
   Projects/grok-code
   Projects/grok-code/grok-code-python
+  Projects/grok-code/grok-code-python/.construct
   Projects/grok-code/grok-code-python/Claude-Eng-v2
   Projects/grok-code/grok-code-python/prompts
   Projects/grok-code/grok-code-python/static
@@ -2175,13 +2204,13 @@ No config directory found
 ## Summary Statistics
 ```
 === File Counts ===
-Shell Scripts: 188
-YAML Configs: 34
-Markdown Docs: 914
+Shell Scripts: 191
+YAML Configs: 37
+Markdown Docs: 924
 Python Files: 21
 
 === Directory Structure ===
-Total Directories: 496
+Total Directories: 501
 
 === Project Health ===
 Pattern Configuration: Found
@@ -2205,5 +2234,5 @@ Active Patterns:
 - AI documentation: 5 files
 
 ---
-*Generated by scan_project_structure.sh on Tue Jul 15 23:25:10 PDT 2025*
+*Generated by scan_project_structure.sh on Wed Jul 16 07:59:02 PDT 2025*
 *Project: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT*

@@ -30,6 +30,7 @@ plugins/
 ### `frameworks/` - Framework-Specific Patterns
 - **swiftui** - SwiftUI best practices and patterns
 - **ios-ui-library** - Reusable iOS UI component patterns
+- **web** - Universal web framework patterns (React, Vue, Angular, vanilla JS)
 
 ### `languages/` - Language Patterns
 - **swift** - Swift 6 language patterns and conventions
@@ -38,6 +39,7 @@ plugins/
 
 ### `platforms/` - Platform-Specific Patterns
 - **ios** - iOS platform conventions and requirements
+- **web** - Web platform patterns (PWA, SEO, browser APIs)
 
 ### `tooling/` - Development Tool Patterns
 - **shell-scripting** - Shell script patterns and structure
