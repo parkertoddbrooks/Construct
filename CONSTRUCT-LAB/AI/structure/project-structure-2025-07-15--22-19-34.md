@@ -848,6 +848,8 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--17-05-53.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--19-02-33.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--19-54-09.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--20-53-19.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--21-00-32.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--21-54-13.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-2223-construct-session.md
@@ -942,6 +944,8 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1705-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1902-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1954-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2053-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2100-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2154-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -1082,6 +1086,8 @@ CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--19-02-31.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--19-54-07.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--20-53-17.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--21-00-30.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--21-54-11.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--22-19-34.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -1198,9 +1204,11 @@ CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--17-05-51.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--19-02-31.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--19-54-07.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--20-53-17.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--21-00-30.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--21-54-11.md
 CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--22-55-28.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
-CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--21-00-30.md
+CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--22-19-34.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-03.md
@@ -1262,6 +1270,7 @@ docs/core/symlink-promotion-rules.md
 docs/core/workspace-management.md
 docs/DOCS-INDEX.md
 docs/features/init-and-construct-init.md
+docs/features/init-construct-enhanced.md
 docs/features/interactive-scripts.md
 docs/features/plugin-registry.md
 docs/features/repository-context.md
@@ -1315,6 +1324,9 @@ Projects/_ai-ignore_not-used/test01/AI/todo/README.md
 Projects/_ai-ignore_not-used/test01/CLAUDE.md
 Projects/_ai-ignore_not-used/TestPatternProject/.construct/CLAUDE.md.sha256
 Projects/_ai-ignore_not-used/TestPatternProject/CLAUDE.md
+Projects/grok-code/grok-code-python/Claude-Eng-v2/readme.md
+Projects/grok-code/grok-code-python/CLAUDE.md
+Projects/grok-code/grok-code-python/readme.md
 Projects/RUN/patterns/run-specific.md
 README.md
 requirements.md
@@ -1322,7 +1334,27 @@ requirements.md
 
 ## Python Files Found
 ```
-None found
+Projects/grok-code/grok-code-python/app.py
+Projects/grok-code/grok-code-python/ce3.py
+Projects/grok-code/grok-code-python/Claude-Eng-v2/main.py
+Projects/grok-code/grok-code-python/Claude-Eng-v2/ollama-eng.py
+Projects/grok-code/grok-code-python/config.py
+Projects/grok-code/grok-code-python/prompts/system_prompts.py
+Projects/grok-code/grok-code-python/test.py
+Projects/grok-code/grok-code-python/tools/base.py
+Projects/grok-code/grok-code-python/tools/browsertool.py
+Projects/grok-code/grok-code-python/tools/createfolderstool.py
+Projects/grok-code/grok-code-python/tools/diffeditortool.py
+Projects/grok-code/grok-code-python/tools/duckduckgotool.py
+Projects/grok-code/grok-code-python/tools/e2bcodetool.py
+Projects/grok-code/grok-code-python/tools/filecontentreadertool.py
+Projects/grok-code/grok-code-python/tools/filecreatortool.py
+Projects/grok-code/grok-code-python/tools/fileedittool.py
+Projects/grok-code/grok-code-python/tools/lintingtool.py
+Projects/grok-code/grok-code-python/tools/screenshottool.py
+Projects/grok-code/grok-code-python/tools/toolcreator.py
+Projects/grok-code/grok-code-python/tools/uvpackagemanager.py
+Projects/grok-code/grok-code-python/tools/webscrapertool.py
 ```
 
 ## Shell Script Analysis
@@ -2117,9 +2149,17 @@ test-runner.sh
   Projects/_ai-ignore_not-used/TestProject
   Projects/_ai-ignore_not-used/TestProject/.construct
   Projects/_ai-ignore_not-used/TestProject2
+  Projects/grok-code
+  Projects/grok-code/grok-code-python
+  Projects/grok-code/grok-code-python/Claude-Eng-v2
+  Projects/grok-code/grok-code-python/prompts
+  Projects/grok-code/grok-code-python/static
+  Projects/grok-code/grok-code-python/static/css
+  Projects/grok-code/grok-code-python/static/js
+  Projects/grok-code/grok-code-python/templates
+  Projects/grok-code/grok-code-python/tools
   Projects/RUN
   Projects/RUN/patterns
-  Projects/Test
 ```
 
 ## Configuration Analysis
@@ -2132,11 +2172,11 @@ No config directory found
 === File Counts ===
 Shell Scripts: 188
 YAML Configs: 34
-Markdown Docs: 898
-Python Files: 0
+Markdown Docs: 910
+Python Files: 21
 
 === Directory Structure ===
-Total Directories: 488
+Total Directories: 496
 
 === Project Health ===
 Pattern Configuration: Found
@@ -2151,6 +2191,8 @@ Active Patterns:
 
 ### Structure Analysis
 - Swift/iOS project detected (35 .swift files)
+- JavaScript/TypeScript project detected (1 files)
+- Python project detected (21 .py files)
 
 ### Documentation Status
 - ✅ README.md found
@@ -2158,5 +2200,5 @@ Active Patterns:
 - AI documentation: 5 files
 
 ---
-*Generated by scan_project_structure.sh on Tue Jul 15 21:00:32 PDT 2025*
+*Generated by scan_project_structure.sh on Tue Jul 15 22:19:35 PDT 2025*
 *Project: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT*

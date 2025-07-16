@@ -26,6 +26,26 @@ source "$CONSTRUCT_CORE/CONSTRUCT/lib/common-patterns.sh" 2>/dev/null || true
 source "$CONSTRUCT_CORE/CONSTRUCT/lib/validation.sh" 2>/dev/null || true
 source "$CONSTRUCT_CORE/CONSTRUCT/lib/interactive-support.sh" 2>/dev/null || true
 
+# Function to check if CLAUDE.md is from /init
+is_from_init() {
+    local claude_file="$1"
+    # Check for common /init patterns
+    grep -q "This file provides guidance to Claude" "$claude_file" 2>/dev/null || \
+    grep -q "AI coding assistant" "$claude_file" 2>/dev/null || \
+    grep -q "codebase context" "$claude_file" 2>/dev/null || \
+    grep -q "## Project Overview" "$claude_file" 2>/dev/null
+}
+
+# Function to check if old CONSTRUCT version
+is_old_construct_version() {
+    local claude_file="$1"
+    grep -q "CONSTRUCT Version" "$claude_file" 2>/dev/null || \
+    grep -q "construct-update" "$claude_file" 2>/dev/null || \
+    grep -q "ENFORCE THESE RULES" "$claude_file" 2>/dev/null || \
+    grep -q "Swift/SwiftUI Truths" "$claude_file" 2>/dev/null || \
+    grep -q "🚨 ENFORCE THESE RULES" "$claude_file" 2>/dev/null
+}
+
 # Function to detect operating mode
 detect_operating_mode() {
     if [ ! -f "CLAUDE.md" ]; then
@@ -725,26 +745,6 @@ if [ ! -d "$CONSTRUCT_DIR" ]; then
     echo -e "${YELLOW}Creating .construct directory...${NC}"
     mkdir -p "$CONSTRUCT_DIR"
 fi
-
-# Function to check if CLAUDE.md is from /init
-is_from_init() {
-    local claude_file="$1"
-    # Check for common /init patterns
-    grep -q "This file provides guidance to Claude" "$claude_file" 2>/dev/null || \
-    grep -q "AI coding assistant" "$claude_file" 2>/dev/null || \
-    grep -q "codebase context" "$claude_file" 2>/dev/null || \
-    grep -q "## Project Overview" "$claude_file" 2>/dev/null
-}
-
-# Function to check if old CONSTRUCT version
-is_old_construct_version() {
-    local claude_file="$1"
-    grep -q "CONSTRUCT Version" "$claude_file" 2>/dev/null || \
-    grep -q "construct-update" "$claude_file" 2>/dev/null || \
-    grep -q "ENFORCE THESE RULES" "$claude_file" 2>/dev/null || \
-    grep -q "Swift/SwiftUI Truths" "$claude_file" 2>/dev/null || \
-    grep -q "🚨 ENFORCE THESE RULES" "$claude_file" 2>/dev/null
-}
 
 # Handle Mode 3: Legacy CLAUDE.md pattern extraction
 EXTRACTED_PLUGIN=""
