@@ -794,10 +794,10 @@ EOF
         # Regular project - use interactive selection
         
         # Analyze project with detection reasons
-        local analysis_results=$(analyze_project_with_reasons)
+        analysis_results=$(analyze_project_with_reasons)
         
         # Interactive selection with reasons
-        local selected_plugins=()
+        selected_plugins=()
         if is_interactive; then
             # Interactive mode - show UI with detection reasons
             IFS=' ' read -ra selected_array <<< "$(interactive_plugin_selection_with_reasons $analysis_results)"
@@ -806,7 +806,7 @@ EOF
             # Non-interactive mode - check for piped input
             if [ -t 0 ]; then
                 # No piped input - extract recommendations from analysis
-                local recommended_plugins=()
+                recommended_plugins=()
                 while IFS= read -r reason; do
                     IFS='|' read -r plugin _ <<< "$reason"
                     recommended_plugins+=("$plugin")
@@ -815,7 +815,7 @@ EOF
                 echo -e "${YELLOW}Using recommended plugins: ${selected_plugins[*]}${NC}"
             else
                 # Read piped input
-                local piped_input
+                piped_input=""
                 read -r piped_input
                 if [ -n "$piped_input" ]; then
                     IFS=',' read -ra selected_plugins <<< "$piped_input"
@@ -833,7 +833,7 @@ EOF
         fi
         
         # Determine primary language from selected plugins
-        local primary_language="bash"
+        primary_language="bash"
         for plugin in "${selected_plugins[@]}"; do
             if [[ "$plugin" =~ ^languages/(.+)$ ]]; then
                 primary_language="${BASH_REMATCH[1]}"
