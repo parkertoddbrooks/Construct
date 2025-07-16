@@ -901,7 +901,7 @@ construct-arch --overview
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-15 17:05:53
+Last updated: 2025-07-15 19:02:33
 
 ### Active Components
 - Shell Scripts: 188
@@ -948,7 +948,7 @@ These files in LAB are symlinks to CORE - NEVER edit them directly:
 **Date**: 2025-07-15
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 7bc6bec feat: Complete abstraction of LAB content into construct-dev patterns
+**Last Commit**: 1ebd048 fix: Implement intelligent /init content merging in init-construct.sh
 
 ### Current Focus
 - Active patterns and development priorities
@@ -983,30 +983,29 @@ Run ./CONSTRUCT/scripts/core/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
-- CONSTRUCT-CORE/CONSTRUCT/scripts/construct/update-context.sh
-- CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/ai-guidance.md
-- CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/examples.md
-- CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/guidelines.md
-- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--15-48-13.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1548-construct-session.md
+- CLAUDE - overwrite.md
+- CLAUDE--with-init-feedback-2025-07-15--16-01-42.md
+- CLAUDE.md
+- CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
+- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--17-05-53.md
+- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1705-construct-session.md
 - CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
-- CONSTRUCT-LAB/AI/PRDs/current-sprint/injection-protocol-spec.md
-- CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--15-30-20.md
-- CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-48-11.md
+- CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-19-34.md
+- CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-25-41.md
 
 
 ### Git Status
 ```
-A  "CLAUDE - overwrite.md"
-A  CLAUDE--with-init-feedback-2025-07-15--16-01-42.md
+D  "CLAUDE - overwrite.md"
+D  CLAUDE--with-init-feedback-2025-07-15--16-01-42.md
 M  CLAUDE.md
-A  CLAUDE.md.backup
+D  CLAUDE.md.backup
 M  CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
- M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
-A  CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-19-34.md
-A  CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-25-41.md
-A  CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-30-20.md
-A  CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-48-11.md
+A  CONSTRUCT-CORE/patterns/plugins/frameworks/swiftui/injections/performance.md
+A  CONSTRUCT-CORE/patterns/plugins/frameworks/swiftui/injections/visual-quality.md
+A  CONSTRUCT-CORE/patterns/plugins/platforms/ios/injections/accessibility.md
+M  CONSTRUCT-LAB/AI/PRDs/current-sprint/CONSTRUCT-Abstraction-Roadmap-v02.md
+M  CONSTRUCT-LAB/AI/PRDs/current-sprint/injection-protocol-spec.md
 ```
 
 ### Active Development Areas
