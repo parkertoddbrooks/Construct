@@ -1,5 +1,12 @@
 # CONSTRUCT Pattern Injection Protocol Specification
 
+## CRITICAL FILE UNDERSTANDING
+**NEVER FORGET DURING REFACTOR:**
+- **CONSTRUCT/CLAUDE.md** (root) = Main working file created by /init, enhanced by construct-init
+- **CONSTRUCT-CORE/CLAUDE.md** = OLD iOS/Swift file - TO BE DELETED
+- **CONSTRUCT-LAB/CLAUDE.md** = OLD LAB context - TO BE DELETED  
+- **CONSTRUCT-CORE/CLAUDE-BASE.md** = Template for construct-init - KEEP THIS
+
 ## Overview
 This document defines how patterns inject content into CLAUDE.md during the two-stage initialization process.
 

@@ -901,7 +901,7 @@ construct-arch --overview
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-15 17:05:02
+Last updated: 2025-07-15 17:05:53
 
 ### Active Components
 - Shell Scripts: 188
@@ -997,16 +997,16 @@ Run ./CONSTRUCT/scripts/core/check-architecture.sh for duplication analysis
 
 ### Git Status
 ```
- M CLAUDE.md
- M CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
- D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-13--08-42-59.md
- D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-19-34.md
- D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-25-41.md
- D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-30-20.md
- M CONSTRUCT-LAB/patterns/plugins/registry.yaml
-?? "CLAUDE - overwrite.md"
-?? CLAUDE--with-init-feedback-2025-07-15--16-01-42.md
-?? CLAUDE.md.backup
+A  "CLAUDE - overwrite.md"
+A  CLAUDE--with-init-feedback-2025-07-15--16-01-42.md
+M  CLAUDE.md
+A  CLAUDE.md.backup
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
+ M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
+A  CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-19-34.md
+A  CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-25-41.md
+A  CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-30-20.md
+A  CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-48-11.md
 ```
 
 ### Active Development Areas

@@ -30,11 +30,17 @@ This works because:
 4. **CONSTRUCT-LAB/CLAUDE.md** - ✅ EXISTS (CONSTRUCT dev context)
 
 ### Future State (Simplified)
-1. **CONSTRUCT-CORE/CLAUDE-BASE.md** - Universal template (enhanced)
-2. **CONSTRUCT/CLAUDE.md** - Enhanced by pattern system after /init
+1. **CONSTRUCT-CORE/CLAUDE-BASE.md** - Universal template (enhanced) - KEEPS
+2. **CONSTRUCT/CLAUDE.md** - Enhanced by pattern system after /init - KEEPS (MAIN WORKING FILE)
 3. **Projects/*/CLAUDE.md** - Enhanced by pattern system after /init
-4. ~~CONSTRUCT-LAB/CLAUDE.md~~ - Content moved to patterns, file removed
-5. ~~CONSTRUCT-CORE/CLAUDE.md~~ - iOS content moved to patterns, file archived
+4. ~~CONSTRUCT-LAB/CLAUDE.md~~ - Content moved to patterns, file REMOVED
+5. ~~CONSTRUCT-CORE/CLAUDE.md~~ - iOS content moved to patterns, file REMOVED
+
+### CRITICAL UNDERSTANDING
+- **CONSTRUCT/CLAUDE.md** (root) = Created by /init, enhanced by construct-init - THIS IS THE MAIN FILE
+- **CONSTRUCT-CORE/CLAUDE.md** = OLD iOS/Swift content - CAN BE DELETED
+- **CONSTRUCT-LAB/CLAUDE.md** = OLD LAB context - CAN BE DELETED
+- **CONSTRUCT-CORE/CLAUDE-BASE.md** = Template for construct-init - KEEP THIS
 
 ### The Elegant Solution
 ```bash

@@ -441,6 +441,25 @@ $(git status --short 2>/dev/null || echo "Not a git repository")
         
         # Start with header and enhancement marker
         merged="<!-- CONSTRUCT Enhanced: $(date -u +"%Y-%m-%d %H:%M:%S UTC") -->
+<!-- 
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      PATTERN-ENHANCED CONTEXT FILE                           ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║ This file is managed by both Claude Code (/init) and CONSTRUCT patterns.    ║
+║                                                                              ║
+║ ⚠️  WARNING: Manual edits may be lost when:                                  ║
+║   • Running /init (replaces entire file)                                     ║
+║   • Running construct-init (rebuilds from patterns)                          ║
+║   • Inside dynamic sections (updated by construct-update)                    ║
+║                                                                              ║
+║ 💡 BETTER APPROACH: Instead of editing this file:                            ║
+║   • Add project rules → .construct/patterns.yaml                             ║
+║   • Create reusable patterns → pattern plugins                               ║
+║   • Let CONSTRUCT manage the content                                         ║
+║                                                                              ║
+║ See: CONSTRUCT-CORE/patterns/PATTERN-GUIDE.md for details                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+-->
 
 # CLAUDE.md
 

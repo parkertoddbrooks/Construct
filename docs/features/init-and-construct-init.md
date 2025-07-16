@@ -143,8 +143,69 @@ Commands...  <!-- Enhanced with pattern additions -->
 3. **Backward Compatible**: Existing /init users can adopt CONSTRUCT gradually
 4. **Forward Thinking**: New patterns can be added without changing the base system
 
+## Handling Different /init Behaviors
+
+### What if /init creates different content?
+
+The `init-construct.sh` script is designed to handle variations in /init output:
+
+#### Detection Strategy
+```bash
+# Looks for common sections that /init typically creates
+if grep -q "## Project Overview" CLAUDE.md && grep -q "## Quick Start" CLAUDE.md; then
+    INIT_CREATED=true
+fi
+```
+
+#### Preserved Sections
+The script attempts to preserve these common sections:
+- `## Project Overview` - Project description
+- `## Quick Start` - Essential commands
+- `## Core Development Principles` - Coding standards
+- `## Troubleshooting` - Common issues
+
+#### Fallback Behavior
+If /init creates different content:
+
+1. **No Match = Standard Process**: If the expected sections aren't found, `init-construct.sh` treats it as a non-/init file and uses the standard CLAUDE-BASE.md template
+2. **Backup Always Created**: Original CLAUDE.md is saved to CLAUDE.md.backup
+3. **No Data Loss**: You can always recover the original content
+
+#### Customization Options
+You can modify the detection logic in `init-construct.sh`:
+
+```bash
+# Add detection for alternative section names
+if echo "$current_content" | grep -q "^## Getting Started"; then
+    getting_started=$(echo "$current_content" | sed -n '/^## Getting Started/,/^##[^#]/p' | sed '$d')
+fi
+
+# Or use more flexible detection
+if grep -q "claude.ai/code" CLAUDE.md; then
+    # Likely created by /init
+    INIT_CREATED=true
+fi
+```
+
+### Future-Proofing
+
+The system is designed to evolve:
+
+1. **Pattern Matching**: Can be updated to recognize new /init formats
+2. **User Configuration**: Could add `.construct/init-merge.yaml` for custom rules
+3. **Smart Detection**: Could analyze content structure rather than just headers
+4. **Version Awareness**: Could detect /init version and adjust accordingly
+
+### Manual Override
+
+If automatic detection fails, users can:
+
+1. Run with `--regenerate` flag to use CONSTRUCT's template
+2. Manually merge content from CLAUDE.md.backup
+3. Create custom merge rules in their patterns
+
 ## Conclusion
 
 The /init and construct-init partnership represents thoughtful system design that enhances rather than replaces existing tools. By working together, they create a development environment where AI assistance continuously improves through structured pattern capture and dynamic context management.
 
-This is not just about making Claude Code better - it's about creating a new paradigm where development environments learn and improve alongside the developers using them.
+The system is resilient to changes in /init behavior, always preserves user data, and can be customized for different scenarios. This is not just about making Claude Code better - it's about creating a new paradigm where development environments learn and improve alongside the developers using them.
