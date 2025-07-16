@@ -125,6 +125,260 @@ analyze_project() {
     echo "${detected_platforms[@]}"
 }
 
+# Function to get GitHub repository info
+get_github_repo_info() {
+    # Check if we're in a git repository
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then
+        return 1
+    fi
+    
+    # Get remote URL
+    local remote_url=$(git config --get remote.origin.url 2>/dev/null)
+    if [ -z "$remote_url" ]; then
+        return 1
+    fi
+    
+    # Extract owner/repo from various GitHub URL formats
+    local owner_repo=""
+    if [[ "$remote_url" =~ github\.com[:/]([^/]+)/([^/]+)(\.git)?$ ]]; then
+        owner_repo="${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
+    else
+        return 1
+    fi
+    
+    echo "$owner_repo"
+    return 0
+}
+
+# Function to fetch GitHub language stats
+fetch_github_languages() {
+    local owner_repo="$1"
+    
+    # Try gh CLI first
+    if command -v gh &> /dev/null; then
+        if gh api "repos/$owner_repo/languages" 2>/dev/null; then
+            return 0
+        fi
+    fi
+    
+    # Fall back to curl
+    if command -v curl &> /dev/null; then
+        local response=$(curl -s -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/$owner_repo/languages")
+        
+        # Check if we got a valid response
+        if [[ "$response" =~ ^\{ ]] && [[ ! "$response" =~ "Not Found" ]]; then
+            echo "$response"
+            return 0
+        fi
+    fi
+    
+    return 1
+}
+
+# Function to analyze GitHub languages and recommend patterns
+analyze_github_languages() {
+    local owner_repo="$1"
+    local languages_json="$2"
+    
+    echo -e "${BLUE}📊 GitHub Repository Language Analysis${NC}"
+    echo -e "${BLUE}Repository: $owner_repo${NC}"
+    echo ""
+    
+    # Calculate total bytes
+    local total_bytes=0
+    while IFS=: read -r lang bytes; do
+        # Clean up the JSON parsing
+        lang=$(echo "$lang" | tr -d '"{,' | xargs)
+        bytes=$(echo "$bytes" | tr -d '", ' | xargs)
+        [ -z "$lang" ] && continue
+        total_bytes=$((total_bytes + bytes))
+    done <<< "$(echo "$languages_json" | grep -E '".+": [0-9]+')"
+    
+    # Process each language
+    local recommendations=()
+    local missing_patterns=()
+    local partial_coverage=()
+    
+    echo "Language breakdown:"
+    while IFS=: read -r lang bytes; do
+        # Clean up the JSON parsing
+        lang=$(echo "$lang" | tr -d '"{,' | xargs)
+        bytes=$(echo "$bytes" | tr -d '", ' | xargs)
+        [ -z "$lang" ] && continue
+        
+        # Calculate percentage
+        local percentage=$(awk "BEGIN {printf \"%.1f\", ($bytes / $total_bytes) * 100}")
+        
+        # Determine plugin availability
+        local plugin_status=""
+        local plugin_name=""
+        
+        case "$lang" in
+            "Python")
+                plugin_status="✅"
+                plugin_name="languages/python"
+                recommendations+=("languages/python")
+                ;;
+            "Swift")
+                plugin_status="✅"
+                plugin_name="languages/swift"
+                recommendations+=("languages/swift")
+                ;;
+            "C#"|"CSharp")
+                plugin_status="✅"
+                plugin_name="languages/csharp"
+                recommendations+=("languages/csharp")
+                ;;
+            "Shell")
+                plugin_status="✅"
+                plugin_name="tooling/shell-scripting"
+                recommendations+=("tooling/shell-scripting")
+                ;;
+            "JavaScript"|"TypeScript")
+                plugin_status="✅"
+                plugin_name="frameworks/web"
+                recommendations+=("frameworks/web")
+                partial_coverage+=("$lang:$percentage:languages/$( echo $lang | tr '[:upper:]' '[:lower:]' )")
+                ;;
+            "HTML"|"CSS")
+                plugin_status="✅"
+                plugin_name="frameworks/web (basic coverage)"
+                if [[ ! " ${recommendations[@]} " =~ " frameworks/web " ]]; then
+                    recommendations+=("frameworks/web")
+                fi
+                partial_coverage+=("$lang:$percentage:languages/$( echo $lang | tr '[:upper:]' '[:lower:]' )")
+                ;;
+            *)
+                plugin_status="❌"
+                plugin_name="No plugin found"
+                missing_patterns+=("$lang:$percentage")
+                ;;
+        esac
+        
+        printf "  %-12s %5s%%  %s %s\n" "$lang" "$percentage" "$plugin_status" "$plugin_name"
+    done <<< "$(echo "$languages_json" | grep -E '".+": [0-9]+')"
+    
+    echo ""
+    
+    # Handle missing patterns
+    if [ ${#missing_patterns[@]} -gt 0 ] || [ ${#partial_coverage[@]} -gt 0 ]; then
+        echo -e "${YELLOW}📝 Pattern Coverage Analysis:${NC}"
+        
+        # Show partial coverage
+        for item in "${partial_coverage[@]}"; do
+            IFS=':' read -r lang percentage plugin <<< "$item"
+            echo -e "  $lang ($percentage%) - Basic coverage via frameworks/web"
+            echo -e "    → Consider creating $plugin for deeper patterns"
+        done
+        
+        # Show missing patterns
+        for item in "${missing_patterns[@]}"; do
+            IFS=':' read -r lang percentage <<< "$item"
+            echo -e "  $lang ($percentage%) - No pattern coverage"
+        done
+        
+        echo ""
+        
+        # Ask about creating PRDs
+        if is_interactive; then
+            echo -e "${YELLOW}Would you like to create PRDs for missing/partial pattern coverage? [y/N]:${NC} "
+            read -r create_prds
+            
+            if [[ "$create_prds" =~ ^[Yy] ]]; then
+                create_pattern_prds "${missing_patterns[@]}" "${partial_coverage[@]}"
+            fi
+        fi
+    fi
+    
+    # Return unique recommendations
+    printf '%s\n' "${recommendations[@]}" | sort -u | tr '\n' ' '
+}
+
+# Function to create PRDs for missing patterns
+create_pattern_prds() {
+    local prd_dir="$CONSTRUCT_LAB/AI/PRDs/future"
+    mkdir -p "$prd_dir"
+    
+    echo -e "${BLUE}📝 Creating Pattern PRDs for future development:${NC}"
+    
+    for item in "$@"; do
+        IFS=':' read -r lang percentage plugin <<< "$item"
+        
+        # Skip if no plugin suggested
+        [ -z "$plugin" ] && plugin="languages/$( echo $lang | tr '[:upper:]' '[:lower:]' | tr ' ' '-' )"
+        
+        local prd_file="$prd_dir/plugin-$(basename $plugin)-pattern.md"
+        
+        cat > "$prd_file" << EOF
+# Pattern Plugin PRD: $plugin
+
+## Overview
+Create a CONSTRUCT pattern plugin for $lang development.
+
+## Context
+- Detected $percentage% $lang in project during init-construct analysis
+- Repository analysis showed need for $lang-specific patterns
+- Currently $([ "$percentage" ] && echo "partial" || echo "no") coverage available
+
+## Requirements
+
+### Pattern Content
+- Language-specific best practices
+- Common anti-patterns to avoid
+- Security considerations
+- Performance patterns
+- Testing patterns
+
+### Validators
+- Code quality checks
+- Style validation
+- Security scanning
+- Pattern compliance
+
+### Integration
+- Should work with existing patterns
+- Consider interactions with frameworks/web (if applicable)
+- Support common $lang frameworks and tools
+
+## Priority
+$(awk -v p="$percentage" 'BEGIN { 
+    if (p > 10) print "High - Significant language presence"
+    else if (p > 5) print "Medium - Notable language presence"
+    else print "Low - Minor language presence"
+}')
+
+## Notes
+Generated by init-construct.sh on $(date)
+EOF
+
+        echo -e "  ${GREEN}✅ Created: $(basename "$prd_file")${NC}"
+    done
+    
+    # Create summary PRD
+    local summary_file="$prd_dir/pattern-coverage-summary.md"
+    {
+        echo "# Pattern Coverage Summary"
+        echo ""
+        echo "Generated: $(date)"
+        echo ""
+        echo "## Missing Pattern Plugins"
+        echo ""
+        for item in "$@"; do
+            IFS=':' read -r lang percentage plugin <<< "$item"
+            echo "- $lang ($percentage%) → $plugin"
+        done
+        echo ""
+        echo "## Next Steps"
+        echo "1. Review individual PRDs"
+        echo "2. Prioritize based on project needs"
+        echo "3. Implement patterns incrementally"
+    } >> "$summary_file"
+    
+    echo -e "  ${GREEN}✅ Updated: pattern-coverage-summary.md${NC}"
+    echo ""
+}
+
 # Function to load plugin registry
 load_plugin_registry() {
     local registry_file="$CONSTRUCT_CORE/patterns/plugins/registry.yaml"
@@ -793,8 +1047,38 @@ EOF
     else
         # Regular project - use interactive selection
         
+        # Try GitHub analysis first
+        github_recommendations=""
+        repo_info=$(get_github_repo_info)
+        if [ $? -eq 0 ] && [ -n "$repo_info" ]; then
+            echo -e "${BLUE}🔍 Analyzing GitHub repository...${NC}"
+            languages_json=$(fetch_github_languages "$repo_info")
+            if [ $? -eq 0 ] && [ -n "$languages_json" ]; then
+                github_recommendations=$(analyze_github_languages "$repo_info" "$languages_json")
+                echo ""
+            else
+                echo -e "${YELLOW}Unable to fetch GitHub language data, using local analysis...${NC}"
+                echo ""
+            fi
+        fi
+        
         # Analyze project with detection reasons
         analysis_results=$(analyze_project_with_reasons)
+        
+        # Merge GitHub and local recommendations
+        all_recommendations=()
+        if [ -n "$github_recommendations" ]; then
+            IFS=' ' read -ra github_array <<< "$github_recommendations"
+            all_recommendations+=("${github_array[@]}")
+        fi
+        
+        # Add local detections
+        while IFS= read -r reason; do
+            IFS='|' read -r plugin _ <<< "$reason"
+            if [[ ! " ${all_recommendations[@]} " =~ " ${plugin} " ]]; then
+                all_recommendations+=("$plugin")
+            fi
+        done <<< "$analysis_results"
         
         # Interactive selection with reasons
         selected_plugins=()
@@ -805,13 +1089,8 @@ EOF
         else
             # Non-interactive mode - check for piped input
             if [ -t 0 ]; then
-                # No piped input - extract recommendations from analysis
-                recommended_plugins=()
-                while IFS= read -r reason; do
-                    IFS='|' read -r plugin _ <<< "$reason"
-                    recommended_plugins+=("$plugin")
-                done <<< "$analysis_results"
-                selected_plugins=("${recommended_plugins[@]}")
+                # No piped input - use all recommendations
+                selected_plugins=("${all_recommendations[@]}")
                 echo -e "${YELLOW}Using recommended plugins: ${selected_plugins[*]}${NC}"
             else
                 # Read piped input

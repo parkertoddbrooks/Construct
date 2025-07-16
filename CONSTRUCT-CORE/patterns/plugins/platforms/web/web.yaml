@@ -12,4 +12,15 @@ tags:
   - browser-api
   - service-worker
   - performance
+coverage:
+  # Platform features covered
+  pwa:
+    level: comprehensive
+    description: Service workers, manifest, offline support
+  seo:
+    level: comprehensive
+    description: Meta tags, structured data, sitemaps
+  browser-apis:
+    level: comprehensive
+    description: Modern browser APIs with feature detection
 min_construct_version: 2.0.0
