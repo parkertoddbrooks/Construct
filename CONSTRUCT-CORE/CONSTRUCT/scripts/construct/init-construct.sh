@@ -405,16 +405,130 @@ $(git status --short 2>/dev/null || echo "Not a git repository")
         echo "$base_content"
     }
     
+    # Function to merge with existing /init content
+    merge_with_init_content() {
+        local current_content="$1"
+        local enhanced_content="$2"
+        
+        # Extract sections from /init content that should be preserved
+        local project_overview=""
+        local quick_start=""
+        local troubleshooting=""
+        local core_principles=""
+        
+        # Extract Project Overview section if it exists
+        if echo "$current_content" | grep -q "^## Project Overview"; then
+            project_overview=$(echo "$current_content" | sed -n '/^## Project Overview/,/^##[^#]/p' | sed '$d')
+        fi
+        
+        # Extract Quick Start section if it exists
+        if echo "$current_content" | grep -q "^## Quick Start"; then
+            quick_start=$(echo "$current_content" | sed -n '/^## Quick Start/,/^##[^#]/p' | sed '$d')
+        fi
+        
+        # Extract Core Development Principles if it exists (from /init)
+        if echo "$current_content" | grep -q "^## Core Development Principles"; then
+            core_principles=$(echo "$current_content" | sed -n '/^## Core Development Principles/,/^##[^#]/p' | sed '$d')
+        fi
+        
+        # Extract Troubleshooting section if it exists
+        if echo "$current_content" | grep -q "^## Troubleshooting"; then
+            troubleshooting=$(echo "$current_content" | sed -n '/^## Troubleshooting/,/^##[^#]/p' | sed '$d')
+        fi
+        
+        # Build merged content
+        local merged=""
+        
+        # Start with header and enhancement marker
+        merged="<!-- CONSTRUCT Enhanced: $(date -u +"%Y-%m-%d %H:%M:%S UTC") -->
+
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository."
+        
+        # Add Project Overview if it exists
+        if [ -n "$project_overview" ]; then
+            merged="$merged
+
+$project_overview"
+        fi
+        
+        # Add Quick Start if it exists
+        if [ -n "$quick_start" ]; then
+            merged="$merged
+
+$quick_start"
+        fi
+        
+        # Add Core Development Principles if it exists
+        if [ -n "$core_principles" ]; then
+            merged="$merged
+
+$core_principles"
+        fi
+        
+        # Extract all pattern-injected content from enhanced version
+        # This includes everything between patterns and dynamic sections
+        local pattern_section_start=$(echo "$enhanced_content" | grep -n "^## Pattern System" | cut -d: -f1)
+        local dynamic_section_start=$(echo "$enhanced_content" | grep -n "^<!-- Dynamic sections" | cut -d: -f1)
+        
+        if [ -n "$pattern_section_start" ] && [ -n "$dynamic_section_start" ]; then
+            # Extract all content between Pattern System and dynamic sections
+            local pattern_content=$(echo "$enhanced_content" | sed -n "${pattern_section_start},${dynamic_section_start}p" | sed '$d')
+            if [ -n "$pattern_content" ]; then
+                merged="$merged
+
+$pattern_content"
+            fi
+        fi
+        
+        # Add Troubleshooting if it exists
+        if [ -n "$troubleshooting" ]; then
+            merged="$merged
+
+$troubleshooting"
+        fi
+        
+        # Add dynamic sections
+        local dynamic_sections=$(echo "$enhanced_content" | sed -n '/^<!-- Dynamic sections/,$p')
+        if [ -n "$dynamic_sections" ]; then
+            merged="$merged
+
+$dynamic_sections"
+        fi
+        
+        echo "$merged"
+    }
+    
+    # Check if CLAUDE.md was created by /init
+    INIT_CREATED=false
+    if grep -q "## Project Overview" CLAUDE.md && grep -q "## Quick Start" CLAUDE.md; then
+        INIT_CREATED=true
+        echo -e "${GREEN}✅ Detected /init-created CLAUDE.md${NC}"
+    fi
+    
     # Create enhanced version
-    {
-        # Add enhancement header
-        echo "<!-- CONSTRUCT Enhanced: $(date -u +"%Y-%m-%d %H:%M:%S UTC") -->"
-        echo ""
+    if [ "$INIT_CREATED" = true ]; then
+        # Intelligently merge with /init content
+        echo -e "${BLUE}🔄 Merging with /init content...${NC}"
         
-        # Process base template with injections
-        process_base_template
+        # Process base template
+        enhanced_content=$(process_base_template)
         
-    } > CLAUDE.md.enhanced
+        # Merge with existing content
+        merge_with_init_content "$CURRENT_CONTENT" "$enhanced_content" > CLAUDE.md.enhanced
+    else
+        # No /init content, use standard processing
+        {
+            # Add enhancement header
+            echo "<!-- CONSTRUCT Enhanced: $(date -u +"%Y-%m-%d %H:%M:%S UTC") -->"
+            echo ""
+            
+            # Process base template with injections
+            process_base_template
+            
+        } > CLAUDE.md.enhanced
+    fi
     
     # Replace CLAUDE.md
     mv CLAUDE.md.enhanced CLAUDE.md

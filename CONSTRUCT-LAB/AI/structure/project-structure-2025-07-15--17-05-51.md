@@ -545,7 +545,10 @@ _ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-10-25.md
 _ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-10-58.md
 _ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-14-31.md
 _ai-ignore_not-used/README-ARCHIVE/README.md
+CLAUDE - overwrite.md
+CLAUDE--with-init-feedback-2025-07-15--16-01-42.md
 CLAUDE.md
+CLAUDE.md.backup
 CLAUDE.md.backup-before-reinit
 CONSTRUCT-CORE/_ai-ignore_not-used/CLAUDE--2025-07-09--18-03-27.md
 CONSTRUCT-CORE/_ai-ignore_not-used/CLAUDE--2025-07-15--14-19-33.md
@@ -833,6 +836,10 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-10--21-51-33.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-11--11-59-14.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-11--14-36-51.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-13--08-43-02.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--15-19-36.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--15-25-43.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--15-30-22.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--15-48-13.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-2223-construct-session.md
@@ -919,6 +926,10 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-10-2151-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-11-1159-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-11-1436-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-13-0843-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1519-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1525-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1530-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1548-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -1044,6 +1055,10 @@ CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-11--11-59-12.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-11--14-36-49.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-13--08-42-59.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-19-34.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-25-41.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-30-20.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-48-11.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--17-05-51.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -1152,9 +1167,13 @@ CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-10--21-51-31.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-11--11-59-12.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-11--14-36-49.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-13--08-42-59.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--15-19-34.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--15-25-41.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--15-30-20.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--15-48-11.md
 CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--22-55-28.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
-CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-19-34.md
+CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--17-05-51.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-03.md
@@ -1215,6 +1234,7 @@ docs/core/README.md
 docs/core/symlink-promotion-rules.md
 docs/core/workspace-management.md
 docs/DOCS-INDEX.md
+docs/features/init-and-construct-init.md
 docs/features/interactive-scripts.md
 docs/features/repository-context.md
 docs/README-INDEX.md
@@ -2072,7 +2092,7 @@ No config directory found
 === File Counts ===
 Shell Scripts: 188
 YAML Configs: 33
-Markdown Docs: 851
+Markdown Docs: 870
 Python Files: 0
 
 === Directory Structure ===
@@ -2098,5 +2118,5 @@ Active Patterns:
 - AI documentation: 5 files
 
 ---
-*Generated by scan_project_structure.sh on Tue Jul 15 15:19:35 PDT 2025*
+*Generated by scan_project_structure.sh on Tue Jul 15 17:05:53 PDT 2025*
 *Project: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT*

@@ -1,41 +1,10 @@
-<!-- CONSTRUCT Enhanced: 2025-07-16 00:04:52 UTC -->
+<!-- CONSTRUCT Enhanced: 2025-07-15 23:03:55 UTC -->
+
+# Development Context
 
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-## Project Overview
-
-CONSTRUCT is a dynamic context engineering system for AI-powered development. It automatically loads the right patterns based on what you're working on, creating self-improving development environments where AI assistance gets smarter with every commit.
-
-### Key Architecture
-- **Dual Environment System**: CONSTRUCT-CORE (stable) and CONSTRUCT-LAB (experimental)
-- **Pattern Plugin System**: Language-specific and tool-specific patterns
-- **Context Injection**: CLAUDE.md is dynamically assembled from pattern injections
-- **Symlink Architecture**: Maintains consistency between CORE and LAB
-
-## Quick Start
-
-### Essential Commands
-```bash
-# Before starting work
-construct-update          # Update CLAUDE.md context
-construct-check          # Check architecture violations
-
-# Development workflow
-construct-before Feature  # Before creating new components
-construct-scan           # Document current structure
-construct-quality        # Check code quality
-
-# When context fills up (~90%)
-construct-session-summary # Save session state
-```
-
-### Interactive Script Usage
-Many CONSTRUCT scripts support interactive mode. In Claude Code's non-interactive environment:
-- Scripts auto-detect non-interactive mode
-- Default values are used automatically
-- Use environment variables to override: `CONSTRUCT_PROJECT_NAME=MyProject ./create-project.sh`
 
 ## Core Development Principles
 
@@ -900,163 +869,64 @@ construct-arch --overview
 ## Current Context
 
 <!-- START:CURRENT-STRUCTURE -->
-## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-15 17:05:02
-
-### Active Components
-- Shell Scripts: 188
-- Library Functions: 0
-- Pattern Plugins: 1
-- Templates: 7
-- Documentation Files: 5
-- Configuration Files: 0
-
-### Available Resources
-
-#### 🧩 Library Functions
-
-#### ⚙️ Configuration Files
-
+### 📊 Current Project State (Auto-Updated)
+*Run `construct-update` to populate*
 <!-- END:CURRENT-STRUCTURE -->
 
 <!-- Dynamic sections updated by construct-update -->
 
 <!-- START:ACTIVE-SYMLINKS -->
 ### 🔗 Active Symlinks (Auto-Updated)
-
-These files in LAB are symlinks to CORE - NEVER edit them directly:
-```bash
-# CONSTRUCT -> ../CONSTRUCT-CORE/CONSTRUCT
-# AI/dev-logs/dev-updates/devupdate-prompt-sym.md -> ../../../../CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md
-# AI/dev-logs/check-quality/README-sym.md -> ../../../../CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/dev-logs/check-quality/README.md
-# AI/dev-logs/dev-updates/README-sym.md -> ../../../../CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/dev-logs/dev-updates/README.md
-# AI/docs/README-sym.md -> ../../../CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/docs/README.md
-# AI/todo/README-sym.md -> ../../../CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/todo/README.md
-
-# To check symlink integrity:
-./CONSTRUCT/scripts/check-symlinks.sh
-
-# If you need to modify these files:
-# 1. Create new version in LAB
-# 2. Test thoroughly
-# 3. Use promote-to-core.sh to update CORE
-```
+*Run `construct-check-symlinks` to populate*
 <!-- END:ACTIVE-SYMLINKS -->
 
 <!-- START:SPRINT-CONTEXT -->
-## 🎯 Current Development Context (Auto-Updated)
-**Date**: 2025-07-15
-**Focus**: Dual-environment development system
+### 🎯 Current Sprint Context (Auto-Updated)
+**Date**: [Auto-generated]
 **Branch**: refactor/core-lab-templates
 **Last Commit**: 7bc6bec feat: Complete abstraction of LAB content into construct-dev patterns
 
 ### Current Focus
-- Active patterns and development priorities
-- Code quality and architecture compliance
-- Documentation coverage and completeness
-- Development workflow optimization
-
-### Development Workflow
-1. Work in project directory
-2. Use project context (this file)
-3. Run pattern-specific validators
-4. Commit changes with confidence
+*Run `construct-update` to refresh*
 <!-- END:SPRINT-CONTEXT -->
 
 <!-- START:VIOLATIONS -->
-## ⚠️ Active Violations (Auto-Updated)
-
-### Hardcoded Paths
-Run ./CONSTRUCT/scripts/core/check-quality.sh to see current violations
-
-### Missing Documentation
-✅ All scripts have documentation headers
-
-### Code Duplication
-Run ./CONSTRUCT/scripts/core/check-architecture.sh for duplication analysis
-
-### Template Issues
-✅ Template integrity verified
+### ⚠️ Active Violations (Auto-Updated)
+*Run `construct-check` to populate*
 <!-- END:VIOLATIONS -->
 
 <!-- START:WORKING-LOCATION -->
-## 📍 Current Working Location (Auto-Updated)
+### 📍 Current Working Location (Auto-Updated)
 
-### Recently Modified Files
-- CONSTRUCT-CORE/CONSTRUCT/scripts/construct/update-context.sh
-- CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/ai-guidance.md
-- CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/examples.md
-- CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/guidelines.md
-- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--15-48-13.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1548-construct-session.md
-- CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
-- CONSTRUCT-LAB/AI/PRDs/current-sprint/injection-protocol-spec.md
-- CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--15-30-20.md
-- CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-48-11.md
+#### Recently Modified Files
+*Run `construct-update` to refresh*
 
-
-### Git Status
+#### Git Status
 ```
  M CLAUDE.md
- M CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
  D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-13--08-42-59.md
  D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-19-34.md
  D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-25-41.md
  D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-30-20.md
  M CONSTRUCT-LAB/patterns/plugins/registry.yaml
-?? "CLAUDE - overwrite.md"
 ?? CLAUDE--with-init-feedback-2025-07-15--16-01-42.md
 ?? CLAUDE.md.backup
+?? CLAUDE.md.enhanced
+?? CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-19-34.md
+?? CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-25-41.md
+?? CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-30-20.md
+?? CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-48-11.md
 ```
-
-### Active Development Areas
-- CONSTRUCT-LAB/CONSTRUCT/scripts/ - Core development scripts
-- CONSTRUCT-LAB/CONSTRUCT/lib/ - Shared library functions  
-- CONSTRUCT-LAB/AI/docs/automated/ - Auto-generated documentation
-- PROJECT-TEMPLATE/ - Template files for users
 <!-- END:WORKING-LOCATION -->
 
 <!-- START:DOCUMENTATION-LINKS -->
-## 📚 Documentation Resources (Auto-Updated)
-
-### Architecture Documentation
-- Architecture Overview - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate
-- Script Reference - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate
-- Development Patterns - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate
-- API Reference - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate
-
-### Structure Analysis
-- Current Structure - Run ./CONSTRUCT/scripts/construct/scan_construct_structure.sh to generate
-- [Latest Structure Scan](AI/structure/) - Timestamped structure analysis files
-- [Structure Archive](AI/structure/_old/) - Previous structure snapshots
-
-### Quality Reports
-- Latest Quality Report - Run ./CONSTRUCT/scripts/core/check-quality.sh to generate
-- Session Summaries - Run ./CONSTRUCT/scripts/dev/session-summary.sh to generate
-
-### Development Process
-- Improving CONSTRUCT Guide - Run ./CONSTRUCT/scripts/construct/update-architecture.sh to generate
+### 📚 Architecture Documentation (Auto-Updated)
+*Run `construct-arch` to generate documentation*
 <!-- END:DOCUMENTATION-LINKS -->
 
 <!-- START:ACTIVE-PRDS -->
 ### 📋 Active Product Requirements (Auto-Updated)
-
-#### Current Sprint PRDs
-- [CONSTRUCT-Abstraction-Roadmap-v02.md](CONSTRUCT-LAB/AI/PRDs/current-sprint/CONSTRUCT-Abstraction-Roadmap-v02.md)
-- [injection-protocol-spec.md](CONSTRUCT-LAB/AI/PRDs/current-sprint/injection-protocol-spec.md)
-
-#### Active Todos
-- [CONSTRUCT-ABSTRACTION-ROADMAP-v01.markdown](CONSTRUCT-LAB/AI/todo/current/CONSTRUCT-ABSTRACTION-ROADMAP-v01.markdown)
-- [CONSTRUCT-ABSTRACTION-ROADMAP-v02.markdown](CONSTRUCT-LAB/AI/todo/current/CONSTRUCT-ABSTRACTION-ROADMAP-v02.markdown)
-- [context-engineering-integration-prd-v01.md](CONSTRUCT-LAB/AI/todo/current/context-engineering-integration-prd-v01.md)
-- [dynamic-context-orchestration-prd.md](CONSTRUCT-LAB/AI/todo/current/dynamic-context-orchestration-prd.md)
-- [howto.md](CONSTRUCT-LAB/AI/todo/current/howto.md)
-- [integrate-init.txt](CONSTRUCT-LAB/AI/todo/current/integrate-init.txt)
-- [interactive-scripts-prd.md](CONSTRUCT-LAB/AI/todo/current/interactive-scripts-prd.md)
-- [preserve.md](CONSTRUCT-LAB/AI/todo/current/preserve.md)
-- [unified-pattern-system-plan-v32.md](CONSTRUCT-LAB/AI/todo/current/unified-pattern-system-plan-v32.md)
-- [workspace-import-prd-v11.md](CONSTRUCT-LAB/AI/todo/current/workspace-import-prd-v11.md)
-
+*Run `construct-update` to refresh PRD tracking*
 <!-- END:ACTIVE-PRDS -->
 
 ## AI Assistance

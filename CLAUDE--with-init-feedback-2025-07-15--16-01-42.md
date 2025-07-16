@@ -1,5 +1,3 @@
-<!-- CONSTRUCT Enhanced: 2025-07-16 00:04:52 UTC -->
-
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
@@ -100,6 +98,13 @@ includes:
 # Overrides for specific files/directories
 overrides: []
 ```
+
+### Available Patterns (Not Yet Active)
+To activate additional patterns, update your `patterns.yaml`:
+- `languages/python` - Python development patterns
+- `languages/typescript` - TypeScript patterns
+- `tooling/git-workflow` - Advanced git workflows
+- `cross-platform/model-sync` - Multi-platform synchronization
 
 ## Development Guidelines
 
@@ -329,6 +334,15 @@ CONSTRUCT/
 ├── CONSTRUCT-LAB/         # Experimental development
 └── Projects/              # Git-independent managed projects
 ```
+
+### Directory Reference
+- **scripts/core/**: Core functionality (quality checks, architecture validation)
+- **scripts/construct/**: CONSTRUCT-specific tools (context updates, symlink management)
+- **scripts/dev/**: Development workflows (session summaries, alias setup)
+- **scripts/workspace/**: Project management (create, import, manage projects)
+- **lib/**: Shared library functions for all scripts
+- **config/**: YAML configuration files for validation rules
+- **patterns/plugins/**: Pattern definitions and validators
 
 ## Code Examples
 
@@ -897,11 +911,61 @@ construct-check --report
 construct-arch --overview
 ```
 
+## Common Patterns
+
+### Pattern Dependencies Visual
+```
+┌─────────────────────────┐
+│   construct-dev         │ (CONSTRUCT-specific patterns)
+├─────────────────────────┤
+│   shell-scripting       │ (General shell patterns)
+├─────────────────────────┤
+│   shell-quality         │ (Quality standards)
+├─────────────────────────┤
+│   unix-philosophy       │ (Unix design principles)
+└─────────────────────────┘
+```
+
+### Performance Tips
+- Run `construct-update` only when needed (start of session, major changes)
+- Use `construct-check` frequently during development
+- Archive old structure files to reduce context size
+- Use session summaries when approaching context limits
+
+### Troubleshooting Common Issues
+
+**Symlink broken after copy:**
+```bash
+# Check symlink status
+./CONSTRUCT/scripts/construct/check-symlinks.sh
+
+# Fix broken symlinks
+./CONSTRUCT/scripts/construct/fix-symlinks.sh
+```
+
+**Script not found:**
+```bash
+# Ensure you're in CONSTRUCT root
+pwd  # Should show .../CONSTRUCT
+
+# Source setup if needed
+source ./CONSTRUCT/scripts/dev/setup-aliases.sh
+```
+
+**Pattern not loading:**
+```bash
+# Check pattern registry
+cat CONSTRUCT-CORE/patterns/plugins/registry.yaml
+
+# Validate pattern structure
+./CONSTRUCT/scripts/construct/validate-patterns.sh
+```
+
 ## Current Context
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-15 17:05:02
+Last updated: 2025-07-15 15:48:13
 
 ### Active Components
 - Shell Scripts: 188
@@ -948,7 +1012,7 @@ These files in LAB are symlinks to CORE - NEVER edit them directly:
 **Date**: 2025-07-15
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 7bc6bec feat: Complete abstraction of LAB content into construct-dev patterns
+**Last Commit**: a4eda90 fix: Clean up update-context.sh and clarify injection protocol
 
 ### Current Focus
 - Active patterns and development priorities
@@ -983,30 +1047,30 @@ Run ./CONSTRUCT/scripts/core/check-architecture.sh for duplication analysis
 ## 📍 Current Working Location (Auto-Updated)
 
 ### Recently Modified Files
+- CLAUDE.md
+- CONSTRUCT-CORE/CLAUDE-BASE.md
 - CONSTRUCT-CORE/CONSTRUCT/scripts/construct/update-context.sh
-- CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/ai-guidance.md
-- CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/examples.md
-- CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/guidelines.md
-- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--15-48-13.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1548-construct-session.md
+- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--15-25-43.md
+- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--15-30-22.md
+- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1530-construct-session.md
 - CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
 - CONSTRUCT-LAB/AI/PRDs/current-sprint/injection-protocol-spec.md
-- CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--15-30-20.md
-- CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-48-11.md
+- CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--15-25-41.md
+- CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-30-20.md
 
 
 ### Git Status
 ```
  M CLAUDE.md
- M CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
+M  CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/ai-guidance.md
+M  CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/examples.md
+M  CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/guidelines.md
+ M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
  D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-13--08-42-59.md
  D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-19-34.md
  D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-25-41.md
  D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--15-30-20.md
  M CONSTRUCT-LAB/patterns/plugins/registry.yaml
-?? "CLAUDE - overwrite.md"
-?? CLAUDE--with-init-feedback-2025-07-15--16-01-42.md
-?? CLAUDE.md.backup
 ```
 
 ### Active Development Areas
