@@ -19,11 +19,53 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
 CONSTRUCT_CORE="$CONSTRUCT_ROOT/CONSTRUCT-CORE"
+CONSTRUCT_LAB="$CONSTRUCT_ROOT/CONSTRUCT-LAB"
 
 # Source library functions
 source "$CONSTRUCT_CORE/CONSTRUCT/lib/common-patterns.sh" 2>/dev/null || true
 source "$CONSTRUCT_CORE/CONSTRUCT/lib/validation.sh" 2>/dev/null || true
 source "$CONSTRUCT_CORE/CONSTRUCT/lib/interactive-support.sh" 2>/dev/null || true
+
+# Function to detect operating mode
+detect_operating_mode() {
+    if [ ! -f "CLAUDE.md" ]; then
+        echo "error_no_claude"
+    elif [ -f ".construct/patterns.yaml" ]; then
+        echo "mode_2"  # Existing CONSTRUCT user
+    elif is_from_init "CLAUDE.md"; then
+        echo "mode_1"  # First-time CONSTRUCT user
+    else
+        echo "mode_3"  # Legacy migration
+    fi
+}
+
+# Function to validate plugin exists
+validate_plugin_exists() {
+    local plugin="$1"
+    local plugin_dir="$CONSTRUCT_CORE/patterns/plugins/$plugin"
+    
+    if [ ! -d "$plugin_dir" ]; then
+        return 1
+    fi
+    
+    # Check for required plugin files
+    local plugin_name=$(basename "$plugin")
+    local plugin_yaml=""
+    
+    # Try different yaml file names
+    for yaml_file in "$plugin_dir/$plugin_name.yaml" "$plugin_dir/pattern.yaml"; do
+        if [ -f "$yaml_file" ]; then
+            plugin_yaml="$yaml_file"
+            break
+        fi
+    done
+    
+    if [ -z "$plugin_yaml" ]; then
+        return 1
+    fi
+    
+    return 0
+}
 
 # Define prompts for interactive mode
 show_init_prompts() {
@@ -91,8 +133,53 @@ if should_show_prompts "$@"; then
     exit 0
 fi
 
-echo -e "${BLUE}🚀 CONSTRUCT Pattern Enhancement${NC}"
-echo -e "${BLUE}================================${NC}"
+# Function to show mode-specific user communication
+show_mode_message() {
+    local mode="$1"
+    
+    echo -e "${BLUE}🚀 CONSTRUCT Pattern Enhancement${NC}"
+    echo -e "${BLUE}================================${NC}"
+    echo ""
+    
+    case "$mode" in
+        mode_1)
+            echo -e "${GREEN}🆕 First-time CONSTRUCT user detected${NC}"
+            echo "   ✓ Found CLAUDE.md from /init"
+            echo "   ✓ No patterns configured yet"
+            echo ""
+            echo "   We'll help you select the right patterns for your project."
+            echo ""
+            ;;
+        mode_2)
+            echo -e "${BLUE}♻️  Existing CONSTRUCT project detected${NC}"
+            echo "   ✓ Found .construct/patterns.yaml"
+            echo "   ✓ Will refresh patterns from configuration"
+            echo ""
+            echo "   Updating CLAUDE.md with latest pattern content..."
+            echo ""
+            ;;
+        mode_3)
+            echo -e "${YELLOW}🔄 Custom CLAUDE.md detected${NC}"
+            if is_old_construct_version "CLAUDE.md"; then
+                echo "   ✓ Found old CONSTRUCT version markers"
+            else
+                echo "   ✓ Found CLAUDE.md with custom patterns"
+            fi
+            echo "   ✓ No patterns.yaml configuration yet"
+            echo ""
+            echo "   We'll extract your custom patterns and convert to the plugin system."
+            echo "   This preserves all your existing rules while enabling pattern reuse."
+            echo ""
+            ;;
+        error_no_claude)
+            echo -e "${RED}❌ No CLAUDE.md found!${NC}"
+            echo ""
+            echo "   Please run '/init' first to create the base CLAUDE.md"
+            echo "   Then run this script to add CONSTRUCT patterns."
+            echo ""
+            ;;
+    esac
+}
 
 # Function to analyze project structure
 analyze_project() {
@@ -189,6 +276,73 @@ show_available_plugins() {
     fi
 }
 
+# Function to analyze project with detection reasons
+analyze_project_with_reasons() {
+    local detected_languages=()
+    local detected_frameworks=()
+    local detected_platforms=()
+    local detection_reasons=()
+    
+    # Detect languages with reasons
+    if ls *.swift *.xcodeproj Package.swift 2>/dev/null | grep -q .; then
+        detected_languages+=("swift")
+        local swift_indicators=()
+        ls *.swift 2>/dev/null | head -1 >/dev/null && swift_indicators+=("*.swift files")
+        [ -f "Package.swift" ] && swift_indicators+=("Package.swift")
+        ls *.xcodeproj 2>/dev/null | head -1 >/dev/null && swift_indicators+=("*.xcodeproj")
+        detection_reasons+=("languages/swift|${swift_indicators[*]}")
+    fi
+    if ls *.py requirements.txt setup.py pyproject.toml 2>/dev/null | grep -q .; then
+        detected_languages+=("python")
+        local py_indicators=()
+        ls *.py 2>/dev/null | head -1 >/dev/null && py_indicators+=("*.py files")
+        [ -f "requirements.txt" ] && py_indicators+=("requirements.txt")
+        [ -f "setup.py" ] && py_indicators+=("setup.py")
+        [ -f "pyproject.toml" ] && py_indicators+=("pyproject.toml")
+        detection_reasons+=("languages/python|${py_indicators[*]}")
+    fi
+    if ls *.ts *.tsx package.json tsconfig.json 2>/dev/null | grep -q .; then
+        detected_languages+=("typescript")
+        local ts_indicators=()
+        ls *.ts *.tsx 2>/dev/null | head -1 >/dev/null && ts_indicators+=("*.ts/*.tsx files")
+        [ -f "tsconfig.json" ] && ts_indicators+=("tsconfig.json")
+        [ -f "package.json" ] && ts_indicators+=("package.json")
+        detection_reasons+=("languages/typescript|${ts_indicators[*]}")
+    fi
+    if ls *.rs Cargo.toml 2>/dev/null | grep -q .; then
+        detected_languages+=("rust")
+        local rust_indicators=()
+        ls *.rs 2>/dev/null | head -1 >/dev/null && rust_indicators+=("*.rs files")
+        [ -f "Cargo.toml" ] && rust_indicators+=("Cargo.toml")
+        detection_reasons+=("languages/rust|${rust_indicators[*]}")
+    fi
+    
+    # Detect frameworks with reasons
+    if [ -f "Package.swift" ] && grep -q "SwiftUI" Package.swift 2>/dev/null; then
+        detected_frameworks+=("swiftui")
+        detection_reasons+=("frameworks/swiftui|SwiftUI in Package.swift")
+    fi
+    if [ -f "package.json" ] && grep -q "react" package.json 2>/dev/null; then
+        detected_frameworks+=("react")
+        detection_reasons+=("frameworks/react|react in package.json")
+    fi
+    
+    # Detect platforms with reasons
+    if ls *.xcodeproj Info.plist 2>/dev/null | grep -q .; then
+        detected_platforms+=("ios")
+        local ios_indicators=()
+        ls *.xcodeproj 2>/dev/null | head -1 >/dev/null && ios_indicators+=("*.xcodeproj")
+        [ -f "Info.plist" ] && ios_indicators+=("Info.plist")
+        detection_reasons+=("platforms/ios|${ios_indicators[*]}")
+        
+        # Also recommend mvvm-ios for iOS projects
+        detection_reasons+=("architectural/mvvm-ios|iOS project detected")
+    fi
+    
+    # Return results with reasons
+    printf '%s\n' "${detection_reasons[@]}"
+}
+
 # Function to recommend plugins based on project analysis
 recommend_plugins() {
     local -n languages=$1
@@ -230,19 +384,43 @@ recommend_plugins() {
     echo "${unique_recommendations[@]}"
 }
 
-# Function for interactive plugin selection
-interactive_plugin_selection() {
-    local recommended_plugins=("$@")
-    local selected_plugins=()
+# Enhanced interactive plugin selection with detection reasons
+interactive_plugin_selection_with_reasons() {
+    local detection_reasons=("$@")
+    local recommended_plugins=()
+    local recommendation_display=()
+    
+    # Build recommendations with reasons
+    for reason in "${detection_reasons[@]}"; do
+        IFS='|' read -r plugin detected <<< "$reason"
+        recommended_plugins+=("$plugin")
+        recommendation_display+=("  ✓ $plugin ${YELLOW}(detected: $detected)${NC}")
+    done
     
     echo -e "${BLUE}🔍 Analyzing your project...${NC}"
     echo ""
     
     if [ ${#recommended_plugins[@]} -gt 0 ]; then
         echo -e "${GREEN}📦 Based on your project, we recommend these plugins:${NC}"
-        for plugin in "${recommended_plugins[@]}"; do
-            echo "  ✓ $plugin"
+        for display in "${recommendation_display[@]}"; do
+            echo -e "$display"
         done
+        echo ""
+        
+        # Show additional available plugins
+        echo -e "${BLUE}📚 Additional plugins you might want:${NC}"
+        local registry_file="$CONSTRUCT_CORE/patterns/plugins/registry.yaml"
+        if command -v yq &> /dev/null && [ -f "$registry_file" ]; then
+            while IFS= read -r plugin; do
+                if [[ ! " ${recommended_plugins[@]} " =~ " ${plugin} " ]]; then
+                    local desc=$(yq eval ".plugins.core.\"$plugin\".description" "$registry_file" 2>/dev/null)
+                    if [ -n "$desc" ] && [ "$desc" != "null" ]; then
+                        echo "  - $plugin"
+                        echo "    ${YELLOW}$desc${NC}"
+                    fi
+                fi
+            done < <(yq eval '.plugins.core | keys | .[]' "$registry_file" 2>/dev/null | grep -E "(tooling/error-handling|tooling/shell)" | head -5)
+        fi
         echo ""
         
         echo -e "${YELLOW}Accept recommendations? [Y/n/customize]: ${NC}"
@@ -259,60 +437,98 @@ interactive_plugin_selection() {
                 echo ""
                 echo -e "${YELLOW}Enter plugins to install (comma-separated, e.g., languages/swift,platforms/ios):${NC}"
                 read -r custom_plugins
+                
+                # Validate each plugin
                 IFS=',' read -ra selected_plugins <<< "$custom_plugins"
+                local valid_plugins=()
+                for plugin in "${selected_plugins[@]}"; do
+                    plugin=$(echo "$plugin" | xargs)  # trim whitespace
+                    if validate_plugin_exists "$plugin"; then
+                        valid_plugins+=("$plugin")
+                    else
+                        echo -e "${RED}⚠️  Skipping invalid plugin: $plugin${NC}"
+                    fi
+                done
+                echo "${valid_plugins[@]}"
                 ;;
             *)
                 # Default: accept recommendations
-                selected_plugins=("${recommended_plugins[@]}")
+                echo "${recommended_plugins[@]}"
                 ;;
         esac
     else
         # No recommendations, show all plugins
+        echo -e "${YELLOW}No specific patterns detected. Showing available plugins:${NC}"
+        echo ""
         show_available_plugins
         echo ""
-        echo -e "${YELLOW}No specific recommendations found. Enter plugins to install (comma-separated):${NC}"
+        echo -e "${YELLOW}Enter plugins to install (comma-separated) or press Enter to skip:${NC}"
         read -r custom_plugins
         if [ -n "$custom_plugins" ]; then
             IFS=',' read -ra selected_plugins <<< "$custom_plugins"
+            local valid_plugins=()
+            for plugin in "${selected_plugins[@]}"; do
+                plugin=$(echo "$plugin" | xargs)
+                if validate_plugin_exists "$plugin"; then
+                    valid_plugins+=("$plugin")
+                else
+                    echo -e "${RED}⚠️  Skipping invalid plugin: $plugin${NC}"
+                fi
+            done
+            echo "${valid_plugins[@]}"
         fi
     fi
-    
-    # Trim whitespace from selections
-    local cleaned_plugins=()
-    for plugin in "${selected_plugins[@]}"; do
-        plugin=$(echo "$plugin" | xargs)  # trim whitespace
-        [ -n "$plugin" ] && cleaned_plugins+=("$plugin")
-    done
-    
-    echo "${cleaned_plugins[@]}"
+}
+
+# Keep old function for compatibility
+interactive_plugin_selection() {
+    interactive_plugin_selection_with_reasons "$@"
 }
 
 # Function to extract patterns from existing CLAUDE.md
 extract_patterns_from_claude_md() {
     local claude_file="$1"
     local project_name=$(basename "$PROJECT_ROOT")
-    local lab_plugin_dir="$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/plugins/project-specific/$project_name"
+    local lab_plugin_dir="$CONSTRUCT_LAB/patterns/plugins/project-specific/$project_name"
     
     echo -e "${BLUE}📝 Extracting custom patterns from existing CLAUDE.md...${NC}"
     
     # Create LAB plugin directory
     mkdir -p "$lab_plugin_dir/injections"
     
-    # Extract custom rules sections
+    # Track what we extract
+    local extracted_sections=()
+    
+    # Extract custom rules sections with enhanced detection
     local in_custom_section=false
     local custom_content=""
     local section_name=""
     
     while IFS= read -r line; do
-        # Detect custom sections (look for patterns like ## Rules, ## Guidelines, etc.)
-        if [[ "$line" =~ ^##[[:space:]]+(Rules|Guidelines|Standards|Patterns|Anti-patterns) ]]; then
+        # Detect various types of custom sections (enhanced for old CONSTRUCT)
+        if [[ "$line" =~ ^##[[:space:]]+(Rules|Guidelines|Standards|Patterns|Anti-patterns|.*Truths|.*Discoveries|ENFORCE.*|Architecture.*|Development.*) ]] || \
+           [[ "$line" =~ ^###[[:space:]]+(.*Rules|.*Guidelines|.*Patterns|.*Standards) ]] || \
+           [[ "$line" =~ ^##[[:space:]]*🚨[[:space:]]*(ENFORCE|Rules) ]] || \
+           [[ "$line" =~ ^##[[:space:]]*🧪[[:space:]]*(Validated|Discoveries) ]]; then
+            
+            # Save previous section if exists
+            if [ "$in_custom_section" = true ] && [ -n "$custom_content" ]; then
+                local safe_name=$(echo "$section_name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | sed 's/[^a-z0-9-]//g')
+                echo "$custom_content" > "$lab_plugin_dir/injections/$safe_name.md"
+                extracted_sections+=("$section_name")
+                echo -e "${GREEN}✅ Extracted: $section_name${NC}"
+            fi
+            
             in_custom_section=true
-            section_name=$(echo "$line" | sed 's/^##[[:space:]]*//' | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+            section_name=$(echo "$line" | sed 's/^#*[[:space:]]*//' | sed 's/^[🚨🧪📚💡⚠️]*[[:space:]]*//')
             custom_content=""
+            
         elif [[ "$line" =~ ^##[[:space:]] ]] && [ "$in_custom_section" = true ]; then
             # End of custom section - save it
             if [ -n "$custom_content" ]; then
-                echo "$custom_content" > "$lab_plugin_dir/injections/$section_name.md"
+                local safe_name=$(echo "$section_name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | sed 's/[^a-z0-9-]//g')
+                echo "$custom_content" > "$lab_plugin_dir/injections/$safe_name.md"
+                extracted_sections+=("$section_name")
                 echo -e "${GREEN}✅ Extracted: $section_name${NC}"
             fi
             in_custom_section=false
@@ -323,8 +539,43 @@ extract_patterns_from_claude_md() {
     
     # Save last section if still in one
     if [ "$in_custom_section" = true ] && [ -n "$custom_content" ]; then
-        echo "$custom_content" > "$lab_plugin_dir/injections/$section_name.md"
+        local safe_name=$(echo "$section_name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | sed 's/[^a-z0-9-]//g')
+        echo "$custom_content" > "$lab_plugin_dir/injections/$safe_name.md"
+        extracted_sections+=("$section_name")
         echo -e "${GREEN}✅ Extracted: $section_name${NC}"
+    fi
+    
+    # Extract code examples and patterns
+    local in_code_block=false
+    local code_content=""
+    local code_lang=""
+    local example_count=0
+    
+    while IFS= read -r line; do
+        if [[ "$line" =~ ^\`\`\`([a-zA-Z]*) ]]; then
+            if [ "$in_code_block" = false ]; then
+                in_code_block=true
+                code_lang="${BASH_REMATCH[1]}"
+                code_content=""
+            else
+                # End of code block - save if it contains patterns
+                if [[ "$code_content" =~ (✅|❌|NEVER|ALWAYS|Pattern|Example) ]]; then
+                    example_count=$((example_count + 1))
+                    echo -e "\n### Example $example_count\n" >> "$lab_plugin_dir/injections/code-examples.md"
+                    echo '```'"$code_lang" >> "$lab_plugin_dir/injections/code-examples.md"
+                    echo "$code_content" >> "$lab_plugin_dir/injections/code-examples.md"
+                    echo '```' >> "$lab_plugin_dir/injections/code-examples.md"
+                fi
+                in_code_block=false
+            fi
+        elif [ "$in_code_block" = true ]; then
+            code_content+="$line"$'\n'
+        fi
+    done < "$claude_file"
+    
+    if [ $example_count -gt 0 ]; then
+        echo -e "${GREEN}✅ Extracted: $example_count code pattern examples${NC}"
+        extracted_sections+=("Code Examples")
     fi
     
     # Create plugin metadata
@@ -338,6 +589,11 @@ tags:
   - project
   - custom
   - migrated
+  - legacy
+extracted_sections:
+$(printf '%s\n' "${extracted_sections[@]}" | sed 's/^/  - /')
+migration_date: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+source_type: $(is_old_construct_version "$claude_file" && echo "old_construct" || echo "custom_claude")
 EOF
     
     # Create plugin documentation
@@ -350,14 +606,32 @@ This plugin contains project-specific patterns extracted from the legacy CLAUDE.
 
 These patterns were automatically extracted during the migration to the CONSTRUCT pattern system.
 
+## Migration Details
+
+- **Extracted on**: $(date)
+- **Source Type**: $(is_old_construct_version "$claude_file" && echo "Old CONSTRUCT version" || echo "Custom CLAUDE.md")
+- **Original backed up as**: CLAUDE.md.pre-construct
+
+## Extracted Sections
+
+$(printf '%s\n' "${extracted_sections[@]}" | sed 's/^/- /')
+
 ## Included Patterns
 
+### Injections
 $(ls "$lab_plugin_dir/injections" 2>/dev/null | sed 's/^/- /')
 
-## Migration Notes
+## Usage
 
-- Extracted on: $(date)
-- Original CLAUDE.md backed up as: CLAUDE.md.pre-construct
+This plugin is automatically included in your patterns.yaml configuration.
+To modify these patterns, edit the files in:
+\`$lab_plugin_dir/injections/\`
+
+## Notes
+
+- Review extracted patterns for accuracy
+- Consider moving general patterns to core plugins
+- Project-specific rules should remain here
 EOF
     
     echo -e "${GREEN}✅ Created LAB plugin: project-specific/$project_name${NC}"
@@ -425,14 +699,18 @@ done
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$PROJECT_ROOT"
 
-echo -e "${BLUE}📍 Project root: $PROJECT_ROOT${NC}"
+# Detect operating mode
+MODE=$(detect_operating_mode)
 
-# Check if CLAUDE.md exists
-if [ ! -f "CLAUDE.md" ]; then
-    echo -e "${RED}❌ CLAUDE.md not found!${NC}"
-    echo -e "${YELLOW}Please run '/init' first to create the base CLAUDE.md${NC}"
+# Show mode-specific message
+show_mode_message "$MODE"
+
+# Handle error case
+if [ "$MODE" = "error_no_claude" ]; then
     exit 1
 fi
+
+echo -e "${BLUE}📍 Project root: $PROJECT_ROOT${NC}"
 
 # Check if this is CONSTRUCT itself
 IS_CONSTRUCT=false
@@ -454,16 +732,23 @@ is_from_init() {
     # Check for common /init patterns
     grep -q "This file provides guidance to Claude" "$claude_file" 2>/dev/null || \
     grep -q "AI coding assistant" "$claude_file" 2>/dev/null || \
-    grep -q "codebase context" "$claude_file" 2>/dev/null
+    grep -q "codebase context" "$claude_file" 2>/dev/null || \
+    grep -q "## Project Overview" "$claude_file" 2>/dev/null
 }
 
-# Check if this is Mode 3: Legacy CLAUDE.md without patterns
-LEGACY_MODE=false
+# Function to check if old CONSTRUCT version
+is_old_construct_version() {
+    local claude_file="$1"
+    grep -q "CONSTRUCT Version" "$claude_file" 2>/dev/null || \
+    grep -q "construct-update" "$claude_file" 2>/dev/null || \
+    grep -q "ENFORCE THESE RULES" "$claude_file" 2>/dev/null || \
+    grep -q "Swift/SwiftUI Truths" "$claude_file" 2>/dev/null || \
+    grep -q "🚨 ENFORCE THESE RULES" "$claude_file" 2>/dev/null
+}
+
+# Handle Mode 3: Legacy CLAUDE.md pattern extraction
 EXTRACTED_PLUGIN=""
-if [ -f "CLAUDE.md" ] && [ ! -f "$PATTERNS_FILE" ] && ! is_from_init "CLAUDE.md"; then
-    LEGACY_MODE=true
-    echo -e "${YELLOW}🔄 Detected legacy CLAUDE.md - will extract patterns${NC}"
-    
+if [ "$MODE" = "mode_3" ]; then
     # Backup original
     cp CLAUDE.md CLAUDE.md.pre-construct
     echo -e "${GREEN}✅ Backed up original as CLAUDE.md.pre-construct${NC}"
@@ -508,32 +793,25 @@ EOF
     else
         # Regular project - use interactive selection
         
-        # Analyze project
-        local detected=$(analyze_project)
-        local detected_languages=$(echo "$detected" | sed -n '1p')
-        local detected_frameworks=$(echo "$detected" | sed -n '2p')
-        local detected_platforms=$(echo "$detected" | sed -n '3p')
+        # Analyze project with detection reasons
+        local analysis_results=$(analyze_project_with_reasons)
         
-        # Convert to arrays
-        IFS=' ' read -ra lang_array <<< "$detected_languages"
-        IFS=' ' read -ra fw_array <<< "$detected_frameworks"
-        IFS=' ' read -ra plat_array <<< "$detected_platforms"
-        
-        # Get recommendations
-        local recommendations=$(recommend_plugins lang_array fw_array plat_array)
-        IFS=' ' read -ra recommended_array <<< "$recommendations"
-        
-        # Interactive selection
+        # Interactive selection with reasons
         local selected_plugins=()
         if is_interactive; then
-            # Interactive mode - show UI
-            IFS=' ' read -ra selected_array <<< "$(interactive_plugin_selection "${recommended_array[@]}")"
+            # Interactive mode - show UI with detection reasons
+            IFS=' ' read -ra selected_array <<< "$(interactive_plugin_selection_with_reasons $analysis_results)"
             selected_plugins=("${selected_array[@]}")
         else
             # Non-interactive mode - check for piped input
             if [ -t 0 ]; then
-                # No piped input - use recommendations
-                selected_plugins=("${recommended_array[@]}")
+                # No piped input - extract recommendations from analysis
+                local recommended_plugins=()
+                while IFS= read -r reason; do
+                    IFS='|' read -r plugin _ <<< "$reason"
+                    recommended_plugins+=("$plugin")
+                done <<< "$analysis_results"
+                selected_plugins=("${recommended_plugins[@]}")
                 echo -e "${YELLOW}Using recommended plugins: ${selected_plugins[*]}${NC}"
             else
                 # Read piped input
@@ -554,8 +832,14 @@ EOF
             fi
         fi
         
-        # Determine primary language
-        local primary_language="${detected_languages:-bash}"
+        # Determine primary language from selected plugins
+        local primary_language="bash"
+        for plugin in "${selected_plugins[@]}"; do
+            if [[ "$plugin" =~ ^languages/(.+)$ ]]; then
+                primary_language="${BASH_REMATCH[1]}"
+                break
+            fi
+        done
         [ -n "$LANGUAGE" ] && primary_language="$LANGUAGE"
         
         # Create patterns.yaml with selections
@@ -579,9 +863,9 @@ EOF
             echo "  # No plugins selected" >> "$PATTERNS_FILE"
         fi
         
-        # Add extracted plugin if in legacy mode
-        if [ "$LEGACY_MODE" = true ] && [ -n "$EXTRACTED_PLUGIN" ]; then
-            echo "  - $EXTRACTED_PLUGIN  # Project-specific patterns" >> "$PATTERNS_FILE"
+        # Add extracted plugin if in mode 3
+        if [ "$MODE" = "mode_3" ] && [ -n "$EXTRACTED_PLUGIN" ]; then
+            echo "  - $EXTRACTED_PLUGIN  # Project-specific patterns (auto-extracted)" >> "$PATTERNS_FILE"
             echo -e "${GREEN}✅ Added extracted patterns plugin${NC}"
         fi
         
