@@ -87,6 +87,61 @@ validate_plugin_exists() {
     return 0
 }
 
+# Function to analyze project structure
+analyze_project() {
+    local detected_languages=()
+    local detected_frameworks=()
+    local detected_platforms=()
+    
+    # Detect languages
+    if ls *.swift *.xcodeproj Package.swift 2>/dev/null | grep -q .; then
+        detected_languages+=("swift")
+    fi
+    if ls *.py requirements.txt setup.py pyproject.toml 2>/dev/null | grep -q .; then
+        detected_languages+=("python")
+    fi
+    if ls *.ts *.tsx package.json tsconfig.json 2>/dev/null | grep -q .; then
+        detected_languages+=("typescript")
+    fi
+    if ls *.rs Cargo.toml 2>/dev/null | grep -q .; then
+        detected_languages+=("rust")
+    fi
+    
+    # Detect frameworks
+    if [ -f "Package.swift" ] && grep -q "SwiftUI" Package.swift 2>/dev/null; then
+        detected_frameworks+=("swiftui")
+    fi
+    if [ -f "package.json" ] && grep -q "react" package.json 2>/dev/null; then
+        detected_frameworks+=("react")
+    fi
+    
+    # Detect platforms
+    if [ -f "Info.plist" ] || [ -d "*.xcodeproj" ]; then
+        detected_platforms+=("ios")
+    fi
+    
+    echo "${detected_languages[@]}"
+    echo "${detected_frameworks[@]}"
+    echo "${detected_platforms[@]}"
+}
+
+# Function to load plugin registry
+load_plugin_registry() {
+    local registry_file="$CONSTRUCT_CORE/patterns/plugins/registry.yaml"
+    if [ ! -f "$registry_file" ]; then
+        echo -e "${YELLOW}⚠️  Plugin registry not found. Running refresh...${NC}"
+        "$CONSTRUCT_CORE/CONSTRUCT/scripts/construct/refresh-plugin-registry.sh" >/dev/null 2>&1
+    fi
+    
+    # Check if yq is available
+    if ! command -v yq &> /dev/null; then
+        echo -e "${YELLOW}⚠️  yq not installed. Plugin descriptions will be limited.${NC}"
+        return 1
+    fi
+    
+    return 0
+}
+
 # Define prompts for interactive mode
 show_init_prompts() {
     # Check if patterns.yaml exists
@@ -199,61 +254,6 @@ show_mode_message() {
             echo ""
             ;;
     esac
-}
-
-# Function to analyze project structure
-analyze_project() {
-    local detected_languages=()
-    local detected_frameworks=()
-    local detected_platforms=()
-    
-    # Detect languages
-    if ls *.swift *.xcodeproj Package.swift 2>/dev/null | grep -q .; then
-        detected_languages+=("swift")
-    fi
-    if ls *.py requirements.txt setup.py pyproject.toml 2>/dev/null | grep -q .; then
-        detected_languages+=("python")
-    fi
-    if ls *.ts *.tsx package.json tsconfig.json 2>/dev/null | grep -q .; then
-        detected_languages+=("typescript")
-    fi
-    if ls *.rs Cargo.toml 2>/dev/null | grep -q .; then
-        detected_languages+=("rust")
-    fi
-    
-    # Detect frameworks
-    if [ -f "Package.swift" ] && grep -q "SwiftUI" Package.swift 2>/dev/null; then
-        detected_frameworks+=("swiftui")
-    fi
-    if [ -f "package.json" ] && grep -q "react" package.json 2>/dev/null; then
-        detected_frameworks+=("react")
-    fi
-    
-    # Detect platforms
-    if [ -f "Info.plist" ] || [ -d "*.xcodeproj" ]; then
-        detected_platforms+=("ios")
-    fi
-    
-    echo "${detected_languages[@]}"
-    echo "${detected_frameworks[@]}"
-    echo "${detected_platforms[@]}"
-}
-
-# Function to load plugin registry
-load_plugin_registry() {
-    local registry_file="$CONSTRUCT_CORE/patterns/plugins/registry.yaml"
-    if [ ! -f "$registry_file" ]; then
-        echo -e "${YELLOW}⚠️  Plugin registry not found. Running refresh...${NC}"
-        "$CONSTRUCT_CORE/CONSTRUCT/scripts/construct/refresh-plugin-registry.sh" >/dev/null 2>&1
-    fi
-    
-    # Check if yq is available
-    if ! command -v yq &> /dev/null; then
-        echo -e "${YELLOW}⚠️  yq not installed. Plugin descriptions will be limited.${NC}"
-        return 1
-    fi
-    
-    return 0
 }
 
 # Function to show available plugins
