@@ -249,6 +249,7 @@ _ai-ignore_not-used/_old-file-system/CONSTRUCT-dev/CONSTRUCT/config/quality-gate
 _ai-ignore_not-used/_trash/test-ios-project/.construct/patterns.yaml
 _ai-ignore_not-used/_trash/test-project/.construct/patterns.yaml
 .construct-workspace/registry.yaml
+.construct/patterns--2025-07-15--20-27-14.yaml
 .construct/patterns.yaml
 CONSTRUCT-CORE/CONSTRUCT/config/mvvm-rules.yaml
 CONSTRUCT-CORE/CONSTRUCT/config/quality-gates.yaml
@@ -262,8 +263,8 @@ CONSTRUCT-CORE/patterns/plugins/languages/python/python.yaml
 CONSTRUCT-CORE/patterns/plugins/languages/swift/swift.yaml
 CONSTRUCT-CORE/patterns/plugins/platforms/ios/ios.yaml
 CONSTRUCT-CORE/patterns/plugins/registry.yaml
+CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/_git-ignore/pattern.yaml
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/construct-dev.yaml
-CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/pattern.yaml
 CONSTRUCT-CORE/patterns/plugins/tooling/error-handling/error-handling.yaml
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-quality/shell-quality.yaml
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/shell-scripting.yaml
@@ -845,6 +846,7 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--15-30-22.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--15-48-13.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--17-05-53.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--19-02-33.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--19-54-09.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-2223-construct-session.md
@@ -937,6 +939,7 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1530-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1548-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1705-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1902-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-1954-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -1043,6 +1046,7 @@ CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
 CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
 CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
 CONSTRUCT-LAB/AI/PRDs/current-sprint/step01/CONSTRUCT-Abstraction-Roadmap-v02.md
+CONSTRUCT-LAB/AI/PRDs/current-sprint/step01/init-construct-enhancement-spec.md
 CONSTRUCT-LAB/AI/PRDs/current-sprint/step01/injection-protocol-spec.md
 CONSTRUCT-LAB/AI/PRDs/current-sprint/step01/status-01.md
 CONSTRUCT-LAB/AI/PRDs/current-sprint/step02/unified-pattern-system-plan-v32.md
@@ -1074,6 +1078,7 @@ CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--15-48-11.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--17-05-51.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--19-02-31.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--19-54-07.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--20-53-17.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -1188,9 +1193,10 @@ CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--15-30-20.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--15-48-11.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--17-05-51.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--19-02-31.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--19-54-07.md
 CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--22-55-28.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
-CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--19-54-07.md
+CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--20-53-17.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-03.md
@@ -1253,6 +1259,7 @@ docs/core/workspace-management.md
 docs/DOCS-INDEX.md
 docs/features/init-and-construct-init.md
 docs/features/interactive-scripts.md
+docs/features/plugin-registry.md
 docs/features/repository-context.md
 docs/README-INDEX.md
 docs/README.md
@@ -1894,6 +1901,7 @@ test-runner.sh
   CONSTRUCT-CORE/patterns/plugins/platforms/ios/validators
   CONSTRUCT-CORE/patterns/plugins/tooling
   CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev
+  CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/_git-ignore
   CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/generators
   CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/guidelines
   CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections
@@ -2107,6 +2115,7 @@ test-runner.sh
   Projects/_ai-ignore_not-used/TestProject2
   Projects/RUN
   Projects/RUN/patterns
+  Projects/Test
 ```
 
 ## Configuration Analysis
@@ -2118,12 +2127,12 @@ No config directory found
 ```
 === File Counts ===
 Shell Scripts: 188
-YAML Configs: 33
-Markdown Docs: 888
+YAML Configs: 34
+Markdown Docs: 894
 Python Files: 0
 
 === Directory Structure ===
-Total Directories: 485
+Total Directories: 487
 
 === Project Health ===
 Pattern Configuration: Found
@@ -2145,5 +2154,5 @@ Active Patterns:
 - AI documentation: 5 files
 
 ---
-*Generated by scan_project_structure.sh on Tue Jul 15 19:54:09 PDT 2025*
+*Generated by scan_project_structure.sh on Tue Jul 15 20:53:18 PDT 2025*
 *Project: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT*
