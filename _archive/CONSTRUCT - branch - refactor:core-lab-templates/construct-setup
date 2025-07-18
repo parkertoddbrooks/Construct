@@ -1,0 +1,319 @@
+#!/bin/bash
+
+# CONSTRUCT Setup Script
+# Dual-mode setup: Interactive prompts OR command-line arguments
+# Usage: ./construct-setup [PROJECT_NAME] [BUNDLE_DOMAIN]
+#   Interactive: ./construct-setup
+#   Direct: ./construct-setup MyApp com.yourname
+
+set -e  # Exit on error
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# CONSTRUCT logo
+print_logo() {
+    echo -e "${BLUE}"
+    echo "   ____                _                   _   "
+    echo "  / ___|___  _ __  ___| |_ _ __ _   _  ___| |_ "
+    echo " | |   / _ \| '_ \/ __| __| '__| | | |/ __| __|"
+    echo " | |__| (_) | | | \__ \ |_| |  | |_| | (__| |_ "
+    echo "  \____\___/|_| |_|___/\__|_|   \__,_|\___|\__|"
+    echo -e "${NC}"
+    echo -e "${GREEN}TRUST THE PROCESS.${NC}\n"
+}
+
+# Parse arguments or get interactive input
+get_setup_parameters() {
+    if [ $# -eq 2 ]; then
+        # Command-line mode: ./construct-setup MyApp com.yourname
+        PROJECT_NAME="$1"
+        BUNDLE_DOMAIN="$2"
+        echo -e "${GREEN}🚀 CONSTRUCT Setup (Args Mode)${NC}"
+        echo -e "${BLUE}Project: $PROJECT_NAME${NC}"
+        echo -e "${BLUE}Bundle Domain: $BUNDLE_DOMAIN${NC}"
+    elif [ $# -eq 0 ]; then
+        # Interactive mode: ./construct-setup
+        echo -e "${GREEN}🚀 CONSTRUCT Setup (Interactive Mode)${NC}"
+        echo -e "${BLUE}Project name: ${NC}"
+        read -r PROJECT_NAME
+        
+        if [[ -z "$PROJECT_NAME" ]]; then
+            echo -e "${RED}Error: Project name cannot be empty.${NC}"
+            exit 1
+        fi
+        
+        echo -e "${BLUE}Bundle domain (e.g. com.yourname): ${NC}"
+        read -r BUNDLE_DOMAIN
+        
+        if [[ -z "$BUNDLE_DOMAIN" ]]; then
+            echo -e "${RED}Error: Bundle domain cannot be empty.${NC}"
+            exit 1
+        fi
+    else
+        echo -e "${RED}Error: Invalid arguments.${NC}"
+        echo -e "${YELLOW}Usage:${NC}"
+        echo -e "  Interactive: ./construct-setup"
+        echo -e "  Direct:      ./construct-setup MyApp com.yourname"
+        exit 1
+    fi
+    
+    # Validate project name (basic validation)
+    if [[ ! "$PROJECT_NAME" =~ ^[a-zA-Z][a-zA-Z0-9]*$ ]]; then
+        echo -e "${RED}Error: Project name must start with a letter and contain only letters and numbers.${NC}"
+        exit 1
+    fi
+    
+    # Validate bundle domain
+    if [[ ! "$BUNDLE_DOMAIN" =~ ^[a-z]+\.[a-z]+ ]]; then
+        echo -e "${RED}Error: Bundle domain must be in format 'com.yourname' (lowercase).${NC}"
+        exit 1
+    fi
+}
+
+# Check prerequisites
+check_prerequisites() {
+    echo -e "${BLUE}Checking prerequisites...${NC}"
+    
+    # Check for Xcode
+    if ! command -v xcodebuild &> /dev/null; then
+        echo -e "${RED}Error: Xcode is not installed. Please install Xcode from the App Store.${NC}"
+        exit 1
+    fi
+    
+    # Check for git
+    if ! command -v git &> /dev/null; then
+        echo -e "${RED}Error: Git is not installed. Please install Git.${NC}"
+        exit 1
+    fi
+    
+    # Check Swift version
+    SWIFT_VERSION=$(swift --version 2>/dev/null | grep -oE 'Swift version [0-9]+\.[0-9]+' | grep -oE '[0-9]+\.[0-9]+')
+    REQUIRED_VERSION="5.9"
+    
+    if ! awk -v v1="$SWIFT_VERSION" -v v2="$REQUIRED_VERSION" 'BEGIN{exit !(v1 >= v2)}'; then
+        echo -e "${YELLOW}Warning: Swift $REQUIRED_VERSION or higher recommended (found $SWIFT_VERSION)${NC}"
+    fi
+    
+    echo -e "${GREEN}✓ Prerequisites check passed${NC}"
+}
+
+# Initialize git repository
+init_git() {
+    if [[ ! -d .git ]]; then
+        echo -e "${BLUE}Initializing git repository...${NC}"
+        git init
+        echo -e "${GREEN}✓ Git repository initialized${NC}"
+    else
+        echo -e "${GREEN}✓ Git repository already exists${NC}"
+    fi
+}
+
+# Rename template directory structure
+rename_template_structure() {
+    echo -e "${BLUE}Setting up project structure...${NC}"
+    
+    # Check if PROJECT-TEMPLATE exists
+    if [ ! -d "PROJECT-TEMPLATE" ]; then
+        echo -e "${RED}Error: PROJECT-TEMPLATE directory not found. This script must be run from the CONSTRUCT template root.${NC}"
+        exit 1
+    fi
+    
+    # Rename USER-CHOSEN-NAME to actual project name
+    if [ -d "PROJECT-TEMPLATE/USER-CHOSEN-NAME" ]; then
+        mv "PROJECT-TEMPLATE/USER-CHOSEN-NAME" "PROJECT-TEMPLATE/$PROJECT_NAME"
+        echo -e "${GREEN}✓ Renamed template directory to $PROJECT_NAME${NC}"
+    else
+        echo -e "${YELLOW}⚠️ Template already renamed or missing${NC}"
+    fi
+    
+    # Move project contents to root and remove PROJECT-TEMPLATE wrapper
+    if [ -d "PROJECT-TEMPLATE/$PROJECT_NAME" ]; then
+        # Move contents to current directory
+        mv "PROJECT-TEMPLATE/$PROJECT_NAME"/* .
+        mv "PROJECT-TEMPLATE/$PROJECT_NAME"/.[^.]* . 2>/dev/null || true
+        
+        # Remove now-empty PROJECT-TEMPLATE
+        rm -rf "PROJECT-TEMPLATE"
+        
+        echo -e "${GREEN}✓ Project structure set up${NC}"
+    fi
+}
+
+# Setup shell aliases with new CONSTUCT structure
+setup_aliases() {
+    echo -e "${BLUE}Setting up shell aliases...${NC}"
+    
+    # Use the CONSTUCT setup-aliases script
+    if [ -f "CONSTUCT/scripts/setup-aliases.sh" ]; then
+        chmod +x "CONSTUCT/scripts/setup-aliases.sh"
+        ./CONSTUCT/scripts/setup-aliases.sh
+        echo -e "${GREEN}✓ Aliases configured via CONSTUCT script${NC}"
+    else
+        echo -e "${YELLOW}⚠️ CONSTUCT aliases script not found, skipping aliases${NC}"
+    fi
+}
+
+# Update CLAUDE.md with project name
+update_claude_md() {
+    echo -e "${BLUE}Updating CLAUDE.md with project details...${NC}"
+    
+    if [ -f "CLAUDE.md" ]; then
+        # Replace any placeholder references
+        sed -i.bak "s/USER-CHOSEN-NAME/$PROJECT_NAME/g" CLAUDE.md
+        sed -i.bak "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" CLAUDE.md
+        rm -f CLAUDE.md.bak
+        echo -e "${GREEN}✓ CLAUDE.md updated${NC}"
+    else
+        echo -e "${YELLOW}⚠️ CLAUDE.md not found${NC}"
+    fi
+}
+
+# Fix Xcode project contamination and setup
+setup_xcode_project() {
+    echo -e "${BLUE}Setting up Xcode project...${NC}"
+    
+    local xcode_project_dir="$PROJECT_NAME-Project"
+    local xcode_project="$xcode_project_dir/$PROJECT_NAME.xcodeproj"
+    
+    if [ -d "$xcode_project_dir" ]; then
+        # Rename Xcode project directory if needed
+        if [ -d "$xcode_project_dir/USER-CHOSEN-NAME.xcodeproj" ]; then
+            mv "$xcode_project_dir/USER-CHOSEN-NAME.xcodeproj" "$xcode_project"
+        fi
+        
+        # Fix Xcode project bundle identifiers and names
+        if [ -f "$xcode_project/project.pbxproj" ]; then
+            echo -e "${BLUE}  Fixing Xcode project configuration...${NC}"
+            
+            # Create backup
+            cp "$xcode_project/project.pbxproj" "$xcode_project/project.pbxproj.bak"
+            
+            # Replace contaminated values with proper ones
+            sed -i '' "s/RUN-iOS/$PROJECT_NAME-iOS/g" "$xcode_project/project.pbxproj"
+            sed -i '' "s/RUN-Watch/$PROJECT_NAME-Watch/g" "$xcode_project/project.pbxproj"
+            sed -i '' "s/\"RUN\"/\"$PROJECT_NAME\"/g" "$xcode_project/project.pbxproj"
+            sed -i '' "s/com\.parkertoddbrooks\.RUN/$BUNDLE_DOMAIN.$PROJECT_NAME/g" "$xcode_project/project.pbxproj"
+            sed -i '' "s/remoteInfo = \"RUN-Watch Watch App\"/remoteInfo = \"$PROJECT_NAME-Watch Watch App\"/g" "$xcode_project/project.pbxproj"
+            sed -i '' "s/productName = \"RUN-iOS\"/productName = \"$PROJECT_NAME-iOS\"/g" "$xcode_project/project.pbxproj"
+            sed -i '' "s/productName = \"RUN-Watch Watch App\"/productName = \"$PROJECT_NAME-Watch Watch App\"/g" "$xcode_project/project.pbxproj"
+            
+            # Update display names and descriptions
+            sed -i '' "s/INFOPLIST_KEY_CFBundleDisplayName = \"RUN-Watch\"/INFOPLIST_KEY_CFBundleDisplayName = \"$PROJECT_NAME-Watch\"/g" "$xcode_project/project.pbxproj"
+            sed -i '' "s/RUN needs access to your heart rate/$PROJECT_NAME needs access to your heart rate/g" "$xcode_project/project.pbxproj"
+            sed -i '' "s/RUN tracks your workout data/$PROJECT_NAME tracks your workout data/g" "$xcode_project/project.pbxproj"
+            
+            echo -e "${GREEN}✓ Xcode project configuration updated${NC}"
+            echo -e "${GREEN}  Bundle ID: $BUNDLE_DOMAIN.$PROJECT_NAME${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️ Xcode project directory not found${NC}"
+    fi
+}
+
+# Create initial directories
+create_directories() {
+    echo -e "${BLUE}Creating project directories...${NC}"
+    
+    # Create directories if they don't exist
+    mkdir -p AI/{dev-logs/session-states,structure/_old}
+    mkdir -p _trash
+    
+    echo -e "${GREEN}✓ Project directories created${NC}"
+}
+
+# Initialize first PRD with new structure
+init_first_prd() {
+    echo -e "${BLUE}Creating first sprint PRD...${NC}"
+    
+    local date=$(date +%Y-%m-%d)
+    local prd_dir="AI/PRDs/current-sprint"
+    local prd_file="$prd_dir/${date}-initial-setup-prd.md"
+    
+    # Create directory if it doesn't exist
+    mkdir -p "$prd_dir"
+    
+    cat > "$prd_file" << EOF
+# PRD: Initial Setup - $PROJECT_NAME
+**Date**: $date
+**Sprint**: Initial Setup
+
+## Overview
+Setting up $PROJECT_NAME with CONSTRUCT architecture system.
+
+## Goals
+- [x] Configure project structure
+- [x] Setup Xcode project with proper bundle IDs
+- [ ] Implement first feature
+- [ ] Setup CI/CD pipeline
+- [ ] Create documentation
+
+## Success Criteria
+- All CONSTRUCT tools working
+- No architecture violations
+- Tests passing
+- Documentation complete
+
+## Technical Requirements
+- iOS 15.0+ support
+- Swift 6 compatibility
+- Accessibility compliance
+- Performance targets met
+
+## Bundle Configuration
+- **Bundle Domain**: $BUNDLE_DOMAIN
+- **iOS App**: $BUNDLE_DOMAIN.$PROJECT_NAME-iOS
+- **Watch App**: $BUNDLE_DOMAIN.$PROJECT_NAME-iOS.watchkitapp
+
+## Notes
+Project successfully configured with CONSTRUCT. Update this PRD with your actual project goals!
+EOF
+    
+    echo -e "${GREEN}✓ Initial PRD created${NC}"
+}
+
+# Main setup flow
+main() {
+    clear
+    print_logo
+    
+    # Parse arguments (supports both interactive and command-line modes)
+    get_setup_parameters "$@"
+    check_prerequisites
+    
+    echo -e "\n${BLUE}Starting CONSTRUCT setup...${NC}\n"
+    
+    rename_template_structure
+    init_git
+    setup_aliases
+    create_directories
+    update_claude_md
+    setup_xcode_project
+    init_first_prd
+    
+    # Run initial context update if available
+    echo -e "\n${BLUE}Running initial context update...${NC}"
+    if [ -f "CONSTUCT/scripts/update-context.sh" ]; then
+        chmod +x "CONSTUCT/scripts/update-context.sh"
+        ./CONSTUCT/scripts/update-context.sh
+    else
+        echo -e "${YELLOW}⚠️ Context update script not found${NC}"
+    fi
+    
+    echo -e "\n${GREEN}✨ CONSTRUCT setup complete!${NC}\n"
+    
+    echo -e "${BLUE}Next steps:${NC}"
+    echo "1. Run: source ~/.zshrc  (or ~/.bashrc)"
+    echo "2. Run: construct-update"
+    echo "3. Open: open $PROJECT_NAME-Project/$PROJECT_NAME.xcodeproj"
+    echo "4. Start development!"
+    
+    echo -e "\n${GREEN}TRUST THE PROCESS.${NC}"
+}
+
+# Run main function with all arguments
+main "$@"

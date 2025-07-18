@@ -11,6 +11,10 @@ plugins:
   - tooling/shell-quality      # Shell script quality standards
   - tooling/unix-philosophy    # Unix design principles
 
+# LAB injections for emerging patterns
+injections:
+  - tooling/shell-scripting/injections/consistency-standards  # Script interface consistency
+
 # Custom rules for CONSTRUCT framework
 custom_rules:
   scripts:
@@ -18,6 +22,7 @@ custom_rules:
     - "Scripts must support interactive mode detection"
     - "Use absolute paths from CONSTRUCT_CORE root"
     - "Exit codes must be meaningful (0=success, >0=errors)"
+    - "All file-modifying scripts must support --dry-run for validation"
   
   structure:
     - "CORE contains stable code"

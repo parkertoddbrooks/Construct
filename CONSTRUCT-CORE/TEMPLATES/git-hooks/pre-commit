@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# CONSTRUCT Pre-commit Hook
+# Validates code quality and architecture compliance before commits
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+echo -e "${BLUE}🔍 CONSTRUCT Pre-commit Validation${NC}"
+
+# Check if CONSTRUCT tools are available
+if [ -d "CONSTRUCT" ] && [ -f "CONSTRUCT/scripts/core/check-quality.sh" ]; then
+    echo -e "${YELLOW}Running quality checks...${NC}"
+    
+    # Run quality checks (don't fail commit on warnings)
+    if ./CONSTRUCT/scripts/core/check-quality.sh --commit-mode; then
+        echo -e "${GREEN}✅ Quality checks passed${NC}"
+    else
+        echo -e "${YELLOW}⚠️ Quality checks had warnings (commit allowed)${NC}"
+    fi
+else
+    echo -e "${GRAY}ℹ️ CONSTRUCT tools not found, skipping validation${NC}"
+fi
+
+# Validate patterns.yaml if it exists
+if [ -f ".construct/patterns.yaml" ]; then
+    if command -v yq >/dev/null 2>&1; then
+        if yq eval '.' .construct/patterns.yaml >/dev/null 2>&1; then
+            echo -e "${GREEN}✅ Pattern configuration valid${NC}"
+        else
+            echo -e "${RED}❌ Invalid patterns.yaml syntax${NC}"
+            echo "Fix .construct/patterns.yaml before committing"
+            exit 1
+        fi
+    fi
+fi
+
+echo -e "${GREEN}✅ Pre-commit validation complete${NC}"
+exit 0

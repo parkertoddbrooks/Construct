@@ -1,0 +1,50 @@
+name: web
+version: 1.0.0
+description: Universal web framework patterns for modern web development
+author: CONSTRUCT Team
+category: frameworks
+dependencies: []  # Framework-agnostic, works with any language
+tags:
+  - web-development
+  - web-framework
+  - frontend
+  - javascript
+  - typescript
+  - js
+  - ts
+  - node
+  - nodejs
+  - npm
+  - yarn
+  - pnpm
+  - package.json
+  - react
+  - vue
+  - angular
+  - svelte
+  - next
+  - nuxt
+  - express
+  - fastify
+  - html5
+  - css3
+  - scss
+  - sass
+  - webpack
+  - vite
+  - babel
+coverage:
+  # Languages with basic coverage via this pattern
+  javascript:
+    level: basic
+    description: Security, performance, and accessibility patterns
+  typescript:
+    level: basic
+    description: Same as JavaScript with type safety mentions
+  html:
+    level: basic
+    description: Semantic HTML, accessibility, meta tags
+  css:
+    level: basic
+    description: Responsive design basics, minimal architecture
+min_construct_version: 2.0.0

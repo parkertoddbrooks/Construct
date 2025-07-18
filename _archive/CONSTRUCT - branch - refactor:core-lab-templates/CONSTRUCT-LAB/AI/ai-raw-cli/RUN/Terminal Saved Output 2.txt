@@ -1,0 +1,59 @@
+Last login: Mon Jun 23 12:16:32 on ttys059
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405):
+Unable to erase contents and settings in current state: Booted
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405):
+Unable to erase contents and settings in current state: Booted
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405):
+Unable to erase contents and settings in current state: Booted
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405):
+Unable to erase contents and settings in current state: Booted
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405):
+Errors encountered while erasing multiple devices.
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405):
+Unable to erase contents and settings in current state: Booted
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405):
+Errors encountered while erasing multiple devices.
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405):
+Unable to erase contents and settings in current state: Booted
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405):
+Unable to erase contents and settings in current state: Booted
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405):
+Unable to erase contents and settings in current state: Booted
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405):
+Unable to erase contents and settings in current state: Booted
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % xcrun simctl erase all
+parker@PxB-AirM3 RUN % 

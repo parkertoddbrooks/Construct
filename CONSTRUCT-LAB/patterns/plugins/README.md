@@ -11,8 +11,17 @@ plugins/
     └── [plugin-name]/
         ├── [plugin-name].md        # Pattern rules
         ├── [plugin-name].yaml      # Metadata
-        └── validators/             # Optional validators
+        └── validators/             # 🚨 MANDATORY validators
 ```
+
+## 🚨 CRITICAL: Validator Requirement
+
+**Every plugin and injection MUST have validators**. This is not optional:
+
+- **No pattern without enforcement** - If you can't validate it, don't document it
+- **Validators must be executable** and follow exit code standards (0=success, >0=issues)
+- **Injections need validators** in their own `validators/` directory
+- **Clear feedback required** - Validators must explain what violations they found
 
 ## Categories
 
@@ -20,7 +29,19 @@ You can use any category that makes sense for your project:
 - `custom/` - Project-specific patterns
 - `experimental/` - Patterns being tested
 - `overrides/` - Patterns that override CORE patterns
+- `injections/` - Small focused improvements to existing patterns
 - Or create your own categories
+
+## Injections
+
+**Injections** are small, focused pattern additions that extend existing CORE patterns without replacing them. They're perfect for:
+- Adding newly discovered best practices
+- Extending patterns with project-specific requirements
+- Documenting architectural decisions learned through development
+
+**🚨 MANDATORY**: Every injection must include a `validators/` directory with enforcement scripts.
+
+Example: `tooling/shell-scripting/injections/consistency-standards` adds interface consistency requirements to shell scripting patterns and includes `validators/interface-consistency.sh` to enforce them.
 
 ## Development Tips
 

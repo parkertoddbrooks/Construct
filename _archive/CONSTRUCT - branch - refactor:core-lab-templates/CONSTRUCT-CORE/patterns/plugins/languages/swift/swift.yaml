@@ -1,0 +1,28 @@
+name: swift-language
+version: 1.0.0
+description: Swift 6 language patterns and best practices for iOS development
+author: CONSTRUCT Team
+category: languages
+validators:
+  - quality
+dependencies:
+  - architectural/mvvm-ios
+  - frameworks/swiftui
+tags:
+  - swift
+  - swiftlang
+  - xcode
+  - xcodeproj
+  - xcworkspace
+  - package.swift
+  - spm
+  - swift-package-manager
+  - ios-development
+  - macos-development
+  - watchos
+  - tvos
+  - visionos
+  - swift-6
+  - swift-concurrency
+  - apple-mobile
+min_construct_version: 2.0.0

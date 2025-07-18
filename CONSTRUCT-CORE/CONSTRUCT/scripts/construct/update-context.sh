@@ -22,34 +22,66 @@ source "$SCRIPTS_ROOT/../lib/validation.sh"
 source "$SCRIPTS_ROOT/../lib/file-analysis.sh"
 source "$SCRIPTS_ROOT/../lib/template-utils.sh"
 
-# Show help if requested
-if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-    echo "Usage: $0 [PROJECT_DIR]"
-    echo ""
-    echo "Update project's CLAUDE.md with current state"
-    echo ""
-    echo "Arguments:"
-    echo "  PROJECT_DIR   Directory containing project (default: current directory)"
-    echo ""
-    echo "This script updates the CLAUDE.md file in the specified project directory"
-    echo "with current project state including:"
-    echo "  - Git status and recent commits"
-    echo "  - Active patterns from .construct/patterns.yaml"
-    echo "  - Code quality violations"
-    echo "  - Documentation status"
-    echo "  - Working location context"
-    exit 0
-fi
+# Parse command line arguments
+DRY_RUN=false
+PROJECT_DIR=""
 
-# Accept PROJECT_DIR as parameter, default to current directory
-PROJECT_DIR="${1:-.}"
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        --help|-h)
+            echo "Usage: $0 [OPTIONS] [PROJECT_DIR]"
+            echo ""
+            echo "Update project's CLAUDE.md with current state"
+            echo ""
+            echo "Arguments:"
+            echo "  PROJECT_DIR   Directory containing project (default: current directory)"
+            echo ""
+            echo "Options:"
+            echo "  --dry-run     Show what would be updated without making changes"
+            echo "  --help, -h    Show this help message"
+            echo ""
+            echo "This script updates the CLAUDE.md file in the specified project directory"
+            echo "with current project state including:"
+            echo "  - Git status and recent commits"
+            echo "  - Active patterns from .construct/patterns.yaml"
+            echo "  - Code quality violations"
+            echo "  - Documentation status"
+            echo "  - Working location context"
+            exit 0
+            ;;
+        -*)
+            echo "Unknown option: $1" >&2
+            exit 1
+            ;;
+        *)
+            if [ -z "$PROJECT_DIR" ]; then
+                PROJECT_DIR="$1"
+            else
+                echo "Too many arguments" >&2
+                exit 1
+            fi
+            shift
+            ;;
+    esac
+done
+
+# Default to current directory if not specified
+PROJECT_DIR="${PROJECT_DIR:-.}"
 PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
 
 # Get CLAUDE.md path for this project
 # All projects now use root CLAUDE.md (created by /init and enhanced by construct-init)
 CLAUDE_MD="$PROJECT_DIR/CLAUDE.md"
 
-echo -e "${BLUE}🔄 Updating project context...${NC}"
+if [ "$DRY_RUN" = true ]; then
+    echo -e "${BLUE}🔍 Analyzing project context (DRY RUN)...${NC}"
+else
+    echo -e "${BLUE}🔄 Updating project context...${NC}"
+fi
 echo "Project: $PROJECT_DIR"
 
 
@@ -511,13 +543,26 @@ Error: check-symlinks.sh not found or not executable"
     { print }
     ' > "$temp_file"
     
-    # Replace original file
-    mv "$temp_file" "$CLAUDE_MD"
+    # Apply changes or show what would be updated
+    if [ "$DRY_RUN" = true ]; then
+        echo -e "${YELLOW}🔍 DRY RUN: Would update the following sections in $CLAUDE_MD:${NC}"
+        echo "  - Current Project State"
+        echo "  - Development Context"
+        echo "  - Documentation Links"
+        echo "  - Active Violations"
+        echo "  - Working Location"
+        echo "  - Active Symlinks"
+        echo "  - Active PRDs"
+        echo -e "${BLUE}💡 Run without --dry-run to apply changes${NC}"
+        rm -f "$temp_file"
+    else
+        # Replace original file
+        mv "$temp_file" "$CLAUDE_MD"
+        echo -e "${GREEN}✅ Auto-sections updated successfully${NC}"
+    fi
     
     # Clean up temporary files
     rm -f "$temp_dir/structure.txt" "$temp_dir/sprint.txt" "$temp_dir/docs.txt" "$temp_dir/violations.txt" "$temp_dir/working.txt" "$temp_dir/symlinks.txt" "$temp_dir/prds.txt"
-    
-    echo -e "${GREEN}✅ Auto-sections updated successfully${NC}"
 }
 
 # Main execution

@@ -7,6 +7,15 @@ Root of CONSTRUCT's modular pattern system for generating context-aware CLAUDE.m
 - `lib/` - Pattern utilities and shared functions (future)
 - `templates/` - Configuration templates for projects
 
+## 🚨 CRITICAL: Validator Requirement
+
+**Every pattern plugin MUST have validators**. This is a fundamental CONSTRUCT principle:
+
+- **No pattern without enforcement** - Patterns that can't be validated shouldn't exist
+- **Validators prove pattern value** - If rules can't be checked, they're just suggestions
+- **Quality assurance** - Validators ensure patterns are actually followed
+- **Architectural integrity** - Enforceable patterns maintain system design
+
 ## Terminology
 - **Pattern System**: The overall framework for managing reusable context
 - **Pattern Plugins** (or just "patterns"): Individual .md files containing specific rules and guidelines

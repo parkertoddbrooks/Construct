@@ -1,0 +1,26 @@
+name: web
+version: 1.0.0
+description: Web platform-specific patterns for PWAs, SEO, and browser APIs
+author: CONSTRUCT Team
+category: platforms
+dependencies: []  # Platform patterns work with any framework
+tags:
+  - web-platform
+  - pwa
+  - progressive-web-app
+  - seo
+  - browser-api
+  - service-worker
+  - web-performance
+coverage:
+  # Platform features covered
+  pwa:
+    level: comprehensive
+    description: Service workers, manifest, offline support
+  seo:
+    level: comprehensive
+    description: Meta tags, structured data, sitemaps
+  browser-apis:
+    level: comprehensive
+    description: Modern browser APIs with feature detection
+min_construct_version: 2.0.0

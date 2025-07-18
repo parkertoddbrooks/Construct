@@ -1,0 +1,184 @@
+# PRD: Self-Learning Pattern System for CONSTRUCT
+
+## Overview
+Introduce a self-learning mechanism to CONSTRUCT's pattern system, enabling automatic detection of improvement opportunities in patterns, validators, and documentation. This CORE feature analyzes usage data from logs, git history, and validation results to suggest refinements, new patterns, or optimizations in real-time or batch modes. Suggestions are pushed to LAB for review, with clear paths for promotion back to CORE or community sharing. It creates closed feedback loops: Detect → Suggest → Apply → Measure, integrating deeply with AI sessions for interactive adjustments.
+
+## Problem Statement
+Patterns in CONSTRUCT evolve manually, missing automated insights from usage—e.g., repeated validator failures or emerging code structures in git diffs. This leads to stale patterns, increased manual refinements during AI sessions, and friction in dynamic context management. Without self-learning, the system doesn't adapt to "what developers are actually doing," limiting its self-improving potential and community evolution.
+
+## Solution
+Add a learning layer that collects data passively, analyzes for gaps, and suggests changes (e.g., .md diffs, new plugins). Integrate real-time prompts during validations/AI sessions for immediate feedback, with batch analysis for deeper insights. Suggestions land in LAB; promotions to CORE via automated PRs. Support opt-in community sharing through a git-based registry for collective improvements, maintaining privacy.
+
+## Strategic Alignment
+- **Self-Improving Patterns**: Realizes "Pattern Learning" by identifying repeated structures and suggesting evolutions, with measurable impact tracking.
+- **Dynamic Context**: Enhances CLAUDE.md with learning insights; AI sessions can auto-adjust patterns on-the-fly.
+- **Unix Philosophy**: Text logs/diffs; simple, composable tools.
+- **Community Scalable**: Opt-in sharing via git registry enables ecosystem-wide benefits without centralization.
+
+## Key Features
+- **Data Collection**: Pattern-specific logging during workflows (e.g., fails per plugin).
+- **Real-Time & Batch Analysis**: Immediate suggestions on fails (e.g., during check-quality); deeper git/log scans via command.
+- **Suggestions & AI Integration**: Propose diffs/stubs; AI prompts for apply/review (e.g., "Refine pattern? y/n").
+- **Analytics Reporting**: Trends across projects (e.g., fail rates, impact scores).
+- **Promotion & Sharing**: Push refined patterns to CORE/community with evidence (logs/stats).
+- **Docs Tie-In**: Analyze .docs.md usage (e.g., underused sections).
+
+## Requirements
+- **Minimal Dependencies**: Bash/yq/git; optional Python in lib/ for analysis.
+- **Project-Aware**: Single PROJECT_DIR or workspace-wide.
+- **Configurable**: Via patterns.yaml (e.g., learning: enabled, thresholds).
+- **Privacy-First**: Local-only default; opt-in sharing of anonymized stats.
+- **Secure**: No code sharing; only aggregated metrics.
+
+## Success Criteria & Metrics
+
+| Metric | Target | Measurement |
+|--------|--------|-------------|
+| Suggestion Accuracy | >50% accept/modify rate | Log user choices (accept/reject/modify) in learning-state.yaml |
+| Performance Overhead | <100ms for real-time suggestions | Time validators with/without learning |
+| Reduction in Manual Edits | 30% fewer pattern tweaks | Git commits to patterns/ pre/post; time-to-stable pattern |
+| Coverage | Detect 80% of repeat fails | Manual review of logs vs. suggestions |
+| Community Contributions | 20% of users share (opt-in) | Track pushes via registry PRs |
+| Adoption | Used in 50% of commits | Analytics from learning-logs/ |
+
+Qualitative: Fewer "explaining patterns" in sessions; patterns converge faster.
+
+## Implementation Details
+
+### Directory Changes
+```
+CONSTRUCT-CORE/
+├── patterns/
+│   └── lib/
+│       ├── learn-utils.sh  # Shared functions (e.g., parse_logs, impact_score)
+│       └── learning-protocol.yaml  # Template for export format
+├── scripts/
+│   ├── core/
+│   │   └── learn-patterns.sh  # Main command (real-time/batch)
+│   └── dev/
+│       └── pattern-analytics.sh  # Reporting
+Projects/MyApp/
+└── .construct/
+    ├── patterns.yaml  # learning: {enabled: true, thresholds...}
+    ├── learning-logs/  # pattern_usage.log, validator_fails.log
+    └── learning-state.yaml  # Track suggest/accept/reject
+CONSTRUCT-LAB/patterns/
+└── experiments/  # Suggestions as diffs/stubs
+```
+
+### Learning Configuration in patterns.yaml
+```yaml
+learning:
+  enabled: true
+  fail_threshold: 5
+  git_depth: 100  # Commits to scan
+  scopes: [all, docs]
+  promotion: {auto_pr: true, threshold: {adoptions: 3, fail_reduction: 50%}}
+  sharing: {opt_in: false, registry: "github:xai-community/construct-patterns"}
+```
+
+### Data Collection
+- Validators: Log granular fails (e.g., `log_fail "$PROJECT_DIR" "$PLUGIN" "$TYPE" "$FILE"` in learn-utils.sh).
+- assemble-claude.sh: Log loads/sections.
+- pre-commit-review.sh: Summary logs.
+- Real-Time Hook: In validators, if fails>threshold, echo immediate suggestion.
+
+### Analysis Logic
+- **Real-Time**: During fails, quick checks (e.g., repeat issue? Suggest rule).
+- **Batch**: Parse logs/git for patterns (e.g., awk for fail groups; git log -p for repeats).
+- **Impact Score**: Fails * severity / uses (severity: predefined in YAML).
+- **Docs**: Grep git diffs for keyword mentions.
+- Prioritization: --top N; suppress duplicates (check learning-state.yaml); batch by type (quick/major).
+
+### Suggestion Format
+- Console + files in experiments/ (e.g., refine.diff).
+- AI Prompts: Via CLAUDE.md insights section; Claude taught to query logs and offer options.
+
+### Feedback Protocol (learning-export.yaml)
+```yaml
+pattern: "swift/mvvm"
+stats:
+  uses: 1000
+  failures:
+    - type: "naming"
+      count: 50
+      fix_accepted: 0.8
+suggested_changes:
+  - diff: "..."
+    impact_score: 0.87
+```
+
+### Community Registry
+- Git repo (e.g., xai-community/construct-patterns): Patterns with metadata.json (downloads, success_rate), learning-aggregated.yaml (anonymized).
+- Commands: `push-learning` (PR anonymized export); `pull-improvements` (fetch/apply diffs); `vote <change>` (issues/reactions).
+- Privacy: Consent prompt with preview; share stats only.
+
+### CLAUDE.md Integration
+Auto-add/update:
+```
+<!-- START:LEARNING-INSIGHTS -->
+## 📊 Pattern Learning
+- Swift naming: 12 violations → Suggest stricter rules [Apply? y/n]
+<!-- END:LEARNING-INSIGHTS -->
+```
+Regenerate via construct-learning-sync.sh.
+
+## Step-by-Step Implementation Guide
+
+### Phase 1: Foundation (Week 1)
+1. **learning-logs/ & Config**:
+   - In create/import-project.sh: `mkdir .construct/learning-logs; touch learning-state.yaml`.
+   
+2. **Logging**:
+   - Add to validators/assemble: Use learn-utils.sh functions.
+   
+3. **Test**:
+   - Mock project, run checks: Verify logs/state.
+
+### Phase 2: Learning Command & Real-Time (Week 2)
+1. **learn-patterns.sh**:
+   - Real-time: In validators, if threshold, echo/prompt.
+   - Batch: Parse, generate diffs/stubs.
+   - --apply: Patch, re-validate, update state.yaml.
+   
+2. **AI Sync**:
+   - New construct-learning-sync.sh: Update CLAUDE.md insights.
+   
+3. **Test**:
+   - Trigger fails: See real-time prompt.
+   - Batch run: Suggestions in experiments/.
+   - AI Session: Simulate Claude querying insights.
+
+### Phase 3: Analytics & Promotion (Month 2)
+1. **pattern-analytics.sh**:
+   - Tables from logs/state.
+   
+2. **Promotion/Sharing**:
+   - promote: Generate PR with export.yaml.
+   - push/pull: Git operations on registry.
+   
+3. **Test**:
+   - Adopt suggestion: Verify fail reduction in state.
+   - Share: Mock PR to registry.
+   - Workspace: Aggregate via workspace-update --learn.
+
+### Phase 4: Polish (Ongoing)
+1. **Suppression/Prioritization**: Implement in utils.
+2. **Metrics Tracking**: Log accept/modify in state.yaml.
+
+## Rollout Plan
+- **Week 1**: Phase 1 in LAB; test mocks.
+- **Week 2**: Phase 2; deploy to iOS/Watch projects.
+- **Month 2**: Phase 3; community registry setup.
+- **Ongoing**: Feedback via dev-updates; refine via learning!
+
+## Open Questions
+1. **Real-Time Thresholds**: User-configurable per pattern?
+   - **Rec**: Yes, in YAML.
+2. **AI Prompt Overload**: Limit to 3/session?
+   - **Rec**: Toggle in config.
+3. **Registry Governance**: Who merges PRs?
+   - **Rec**: Community maintainers; start with you.
+
+## Summary
+This revised PRD makes self-learning a CORE feature, pushing suggestions to LAB with promotion paths to CORE/community. Real-time AI integration reduces complexity by enabling on-the-fly adjustments, while opt-in sharing via git registry fosters ecosystem growth. Impact: Patterns evolve with use, cutting manual work by 30% and making CONSTRUCT truly adaptive.

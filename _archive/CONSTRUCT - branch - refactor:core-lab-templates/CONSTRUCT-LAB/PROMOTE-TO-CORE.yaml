@@ -1,0 +1,55 @@
+# CONSTRUCT Promotion Manifest
+# This file declares what should be promoted from LAB to CORE
+# Nothing enters CORE without being explicitly listed here
+
+# Promotion Rules:
+# 1. All promotions must be tested in LAB first
+# 2. Include clear descriptions of what and why
+# 3. Version bumps are handled automatically
+# 4. Run: ./tools/promote-to-core.sh to execute promotions
+
+promotions:
+  # Example promotion entries (uncomment and modify as needed):
+  
+  # # Promote a script improvement
+  # - type: file
+  #   source: experiments/better-validation.sh
+  #   dest: CONSTRUCT-CORE/CONSTRUCT/scripts/validation.sh
+  #   description: "Improved validation with better error messages"
+  #   bump_version: minor
+  #   
+  # # Promote a new library function
+  # - type: file
+  #   source: experiments/new-utils.sh
+  #   dest: CONSTRUCT-CORE/CONSTRUCT/lib/new-utils.sh
+  #   description: "New utility functions for file processing"
+  #   bump_version: minor
+  #   
+  # # Promote documentation updates
+  # - type: file
+  #   source: AI/docs/guides/new-pattern-guide.md
+  #   dest: CONSTRUCT-CORE/docs/new-pattern-guide.md
+  #   description: "Documentation for new architectural pattern"
+  #   bump_version: patch
+  #
+  # # Promote a file that should be symlinked from LAB
+  # - type: symlinked-file
+  #   source: AI/docs/shared-readme.md
+  #   dest: CONSTRUCT-CORE/AI/docs/shared-readme.md
+  #   description: "Shared README that LAB references via symlink"
+  #   bump_version: patch
+  #   # This will:
+  #   # 1. Copy file to CORE
+  #   # 2. Replace LAB file with symlink
+  #   # 3. Update check-symlinks.sh automatically
+  
+  # Active promotions will be listed below this line:
+  
+  # Promote distributed quality examples documentation (disabled - file missing)
+  # - type: file
+  #   source: experiments/distributed-quality-examples.md
+  #   dest: CONSTRUCT-CORE/docs/distributed-quality-examples.md
+  #   description: "Documentation showing real examples of distributed quality philosophy"
+  #   bump_version: patch
+    
+  # Promotion testing complete - manifest cleared

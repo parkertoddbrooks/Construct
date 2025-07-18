@@ -1,0 +1,27 @@
+name: ios
+version: 1.0.0
+description: iOS platform-specific patterns and conventions
+author: CONSTRUCT Team
+category: platforms
+dependencies:
+  - languages/swift
+tags:
+  - ios-platform
+  - iphone
+  - ipad
+  - ipados
+  - xcode
+  - xcodeproj
+  - xcworkspace
+  - info.plist
+  - uikit
+  - foundation
+  - "core data"
+  - cloudkit
+  - "app store"
+  - testflight
+  - "provisioning profile"
+  - apple
+  - ios-mobile
+  - apple-platform
+min_construct_version: 2.0.0

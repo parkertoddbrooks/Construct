@@ -49,6 +49,13 @@ plugins:
       has_generators: false
   lab:
     # Project-specific plugins in CONSTRUCT-LAB
+    - id: tooling/shell-scripting/injections/consistency-standards
+      name: "Script Interface Consistency Standards"
+      description: "Ensures consistent flag support (--dry-run, --help) across all scripts in tooling systems"
+      category: injection
+      target: shell-scripting
+      discovered: "2025-07-18"
+      context: "CONSTRUCT construct-init testing revealed inconsistent validation approaches"
 ```
 
 ## Available Plugin Categories
@@ -80,6 +87,9 @@ plugins:
 - **construct-dev** - CONSTRUCT development
 - **error-handling** - Error handling patterns
 - **unix-philosophy** - Unix design principles
+
+### LAB Injections (`LAB/patterns/plugins/`)
+- **tooling/shell-scripting/injections/consistency-standards** - Script interface consistency requirements (discovered 2025-07-18)
 
 ## Plugin Structure
 
@@ -198,6 +208,78 @@ Workspace management scripts use a separate workspace registry:
 - `workspace-update.sh` - Updates all projects
 - `import-project.sh` - Records imported projects
 
+## LAB Injections
+
+### What are Injections?
+
+**Injections** are small, focused pattern additions that extend existing CORE patterns without replacing them. They're perfect for:
+
+- **Newly discovered best practices** learned through real development
+- **Architectural decisions** that need to be preserved
+- **Project-specific extensions** to standard patterns
+- **Experimental improvements** that might eventually become CORE patterns
+
+### Creating an Injection
+
+```bash
+# 1. Create injection directory
+mkdir -p CONSTRUCT-LAB/patterns/plugins/tooling/shell-scripting/injections
+
+# 2. Create the injection file
+cat > CONSTRUCT-LAB/patterns/plugins/tooling/shell-scripting/injections/my-discovery.md << 'EOF'
+# My Discovery
+
+## When to Use
+Description of when this injection applies
+
+## Rules
+New patterns discovered through development
+EOF
+
+# 3. MANDATORY: Create validator for the injection
+mkdir -p CONSTRUCT-LAB/patterns/plugins/tooling/shell-scripting/injections/validators
+cat > CONSTRUCT-LAB/patterns/plugins/tooling/shell-scripting/injections/validators/my-discovery-validator.sh << 'EOF'
+#!/bin/bash
+# Validator for my-discovery injection
+# MANDATORY: Every injection must have a validator
+
+set -e
+ISSUES_FOUND=0
+
+echo "🔍 Validating my-discovery patterns..."
+
+# Add specific validation logic here
+# Example: Check for required patterns, file formats, etc.
+
+if [ $ISSUES_FOUND -eq 0 ]; then
+    echo "✅ All my-discovery patterns validated"
+else
+    echo "❌ Found $ISSUES_FOUND violations"
+fi
+
+exit $ISSUES_FOUND
+EOF
+
+chmod +x CONSTRUCT-LAB/patterns/plugins/tooling/shell-scripting/injections/validators/my-discovery-validator.sh
+
+# 4. Add to patterns.yaml
+echo "injections:" >> .construct/patterns.yaml
+echo "  - tooling/shell-scripting/injections/my-discovery" >> .construct/patterns.yaml
+
+# 5. Update registry
+./CONSTRUCT-CORE/CONSTRUCT/scripts/construct/refresh-plugin-registry.sh
+```
+
+**🚨 CRITICAL**: Every injection MUST have a validator - no exceptions.
+
+### Example: consistency-standards Injection
+
+The `consistency-standards` injection was discovered during CONSTRUCT construct-init testing when we found inconsistent script interfaces. It now ensures all scripts support `--dry-run` and `--help` consistently.
+
+**Discovery context**: Testing revealed some scripts used `--help` for validation while others used `--dry-run`, creating inconsistent user experience.
+
+**Solution**: Document the requirement that all file-modifying scripts must support both flags consistently.
+
 ## Creating New Plugins
 
 ### Step 1: Create Plugin Directory
@@ -254,24 +336,57 @@ This pattern provides Rust language best practices...
 - Fighting the borrow checker
 ```
 
-### Step 4: Add Validators (Optional)
+### Step 4: Add Validators (MANDATORY)
 
 ```bash
 mkdir validators
-cat > validators/cargo-check.sh << 'EOF'
+cat > validators/rust-patterns.sh << 'EOF'
 #!/bin/bash
-# Validate Rust code quality
+# Validate Rust patterns compliance
+# MANDATORY: Every plugin must have validators
 set -e
 
+ISSUES_FOUND=0
+
+echo "🔍 Validating Rust pattern compliance..."
+
+# Check for Result usage instead of unwrap
+if grep -r "\.unwrap()" . --include="*.rs" >/dev/null 2>&1; then
+    echo "❌ Found .unwrap() usage - use proper error handling"
+    ISSUES_FOUND=$((ISSUES_FOUND + 1))
+fi
+
+# Check for proper error handling
+if ! grep -r "Result<" . --include="*.rs" >/dev/null 2>&1; then
+    echo "❌ No Result types found - add proper error handling"
+    ISSUES_FOUND=$((ISSUES_FOUND + 1))
+fi
+
 echo "🔍 Running cargo check..."
-cargo check --all-targets
+if ! cargo check --all-targets >/dev/null 2>&1; then
+    echo "❌ Cargo check failed"
+    ISSUES_FOUND=$((ISSUES_FOUND + 1))
+fi
 
 echo "🔍 Running clippy..."
-cargo clippy -- -D warnings
+if ! cargo clippy -- -D warnings >/dev/null 2>&1; then
+    echo "❌ Clippy warnings found"
+    ISSUES_FOUND=$((ISSUES_FOUND + 1))
+fi
+
+if [ $ISSUES_FOUND -eq 0 ]; then
+    echo "✅ All Rust patterns validated successfully"
+else
+    echo "❌ Found $ISSUES_FOUND Rust pattern violations"
+fi
+
+exit $ISSUES_FOUND
 EOF
 
-chmod +x validators/cargo-check.sh
+chmod +x validators/rust-patterns.sh
 ```
+
+**⚠️ CRITICAL**: Validators are not optional - they're mandatory for every plugin and injection.
 
 ### Step 5: Add Injections (Optional)
 
@@ -307,7 +422,14 @@ EOF
 2. **Clear Dependencies**: Declare requirements in pattern.yaml
 3. **Documentation**: Comprehensive pattern.md is essential
 4. **Examples**: Provide real-world usage examples
-5. **Validation**: Include validators for enforcement
+5. **🚨 MANDATORY: Validators**: Every plugin and injection MUST have validators that enforce the documented patterns
+
+### ✅ DO: Validator Requirements
+- **Every plugin** must include a `validators/` directory with enforcement scripts
+- **Every injection** must include a `validators/` directory that validates the specific rules
+- **Validators must be executable** and follow standard exit codes (0=success, >0=issues found)
+- **Validators must provide clear feedback** about what violations were found
+- **No pattern without enforcement** - if you can't validate it, don't document it
 
 ### Naming Conventions
 

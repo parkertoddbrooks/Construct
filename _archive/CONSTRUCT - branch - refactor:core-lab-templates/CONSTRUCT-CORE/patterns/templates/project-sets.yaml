@@ -1,0 +1,71 @@
+# CONSTRUCT Project Template Sets
+# Pre-configured plugin combinations for common project types
+
+project_sets:
+  ios:
+    description: "iOS App with Swift and MVVM patterns"
+    languages: 
+      - swift
+    plugins:
+      - languages/swift
+      - architectural/mvvm-ios
+      - frameworks/swiftui
+      - platforms/ios
+      - tooling/shell-scripting
+    
+  web:
+    description: "Web application with TypeScript/React"
+    languages:
+      - typescript
+    plugins:
+      - languages/typescript
+      - frameworks/react
+      - tooling/shell-scripting
+      - tooling/error-handling
+    
+  api:
+    description: "Backend API with C#/.NET"
+    languages:
+      - csharp
+    plugins:
+      - languages/csharp
+      - tooling/shell-scripting
+      - tooling/error-handling
+    
+  fullstack:
+    description: "Full-stack application with multiple languages"
+    languages:
+      - swift
+      - csharp
+      - typescript
+    plugins:
+      - languages/swift
+      - languages/csharp
+      - cross-platform/model-sync
+      - tooling/shell-scripting
+      
+  construct-dev:
+    description: "CONSTRUCT development environment"
+    languages:
+      - python
+    plugins:
+      - tooling/construct-dev
+      - tooling/shell-scripting
+      - tooling/shell-quality
+      - tooling/unix-philosophy
+      
+  # Custom templates can be added here
+  run-app:
+    description: "RUN full-stack (iOS + Watch + API)"
+    languages:
+      - swift
+      - csharp
+    plugins:
+      - languages/swift
+      - languages/csharp
+      - architectural/mvvm-ios
+      - cross-platform/model-sync
+      - frameworks/swiftui
+      - frameworks/ios-ui-library
+      - platforms/ios
+      - tooling/shell-scripting

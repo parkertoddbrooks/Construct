@@ -43,8 +43,10 @@ When you edit a Swift file, Claude gets Swift patterns. When you switch to shell
 
 Each pattern includes:
 - **📝 Rules**: The actual context and examples for AI
-- **✅ Validators**: Pre-commit checks ensuring code follows the pattern
+- **🚨 Validators**: MANDATORY enforcement scripts ensuring patterns are followed
 - **🏗️ Generators**: Create boilerplate code or visualizations from patterns
+
+**Core Principle**: Every pattern must have a validator. No pattern without enforcement.
 
 ### ⚡ One-Click Everything
 - **Integrations**: `construct add integration/stripe` - full MVVM-compliant integration
