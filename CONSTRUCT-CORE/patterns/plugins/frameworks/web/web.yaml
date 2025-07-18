@@ -5,15 +5,34 @@ author: CONSTRUCT Team
 category: frameworks
 dependencies: []  # Framework-agnostic, works with any language
 tags:
-  - web
+  - web-development
+  - web-framework
   - frontend
   - javascript
   - typescript
-  - html
-  - css
+  - js
+  - ts
+  - node
+  - nodejs
+  - npm
+  - yarn
+  - pnpm
+  - package.json
   - react
   - vue
   - angular
+  - svelte
+  - next
+  - nuxt
+  - express
+  - fastify
+  - html5
+  - css3
+  - scss
+  - sass
+  - webpack
+  - vite
+  - babel
 coverage:
   # Languages with basic coverage via this pattern
   javascript:

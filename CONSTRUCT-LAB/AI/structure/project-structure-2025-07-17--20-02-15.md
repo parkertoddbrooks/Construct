@@ -1,5 +1,5 @@
 # Project Structure Scan
-**Date**: 2025-07-16
+**Date**: 2025-07-17
 **Repo**: Construct
 **Remote**: git@github.com:parkertoddbrooks/Construct.git
 **Branch**: refactor/core-lab-templates
@@ -200,6 +200,7 @@ CONSTRUCT-CORE/CONSTRUCT/scripts-backup-20250710-094133/workspace-update.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/_git-ignore/check-symlinks.sh.bak
 CONSTRUCT-CORE/CONSTRUCT/scripts/construct/assemble-claude.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/construct/check-symlinks.sh
+CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct-old.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/construct/refresh-plugin-registry.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/construct/scan_project_structure.sh
@@ -215,6 +216,11 @@ CONSTRUCT-CORE/CONSTRUCT/scripts/dev/generate-devupdate.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/dev/pre-commit-review.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/dev/session-summary.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/dev/setup-aliases.sh
+CONSTRUCT-CORE/CONSTRUCT/scripts/patterns/analyze-claude-content.sh
+CONSTRUCT-CORE/CONSTRUCT/scripts/patterns/analyze-github-patterns.sh
+CONSTRUCT-CORE/CONSTRUCT/scripts/patterns/extract-legacy-patterns.sh
+CONSTRUCT-CORE/CONSTRUCT/scripts/patterns/generate-pattern-prd.sh
+CONSTRUCT-CORE/CONSTRUCT/scripts/patterns/recommend-patterns.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/workspace/create-project.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/workspace/import-component.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/workspace/import-project.sh
@@ -238,6 +244,7 @@ CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/validators/documentation.s
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-quality/validators/quality.sh
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/validators/architecture.sh
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/validators/documentation.sh
+CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/validators/orchestration-check.sh
 CONSTRUCT-LAB/tools/promote-to-core.sh
 CONSTRUCT-LAB/tools/validate-promotion.sh
 Projects/_ai-ignore_not-used/test003/.construct/CLAUDE.md.sha256
@@ -251,6 +258,8 @@ _ai-ignore_not-used/_old-file-system/CONSTRUCT-dev/CONSTRUCT/config/mvvm-rules.y
 _ai-ignore_not-used/_old-file-system/CONSTRUCT-dev/CONSTRUCT/config/quality-gates.yaml
 _ai-ignore_not-used/_trash/test-ios-project/.construct/patterns.yaml
 _ai-ignore_not-used/_trash/test-project/.construct/patterns.yaml
+_ai-ignore_not-used/.construct--2025-07-16--08-04-07/patterns--2025-07-15--20-27-14.yaml
+_ai-ignore_not-used/.construct--2025-07-16--08-04-07/patterns.yaml
 .construct-workspace/registry.yaml
 .construct/patterns--2025-07-15--20-27-14.yaml
 .construct/patterns.yaml
@@ -283,7 +292,6 @@ Projects/_ai-ignore_not-used/test003/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/test01/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/TestPatternProject/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/TestProject/.construct/patterns.yaml
-Projects/grok-code/grok-code-python/.construct/patterns.yaml
 ```
 
 ## Markdown Documentation Files
@@ -537,11 +545,13 @@ _ai-ignore_not-used/AI - 2/structure/_old/project-structure-2025-07-10--20-27-06
 _ai-ignore_not-used/AI - 2/structure/current-structure.md
 _ai-ignore_not-used/AI - 2/structure/project-structure-2025-07-10--20-38-19.md
 _ai-ignore_not-used/CLAUDE--2025-07-15--14-19-29.md
+_ai-ignore_not-used/CLAUDE--pre-mod.md
 _ai-ignore_not-used/claude-archive/CLAUDE - overwrite.md
 _ai-ignore_not-used/claude-archive/CLAUDE--with-init-feedback-2025-07-15--16-01-42.md
-_ai-ignore_not-used/claude-archive/CLAUDE.md.backup
-_ai-ignore_not-used/claude-archive/CLAUDE.md.backup-before-reinit
+_ai-ignore_not-used/claude-archive/CLAUDE.md.backup.md
+_ai-ignore_not-used/CLAUDE-backup-before-reinit--2025-07-17--05-16-39.md
 _ai-ignore_not-used/CLAUDE.md
+_ai-ignore_not-used/CLAUDE.md.backup
 _ai-ignore_not-used/README-ARCHIVE/README--2025-07-10--12-15-04.md
 _ai-ignore_not-used/README-ARCHIVE/README--2025-07-10--15-21-37.md
 _ai-ignore_not-used/README-ARCHIVE/README--2025-07-10--15-41-17.md
@@ -556,13 +566,14 @@ _ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-10-25.md
 _ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-10-58.md
 _ai-ignore_not-used/README-ARCHIVE/readme-v03--2025-07-10--16-14-31.md
 _ai-ignore_not-used/README-ARCHIVE/README.md
+CLAUDE-backup-before-reinit.md
 CLAUDE.md
-CLAUDE.md.backup
 CONSTRUCT-CORE/_ai-ignore_not-used/CLAUDE--2025-07-09--18-03-27.md
 CONSTRUCT-CORE/_ai-ignore_not-used/CLAUDE--2025-07-15--14-19-33.md
+CONSTRUCT-CORE/_ai-ignore_not-used/CLAUDE--2025-07-16--08-03-19.md
 CONSTRUCT-CORE/_ai-ignore_not-used/CLAUDE-BASE--2025-07-15--14-19-36.md
+CONSTRUCT-CORE/_ai-ignore_not-used/CLAUDE.md
 CONSTRUCT-CORE/CLAUDE-BASE.md
-CONSTRUCT-CORE/CLAUDE.md
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-08--20-17-09/README.md
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-09--23-24-52/DEV-NOTICE.md
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-09--23-24-52/README.md
@@ -604,6 +615,7 @@ CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/injections/validated-disco
 CONSTRUCT-CORE/patterns/plugins/tooling/construct-dev/README.md
 CONSTRUCT-CORE/patterns/plugins/tooling/error-handling/error-handling.md
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-quality/shell-quality.md
+CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/injections/orchestration.md
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/shell-scripting.md
 CONSTRUCT-CORE/patterns/plugins/tooling/unix-philosophy/unix-philosophy.md
 CONSTRUCT-CORE/patterns/README.md
@@ -632,7 +644,10 @@ CONSTRUCT-CORE/TEMPLATES/project-templates/swift-ios+watch/Watch-App/Tests/READM
 CONSTRUCT-LAB/_ai-ignore_not-used/CLAUDE--2025-07-08--14-39-51.md
 CONSTRUCT-LAB/_ai-ignore_not-used/CLAUDE--2025-07-10--21-56-11.md
 CONSTRUCT-LAB/_ai-ignore_not-used/CLAUDE--2025-07-15--14-19-22.md
-CONSTRUCT-LAB/_ai-ignore_not-used/CLAUDE.md.backup-before-pattern-integration
+CONSTRUCT-LAB/_ai-ignore_not-used/CLAUDE--2025-07-16--08-03-39.md
+CONSTRUCT-LAB/_ai-ignore_not-used/CLAUDE-backup-before-pattern-integration--2025-07-17--05-16-48.md
+CONSTRUCT-LAB/_ai-ignore_not-used/CLAUDE.md
+CONSTRUCT-LAB/_ai-ignore_not-used/CLAUDE.md.backup-before-pattern-integration.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/claude-ui-opus-feedback.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/combining-construct-w-claude-commands.md
 CONSTRUCT-LAB/AI/ai-misc-conversations/construct-feedback-opus-07-10-2025.md
@@ -862,6 +877,8 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--21-54-13.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--22-19-36.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--23-25-10.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--23-34-06.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-16--07-59-02.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-16--08-37-07.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-2223-construct-session.md
@@ -961,6 +978,8 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2154-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2219-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2325-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2334-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-16-0759-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-16-0837-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -1066,6 +1085,10 @@ CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
 CONSTRUCT-LAB/AI/docs/automated/development-patterns-automated.md
 CONSTRUCT-LAB/AI/docs/automated/improving-CONSTRUCT-guide-automated.md
 CONSTRUCT-LAB/AI/docs/automated/script-reference-automated.md
+CONSTRUCT-LAB/AI/PRDs/current-sprint/Step00/_ai-ignore/construct-plan.md
+CONSTRUCT-LAB/AI/PRDs/current-sprint/Step00/construct-post-recovery-plan.md
+CONSTRUCT-LAB/AI/PRDs/current-sprint/Step00/construct-recovery-analysis-complete.md
+CONSTRUCT-LAB/AI/PRDs/current-sprint/Step00/full-rework.md
 CONSTRUCT-LAB/AI/PRDs/current-sprint/step01/CONSTRUCT-Abstraction-Roadmap-v02.md
 CONSTRUCT-LAB/AI/PRDs/current-sprint/step01/init-construct-enhancement-spec.md
 CONSTRUCT-LAB/AI/PRDs/current-sprint/step01/injection-protocol-spec.md
@@ -1106,6 +1129,8 @@ CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--22-19-34.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--23-25-07.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--23-34-04.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-16--07-59-00.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-16--08-37-04.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-17--20-02-15.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -1227,9 +1252,11 @@ CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--21-54-11.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--22-19-34.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--23-25-07.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--23-34-04.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-16--07-59-00.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-16--08-37-04.md
 CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--22-55-28.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
-CONSTRUCT-LAB/AI/structure/project-structure-2025-07-16--07-59-00.md
+CONSTRUCT-LAB/AI/structure/project-structure-2025-07-17--20-02-15.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-03.md
@@ -1270,6 +1297,7 @@ CONSTRUCT-LAB/AI/todo/future/implement-living-documentation-system.md
 CONSTRUCT-LAB/AI/todo/future/learing-modules-ui-lib.md
 CONSTRUCT-LAB/AI/todo/future/make-readme-config-vs-lib.md
 CONSTRUCT-LAB/AI/todo/future/remove-hard-coded-paths.md
+CONSTRUCT-LAB/AI/todo/future/review-plugins.md
 CONSTRUCT-LAB/AI/todo/future/setup-pyyaml-requirement.md
 CONSTRUCT-LAB/AI/todo/future/setup-requirements.md
 CONSTRUCT-LAB/AI/todo/future/standardize-automated-file-naming.md
@@ -1277,7 +1305,7 @@ CONSTRUCT-LAB/AI/todo/future/two-track-documentation-strategy.md
 CONSTRUCT-LAB/AI/todo/future/using-promotion-system.md
 CONSTRUCT-LAB/AI/todo/misc/context-engineering-karpathy.md
 CONSTRUCT-LAB/AI/todo/misc/context-engineering.md
-CONSTRUCT-LAB/CLAUDE.md
+CONSTRUCT-LAB/CLAUDE-backup-before-pattern-integration.md
 CONSTRUCT-LAB/patterns/plugins/README.md
 CONSTRUCT-LAB/patterns/README.md
 CONSTRUCT-LAB/tools/README.md
@@ -1345,9 +1373,9 @@ Projects/_ai-ignore_not-used/test01/AI/todo/README.md
 Projects/_ai-ignore_not-used/test01/CLAUDE.md
 Projects/_ai-ignore_not-used/TestPatternProject/.construct/CLAUDE.md.sha256
 Projects/_ai-ignore_not-used/TestPatternProject/CLAUDE.md
+Projects/grok-code/grok-code-python/CLAUDE--2025-07-16--18-03-17.md
 Projects/grok-code/grok-code-python/Claude-Eng-v2/readme.md
 Projects/grok-code/grok-code-python/CLAUDE.md
-Projects/grok-code/grok-code-python/CLAUDE.md.backup
 Projects/grok-code/grok-code-python/readme.md
 Projects/RUN/patterns/run-specific.md
 README.md
@@ -1583,6 +1611,7 @@ CONSTRUCT-CORE/CONSTRUCT/:
   - workspace-update.sh
   - assemble-claude.sh
   - check-symlinks.sh
+  - init-construct-old.sh
   - init-construct.sh
   - refresh-plugin-registry.sh
   - scan_project_structure.sh
@@ -1598,6 +1627,11 @@ CONSTRUCT-CORE/CONSTRUCT/:
   - pre-commit-review.sh
   - session-summary.sh
   - setup-aliases.sh
+  - analyze-claude-content.sh
+  - analyze-github-patterns.sh
+  - extract-legacy-patterns.sh
+  - generate-pattern-prd.sh
+  - recommend-patterns.sh
   - create-project.sh
   - import-component.sh
   - import-project.sh
@@ -1752,6 +1786,7 @@ CONSTRUCT-CORE/CONSTRUCT/scripts-backup-20250710-094133/:
 CONSTRUCT-CORE/CONSTRUCT/scripts/construct/:
   - assemble-claude.sh
   - check-symlinks.sh
+  - init-construct-old.sh
   - init-construct.sh
   - refresh-plugin-registry.sh
   - scan_project_structure.sh
@@ -1771,6 +1806,13 @@ CONSTRUCT-CORE/CONSTRUCT/scripts/dev/:
   - pre-commit-review.sh
   - session-summary.sh
   - setup-aliases.sh
+
+CONSTRUCT-CORE/CONSTRUCT/scripts/patterns/:
+  - analyze-claude-content.sh
+  - analyze-github-patterns.sh
+  - extract-legacy-patterns.sh
+  - generate-pattern-prd.sh
+  - recommend-patterns.sh
 
 CONSTRUCT-CORE/CONSTRUCT/scripts/workspace/:
   - create-project.sh
@@ -1816,6 +1858,7 @@ CONSTRUCT-CORE/patterns/plugins/tooling/shell-quality/validators/:
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/validators/:
   - architecture.sh
   - documentation.sh
+  - orchestration-check.sh
 
 CONSTRUCT-LAB/tools/:
   - promote-to-core.sh
@@ -1876,6 +1919,7 @@ test-runner.sh
   _ai-ignore_not-used/_trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/dev-logs/dev-updates
   _ai-ignore_not-used/_trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/docs
   _ai-ignore_not-used/_trash/test-project/CONSTRUCT-CORE/AI/template-structure/AI/todo
+  _ai-ignore_not-used/.construct--2025-07-16--08-04-07
   _ai-ignore_not-used/AI
   _ai-ignore_not-used/AI - 2
   _ai-ignore_not-used/AI - 2/dev-logs
@@ -1935,6 +1979,7 @@ test-runner.sh
   CONSTRUCT-CORE/CONSTRUCT/scripts/construct
   CONSTRUCT-CORE/CONSTRUCT/scripts/core
   CONSTRUCT-CORE/CONSTRUCT/scripts/dev
+  CONSTRUCT-CORE/CONSTRUCT/scripts/patterns
   CONSTRUCT-CORE/CONSTRUCT/scripts/workspace
   CONSTRUCT-CORE/patterns
   CONSTRUCT-CORE/patterns/lib
@@ -1980,6 +2025,7 @@ test-runner.sh
   CONSTRUCT-CORE/patterns/plugins/tooling/shell-quality
   CONSTRUCT-CORE/patterns/plugins/tooling/shell-quality/validators
   CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting
+  CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/injections
   CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/validators
   CONSTRUCT-CORE/patterns/plugins/tooling/unix-philosophy
   CONSTRUCT-CORE/patterns/plugins/tooling/unix-philosophy/validators
@@ -2077,7 +2123,10 @@ test-runner.sh
   CONSTRUCT-LAB/AI/PRDs
   CONSTRUCT-LAB/AI/PRDs/_archive
   CONSTRUCT-LAB/AI/PRDs/current-sprint
+  CONSTRUCT-LAB/AI/PRDs/current-sprint/Step00
+  CONSTRUCT-LAB/AI/PRDs/current-sprint/Step00/_ai-ignore
   CONSTRUCT-LAB/AI/PRDs/current-sprint/step01
+  CONSTRUCT-LAB/AI/PRDs/current-sprint/step01/_ai-ignore
   CONSTRUCT-LAB/AI/PRDs/current-sprint/step02
   CONSTRUCT-LAB/AI/PRDs/current-sprint/step03
   CONSTRUCT-LAB/AI/PRDs/current-sprint/step04
@@ -2184,7 +2233,6 @@ test-runner.sh
   Projects/_ai-ignore_not-used/TestProject2
   Projects/grok-code
   Projects/grok-code/grok-code-python
-  Projects/grok-code/grok-code-python/.construct
   Projects/grok-code/grok-code-python/Claude-Eng-v2
   Projects/grok-code/grok-code-python/prompts
   Projects/grok-code/grok-code-python/static
@@ -2204,13 +2252,13 @@ No config directory found
 ## Summary Statistics
 ```
 === File Counts ===
-Shell Scripts: 191
-YAML Configs: 37
-Markdown Docs: 924
+Shell Scripts: 198
+YAML Configs: 38
+Markdown Docs: 948
 Python Files: 21
 
 === Directory Structure ===
-Total Directories: 501
+Total Directories: 505
 
 === Project Health ===
 Pattern Configuration: Found
@@ -2234,5 +2282,5 @@ Active Patterns:
 - AI documentation: 5 files
 
 ---
-*Generated by scan_project_structure.sh on Wed Jul 16 07:59:02 PDT 2025*
+*Generated by scan_project_structure.sh on Thu Jul 17 20:02:17 PDT 2025*
 *Project: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT*

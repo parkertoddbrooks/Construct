@@ -7,8 +7,8 @@ validators:
   - architecture
 tags:
   - mvvm
-  - architecture
+  - mvvm-architecture
   - separation-of-concerns
   - testability
-  - patterns
+  - architectural-pattern
 min_construct_version: 2.0.0

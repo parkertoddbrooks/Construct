@@ -10,9 +10,17 @@ dependencies:
   - tooling/unix-philosophy
   - tooling/error-handling
 tags:
-  - shell
-  - bash
-  - scripting
-  - automation
+  - shell-script
+  - bash-script
+  - sh
+  - zsh
+  - .sh
+  - .bash
+  - "#!/bin/bash"
+  - "#!/bin/sh"
+  - shellcheck
+  - shell-scripting
+  - shell-automation
   - devops
+  - makefile
 min_construct_version: 2.0.0

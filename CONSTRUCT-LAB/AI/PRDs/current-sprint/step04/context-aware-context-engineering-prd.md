@@ -1,14 +1,32 @@
 # PRD: Context-Aware Context Engineering for CONSTRUCT
 
 **Product Requirements Document**  
-**Version**: 1.0  
-**Date**: 2025-07-16  
+**Version**: 2.0  
+**Date**: 2025-07-18  
 **Author**: CONSTRUCT Team  
 **Status**: Future Development
 
+## 🆕 NEW THINKING: Building on construct-init Infrastructure Foundation
+
+**CRITICAL UPDATE**: This context-aware engineering system now builds on the enhanced `construct-init` orchestrator that provides a reliable foundation of complete infrastructure in every project.
+
+**Key Integration Points**:
+- **Infrastructure Foundation**: Context engineering works because construct-init guarantees every project has complete, working CONSTRUCT setup
+- **Pattern System Integration**: Can reliably load and optimize patterns because construct-init ensures valid .construct/patterns.yaml exists
+- **Usage Analytics Foundation**: Can track pattern usage because construct-init validates all scripts work
+- **Learning System Reliability**: Analytics and learning work because infrastructure is consistent across all projects
+
+**Enhanced Capabilities**:
+- Context optimization works immediately in any project (infrastructure guaranteed)
+- Usage analytics are consistent (all projects have same CONSTRUCT interface)
+- Learning algorithms have reliable data (construct-init ensures data sources exist)
+- Context compression is predictable (pattern structure guaranteed by construct-init)
+
+**This provides the reliable foundation** that makes advanced context engineering possible - without complete infrastructure, the learning and optimization systems couldn't function reliably.
+
 ## Executive Summary
 
-CONSTRUCT will pioneer "Context-Aware Context Engineering" - an intelligent system that dynamically optimizes what information is loaded into Claude's context window based on the task at hand, learning from usage patterns, and continuously improving its selections. This moves beyond static CLAUDE.md files to create truly adaptive AI assistance.
+CONSTRUCT will pioneer "Context-Aware Context Engineering" - an intelligent system that dynamically optimizes what information is loaded into Claude's context window based on the task at hand, learning from usage patterns, and continuously improving its selections. This builds on the infrastructure foundation provided by construct-init to create truly adaptive AI assistance.
 
 ## Problem Statement
 

@@ -40,7 +40,7 @@ This works because:
 - **CONSTRUCT/CLAUDE.md** (root) = Created by /init, enhanced by construct-init - THIS IS THE MAIN FILE
 - **CONSTRUCT-CORE/CLAUDE.md** = OLD iOS/Swift content - CAN BE DELETED
 - **CONSTRUCT-LAB/CLAUDE.md** = OLD LAB context - CAN BE DELETED
-- **CONSTRUCT-CORE/CLAUDE-BASE.md** = Template for construct-init - KEEP THIS
+- **CONSTRUCT-CORE/CLAUDE-BASE.md** = Template for construct-init and assemble - this is the claude template that powers the assemble and injection - KEEP THIS (it needs to b reworked to work like CONSTRUCT-LAB/CLAUDE.md + CONSTRUCT-CORE/CLAUDE.md (but 100% automated) : )
 
 ### The Elegant Solution
 ```bash

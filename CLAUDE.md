@@ -920,7 +920,7 @@ construct-arch --overview
 
 <!-- START:CURRENT-STRUCTURE -->
 ## 📊 Current Project State (Auto-Updated)
-Last updated: 2025-07-16 07:59:03
+Last updated: 2025-07-16 08:37:07
 
 ### Active Components
 - Shell Scripts: 191
@@ -967,7 +967,7 @@ These files in LAB are symlinks to CORE - NEVER edit them directly:
 **Date**: 2025-07-16
 **Focus**: Dual-environment development system
 **Branch**: refactor/core-lab-templates
-**Last Commit**: 0ce186f fix: Remove improper use of 'local' keyword in main script body
+**Last Commit**: e22ed4b feat: Add web framework and platform patterns
 
 ### Current Focus
 - Active patterns and development priorities
@@ -1003,28 +1003,29 @@ Run ./CONSTRUCT/scripts/core/check-architecture.sh for duplication analysis
 
 ### Recently Modified Files
 - CLAUDE.md
-- CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
-- CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-15--23-34-06.md
-- CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-15-2334-construct-session.md
-- CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
-- CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-15--23-25-07.md
-- CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-15--23-25-07.md
-- CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--23-34-04.md
-- CONSTRUCT-LAB/patterns/plugins/registry.yaml
+- CONSTRUCT-CORE/patterns/plugins/frameworks/web/validators/performance-check.sh
+- CONSTRUCT-CORE/patterns/plugins/frameworks/web/validators/security-check.sh
+- CONSTRUCT-CORE/patterns/plugins/frameworks/web/web.md
+- CONSTRUCT-CORE/patterns/plugins/frameworks/web/web.yaml
+- CONSTRUCT-CORE/patterns/plugins/platforms/web/validators/accessibility-check.sh
+- CONSTRUCT-CORE/patterns/plugins/platforms/web/web.md
+- CONSTRUCT-CORE/patterns/plugins/platforms/web/web.yaml
+- CONSTRUCT-CORE/patterns/plugins/README.md
+- CONSTRUCT-CORE/patterns/plugins/registry.yaml
 
 
 ### Git Status
 ```
 M  CLAUDE.md
-M  CONSTRUCT-CORE/patterns/plugins/README.md
-A  CONSTRUCT-CORE/patterns/plugins/frameworks/web/validators/performance-check.sh
-A  CONSTRUCT-CORE/patterns/plugins/frameworks/web/validators/security-check.sh
-A  CONSTRUCT-CORE/patterns/plugins/frameworks/web/web.md
-A  CONSTRUCT-CORE/patterns/plugins/frameworks/web/web.yaml
-A  CONSTRUCT-CORE/patterns/plugins/platforms/web/validators/accessibility-check.sh
-A  CONSTRUCT-CORE/patterns/plugins/platforms/web/web.md
-A  CONSTRUCT-CORE/patterns/plugins/platforms/web/web.yaml
-M  CONSTRUCT-CORE/patterns/plugins/registry.yaml
+D  CONSTRUCT-CORE/CLAUDE.md
+M  CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
+M  CONSTRUCT-CORE/patterns/plugins/frameworks/web/web.yaml
+M  CONSTRUCT-CORE/patterns/plugins/platforms/web/web.yaml
+M  CONSTRUCT-LAB/AI/PRDs/current-sprint/step01/status-01.md
+ M CONSTRUCT-LAB/AI/docs/automated/architecture-overview-automated.md
+A  CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-16--07-59-00.md
+D  CONSTRUCT-LAB/AI/structure/project-structure-2025-07-15--23-34-04.md
+ D CONSTRUCT-LAB/AI/structure/project-structure-2025-07-16--07-59-00.md
 ```
 
 ### Active Development Areas

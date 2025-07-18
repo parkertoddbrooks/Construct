@@ -1,8 +1,26 @@
 # PRD: Dynamic Context Orchestration System
 
+## 🆕 NEW THINKING: Integration with construct-init Infrastructure
+
+**CRITICAL UPDATE**: This dynamic context orchestration system now builds on the enhanced `construct-init` orchestrator that ensures every project has complete CONSTRUCT infrastructure.
+
+**Key Integration Points**:
+- **Infrastructure Reliability**: Dynamic context switching now guaranteed to work because `construct-init` ensures every project has CONSTRUCT/, AI/, .construct/
+- **Pattern Context Loading**: Can reliably load .construct/patterns.yaml because construct-init ensures it exists and is valid
+- **Script Execution**: Can reliably execute CONSTRUCT scripts because construct-init validates they work
+- **Consistent Interface**: Every project has same CONSTRUCT interface, making dynamic switching predictable
+
+**Enhanced Capabilities**:
+- Context switching works immediately after project import (infrastructure guaranteed)
+- Pattern loading is reliable (construct-init validates pattern configurations)
+- Script execution is consistent (construct-init tests all scripts work)
+- No "broken project" scenarios (construct-init ensures complete setup)
+
+**This significantly enhances the dynamic context system** by providing a reliable foundation of complete infrastructure in every project.
+
 ## Overview
 
-This PRD defines how Claude Code dynamically orchestrates context switching across multiple projects and repositories within a CONSTRUCT workspace. It leverages Claude Code's ability to execute commands to provide intelligent, real-time context awareness.
+This PRD defines how Claude Code dynamically orchestrates context switching across multiple projects and repositories within a CONSTRUCT workspace. It leverages Claude Code's ability to execute commands to provide intelligent, real-time context awareness, building on the infrastructure guaranteed by construct-init.
 
 ## Problem Statement
 

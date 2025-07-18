@@ -16,9 +16,9 @@ dependencies:
   - tooling/shell-scripting
   - tooling/unix-philosophy
 tags:
-  - construct
-  - development
-  - tooling
-  - meta
+  - construct-framework
+  - construct-development
+  - framework-tooling
+  - meta-framework
   - self-improvement
 min_construct_version: 2.0.0

@@ -9,8 +9,18 @@ validators:
   - documentation
 tags:
   - python
+  - py
+  - django
+  - flask
+  - fastapi
+  - pytest
+  - pip
+  - poetry
+  - uv
+  - requirements.txt
+  - pyproject.toml
   - pep8
   - type-hints
-  - async
-  - testing
+  - python-async
+  - python-testing
 min_construct_version: 2.0.0

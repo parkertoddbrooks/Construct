@@ -5,13 +5,13 @@ author: CONSTRUCT Team
 category: platforms
 dependencies: []  # Platform patterns work with any framework
 tags:
-  - web
-  - platform
+  - web-platform
   - pwa
+  - progressive-web-app
   - seo
   - browser-api
   - service-worker
-  - performance
+  - web-performance
 coverage:
   # Platform features covered
   pwa:

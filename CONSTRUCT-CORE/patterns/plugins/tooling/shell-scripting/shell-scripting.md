@@ -5,6 +5,41 @@
 - When creating bash automation or tooling
 - For any shell-based scripting tasks
 
+## 🚨 MANDATORY: Orchestration Pattern
+
+**Scripts >50 lines MUST be split into orchestration + lib functions**
+
+```bash
+❌ NEVER: Monolithic scripts with business logic mixed with flow control
+✅ ALWAYS: main.sh (orchestration) + lib/functions.sh (pure logic)
+```
+
+### Orchestration Script (main.sh)
+```bash
+#!/bin/bash
+# Main orchestration - handles arguments, flow, user interaction
+
+source "$(dirname "$0")/lib/business-logic.sh"
+
+# Parse args and orchestrate
+parse_args "$@"
+validate_input "$INPUT"
+result=$(process_data "$INPUT")  
+generate_output "$result"
+```
+
+### Library Functions (lib/business-logic.sh)
+```bash
+#!/bin/bash
+# Pure functions - no user interaction, no argument parsing
+
+process_data() {
+    local input="$1"
+    # Complex business logic here
+    echo "processed: $input"
+}
+```
+
 ## Essential Patterns
 
 ### ✅ DO: Script Structure

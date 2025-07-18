@@ -1,8 +1,26 @@
 # PRD: CONSTRUCT Workspace & Project Import System
 
+## 🆕 NEW THINKING: Integration with construct-init Orchestrator
+
+**CRITICAL UPDATE**: This workspace import system now integrates with the enhanced `construct-init` as intelligent orchestrator approach discovered in Step00 recovery analysis.
+
+**Key Integration Points**:
+- **Import Process Enhancement**: `import-project.sh` now calls `construct-init` to ensure complete infrastructure installation
+- **Infrastructure Guarantees**: Every imported project gets full CONSTRUCT infrastructure (AI/, .construct/, hooks, CONSTRUCT/)
+- **Pattern Extraction Integration**: Import process extracts existing patterns before applying CONSTRUCT enhancement
+- **Validation Integration**: Import process validates all infrastructure works before completion
+
+**Enhanced Import Flow**:
+1. Clone/import project (preserving git history)
+2. Run `construct-init` for complete infrastructure setup
+3. Pattern extraction and enhancement (if existing CLAUDE.md)
+4. Validation that all CONSTRUCT tools work in imported project
+
+**This enhances the workspace import design** by ensuring every imported project has complete, working CONSTRUCT integration.
+
 ## Overview
 
-This PRD defines how CONSTRUCT manages multiple independent projects within a workspace while preserving each project's git history and identity. It builds on the pattern system (unified-pattern-system-plan.md) to handle real-world scenarios of importing existing projects.
+This PRD defines how CONSTRUCT manages multiple independent projects within a workspace while preserving each project's git history and identity. It builds on the pattern system (unified-pattern-system-plan.md) and the construct-init orchestrator to handle real-world scenarios of importing existing projects.
 
 ## Core Concepts
 

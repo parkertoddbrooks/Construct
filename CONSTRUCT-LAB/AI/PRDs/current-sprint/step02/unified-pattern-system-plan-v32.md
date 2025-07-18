@@ -1,3 +1,15 @@
+## 🆕 NEW THINKING: Integration with construct-init Orchestrator
+
+**CRITICAL UPDATE**: This pattern system now integrates with the enhanced `construct-init` as intelligent orchestrator approach discovered in Step00 recovery analysis.
+
+**Key Integration Points**:
+- **Infrastructure Installation**: construct-init now installs AI templates, symlinks CONSTRUCT, sets up .construct/ before pattern system kicks in
+- **Pattern Extraction**: construct-init extracts custom patterns from existing CLAUDE.md before applying pattern system
+- **Validation Integration**: Pattern system validation happens as part of construct-init's infrastructure validation phase
+- **Template Integration**: CONSTRUCT-CORE/TEMPLATES/ now provide the infrastructure that pattern system operates on
+
+**This enhances rather than replaces the pattern system design** - the pattern system becomes the content management layer, while construct-init provides the infrastructure layer.
+
 ### Phase 5: Documentation Updates
 
 #### 5.1 Update README
@@ -13,6 +25,7 @@
 ## Overview
 
 CONSTRUCT has evolved from using symlinked or monolithic CLAUDE.md files to a flexible pattern-based system. This guide helps you migrate existing projects.
+
 
 ## Migration Paths
 
