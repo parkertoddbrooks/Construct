@@ -269,40 +269,103 @@ extract_existing_patterns() {
         # Create project-specific injection directory
         mkdir -p .construct/injections
         
-        # Extract project-specific patterns (simple extraction for now)
-        echo -e "  ${YELLOW}📝${NC} Analyzing CLAUDE.md for custom rules..."
+        # Use Claude SDK for intelligent pattern extraction
+        echo -e "  ${YELLOW}📝${NC} Using Claude SDK to extract project patterns..."
         
-        # Look for custom sections and extract them
-        if grep -n "# Custom\|## Custom\|project-specific\|TODO:\|FIXME:" CLAUDE.md > .construct/injections/extracted-patterns.txt; then
-            echo -e "  ${GREEN}✅${NC} Custom patterns extracted to .construct/injections/"
-            
-            # Create a basic project-custom.md injection
-            cat > .construct/injections/project-custom.md << 'EOF'
-## Project-Specific Patterns
+        # Check if Claude SDK is available
+        if command -v claude >/dev/null 2>&1; then
+            # Use Claude SDK to intelligently extract patterns
+            claude -p "Analyze this CLAUDE.md file and extract ALL project-specific content that should be preserved. This includes:
 
-### Custom Rules Extracted from Original CLAUDE.md
+1. Project overview and description
+2. Development commands and workflows  
+3. Architecture explanations
+4. Tool development patterns
+5. Configuration details
+6. Any custom guidelines or best practices
+7. Technology-specific information
+8. Build/test/deployment instructions
 
-The following patterns were extracted from your existing CLAUDE.md and preserved:
+Format the output as a structured markdown document that captures the essential project knowledge. Focus on preserving information that would help developers understand and work with this specific project.
 
-EOF
-            
-            # Add extracted content
-            echo "" >> .construct/injections/project-custom.md
-            echo "```" >> .construct/injections/project-custom.md
-            cat .construct/injections/extracted-patterns.txt >> .construct/injections/project-custom.md
-            echo "```" >> .construct/injections/project-custom.md
-            
-            # Update patterns.yaml to include extracted patterns
-            if command -v yq >/dev/null 2>&1; then
-                yq eval -i '.plugins += ["project-custom"]' .construct/patterns.yaml
-                echo -e "  ${GREEN}✅${NC} Pattern configuration updated with extracted rules"
+Return ONLY the extracted content in markdown format, without any explanation or meta-commentary." CLAUDE.md.backup > .construct/injections/project-custom.md 2>/dev/null
+
+            # Check if extraction was successful
+            if [ -s .construct/injections/project-custom.md ]; then
+                echo -e "  ${GREEN}✅${NC} Project patterns extracted via Claude SDK"
+                
+                # Update patterns.yaml to include extracted patterns
+                if command -v yq >/dev/null 2>&1; then
+                    yq eval -i '.plugins += ["project-custom"]' .construct/patterns.yaml
+                    echo -e "  ${GREEN}✅${NC} Pattern configuration updated with extracted rules"
+                fi
+            else
+                echo -e "  ${YELLOW}⚠️${NC} Claude SDK extraction failed, using fallback method"
+                # Fallback to logic-based extraction
+                fallback_extract_patterns
             fi
         else
-            echo -e "  ${GRAY}ℹ️${NC} No extractable patterns found"
+            echo -e "  ${YELLOW}⚠️${NC} Claude SDK not available, using fallback method"
+            # Fallback to logic-based extraction
+            fallback_extract_patterns
         fi
         
         echo ""
     fi
+}
+
+# Fallback pattern extraction using logic-based detection
+fallback_extract_patterns() {
+    echo -e "  ${YELLOW}📝${NC} Using logic-based pattern extraction as fallback..."
+    
+    # Look for substantial project content using logic
+    temp_file=$(mktemp)
+    
+    # Extract project overview sections
+    sed -n '/## Project Overview/,/## /p' CLAUDE.md.backup | head -n -1 > "$temp_file"
+    
+    # Extract development commands
+    sed -n '/## Development Commands/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    sed -n '/### Running/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    sed -n '/### Environment Setup/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    
+    # Extract architecture information
+    sed -n '/## Architecture/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    sed -n '/## Code Architecture/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    sed -n '/### Core Components/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    
+    # Extract tool development patterns
+    sed -n '/## Tool Development/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    sed -n '/### Tool Development Pattern/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    
+    # Extract configuration details
+    sed -n '/## Configuration/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    
+    # If we extracted substantial content, create the injection
+    if [ -s "$temp_file" ] && [ $(wc -l < "$temp_file") -gt 10 ]; then
+        cat > .construct/injections/project-custom.md << 'EOF'
+# Project-Specific Patterns
+
+## Extracted Project Knowledge
+
+The following content was extracted from your original CLAUDE.md to preserve project-specific knowledge:
+
+EOF
+        cat "$temp_file" >> .construct/injections/project-custom.md
+        
+        echo -e "  ${GREEN}✅${NC} Project patterns extracted using logic-based fallback"
+        
+        # Update patterns.yaml to include extracted patterns
+        if command -v yq >/dev/null 2>&1; then
+            yq eval -i '.plugins += ["project-custom"]' .construct/patterns.yaml
+            echo -e "  ${GREEN}✅${NC} Pattern configuration updated with extracted rules"
+        fi
+    else
+        echo -e "  ${GRAY}ℹ️${NC} No substantial project content found to extract"
+    fi
+    
+    # Cleanup
+    rm -f "$temp_file"
 }
 
 # Phase 4: Project Analysis and Pattern Recommendations
