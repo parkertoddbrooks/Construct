@@ -36,8 +36,8 @@ CONSTRUCT works WITH `/init`, not against it. We preserve ALL content from `/ini
    - Install AI folder structure from templates
    - Create .construct configuration directory
    - Install git hooks for validation
-3. **Project Analysis**: Detect languages, frameworks, architecture
-4. **Interactive Pattern Selection**: Show recommendations, allow customization
+3. **Claude SDK Project Analysis**: Intelligent detection of languages, frameworks, architecture patterns using Claude SDK
+4. **Interactive Pattern Selection**: Show Claude's intelligent recommendations, allow customization
 5. **Pattern Configuration**: Create .construct/patterns.yaml with selections
 6. **CLAUDE.md Enhancement**: Preserve ALL /init content + add patterns
 7. **Infrastructure Validation**: Test all installed scripts and hooks work
@@ -141,21 +141,20 @@ validate_infrastructure() {
 ### 2. Enhanced Pattern Extraction (Mode 3)
 ```bash
 extract_patterns_from_claude_md() {
-    echo "🔍 Extracting custom patterns from existing CLAUDE.md..."
+    echo "🧠 Using Claude SDK to extract custom patterns from existing CLAUDE.md..."
     
     # Backup original
     cp CLAUDE.md CLAUDE.md.backup
     
-    # Parse CLAUDE.md for:
+    # Use Claude SDK to intelligently analyze for:
     # - Custom rules sections
     # - Project-specific patterns  
     # - Non-standard content
     # - Manual additions
     
-    # Create project-specific injection:
+    # Create project-specific injection using Claude intelligence:
     mkdir -p .construct/injections
-    ./CONSTRUCT/scripts/construct/extract-patterns.sh CLAUDE.md.backup \
-        > .construct/injections/project-custom.md
+    claude -p "Extract custom development patterns, guidelines, and project-specific rules from this CLAUDE.md. Format as a reusable pattern injection with clear sections for: custom rules, project conventions, domain-specific patterns. Preserve valuable project knowledge while making it reusable." CLAUDE.md.backup > .construct/injections/project-custom.md
     
     echo "✅ Custom patterns extracted to .construct/injections/"
 }

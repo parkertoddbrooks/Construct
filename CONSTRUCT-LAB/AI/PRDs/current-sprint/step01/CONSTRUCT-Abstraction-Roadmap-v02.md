@@ -57,7 +57,7 @@ cd Projects/MyApp/ios
 
 ## Pattern System Architecture
 
-### How Patterns Enhance CLAUDE.md
+### How Claude SDK Enhances Pattern Selection
 ```yaml
 # CONSTRUCT/.construct/patterns.yaml
 plugins:
@@ -67,17 +67,17 @@ plugins:
 
 # Projects/MyApp/ios/.construct/patterns.yaml
 plugins:
-  - "languages/swift"          # Swift patterns
-  - "architecture/mvvm"        # MVVM patterns
-  - "platform/ios"            # iOS specifics
+  - "languages/swift"          # Swift patterns detected by Claude SDK
+  - "architecture/mvvm"        # MVVM patterns identified via AI analysis
+  - "platform/ios"            # iOS specifics recognized through Claude intelligence
 ```
 
-### The Enhancement Process
+### The Claude SDK Enhancement Process
 1. Read existing CLAUDE.md (from /init)
 2. Load CLAUDE-BASE.md sections
-3. Apply patterns from patterns.yaml
-4. Inject pattern-specific content
-5. Update CLAUDE.md with enhanced content
+3. Apply patterns from patterns.yaml (selected via Claude SDK analysis)
+4. Inject pattern-specific content using Claude-guided content assembly
+5. Update CLAUDE.md with AI-enhanced content
 
 ## Roadmap Phases
 

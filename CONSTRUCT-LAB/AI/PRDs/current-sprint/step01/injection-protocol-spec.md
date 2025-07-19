@@ -55,8 +55,8 @@ patterns=$(parse_patterns patterns.yaml)
 ### 2. Collection Phase
 For each active pattern:
 1. Check for injection files
-2. Collect content by injection point
-3. Merge with existing content
+2. Collect content by injection point using Claude SDK for intelligent extraction
+3. Merge with existing content using AI-guided combination
 
 ### 3. Assembly Phase
 ```bash

@@ -12,9 +12,9 @@
 
 **Key Integration Points**:
 - **Infrastructure Foundation**: Context engineering works because construct-init guarantees every project has complete, working CONSTRUCT setup
-- **Pattern System Integration**: Can reliably load and optimize patterns because construct-init ensures valid .construct/patterns.yaml exists
-- **Usage Analytics Foundation**: Can track pattern usage because construct-init validates all scripts work
-- **Learning System Reliability**: Analytics and learning work because infrastructure is consistent across all projects
+- **Claude SDK Pattern Optimization**: Can intelligently optimize patterns using Claude SDK because construct-init ensures valid .construct/patterns.yaml exists
+- **AI-Powered Usage Analytics**: Can track pattern usage via Claude SDK analysis because construct-init validates all scripts work  
+- **Claude SDK Learning**: Analytics and learning use Claude intelligence because infrastructure is consistent across all projects
 
 **Enhanced Capabilities**:
 - Context optimization works immediately in any project (infrastructure guaranteed)

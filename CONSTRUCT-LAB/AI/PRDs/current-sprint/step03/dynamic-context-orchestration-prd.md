@@ -39,11 +39,11 @@ However, Claude Code CAN:
 
 ### Core Innovation
 
-Instead of relying on static CLAUDE.md loading, we use Claude Code's command execution to:
+Instead of relying on static CLAUDE.md loading, we use Claude Code's command execution + Claude SDK:
 1. Detect current working context via `pwd`
 2. Load appropriate CLAUDE.md via `cat`
 3. Check git branch via `git branch --show-current`
-4. Apply correct patterns based on location and state
+4. Use Claude SDK to intelligently apply correct patterns based on location and state
 
 ## Technical Architecture
 

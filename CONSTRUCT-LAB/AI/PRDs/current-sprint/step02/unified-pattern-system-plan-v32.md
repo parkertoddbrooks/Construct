@@ -4,7 +4,7 @@
 
 **Key Integration Points**:
 - **Infrastructure Installation**: construct-init now installs AI templates, symlinks CONSTRUCT, sets up .construct/ before pattern system kicks in
-- **Pattern Extraction**: construct-init extracts custom patterns from existing CLAUDE.md before applying pattern system
+- **Claude SDK Pattern Extraction**: construct-init uses Claude SDK for intelligent pattern extraction from existing CLAUDE.md - no more regex parsing
 - **Validation Integration**: Pattern system validation happens as part of construct-init's infrastructure validation phase
 - **Template Integration**: CONSTRUCT-CORE/TEMPLATES/ now provide the infrastructure that pattern system operates on
 

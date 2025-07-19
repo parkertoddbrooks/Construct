@@ -7,7 +7,7 @@
 **Key Integration Points**:
 - **Import Process Enhancement**: `import-project.sh` now calls `construct-init` to ensure complete infrastructure installation
 - **Infrastructure Guarantees**: Every imported project gets full CONSTRUCT infrastructure (AI/, .construct/, hooks, CONSTRUCT/)
-- **Pattern Extraction Integration**: Import process extracts existing patterns before applying CONSTRUCT enhancement
+- **Claude SDK Pattern Extraction**: Import process uses Claude SDK to intelligently extract existing patterns before applying CONSTRUCT enhancement
 - **Validation Integration**: Import process validates all infrastructure works before completion
 
 **Enhanced Import Flow**:

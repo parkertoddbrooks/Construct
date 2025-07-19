@@ -105,18 +105,18 @@
     - Follows the --show-prompts pattern
     - Works seamlessly with Claude Code constraints
     - Shows what inputs are needed before execution
-  2. Smart Project Analysis
-    - Detects Swift, Python, TypeScript, Rust
-    - Identifies frameworks like SwiftUI, React
-    - Recognizes platforms like iOS
+  2. Claude SDK Project Analysis
+    - Uses Claude SDK for intelligent language detection  
+    - AI-powered framework identification (SwiftUI, React, etc.)
+    - Smart platform recognition via Claude analysis
   3. Registry Integration
     - Loads plugin registry for discovery
     - Shows plugin descriptions when available
     - Falls back to directory scanning if yq not installed
-  4. Pattern Extraction
-    - Parses legacy CLAUDE.md for custom rules
-    - Creates LAB plugins automatically
-    - Preserves all custom content during migration
+  4. Claude SDK Pattern Extraction  
+    - Uses Claude SDK to intelligently parse legacy CLAUDE.md
+    - AI creates LAB plugins from custom patterns
+    - Smart preservation of all custom content via Claude analysis
 
   Next Steps:
 
