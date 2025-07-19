@@ -56,11 +56,82 @@ assess_project_state() {
         HAS_CLAUDE_MD=true
         echo -e "  ${GREEN}✅${NC} CLAUDE.md exists"
         
-        # Analyze existing CLAUDE.md for extractable patterns
-        if grep -q "project-specific\|custom rule\|TODO:\|FIXME:\|# Custom\|## Custom" CLAUDE.md; then
+        # Analyze existing CLAUDE.md for extractable patterns using intelligent content analysis
+        echo -e "  ${YELLOW}🧠${NC} Analyzing CLAUDE.md content for custom patterns..."
+        
+        # Create a temporary analysis script
+        cat > .construct_temp_analysis.py << 'EOF'
+import sys
+import re
+
+def analyze_claude_md(filename):
+    try:
+        with open(filename, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Skip if it looks like a standard generated CLAUDE.md
+        if "This file provides guidance to Claude Code" in content and len(content) < 2000:
+            return False
+            
+        # Skip if it's clearly a CONSTRUCT-generated file
+        if "Generated:" in content and "Source: CONSTRUCT-CORE" in content:
+            return False
+            
+        indicators = []
+        
+        # Look for project-specific technology mentions
+        tech_patterns = r'\b(SwiftUI|UIKit|React|Vue|Angular|Django|Flask|Rails|Spring|Express|FastAPI|Laravel)\b'
+        if re.search(tech_patterns, content, re.IGNORECASE):
+            indicators.append("technology-specific")
+            
+        # Look for custom guidelines/practices sections
+        if re.search(r'#+ [^#\n]*(?:Best Practices|Guidelines|Rules|Standards|Conventions)', content, re.IGNORECASE):
+            indicators.append("custom-guidelines")
+            
+        # Look for numbered workflow steps
+        if re.search(r'##? \d+\.', content):
+            indicators.append("structured-workflow")
+            
+        # Look for instruction patterns
+        instruction_patterns = r'(?:When|Always|Never|Use|Avoid|Follow|Remember|Ensure)\s+[a-z]'
+        if len(re.findall(instruction_patterns, content)) > 5:
+            indicators.append("instruction-heavy")
+            
+        # Look for code examples with specific syntax
+        if re.search(r'```\w+', content) and len(content) > 1000:
+            indicators.append("code-examples")
+            
+        # Look for project-specific vocabulary (beyond common words)
+        domain_words = re.findall(r'\b[A-Z][a-z]*(?:View|Model|Controller|Service|Manager|Handler|Provider|Factory)\b', content)
+        if len(set(domain_words)) > 3:
+            indicators.append("domain-vocabulary")
+            
+        # Look for custom configuration or setup instructions
+        if re.search(r'(?:configure|setup|install|initialize)', content, re.IGNORECASE) and 'claude' not in content.lower():
+            indicators.append("setup-instructions")
+            
+        # Decision: extractable if we found meaningful indicators
+        return len(indicators) >= 2
+        
+    except Exception as e:
+        # If analysis fails, err on the side of extraction
+        return True
+
+if __name__ == "__main__":
+    result = analyze_claude_md(sys.argv[1])
+    sys.exit(0 if result else 1)
+EOF
+
+        # Run the intelligent analysis
+        if python3 .construct_temp_analysis.py CLAUDE.md 2>/dev/null; then
             CLAUDE_HAS_EXTRACTABLE_PATTERNS=true
-            echo -e "  ${YELLOW}📝${NC} Custom patterns detected in CLAUDE.md"
+            echo -e "  ${GREEN}📝${NC} Custom patterns detected through content analysis"
+        else
+            echo -e "  ${GRAY}ℹ️${NC} No significant custom patterns detected"
         fi
+        
+        # Clean up
+        rm -f .construct_temp_analysis.py
     else
         echo -e "  ${YELLOW}⚠️${NC} CLAUDE.md not found"
         echo -e "  ${GRAY}💡 Run '/init' first to create base CLAUDE.md${NC}"
