@@ -141,6 +141,11 @@ This transforms CONSTRUCT from "configuration-driven scripts" to "AI-native deve
    **NEW UNDERSTANDING**: The real issue is construct-init assumed projects already had CONSTRUCT infrastructure
    **PARADIGM SHIFT**: Replace all regex/manual analysis with Claude SDK intelligence
    
+   **ARCHITECTURE ENHANCEMENT**: Unified CONSTRUCT/ folder structure
+   - **Same as LAB**: Every project gets CONSTRUCT/, AI/, patterns/ folders
+   - **Template Intelligence**: Symlink vs. copy CONSTRUCT tools based on context
+   - **Project Patterns**: CONSTRUCT/patterns/plugins/project-custom/ for extracted content
+   
    **Location**: `CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh`
    
    **AI-Native Orchestrator Implementation**:
@@ -163,15 +168,27 @@ This transforms CONSTRUCT from "configuration-driven scripts" to "AI-native deve
    - **Smart Project Analysis**: Claude analyzes entire project structure
    - **Confidence-Based Decisions**: Use Claude's confidence scoring for thresholds
    
-   **Template Installation Integration**:
+   **Enhanced Template Installation Integration**:
    ```bash
-   # Symlink CONSTRUCT for tool access
-   ln -sf "$(realpath --relative-to=. "$CONSTRUCT_CORE/CONSTRUCT")" CONSTRUCT
+   # Create unified CONSTRUCT/ folder structure (same as LAB)
+   mkdir -p CONSTRUCT
    
-   # Install AI folder from templates
-   cp -r "$CONSTRUCT_CORE/TEMPLATES/component-templates/ai-structure/AI" .
+   # Install CONSTRUCT tools (context-aware)
+   if [ -d "$CONSTRUCT_CORE" ]; then
+       # Live repo - symlink for updates
+       ln -sf "$CONSTRUCT_CORE/CONSTRUCT" CONSTRUCT/CONSTRUCT
+   else
+       # Template - copy for portability
+       cp -r "$TEMPLATE_SOURCE/CONSTRUCT" CONSTRUCT/CONSTRUCT
+   fi
    
-   # Setup pattern configuration
+   # Install AI folder structure
+   cp -r "$CONSTRUCT_CORE/TEMPLATES/component-templates/ai-structure/AI" CONSTRUCT/AI
+   
+   # Create pattern space for project-specific patterns
+   mkdir -p CONSTRUCT/patterns/plugins
+   
+   # Setup pattern configuration (metadata only)
    mkdir -p .construct
    cp "$CONSTRUCT_CORE/TEMPLATES/patterns/patterns.yaml" .construct/
    
@@ -235,8 +252,8 @@ This transforms CONSTRUCT from "configuration-driven scripts" to "AI-native deve
    construct-init           # Should extract custom patterns
    
    # Verify extraction worked
-   [ -f ".construct/injections/project-custom.md" ] && echo "✅ Patterns extracted"
-   grep -q "custom naming" .construct/injections/project-custom.md && echo "✅ Custom rules preserved"
+   [ -f "CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md" ] && echo "✅ Patterns extracted"
+   grep -q "custom naming" CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md && echo "✅ Custom rules preserved"
    ```
 
 ### 1.3 Success Criteria

@@ -198,6 +198,11 @@ tail -n +3 CONSTRUCT-LAB/CLAUDE.md >> CLAUDE.md
 **NEW UNDERSTANDING**: construct-init must handle complete infrastructure setup using Claude SDK
 **PARADIGM SHIFT**: Replace all regex with Claude SDK intelligent analysis
 
+**ARCHITECTURE ENHANCEMENT**: Unified CONSTRUCT/ folder structure in all projects
+- **Same Structure as LAB**: CONSTRUCT/, AI/, patterns/ folders in every project
+- **Template vs. Live-Repo Intelligence**: Symlink vs. copy CONSTRUCT tools based on context
+- **Consistent Mental Model**: All projects mirror LAB architecture
+
 **Location**: `CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh`
 
 **AI-Native Orchestrator Implementation**:
@@ -280,10 +285,20 @@ extract_existing_patterns() {
     if [ "$CLAUDE_HAS_EXTRACTABLE_PATTERNS" = true ]; then
         echo "🧠 Using Claude SDK to extract custom patterns from existing CLAUDE.md..."
         cp CLAUDE.md CLAUDE.md.backup
-        mkdir -p .construct/injections
+        mkdir -p CONSTRUCT/patterns/plugins/project-custom/injections
         
-        # Use Claude to extract patterns intelligently
-        claude -p "Extract custom development patterns, guidelines, and project-specific rules from this CLAUDE.md. Format as a reusable pattern injection with clear sections for: custom rules, project conventions, domain-specific patterns. Preserve the valuable project knowledge while making it reusable." CLAUDE.md.backup > .construct/injections/project-custom.md
+        # Use Claude to extract patterns intelligently  
+        claude -p "Extract custom development patterns, guidelines, and project-specific rules from this CLAUDE.md. Format as a reusable pattern injection with clear sections for: custom rules, project conventions, domain-specific patterns. Preserve the valuable project knowledge while making it reusable." CLAUDE.md.backup > CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md
+        
+        # Create pattern plugin metadata
+        cat > CONSTRUCT/patterns/plugins/project-custom/pattern.yaml << 'EOF'
+id: project-custom
+name: Project-Specific Patterns
+description: Custom patterns extracted from existing CLAUDE.md
+version: 1.0.0
+injections:
+  - project-custom.md
+EOF
         
         echo "✅ Custom patterns extracted via Claude SDK"
     fi
@@ -363,8 +378,8 @@ EOF
 construct-init           # Should use Claude SDK to extract and preserve custom rules
 
 # Verify Claude SDK pattern extraction
-[ -f ".construct/injections/project-custom.md" ] && echo "✅ Custom patterns extracted via Claude"
-grep -q "SwiftUI\|Observable" .construct/injections/project-custom.md && echo "✅ Custom rules preserved via AI analysis"
+[ -f "CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md" ] && echo "✅ Custom patterns extracted via Claude"
+grep -q "SwiftUI\|Observable" CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md && echo "✅ Custom rules preserved via AI analysis"
 
 # Test 3: Infrastructure validation
 ./CONSTRUCT/scripts/construct/update-context.sh --dry-run && echo "✅ Context updates work"
@@ -525,7 +540,7 @@ git diff working-01 CLAUDE.md                    # See what broke
 
 3. **AI-Enhanced Pattern System Integration**:
    - **Claude Pattern Assembly**: Patterns from patterns.yaml appear in final CLAUDE.md via Claude intelligence
-   - **AI-Extracted Custom Patterns**: Claude extracts custom patterns to .construct/injections/
+   - **AI-Extracted Custom Patterns**: Claude extracts custom patterns to CONSTRUCT/patterns/plugins/project-custom/
    - Base `/init` knowledge preserved during AI-driven enhancement
    - Project-specific rules maintained and enhanced through Claude analysis
 
