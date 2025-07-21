@@ -173,38 +173,56 @@ EOF
 install_missing_infrastructure() {
     echo -e "${BLUE}🛠️ Phase 2: Installing missing CONSTRUCT infrastructure...${NC}"
     
-    # Symlink CONSTRUCT directory for tool access
-    if [ "$HAS_CONSTRUCT_DIR" = false ]; then
-        echo -e "  ${YELLOW}🔗${NC} Linking CONSTRUCT tools directory..."
+    # Create unified CONSTRUCT/ folder structure (same as LAB)
+    if [ "$HAS_CONSTRUCT_DIR" = false ] || [ "$HAS_AI_FOLDER" = false ]; then
+        echo -e "  ${YELLOW}🏗️${NC} Creating unified CONSTRUCT/ folder structure..."
         
-        # Calculate relative path to CONSTRUCT-CORE/CONSTRUCT (macOS compatible)
-        # Use Python to calculate relative path since macOS realpath doesn't support --relative-to
-        RELATIVE_PATH="$(python3 -c "import os; print(os.path.relpath('$CONSTRUCT_CORE/CONSTRUCT', '$PROJECT_ROOT'))")"
-        ln -sf "$RELATIVE_PATH" CONSTRUCT
+        # Create main CONSTRUCT folder
+        mkdir -p CONSTRUCT
         
-        echo -e "  ${GREEN}✅${NC} CONSTRUCT tools linked"
-        HAS_CONSTRUCT_DIR=true
-    fi
-    
-    # Install AI folder structure from templates
-    if [ "$HAS_AI_FOLDER" = false ]; then
-        echo -e "  ${YELLOW}📁${NC} Installing AI folder structure..."
+        # Install CONSTRUCT tools (context-aware: symlink vs. copy)
+        if [ -d "$CONSTRUCT_CORE" ]; then
+            # Check if we're running from within CONSTRUCT-CORE (prevent recursive symlink)
+            CURRENT_DIR_REAL="$(cd "$PROJECT_ROOT" && pwd)"
+            CONSTRUCT_CORE_REAL="$(cd "$CONSTRUCT_CORE" && pwd)"
+            
+            if [[ "$CURRENT_DIR_REAL" == "$CONSTRUCT_CORE_REAL"* ]]; then
+                echo -e "  ${YELLOW}⚠️${NC} Running from within CONSTRUCT-CORE, skipping symlink creation"
+                echo -e "  ${GRAY}    (Prevents recursive symlink: CONSTRUCT/CONSTRUCT → CONSTRUCT)${NC}"
+            else
+                # Live repo - symlink for updates
+                echo -e "  ${YELLOW}🔗${NC} Linking CONSTRUCT tools (live repo mode)..."
+                RELATIVE_PATH="$(python3 -c "import os; print(os.path.relpath('$CONSTRUCT_CORE/CONSTRUCT', '$PROJECT_ROOT/CONSTRUCT'))")" 
+                ln -sf "$RELATIVE_PATH" CONSTRUCT/CONSTRUCT
+            fi
+        else
+            # Template - copy for portability
+            echo -e "  ${YELLOW}📦${NC} Copying CONSTRUCT tools (template mode)..."
+            cp -r "$TEMPLATE_SOURCE/CONSTRUCT" CONSTRUCT/CONSTRUCT
+        fi
         
+        # Install AI folder structure
         if [ -d "$CONSTRUCT_CORE/TEMPLATES/component-templates/ai-structure/AI" ]; then
-            cp -r "$CONSTRUCT_CORE/TEMPLATES/component-templates/ai-structure/AI" .
+            cp -r "$CONSTRUCT_CORE/TEMPLATES/component-templates/ai-structure/AI" CONSTRUCT/
             echo -e "  ${GREEN}✅${NC} AI documentation structure installed"
-            HAS_AI_FOLDER=true
         else
             echo -e "  ${YELLOW}⚠️${NC} AI template not found, creating basic structure"
-            mkdir -p AI/{docs,structure,quality-reports,dev-logs}
-            echo "# AI Documentation" > AI/README.md
+            mkdir -p CONSTRUCT/AI/{docs,structure,quality-reports,dev-logs}
+            echo "# AI Documentation" > CONSTRUCT/AI/README.md
         fi
+        
+        # Create pattern space for project-specific patterns
+        mkdir -p CONSTRUCT/patterns/plugins
+        
+        HAS_CONSTRUCT_DIR=true
+        HAS_AI_FOLDER=true
     fi
     
-    # Create pattern configuration
+    # Create pattern configuration (.construct/ for metadata)
     if [ "$HAS_PATTERNS_CONFIG" = false ]; then
         echo -e "  ${YELLOW}⚙️${NC} Creating pattern configuration..."
         
+        # Create .construct for metadata/configuration
         mkdir -p .construct
         
         if [ -f "$CONSTRUCT_CORE/patterns/templates/patterns.yaml" ]; then
@@ -266,8 +284,8 @@ extract_existing_patterns() {
         cp CLAUDE.md CLAUDE.md.backup
         echo -e "  ${GREEN}💾${NC} Original CLAUDE.md backed up"
         
-        # Create project-specific injection directory
-        mkdir -p .construct/injections
+        # Create project-specific injection directory in CONSTRUCT structure
+        mkdir -p CONSTRUCT/patterns/plugins/project-custom/injections
         
         # Use Claude SDK for intelligent pattern extraction
         echo -e "  ${YELLOW}📝${NC} Using Claude SDK to extract project patterns..."
@@ -288,11 +306,21 @@ extract_existing_patterns() {
 
 Format the output as a structured markdown document that captures the essential project knowledge. Focus on preserving information that would help developers understand and work with this specific project.
 
-Return ONLY the extracted content in markdown format, without any explanation or meta-commentary." CLAUDE.md.backup > .construct/injections/project-custom.md 2>/dev/null
+Return ONLY the extracted content in markdown format, without any explanation or meta-commentary." CLAUDE.md.backup > CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md 2>/dev/null
 
             # Check if extraction was successful
-            if [ -s .construct/injections/project-custom.md ]; then
+            if [ -s CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md ]; then
                 echo -e "  ${GREEN}✅${NC} Project patterns extracted via Claude SDK"
+                
+                # Create pattern plugin metadata
+                cat > CONSTRUCT/patterns/plugins/project-custom/pattern.yaml << 'EOF'
+id: project-custom
+name: Project-Specific Patterns  
+description: Custom patterns extracted from existing CLAUDE.md
+version: 1.0.0
+injections:
+  - project-custom.md
+EOF
                 
                 # Update patterns.yaml to include extracted patterns
                 if command -v yq >/dev/null 2>&1; then
@@ -343,7 +371,7 @@ fallback_extract_patterns() {
     
     # If we extracted substantial content, create the injection
     if [ -s "$temp_file" ] && [ $(wc -l < "$temp_file") -gt 10 ]; then
-        cat > .construct/injections/project-custom.md << 'EOF'
+        cat > CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md << 'EOF'
 # Project-Specific Patterns
 
 ## Extracted Project Knowledge
@@ -351,7 +379,17 @@ fallback_extract_patterns() {
 The following content was extracted from your original CLAUDE.md to preserve project-specific knowledge:
 
 EOF
-        cat "$temp_file" >> .construct/injections/project-custom.md
+        cat "$temp_file" >> CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md
+        
+        # Create pattern plugin metadata
+        cat > CONSTRUCT/patterns/plugins/project-custom/pattern.yaml << 'EOF'
+id: project-custom
+name: Project-Specific Patterns
+description: Custom patterns extracted from existing CLAUDE.md via fallback
+version: 1.0.0
+injections:
+  - project-custom.md
+EOF
         
         echo -e "  ${GREEN}✅${NC} Project patterns extracted using logic-based fallback"
         
@@ -416,8 +454,11 @@ analyze_and_recommend_patterns() {
     if command -v yq >/dev/null 2>&1; then
         # Update languages
         if [ -n "$DETECTED_LANGUAGES" ]; then
-            LANG_ARRAY=$(echo "$DETECTED_LANGUAGES" | tr ' ' '\n' | grep -v '^$' | sed 's/^/"/;s/$/"/' | paste -sd ',' -)
-            yq eval -i ".languages = [$LANG_ARRAY]" .construct/patterns.yaml
+            # Clear existing languages and add detected ones
+            yq eval -i ".languages = []" .construct/patterns.yaml
+            for lang in $DETECTED_LANGUAGES; do
+                yq eval -i ".languages += [\"$lang\"]" .construct/patterns.yaml
+            done
             echo -e "  ${GREEN}📋${NC} Updated languages: $(echo $DETECTED_LANGUAGES | tr ' ' ', ')"
         fi
         
@@ -436,8 +477,19 @@ analyze_and_recommend_patterns() {
         if [ -n "$RECOMMENDED_PLUGINS" ]; then
             # Remove trailing comma
             RECOMMENDED_PLUGINS=$(echo "$RECOMMENDED_PLUGINS" | sed 's/,$//')
-            yq eval -i ".plugins = [$RECOMMENDED_PLUGINS]" .construct/patterns.yaml
-            echo -e "  ${GREEN}🔧${NC} Updated plugins with recommendations"
+            
+            # Get existing plugins
+            EXISTING_PLUGINS=$(yq eval '.plugins[]' .construct/patterns.yaml 2>/dev/null | tr '\n' ' ')
+            
+            # Add recommended plugins one by one to avoid YAML parsing issues
+            for plugin in $(echo "$RECOMMENDED_PLUGINS" | tr ',' '\n' | sed 's/"//g'); do
+                # Check if plugin already exists
+                if ! echo "$EXISTING_PLUGINS" | grep -q "$plugin"; then
+                    yq eval -i ".plugins += [\"$plugin\"]" .construct/patterns.yaml
+                fi
+            done
+            
+            echo -e "  ${GREEN}🔧${NC} Updated plugins with recommendations (preserving existing)"
         fi
     else
         echo -e "  ${YELLOW}⚠️${NC} yq not available, skipping pattern configuration update"
@@ -566,9 +618,11 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "  - Git repository recommended for full features"
     echo ""
     echo "WHAT GETS INSTALLED:"
-    echo "  - CONSTRUCT/ → Symlinked tools directory"
-    echo "  - AI/ → Documentation and analysis structure"  
-    echo "  - .construct/patterns.yaml → Pattern configuration"
+    echo "  - CONSTRUCT/ → Unified project structure (same as LAB)"
+    echo "  - CONSTRUCT/CONSTRUCT/ → Symlinked or copied tools directory"
+    echo "  - CONSTRUCT/AI/ → Documentation and analysis structure"
+    echo "  - CONSTRUCT/patterns/plugins/ → Project-specific pattern space"
+    echo "  - .construct/patterns.yaml → Pattern configuration metadata"
     echo "  - .git/hooks/pre-commit → Quality validation hooks"
     echo ""
     exit 0
@@ -594,9 +648,11 @@ main() {
     echo -e "${GREEN}✅ CONSTRUCT integration complete!${NC}"
     echo ""
     echo -e "${BLUE}📋 What was installed/configured:${NC}"
-    echo -e "  ${GREEN}🔗${NC} CONSTRUCT tools → Symlinked for script access"
-    echo -e "  ${GREEN}📁${NC} AI folder → Documentation and analysis structure"
-    echo -e "  ${GREEN}⚙️${NC} Pattern system → Configured based on project analysis"
+    echo -e "  ${GREEN}🏗️${NC} CONSTRUCT/ structure → Unified project architecture (same as LAB)"
+    echo -e "  ${GREEN}🔗${NC} CONSTRUCT/CONSTRUCT/ → Tools directory (symlinked or copied)"
+    echo -e "  ${GREEN}📁${NC} CONSTRUCT/AI/ → Documentation and analysis structure"
+    echo -e "  ${GREEN}🧩${NC} CONSTRUCT/patterns/plugins/ → Project-specific pattern space"
+    echo -e "  ${GREEN}⚙️${NC} .construct/patterns.yaml → Pattern configuration metadata"
     echo -e "  ${GREEN}🪝${NC} Git hooks → Quality validation on commits"
     echo -e "  ${GREEN}📝${NC} Enhanced CLAUDE.md → Generated from patterns + /init content"
     echo ""
