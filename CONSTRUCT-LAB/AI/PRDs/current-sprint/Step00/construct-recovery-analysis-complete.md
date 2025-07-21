@@ -525,8 +525,10 @@ git diff working-01 CLAUDE.md                    # See what broke
 ### ✅ Working System Indicators
 
 1. **Complete Infrastructure Installation**:
-   - CONSTRUCT/ directory symlinked for tool access
-   - AI/ folder structure installed from templates
+   - CONSTRUCT/ unified folder structure created (same as LAB)
+   - CONSTRUCT/CONSTRUCT/ tools directory symlinked for access
+   - CONSTRUCT/AI/ folder structure installed from templates
+   - CONSTRUCT/patterns/plugins/ pattern space created
    - .construct/patterns.yaml configuration created
    - Git hooks installed and executable
    - All template infrastructure present
@@ -558,7 +560,7 @@ git diff working-01 CLAUDE.md                    # See what broke
 ### ❌ Failure Indicators
 
 1. **Claude SDK Issues**: Claude SDK unavailable, API failures, or AI analysis not working
-2. **Missing Infrastructure**: Projects lack CONSTRUCT/, AI/, or .construct/ directories after construct-init
+2. **Missing Infrastructure**: Projects lack CONSTRUCT/, CONSTRUCT/AI/, CONSTRUCT/patterns/, or .construct/ directories after construct-init
 3. **Generic Claude Code content**: If CLAUDE.md starts with "This file provides guidance to Claude Code" instead of "CONSTRUCT Development Guide"
 4. **Empty dynamic sections**: Auto-updating sections showing placeholder text
 5. **Missing patterns**: construct-init runs but no pattern content appears
