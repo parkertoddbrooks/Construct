@@ -1,6 +1,6 @@
 # CONSTRUCT Directory Structure
 
-Last updated: 2025-07-10
+Last updated: 2025-07-21
 
 ## Overview
 
@@ -41,7 +41,11 @@ CONSTRUCT/
 │   │   │   ├── frameworks/           # Framework-specific patterns
 │   │   │   ├── languages/            # Language-specific patterns
 │   │   │   ├── platforms/            # Platform-specific patterns
-│   │   │   └── tooling/              # Development tooling patterns
+│   │   │   ├── tooling/              # Development tooling patterns
+│   │   │   ├── ui/                   # UI and design patterns
+│   │   │   ├── performance/          # Performance optimization patterns
+│   │   │   ├── quality/              # Quality and standards patterns
+│   │   │   └── configuration/        # Configuration patterns
 │   │   └── templates/                # Configuration templates
 │   │       ├── patterns.yaml         # Template for project patterns
 │   │       └── project-sets.yaml     # Pre-configured project types
@@ -120,9 +124,10 @@ CONSTRUCT/
 - `patterns/plugins/registry.yaml` - Available plugins catalog
 - `patterns/templates/project-sets.yaml` - Project type templates
 
-## Recent Changes (2025-07-10)
+## Recent Changes (2025-07-21)
 
-1. **Scripts Migration**: `scripts-new/` → `scripts/` with new organization
-2. **Plugin Registry**: Added auto-generated plugin catalog
-3. **Project Templates**: Added project-sets.yaml for quick setup
-4. **Documentation**: Improved workspace vs project configuration docs
+1. **Enhanced Pattern Categories**: Expanded from 6 to 10 categories for comprehensive project support
+2. **Claude SDK Integration**: AI-native intelligent pattern extraction using Claude SDK
+3. **Pattern Enhancement**: Added ui/, performance/, quality/, and configuration/ categories
+4. **Project Recovery**: Completed Phase 2A of CONSTRUCT recovery plan with enhanced categorization
+5. **Cross-Platform Support**: Bash 3+ compatibility for macOS, Linux, and Windows WSL

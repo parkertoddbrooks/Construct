@@ -2,15 +2,16 @@
 
 Welcome to the CONSTRUCT documentation. This directory contains comprehensive documentation for the CONSTRUCT pattern framework.
 
-## 🆕 What's New (2025-07-10)
+## 🆕 What's New (2025-07-21)
 
 ### Major Updates
-- **Scripts Reorganization Complete** - Migrated from `scripts-new/` to organized `scripts/` structure
-- **Plugin Registry System** - Auto-generated catalog of all available plugins
-- **New Documentation** - Added workspace management guide and comprehensive indices
-- **Bug Fixes** - Fixed --help handling and plugin path resolution
+- **Phase 2A Complete** - Enhanced pattern categorization system with 10 categories
+- **Claude SDK Integration** - AI-native intelligent pattern extraction and analysis
+- **Comprehensive Project Support** - Now handles projects with design tokens, quality gates, professional standards
+- **Cross-Platform Compatibility** - Bash 3+ support for macOS, Linux, Windows WSL
+- **Enhanced Categories** - Added ui/, performance/, quality/, configuration/ pattern categories
 
-[See full changelog →](DOCS-INDEX.md#-whats-new-2025-07-10)
+[See full changelog →](DOCS-INDEX.md#-whats-new-2025-07-21)
 
 ## 📚 Documentation Guides
 
@@ -21,6 +22,7 @@ Welcome to the CONSTRUCT documentation. This directory contains comprehensive do
 
 ### Key Topics
 - [Workspace Management](core/workspace-management.md) - Understanding `.construct/` vs `.construct-workspace/`
+- [Pattern System](../CONSTRUCT-CORE/patterns/README.md) - AI-native categorization and Claude SDK integration
 - [Interactive Scripts](features/interactive-scripts.md) - Script capabilities and Rails mode
 - [Architecture Cheatsheet](ARCHITECTURE-CHEATSHEET/) - Quick reference guide
 

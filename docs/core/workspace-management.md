@@ -66,6 +66,10 @@ custom_rules:
   ui:
     - "All views must support dark mode"
     - "Use design tokens for spacing"
+  performance:
+    - "Views must render under 16ms"
+  quality:
+    - "All features require unit tests"
 
 # Pattern overrides
 overrides: []
@@ -92,8 +96,8 @@ includes: []
 ```yaml
 construct:
   branch: main
-  version: 2.0.0
-  last_updated: 2025-07-10
+  version: 2.1.0
+  last_updated: 2025-07-21
 
 projects:
   MyApp:
@@ -104,6 +108,8 @@ projects:
     patterns:
       - languages/swift
       - architectural/mvvm-ios
+      - ui/design-tokens
+      - quality/standards
     components:
       - name: MyApp-API
         path: ./Projects/MyApp/API
@@ -115,6 +121,10 @@ workspace:
   active_plugins:
     - languages/swift
     - architectural/mvvm-ios
+    - ui/design-tokens
+    - quality/standards
+  categorization: enhanced  # AI-native 10-category system
+  extraction: claude-sdk    # Intelligent pattern detection
 ```
 
 ## Use Cases
