@@ -48,6 +48,26 @@ plugins/
 - **error-handling** - Error handling best practices
 - **unix-philosophy** - Unix philosophy principles
 
+### `ui/` - UI and Design Patterns
+- **design-tokens** - Design system tokens and visual consistency
+- **accessibility** - Accessibility patterns and inclusive design
+- **visual-quality** - Professional visual standards and quality gates
+
+### `performance/` - Performance Patterns
+- **optimization** - General performance optimization patterns
+- **rendering** - UI rendering optimization and efficiency patterns
+- **memory-management** - Memory usage and lifecycle patterns
+
+### `quality/` - Quality and Standards Patterns
+- **standards** - Professional quality standards and requirements
+- **practices** - Best practices and empirically validated patterns
+- **gates** - Quality gates and validation checkpoints
+
+### `configuration/` - Configuration Patterns
+- **ios-config** - iOS platform configuration patterns
+- **build-config** - Build system and environment configuration
+- **env-setup** - Development environment setup patterns
+
 ## Plugin Metadata
 
 Each plugin has a `.yaml` file with:
@@ -56,7 +76,7 @@ name: plugin-name
 version: 1.0.0
 description: Clear description of the plugin
 author: CONSTRUCT Team
-category: languages|frameworks|architectural|platforms|tooling|cross-platform
+category: languages|frameworks|architectural|platforms|tooling|cross-platform|ui|performance|quality|configuration
 validators:           # Optional - which validators are included
   - quality
   - architecture

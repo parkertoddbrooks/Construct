@@ -275,63 +275,19 @@ EOF
     echo ""
 }
 
-# Phase 3: Pattern Extraction
+# Phase 3: Enhanced Pattern Extraction with 10 Categories
 extract_existing_patterns() {
     if [ "$CLAUDE_HAS_EXTRACTABLE_PATTERNS" = true ]; then
-        echo -e "${BLUE}🔍 Phase 3: Extracting custom patterns from existing CLAUDE.md...${NC}"
+        echo -e "${BLUE}🔍 Phase 3: Extracting patterns across enhanced categories...${NC}"
         
         # Backup original
         cp CLAUDE.md CLAUDE.md.backup
         echo -e "  ${GREEN}💾${NC} Original CLAUDE.md backed up"
         
-        # Create project-specific injection directory in CONSTRUCT structure
-        mkdir -p CONSTRUCT/patterns/plugins/project-custom/injections
-        
-        # Use Claude SDK for intelligent pattern extraction
-        echo -e "  ${YELLOW}📝${NC} Using Claude SDK to extract project patterns..."
-        
         # Check if Claude SDK is available
         if command -v claude >/dev/null 2>&1; then
-            # Use Claude SDK to intelligently extract patterns
-            claude -p "Analyze this CLAUDE.md file and extract ALL project-specific content that should be preserved. This includes:
-
-1. Project overview and description
-2. Development commands and workflows  
-3. Architecture explanations
-4. Tool development patterns
-5. Configuration details
-6. Any custom guidelines or best practices
-7. Technology-specific information
-8. Build/test/deployment instructions
-
-Format the output as a structured markdown document that captures the essential project knowledge. Focus on preserving information that would help developers understand and work with this specific project.
-
-Return ONLY the extracted content in markdown format, without any explanation or meta-commentary." CLAUDE.md.backup > CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md 2>/dev/null
-
-            # Check if extraction was successful
-            if [ -s CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md ]; then
-                echo -e "  ${GREEN}✅${NC} Project patterns extracted via Claude SDK"
-                
-                # Create pattern plugin metadata
-                cat > CONSTRUCT/patterns/plugins/project-custom/pattern.yaml << 'EOF'
-id: project-custom
-name: Project-Specific Patterns  
-description: Custom patterns extracted from existing CLAUDE.md
-version: 1.0.0
-injections:
-  - project-custom.md
-EOF
-                
-                # Update patterns.yaml to include extracted patterns
-                if command -v yq >/dev/null 2>&1; then
-                    yq eval -i '.plugins += ["project-custom"]' .construct/patterns.yaml
-                    echo -e "  ${GREEN}✅${NC} Pattern configuration updated with extracted rules"
-                fi
-            else
-                echo -e "  ${YELLOW}⚠️${NC} Claude SDK extraction failed, using fallback method"
-                # Fallback to logic-based extraction
-                fallback_extract_patterns
-            fi
+            # Use enhanced categorization extraction
+            extract_enhanced_patterns
         else
             echo -e "  ${YELLOW}⚠️${NC} Claude SDK not available, using fallback method"
             # Fallback to logic-based extraction
@@ -342,9 +298,145 @@ EOF
     fi
 }
 
+# Enhanced pattern extraction with comprehensive categorization (bash 3+ compatible)
+extract_enhanced_patterns() {
+    echo -e "  ${YELLOW}🧠${NC} Using enhanced categorization with Claude SDK..."
+    
+    local patterns_created=0
+    local categories="architectural cross-platform frameworks languages platforms tooling ui performance quality configuration"
+    
+    # Process each category individually
+    for category in $categories; do
+        # Set category description and keywords based on category name
+        case "$category" in
+            "ui")
+                description="Design tokens, visual quality, accessibility, component design patterns"
+                keywords="design.*token|\.frame.*token|AppColors|spacing|visual.*quality|accessibility|component.*pattern|@State.*UI|background.*flash"
+                ;;
+            "performance")
+                description="Optimization patterns, rendering rules, memory management, lazy loading"
+                keywords="LazyVStack|performance|optimization|rendering|ForEach.*id|memory.*management|animation.*performance|loading.*pattern"
+                ;;
+            "quality")
+                description="Professional standards, quality gates, empirical discoveries, best practices"
+                keywords="quality.*gate|professional.*standard|empirical|validated.*discover|best.*practice|architectural.*constant|NEVER:|ALWAYS:"
+                ;;
+            "configuration")
+                description="Platform settings, Info.plist, build configuration, environment setup"
+                keywords="Info\.plist|Xcode.*setting|build.*config|environment|permission.*config|orientation.*setting|launch.*screen"
+                ;;
+            "architectural")
+                description="MVVM, Clean Architecture, design patterns, business logic separation"
+                keywords="MVVM|ViewModel|@Published|business.*logic|Clean.*Architecture|design.*pattern|coordinator|navigation.*pattern"
+                ;;
+            "frameworks")
+                description="SwiftUI, Flask, React, framework-specific patterns and best practices"
+                keywords="SwiftUI|@State|Flask|React|framework.*specific|library.*pattern|NavigationStack|async.*await.*UI"
+                ;;
+            "languages")
+                description="Swift, Python, TypeScript language conventions and modern patterns"
+                keywords="Swift.*6|async.*await|python.*convention|language.*specific|syntax.*pattern|@MainActor|concurrency"
+                ;;
+            "platforms")
+                description="iOS, web, Android platform-specific requirements and constraints"
+                keywords="iOS.*specific|platform.*requirement|device.*specific|platform.*constraint|Watch.*connectivity"
+                ;;
+            "tooling")
+                description="Build scripts, development workflows, CI/CD, tool configurations"
+                keywords="build.*script|CI.*CD|deployment|development.*tool|workflow.*automation|testing.*framework"
+                ;;
+            "cross-platform")
+                description="Shared models, API contracts, multi-platform sync patterns"
+                keywords="shared.*model|API.*contract|cross.*platform|multi.*platform.*sync|data.*synchronization"
+                ;;
+        esac
+        
+        # Use Claude SDK for intelligent extraction per category
+        claude -p "Extract content related to: $description
+
+Keywords to focus on: $keywords
+
+From this CLAUDE.md file, extract only content that matches this category.
+Look for:
+- Specific rules and patterns (❌ NEVER: / ✅ ALWAYS: patterns)
+- Do/Don't examples  
+- Configuration requirements
+- Best practices and standards
+- Project-specific implementations
+
+Return clean markdown without category headers.
+Focus on project-specific patterns that override or extend standard patterns.
+If no relevant content exists, return empty." \
+        CLAUDE.md.backup > "temp_${category}.md" 2>/dev/null
+        
+        if [ -s "temp_${category}.md" ] && [ $(wc -l < "temp_${category}.md") -gt 5 ]; then
+            # Determine specific plugin name using Claude intelligence
+            plugin_name=$(claude -p "Based on this content, what specific plugin name fits best?
+Category: $category
+
+For ui: design-system, visual-quality, accessibility, tokens
+For performance: optimization, rendering, memory-management  
+For quality: standards, gates, discoveries, practices
+For configuration: ios-config, build-config, env-config
+For architectural: mvvm, clean, coordinator, navigation
+For frameworks: swiftui, web, react, flask
+For languages: swift, python, typescript
+For platforms: ios, web, android
+For tooling: build, scripting, ci-cd
+For cross-platform: sync, api, models
+
+Return ONLY the plugin name." "temp_${category}.md" 2>/dev/null | head -1 | tr -d '\n' || echo "project-${category}")
+            
+            # Clean plugin name (remove any extra text)
+            plugin_name=$(echo "$plugin_name" | sed 's/[^a-zA-Z0-9-]//g' | head -c 20)
+            [ -z "$plugin_name" ] && plugin_name="project-${category}"
+            
+            # Create directory structure
+            mkdir -p "CONSTRUCT/patterns/plugins/${category}/project-${plugin_name}/injections"
+            
+            # Move extracted content
+            mv "temp_${category}.md" "CONSTRUCT/patterns/plugins/${category}/project-${plugin_name}/injections/project-${plugin_name}.md"
+            
+            # Create pattern metadata (bash 3+ compatible)
+            category_title=$(echo "$category" | sed 's/./\U&/')
+            plugin_title=$(echo "$plugin_name" | sed 's/./\U&/')
+            
+            cat > "CONSTRUCT/patterns/plugins/${category}/project-${plugin_name}/pattern.yaml" << EOF
+id: project-${plugin_name}
+name: Project-Specific ${category_title} - ${plugin_title}
+description: Extracted ${category} patterns from existing CLAUDE.md
+version: 1.0.0
+category: ${category}
+injections:
+  - project-${plugin_name}.md
+EOF
+            
+            # Update patterns.yaml
+            if command -v yq >/dev/null 2>&1; then
+                yq eval -i ".plugins += [\"${category}/project-${plugin_name}\"]" .construct/patterns.yaml
+                echo -e "  ${GREEN}✅${NC} Created ${category}/project-${plugin_name} pattern"
+                patterns_created=$((patterns_created + 1))
+            fi
+        else
+            echo -e "  ${GRAY}ℹ️${NC} No substantial ${category} patterns found"
+            rm -f "temp_${category}.md"
+        fi
+    done
+    
+    if [ $patterns_created -gt 0 ]; then
+        echo -e "  ${GREEN}🎉${NC} Successfully created $patterns_created categorized pattern plugins"
+    else
+        echo -e "  ${YELLOW}⚠️${NC} No patterns extracted, falling back to single-file extraction"
+        fallback_extract_patterns
+    fi
+}
+
 # Fallback pattern extraction using logic-based detection
 fallback_extract_patterns() {
     echo -e "  ${YELLOW}📝${NC} Using logic-based pattern extraction as fallback..."
+    
+    # Create project-specific injection directory for fallback
+    mkdir -p CONSTRUCT/patterns/plugins/project-custom/injections
     
     # Look for substantial project content using logic
     temp_file=$(mktemp)
@@ -368,6 +460,10 @@ fallback_extract_patterns() {
     
     # Extract configuration details
     sed -n '/## Configuration/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    
+    # Extract ENFORCE RULES sections (critical patterns)
+    sed -n '/## 🚨 ENFORCE THESE RULES/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    sed -n '/❌ NEVER:/,/✅ ALWAYS:/p' CLAUDE.md.backup >> "$temp_file"
     
     # If we extracted substantial content, create the injection
     if [ -s "$temp_file" ] && [ $(wc -l < "$temp_file") -gt 10 ]; then
