@@ -10,6 +10,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
+MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
 # Get script directory and project root
@@ -135,16 +136,25 @@ for plugin in "${PLUGIN_ARRAY[@]}"; do
         core_plugin_path="$CONSTRUCT_CORE/patterns/plugins/$plugin/$plugin_name.md"
         # Check LAB second
         lab_plugin_path="$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/plugins/$plugin/$plugin_name.md"
+        # Check project-local third (for extracted patterns)
+        project_plugin_path="./CONSTRUCT/patterns/plugins/$plugin/$plugin_name.md"
+        project_injection_path="./CONSTRUCT/patterns/plugins/$plugin/injections/$plugin_name.md"
         
         if [ -f "$core_plugin_path" ]; then
             continue # Found in CORE
         elif [ -f "$lab_plugin_path" ]; then
             continue # Found in LAB
+        elif [ -f "$project_plugin_path" ]; then
+            continue # Found in project
+        elif [ -f "$project_injection_path" ]; then
+            continue # Found in project injections
         else
             echo -e "${RED}❌ Error: Plugin not found: $plugin${NC}"
             echo -e "${YELLOW}   Looking for:${NC}"
             echo -e "${YELLOW}     CORE: $core_plugin_path${NC}"
             echo -e "${YELLOW}     LAB:  $lab_plugin_path${NC}"
+            echo -e "${YELLOW}     PROJECT: $project_plugin_path${NC}"
+            echo -e "${YELLOW}     PROJECT INJECTIONS: $project_injection_path${NC}"
             echo -e "${YELLOW}   Available CORE plugins:${NC}"
             find "$CONSTRUCT_CORE/patterns/plugins" -name "*.md" -type f | sed "s|$CONSTRUCT_CORE/patterns/plugins/||" | sed 's|\.md$||' | sort
             echo -e "${YELLOW}   Available LAB plugins:${NC}"
@@ -184,6 +194,7 @@ CLAUDE_CONTENT+="<!--
 ║ 3. Run: construct-patterns regenerate                                        ║
 ║                                                                              ║
 ║ Think of this like Photoshop's .exe - you don't edit the binary!           ║
+║ Instead, edit the source (patterns.yaml) and regenerate.                   ║
 ║                                                                              ║
 ║ See: CONSTRUCT-CORE/patterns/PATTERN-GUIDE.md for customization help        ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
@@ -191,7 +202,26 @@ CLAUDE_CONTENT+="<!--
 
 "
 
-# Add base content
+# Check if we have extracted project knowledge to lead with
+PROJECT_CUSTOM_CONTENT=""
+project_custom_path="./CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md"
+if [ -f "$project_custom_path" ]; then
+    PROJECT_CUSTOM_CONTENT=$(cat "$project_custom_path")
+    echo -e "${YELLOW}📋 Found project-specific knowledge to feature prominently${NC}"
+fi
+
+# Start with project knowledge if available
+if [ -n "$PROJECT_CUSTOM_CONTENT" ]; then
+    CLAUDE_CONTENT+="
+
+$PROJECT_CUSTOM_CONTENT
+
+---
+
+"
+fi
+
+# Add base content (universal principles)
 if [ ! -f "$CONSTRUCT_CORE/CLAUDE-BASE.md" ]; then
     echo -e "${RED}❌ Error: CLAUDE-BASE.md not found in $CONSTRUCT_CORE${NC}"
     exit 1
@@ -221,50 +251,75 @@ When you mention entities that exist across your stack, I'll consider all implem
 
 "
 
-# Add pattern configuration panel
+# Add brief pattern configuration section
 CLAUDE_CONTENT+="
-## 🎛️ Pattern Configuration
+## 🎯 Development Patterns
 
-### Active Patterns (Toggle ✓/✗ to enable/disable)
+### Active Pattern Configuration
+This project uses the following patterns for intelligent development assistance:
 "
 
-# Add plugins based on configuration
+# Add brief pattern references without full content
+echo -e "${BLUE}🔄 Assembling pattern references...${NC}"
+PATTERN_SUMMARIES=""
 for plugin in "${PLUGIN_ARRAY[@]}"; do
     plugin=$(echo "$plugin" | xargs) # Trim whitespace
     if [ -n "$plugin" ]; then
-        CLAUDE_CONTENT+="- ✓ $plugin
-"
-    fi
-done
-
-# Add plugin content (check both CORE and LAB)
-echo -e "${BLUE}🔄 Assembling patterns...${NC}"
-for plugin in "${PLUGIN_ARRAY[@]}"; do
-    plugin=$(echo "$plugin" | xargs) # Trim whitespace
-    if [ -n "$plugin" ]; then
+        # Skip project-custom as it's already featured prominently above
+        if [ "$plugin" = "project-custom" ]; then
+            continue
+        fi
+        
         # Extract plugin name from path (e.g., tooling/construct-dev -> construct-dev)
         plugin_name=$(basename "$plugin")
         
-        # Check CORE first - look for pattern file in plugin directory
+        # Check where pattern exists and create brief reference
         core_plugin_path="$CONSTRUCT_CORE/patterns/plugins/$plugin/$plugin_name.md"
-        # Check LAB second
         lab_plugin_path="$CONSTRUCT_ROOT/CONSTRUCT-LAB/patterns/plugins/$plugin/$plugin_name.md"
         
         if [ -f "$core_plugin_path" ]; then
-            echo -e "${YELLOW}  Adding: $plugin ${BLUE}(CORE)${NC}"
-            CLAUDE_CONTENT+="
-
+            echo -e "${YELLOW}  Referencing: $plugin ${BLUE}(CORE)${NC}"
+            PATTERN_SUMMARIES+="- **$plugin**: Active (provides language-specific guidance and best practices)
 "
-            CLAUDE_CONTENT+=$(cat "$core_plugin_path")
         elif [ -f "$lab_plugin_path" ]; then
-            echo -e "${YELLOW}  Adding: $plugin ${GREEN}(LAB)${NC}"
-            CLAUDE_CONTENT+="
-
+            echo -e "${YELLOW}  Referencing: $plugin ${GREEN}(LAB)${NC}"
+            PATTERN_SUMMARIES+="- **$plugin**: Active (provides experimental patterns and guidance)
 "
-            CLAUDE_CONTENT+=$(cat "$lab_plugin_path")
         fi
     fi
 done
+
+CLAUDE_CONTENT+="$PATTERN_SUMMARIES
+
+### 🔄 Context-Aware Pattern Loading
+Additional patterns are automatically loaded based on your current work:
+- **File Type Detection**: Opening *.py files loads Python patterns, *.sh loads shell scripting patterns
+- **Task Detection**: Working on tests loads testing patterns, documentation work loads writing patterns  
+- **Dynamic Context**: Patterns adapt to your current focus without cluttering the main context
+
+### 🎯 Pattern Activation Examples
+- Edit \`app.py\` → Python patterns activate for Flask best practices
+- Create \`test_*.py\` → Testing patterns load with pytest guidance
+- Work on \`*.sh\` → Shell scripting patterns provide bash best practices
+- Switch to feature branch → Relevant feature development patterns load
+
+### 🔄 Real-Time Context Updates
+This file is automatically updated when:
+- You add or remove patterns via \`.construct/patterns.yaml\`
+- Project structure changes significantly
+- CONSTRUCT detects new frameworks or tools
+
+I'm immediately aware of these changes without needing a restart.
+
+### 📚 Full Pattern Details
+Complete pattern details are available but not included here to keep focus on your project. Patterns provide guidance on:
+- Language-specific best practices and conventions
+- Framework-specific patterns and anti-patterns
+- Tool-specific workflows and quality standards
+- Architecture and design pattern recommendations
+
+*Pattern content is contextually loaded when relevant to your current work.*
+"
 
 # Process patterns.yaml for custom rules and includes
 if [ -f "$CONFIG_FILE" ] && command -v yq >/dev/null 2>&1; then
@@ -319,8 +374,10 @@ CLAUDE_CONTENT+="
 
 <!-- 
 Generated: $GENERATION_TIME
-Source: CONSTRUCT-CORE/CLAUDE-BASE.md
-Plugins: $PLUGINS
+Assembly: Project-focused (extracted knowledge prominent, brief pattern references)
+Source: CONSTRUCT-CORE/CLAUDE-BASE.md + extracted project patterns
+Patterns: $PLUGINS
+Note: Full pattern content available contextually, not included for focused experience
 -->
 "
 

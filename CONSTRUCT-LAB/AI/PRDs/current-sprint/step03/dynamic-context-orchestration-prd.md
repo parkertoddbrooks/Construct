@@ -22,6 +22,22 @@
 
 This PRD defines how Claude Code dynamically orchestrates context switching across multiple projects and repositories within a CONSTRUCT workspace. It leverages Claude Code's ability to execute commands to provide intelligent, real-time context awareness, building on the infrastructure guaranteed by construct-init.
 
+## 🎯 User Feedback & Real-Time Awareness (2025-07-21)
+
+**Real-Time CLAUDE.md Awareness**: Claude immediately knows when CLAUDE.md files change:
+- **File change detection** monitors CLAUDE.md updates
+- **Immediate pattern awareness** - "I see you just added SwiftUI patterns"
+- **Dynamic context refresh** without restart required
+- **Context continuity** throughout development sessions
+
+**Focused Context Switching**: Each project context remains **project-centric** during switches:
+- **Project knowledge prominent** in each context
+- **Relevant patterns only** based on current project
+- **No pattern pollution** between projects
+- **Clean context boundaries** with intelligent coordination
+
+**Multi-Project Intelligence**: Claude SDK coordinates context switching while maintaining focused, project-specific experiences.
+
 ## Problem Statement
 
 Current limitations in our system:

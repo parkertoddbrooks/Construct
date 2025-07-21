@@ -1,7 +1,18 @@
 # CONSTRUCT Abstraction Roadmap v02
 
 ## Overview
-This roadmap guides the transformation of CONSTRUCT from a Swift/iOS-influenced system to a truly universal development framework. The goal is to extract all language-specific content into pattern plugins while implementing a two-stage initialization process that works seamlessly with Claude Code's `/init` command.
+This roadmap guides the transformation of CONSTRUCT from a Swift/iOS-influenced system to a truly AI-native universal development framework. The goal is to extract all language-specific content into pattern plugins while implementing a two-stage initialization process that works seamlessly with Claude Code's `/init` command.
+
+## 🚀 AI-Native Paradigm (2025-07-21 Update)
+
+**Paradigm Shift**: CONSTRUCT is now an AI-native system where Claude SDK provides the intelligence layer:
+
+- **Scripts = Orchestration**: Handle file operations, installations, workflow
+- **Claude SDK = Intelligence**: All analysis, decisions, content generation
+- **No Regex Fallbacks**: All pattern detection uses Claude intelligence
+- **Focused Output**: User feedback confirms preference for project-centric CLAUDE.md files
+
+**Key Insight from Recovery**: The real issue was that `construct-init` assumed projects already had CONSTRUCT infrastructure, creating a chicken-and-egg problem.
 
 ## Key Innovation: Two-Stage Initialization
 
@@ -11,15 +22,23 @@ This roadmap guides the transformation of CONSTRUCT from a Swift/iOS-influenced 
 - Perfect for CONSTRUCT's multi-project architecture
 - No cross-contamination between projects
 
-### Two-Stage Process
+### Two-Stage Process (AI-Native)
 1. **Stage 1: `/init`** - Creates standard CLAUDE.md at git root
-2. **Stage 2: `construct init`** - Enhances with pattern system
+2. **Stage 2: `construct-init`** - AI-powered CONSTRUCT integration
+
+**Stage 2 is now an AI-Native Intelligent Orchestrator that:**
+- **Assesses project state** using Claude SDK analysis
+- **Installs complete infrastructure** (unified CONSTRUCT/ folder structure)
+- **Extracts existing patterns** using Claude content analysis
+- **Analyzes project intelligently** (languages, frameworks, recommendations)
+- **Creates focused output** based on user feedback (project knowledge prominent)
 
 This works because:
 - Leverages Claude Code's built-in tooling
-- Progressive enhancement approach
+- Claude SDK provides true intelligence instead of regex patterns
+- Progressive enhancement approach with complete infrastructure installation
 - User controls when to add CONSTRUCT features
-- Same process works for CONSTRUCT itself and all projects
+- Handles any project state (no infrastructure assumptions)
 
 ## Current State Analysis
 

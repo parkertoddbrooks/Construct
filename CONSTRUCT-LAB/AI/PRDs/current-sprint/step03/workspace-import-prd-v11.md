@@ -22,6 +22,17 @@
 
 This PRD defines how CONSTRUCT manages multiple independent projects within a workspace while preserving each project's git history and identity. It builds on the pattern system (unified-pattern-system-plan.md) and the construct-init orchestrator to handle real-world scenarios of importing existing projects.
 
+## 🎯 User Feedback Integration (2025-07-21)
+
+**Assembly Output for Multi-Project**: Each imported project receives a **focused, project-centric CLAUDE.md** based on user feedback preferences:
+
+- **Extracted project knowledge leads** (preserving original project documentation)
+- **Brief pattern references** specific to that project's tech stack
+- **Cross-project coordination hints** without overwhelming detail
+- **Unified CONSTRUCT/ structure** but project-specific content
+
+**Multi-Project Intelligence**: Claude SDK analyzes workspace relationships and recommends optimal pattern inheritance without dumping all patterns into every project.
+
 ## Core Concepts
 
 ### Pattern Locations & Ownership

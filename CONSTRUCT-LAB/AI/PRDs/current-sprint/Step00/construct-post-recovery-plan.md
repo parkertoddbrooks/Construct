@@ -141,10 +141,32 @@ This transforms CONSTRUCT from "configuration-driven scripts" to "AI-native deve
    **NEW UNDERSTANDING**: The real issue is construct-init assumed projects already had CONSTRUCT infrastructure
    **PARADIGM SHIFT**: Replace all regex/manual analysis with Claude SDK intelligence
    
-   **ARCHITECTURE ENHANCEMENT**: Unified CONSTRUCT/ folder structure
-   - **Same as LAB**: Every project gets CONSTRUCT/, AI/, patterns/ folders
+   **🤯 BRILLIANT ARCHITECTURAL INSIGHT**: Unified CONSTRUCT/ folder structure
+   ```
+   myproject/
+   ├── CONSTRUCT/              # ← Same structure as LAB!
+   │   ├── CONSTRUCT/          # ← Symlink to CORE (tools)
+   │   ├── AI/                 # ← Project AI documentation
+   │   └── patterns/           # ← Project-specific patterns
+   │       └── plugins/
+   │           └── project-custom/
+   ├── .construct/             # ← Metadata only
+   │   └── patterns.yaml       # ← Configuration
+   ├── src/
+   └── package.json
+   ```
+   
+   **Why This Is GENIUS**:
+   1. **Consistent Architecture**: LAB Structure = Project Structure (same mental model everywhere)
+   2. **Clean Separation**: CONSTRUCT/ = all CONSTRUCT content (visible), .construct/ = pure metadata (hidden)
+   3. **Familiar Symlink Pattern**: Projects get CONSTRUCT tools via symlink (already working)
+   4. **Git Behavior**: CONSTRUCT/CONSTRUCT/ = symlink (not tracked), CONSTRUCT/AI/ & patterns/ = project-specific (tracked)
+   
+   **Implementation Details**:
+   - **Same as LAB**: Every project gets CONSTRUCT/, CONSTRUCT/AI/, CONSTRUCT/patterns/ folders
    - **Template Intelligence**: Symlink vs. copy CONSTRUCT tools based on context
    - **Project Patterns**: CONSTRUCT/patterns/plugins/project-custom/ for extracted content
+   - **Configuration**: .construct/patterns.yaml for metadata (hidden, git-tracked)
    
    **Location**: `CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh`
    
@@ -153,12 +175,12 @@ This transforms CONSTRUCT from "configuration-driven scripts" to "AI-native deve
    # NEW: construct-init as AI-powered setup orchestrator
    # 0. Verify Claude SDK available (required dependency)
    # 1. Assess what exists using Claude analysis
-   # 2. Install missing templates (AI structure, .construct, git hooks)
-   # 3. Symlink CONSTRUCT directory for tool access
+   # 2. Install missing templates (CONSTRUCT/ structure, .construct config, git hooks)
+   # 3. Create unified CONSTRUCT/ folder with symlinked tools
    # 4. Extract patterns using Claude SDK content analysis
    # 5. Analyze project using Claude SDK (languages, frameworks, architecture)
    # 6. Generate patterns.yaml with Claude-recommended patterns + extractions
-   # 7. Call assemble-claude.sh with proper inputs
+   # 7. Call assemble-claude.sh with proper inputs (USER FEEDBACK: Focus on project knowledge, brief pattern refs)
    # 8. Validate all infrastructure works (test scripts, hooks, updates)
    ```
    
@@ -220,8 +242,10 @@ This transforms CONSTRUCT from "configuration-driven scripts" to "AI-native deve
    construct-init           # Should install everything and enhance
    
    # Verify complete infrastructure installed
-   [ -L "CONSTRUCT" ] && echo "✅ CONSTRUCT tools linked"
-   [ -d "AI" ] && echo "✅ AI folder structure installed"
+   [ -d "CONSTRUCT" ] && echo "✅ CONSTRUCT/ folder structure created"
+   [ -L "CONSTRUCT/CONSTRUCT" ] && echo "✅ CONSTRUCT tools linked"
+   [ -d "CONSTRUCT/AI" ] && echo "✅ AI folder structure installed"
+   [ -d "CONSTRUCT/patterns/plugins" ] && echo "✅ Pattern space created"
    [ -f ".construct/patterns.yaml" ] && echo "✅ Pattern configuration created"
    [ -x ".git/hooks/pre-commit" ] && echo "✅ Git hooks installed"
    
@@ -233,12 +257,12 @@ This transforms CONSTRUCT from "configuration-driven scripts" to "AI-native deve
 2. **Test Infrastructure Validation**
    ```bash
    # Test that installed scripts actually work
-   ./CONSTRUCT/scripts/construct/update-context.sh --dry-run && echo "✅ Context updates work"
-   ./CONSTRUCT/scripts/core/check-architecture.sh --dry-run && echo "✅ Architecture checks work"
-   ./CONSTRUCT/scripts/construct/construct-patterns.sh validate && echo "✅ Pattern validation works"
+   ./CONSTRUCT/CONSTRUCT/scripts/construct/update-context.sh --dry-run && echo "✅ Context updates work"
+   ./CONSTRUCT/CONSTRUCT/scripts/core/check-architecture.sh --dry-run && echo "✅ Architecture checks work"
+   ./CONSTRUCT/CONSTRUCT/scripts/construct/construct-patterns.sh validate && echo "✅ Pattern validation works"
    
    # Test auto-updating sections populate
-   ./CONSTRUCT/scripts/construct/update-context.sh
+   ./CONSTRUCT/CONSTRUCT/scripts/construct/update-context.sh
    grep -A 5 "START:CURRENT-STRUCTURE" CLAUDE.md && echo "✅ Auto-updating works"
    ```
 
@@ -264,6 +288,26 @@ This transforms CONSTRUCT from "configuration-driven scripts" to "AI-native deve
 - ✅ **Infrastructure Validation**: All installed scripts and hooks actually work
 - ✅ **Two-stage Enhancement**: `/init` content preserved and enhanced with Claude-selected patterns
 - ✅ **Auto-updating System**: Dynamic sections populate and update correctly
+
+### 1.4 User Feedback Integration (2025-07-21)
+
+**Critical Insight**: User feedback revealed that while AI-Native Orchestrator is working correctly, the assembly output needs refinement to prioritize project-specific knowledge over comprehensive pattern dumps.
+
+**User Preference**: 
+```
+✅ PREFERRED: Clean, focused CLAUDE.md with project knowledge prominent
+❌ AVOID: Comprehensive dumps mixing project info with full language patterns
+```
+
+**Assembly Output Refinement Requirements**:
+1. **Lead with extracted project knowledge** (Claude Engineer v3 project info, commands, architecture)
+2. **Brief pattern references** instead of full pattern content dumps
+3. **Contextual loading hints** ("Additional patterns loaded based on file type")
+4. **Clean separation** between project-specific content and universal patterns
+
+**Implementation**: Modify `assemble-claude.sh` in step 7 to create focused, project-centric output while maintaining pattern system functionality.
+
+**Success Indicator**: Enhanced CLAUDE.md reads like the original focused project guide but with intelligent pattern integration.
 
 ## Phase 2: Core Infrastructure Completion (Short Term - Next 2-3 Sessions)
 

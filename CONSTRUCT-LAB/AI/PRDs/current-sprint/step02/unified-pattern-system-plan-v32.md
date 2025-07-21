@@ -276,6 +276,24 @@ git commit -m "[pattern-system] Rollback to last stable"
 ## Overview
 This document unifies the pattern plugin system with the existing CONSTRUCT restructuring plans and TODOs, creating a cohesive implementation strategy that builds on what's already working.
 
+## 🎯 User Feedback Integration (2025-07-21)
+
+**Critical Discovery**: User feedback revealed that while the pattern system works correctly, the assembly output must prioritize **project-specific knowledge** over comprehensive pattern dumps.
+
+**User Preference for CLAUDE.md Output**:
+```
+✅ PREFERRED: Clean, focused project guide with extracted knowledge prominent
+❌ AVOID: Comprehensive dumps mixing project info with full language patterns
+```
+
+**Assembly Strategy Update**:
+1. **Lead with extracted project knowledge** (commands, architecture, key features)
+2. **Brief pattern summaries** instead of full pattern content
+3. **Contextual loading hints** ("Python patterns active", "Additional patterns loaded by file type")
+4. **Focused experience** that reads like a project guide, not a pattern catalog
+
+**Implementation Impact**: `assemble-claude.sh` generates focused, project-centric CLAUDE.md files while maintaining full pattern system functionality behind the scenes.
+
 ## The Unified Vision
 
 ### What We're Building
