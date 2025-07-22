@@ -490,6 +490,7 @@ CONSTRUCT-CORE/patterns/plugins/tooling/shell-quality/validators/quality.sh
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/validators/architecture.sh
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/validators/documentation.sh
 CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/validators/orchestration-check.sh
+CONSTRUCT-CORE/shortcuts/install-shortcuts.sh
 CONSTRUCT-LAB/patterns/plugins/tooling/shell-scripting/injections/validators/interface-consistency.sh
 CONSTRUCT-LAB/tools/promote-to-core.sh
 CONSTRUCT-LAB/tools/validate-promotion.sh
@@ -497,7 +498,6 @@ optimized_extraction.sh
 Projects/_ai-ignore_not-used/test003/.construct/CLAUDE.md.sha256
 Projects/_ai-ignore_not-used/test01/.construct/CLAUDE.md.sha256
 Projects/_ai-ignore_not-used/TestPatternProject/.construct/CLAUDE.md.sha256
-Projects/grok-code/grok-code-python/.construct/CLAUDE.md.sha256
 Projects/test-typescript-react/.construct/CLAUDE.md.sha256
 ```
 
@@ -580,7 +580,7 @@ Projects/_ai-ignore_not-used/test01/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/TestPatternProject/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/TestProject/.construct/patterns.yaml
 Projects/grok-code/grok-code-python/.construct/patterns.yaml
-Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/project-custom/pattern.yaml
+Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/extracted-grok-code-python/pattern.yaml
 Projects/large-test-project/.construct/patterns.yaml
 Projects/large-test-project/CONSTRUCT/patterns/plugins/architectural/multiplatform-mvvm/pattern.yaml
 Projects/large-test-project/CONSTRUCT/patterns/plugins/cross-platform/api-contracts/pattern.yaml
@@ -1961,6 +1961,7 @@ _archive/CONSTRUCT - branch - refactor:core-lab-templates/Projects/grok-code/gro
 _archive/CONSTRUCT - branch - refactor:core-lab-templates/Projects/RUN/patterns/run-specific.md
 _archive/CONSTRUCT - branch - refactor:core-lab-templates/README.md
 _archive/CONSTRUCT - branch - refactor:core-lab-templates/requirements.md
+~/.config/claude/shortcuts/init-construct.md
 CLAUDE-backup-before-reinit.md
 CLAUDE.md
 CLAUDE.md.broken-backup
@@ -2021,6 +2022,8 @@ CONSTRUCT-CORE/patterns/plugins/ui/README.md
 CONSTRUCT-CORE/patterns/README.md
 CONSTRUCT-CORE/patterns/templates/README.md
 CONSTRUCT-CORE/PROMOTION-LOG.md
+CONSTRUCT-CORE/shortcuts/claude/init-construct.md
+CONSTRUCT-CORE/shortcuts/README.md
 CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/_git-ignore/template-structure/AI/dev-logs/check-quality/README.md
 CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md
 CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/README.md
@@ -2291,6 +2294,9 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-20--19-51-24.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-21--08-28-37.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-21--08-44-52.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-21--19-07-51.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-21--19-55-14.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-21--21-36-48.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-21--21-41-25.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/_devupdate-prompt.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
@@ -2405,6 +2411,9 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-20-1951-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-21-0828-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-21-0844-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-21-1907-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-21-1955-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-21-2136-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-21-2141-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -2568,6 +2577,9 @@ CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-21--08-28-35.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-21--08-44-50.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-21--19-07-48.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-21--19-55-12.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-21--21-36-45.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-21--21-41-22.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-21--21-57-23.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -2703,9 +2715,12 @@ CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-20--19-51-22.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-21--08-28-35.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-21--08-44-50.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-21--19-07-48.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-21--19-55-12.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-21--21-36-45.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-21--21-41-22.md
 CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--22-55-28.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
-CONSTRUCT-LAB/AI/structure/project-structure-2025-07-21--19-55-12.md
+CONSTRUCT-LAB/AI/structure/project-structure-2025-07-21--21-57-23.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-03.md
@@ -2831,7 +2846,6 @@ Projects/grok-code/claudes-no-in-root-for-testing/CLAUDE--2025-07-19--15-54-27.m
 Projects/grok-code/claudes-no-in-root-for-testing/CLAUDE--2025-07-20--10-11-41.md
 Projects/grok-code/claudes-no-in-root-for-testing/CLAUDE-init.md
 Projects/grok-code/claudes-no-in-root-for-testing/CLAUDE.md.backup.md
-Projects/grok-code/grok-code-python/.construct/CLAUDE.md.sha256
 Projects/grok-code/grok-code-python/Claude-Eng-v2/readme.md
 Projects/grok-code/grok-code-python/CLAUDE.md
 Projects/grok-code/grok-code-python/CLAUDE.md.backup
@@ -2845,7 +2859,7 @@ Projects/grok-code/grok-code-python/CONSTRUCT/AI/dev-logs/dev-updates/_devupdate
 Projects/grok-code/grok-code-python/CONSTRUCT/AI/dev-logs/dev-updates/README.md
 Projects/grok-code/grok-code-python/CONSTRUCT/AI/docs/README.md
 Projects/grok-code/grok-code-python/CONSTRUCT/AI/todo/README.md
-Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md
+Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/extracted-grok-code-python/injections/extracted-grok-code-python.md
 Projects/grok-code/grok-code-python/readme.md
 Projects/large-test-project/CLAUDE--2025-07-21--09-14-30.md
 Projects/large-test-project/CLAUDE.md
@@ -3660,6 +3674,10 @@ test-runner.sh
   .construct
   .construct-workspace
   .construct-workspace/import-history
+  ~
+  ~/.config
+  ~/.config/claude
+  ~/.config/claude/shortcuts
   CONSTRUCT
   CONSTRUCT-CORE
   CONSTRUCT-CORE/_ai-ignore_not-used
@@ -3749,6 +3767,8 @@ test-runner.sh
   CONSTRUCT-CORE/patterns/plugins/tooling/unix-philosophy/validators
   CONSTRUCT-CORE/patterns/plugins/ui
   CONSTRUCT-CORE/patterns/templates
+  CONSTRUCT-CORE/shortcuts
+  CONSTRUCT-CORE/shortcuts/claude
   CONSTRUCT-CORE/TEMPLATES
   CONSTRUCT-CORE/TEMPLATES/component-templates
   CONSTRUCT-CORE/TEMPLATES/component-templates/ai-structure
@@ -3993,8 +4013,8 @@ test-runner.sh
   Projects/grok-code/grok-code-python/CONSTRUCT/AI/todo/_done
   Projects/grok-code/grok-code-python/CONSTRUCT/patterns
   Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins
-  Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/project-custom
-  Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/project-custom/injections
+  Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/extracted-grok-code-python
+  Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/extracted-grok-code-python/injections
   Projects/grok-code/grok-code-python/prompts
   Projects/grok-code/grok-code-python/static
   Projects/grok-code/grok-code-python/static/css
@@ -4179,13 +4199,13 @@ No config directory found
 ## Summary Statistics
 ```
 === File Counts ===
-Shell Scripts: 399
+Shell Scripts: 400
 YAML Configs: 98
-Markdown Docs: 2025
+Markdown Docs: 2040
 Python Files: 42
 
 === Directory Structure ===
-Total Directories: 1228
+Total Directories: 1234
 
 === Project Health ===
 Pattern Configuration: Found
@@ -4209,5 +4229,5 @@ Active Patterns:
 - AI documentation: 5 files
 
 ---
-*Generated by scan_project_structure.sh on Mon Jul 21 19:55:14 PDT 2025*
+*Generated by scan_project_structure.sh on Mon Jul 21 21:57:25 PDT 2025*
 *Project: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT*

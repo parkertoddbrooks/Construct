@@ -85,21 +85,24 @@ assess_project_state() {
         echo -e "  ${YELLOW}🧠${NC} Analyzing CLAUDE.md content with AI...${NC}"
         
         # Use Claude SDK for intelligent analysis with JSON output
-        ANALYSIS_JSON=$(cat CLAUDE.md | claude -p "Analyze this CLAUDE.md file and return ONLY a JSON object (no markdown formatting):
+        # Create a temp file to avoid stdin issues
+        local temp_prompt=$(mktemp)
+        cat > "$temp_prompt" << 'EOF'
+Analyze this CLAUDE.md file and return ONLY a JSON object (no markdown formatting):
 {
-  \"has_extractable_patterns\": boolean,
-  \"confidence\": number between 0.0 and 1.0,
-  \"content_type\": \"project-specific\" or \"template\" or \"minimal\",
-  \"detected_patterns\": {
-    \"project_overview\": boolean,
-    \"architecture\": boolean,
-    \"development_commands\": boolean,
-    \"custom_rules\": boolean,
-    \"tool_patterns\": boolean,
-    \"technology_specific\": boolean,
-    \"substantial_content\": boolean
+  "has_extractable_patterns": boolean,
+  "confidence": number between 0.0 and 1.0,
+  "content_type": "project-specific" or "template" or "minimal",
+  "detected_patterns": {
+    "project_overview": boolean,
+    "architecture": boolean,
+    "development_commands": boolean,
+    "custom_rules": boolean,
+    "tool_patterns": boolean,
+    "technology_specific": boolean,
+    "substantial_content": boolean
   },
-  \"reasoning\": \"brief explanation of decision\"
+  "reasoning": "brief explanation of decision"
 }
 
 Rules for analysis:
@@ -107,7 +110,15 @@ Rules for analysis:
 - If it contains 'Generated:' and 'Source: CONSTRUCT-CORE', it's a CONSTRUCT-generated file
 - Look for project-specific technologies (SwiftUI, React, Flask, etc)
 - Check for custom guidelines, workflows, domain vocabulary
-- A confidence > 0.7 with project-specific content means it has extractable patterns" 2>/dev/null || echo '{"has_extractable_patterns": false, "confidence": 0.0, "reasoning": "Claude SDK analysis failed"}')
+- A confidence > 0.7 with project-specific content means it has extractable patterns
+
+Content to analyze:
+EOF
+        cat CLAUDE.md >> "$temp_prompt"
+        
+        # Call Claude with timeout and proper error handling
+        ANALYSIS_JSON=$(timeout 30 claude < "$temp_prompt" 2>/dev/null || echo '{"has_extractable_patterns": false, "confidence": 0.0, "reasoning": "Claude SDK analysis failed or timed out"}')
+        rm -f "$temp_prompt"
         
         # Parse JSON using grep (portable approach)
         HAS_PATTERNS=$(echo "$ANALYSIS_JSON" | grep -o '"has_extractable_patterns":[^,}]*' | cut -d: -f2 | xargs)
@@ -285,8 +296,10 @@ extract_existing_patterns() {
         # Use Claude SDK for intelligent pattern extraction
         echo -e "  ${YELLOW}📝${NC} Using Claude SDK to extract project patterns..."
         
-        # Check if Claude SDK is available
-        if claude -p "Analyze this CLAUDE.md file and extract ALL project-specific content that should be preserved. This includes:
+        # Create temp file for Claude SDK prompt
+        local extract_prompt=$(mktemp)
+        cat > "$extract_prompt" << 'EOF'
+Analyze this CLAUDE.md file and extract ALL project-specific content that should be preserved. This includes:
 
 1. Project overview and description
 2. Development commands and workflows  
@@ -299,7 +312,13 @@ extract_existing_patterns() {
 
 Format the output as a structured markdown document that captures the essential project knowledge. Focus on preserving information that would help developers understand and work with this specific project.
 
-Return ONLY the extracted content in markdown format, without any explanation or meta-commentary." CLAUDE.md.backup > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md" 2>/dev/null; then
+Return ONLY the extracted content in markdown format, without any explanation or meta-commentary.
+EOF
+        
+        # Check if Claude SDK is available and extract patterns
+        if timeout 30 claude < CLAUDE.md.backup >> "$extract_prompt" 2>/dev/null && \
+           timeout 30 claude < "$extract_prompt" > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md" 2>/dev/null; then
+            rm -f "$extract_prompt"
 
             # Check if extraction was successful
             if [ -s "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md" ]; then
@@ -363,7 +382,14 @@ For category '$category', suggest a descriptive plugin name based on the content
 
 Return ONLY the plugin name."
 
-        local plugin_name=$(echo "$content" | claude -p "$analysis_prompt" 2>/dev/null | tr -d '\n' | tr -d '"')
+        # Create temp file for content analysis
+        local temp_content=$(mktemp)
+        echo "$analysis_prompt" > "$temp_content"
+        echo "" >> "$temp_content"
+        echo "$content" >> "$temp_content"
+        
+        local plugin_name=$(timeout 10 claude < "$temp_content" 2>/dev/null | tr -d '\n' | tr -d '"')
+        rm -f "$temp_content"
         
         if [ -n "$plugin_name" ] && [ "$plugin_name" != "null" ]; then
             echo "$plugin_name"
@@ -552,7 +578,13 @@ $config_files
 README excerpt:
 $readme_content"
 
-    local analysis_result=$(claude -p "$analysis_prompt" 2>/dev/null || echo "{}")
+    # Create temp file for analysis prompt
+    local temp_analysis=$(mktemp)
+    echo "$analysis_prompt" > "$temp_analysis"
+    
+    # Call Claude with timeout
+    local analysis_result=$(timeout 30 claude < "$temp_analysis" 2>/dev/null || echo "{}")
+    rm -f "$temp_analysis"
     
     # Parse Claude's analysis
     if [ -n "$analysis_result" ] && [ "$analysis_result" != "{}" ]; then
@@ -783,7 +815,14 @@ $script_test_results
 
 Assess if the CONSTRUCT installation is complete and functional."
 
-        local validation_result=$(echo -e "$infrastructure_state\n$script_test_results" | claude -p "$validation_prompt" 2>/dev/null || echo '{"overall_status": "unknown", "confidence": 0.5}')
+        # Create temp file for validation prompt
+        local temp_validation=$(mktemp)
+        echo "$validation_prompt" > "$temp_validation"
+        echo "" >> "$temp_validation"
+        echo -e "$infrastructure_state\n$script_test_results" >> "$temp_validation"
+        
+        local validation_result=$(timeout 20 claude < "$temp_validation" 2>/dev/null || echo '{"overall_status": "unknown", "confidence": 0.5}')
+        rm -f "$temp_validation"
         
         # Parse validation results
         if command -v jq >/dev/null 2>&1; then
