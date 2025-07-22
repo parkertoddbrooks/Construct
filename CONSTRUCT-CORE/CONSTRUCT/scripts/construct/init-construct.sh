@@ -1,6 +1,18 @@
 #!/bin/bash
 
 # construct-init / install-construct - Complete CONSTRUCT Integration System
+
+# Check if we're already running under a timeout
+if [ -z "$CONSTRUCT_TIMEOUT_SET" ]; then
+    export CONSTRUCT_TIMEOUT_SET=1
+    # Re-run ourselves with a 10-minute timeout
+    if command -v gtimeout >/dev/null 2>&1; then
+        exec gtimeout 600 "$0" "$@"
+    elif command -v timeout >/dev/null 2>&1; then
+        exec timeout 600 "$0" "$@"
+    fi
+    # If no timeout command available, continue without it
+fi
 # This script transforms ANY project into a fully CONSTRUCT-enabled environment
 # Works as both construct-init and install-construct (complete orchestrator)
 #
@@ -29,6 +41,18 @@ NC='\033[0m' # No Color
 # Get script directory and project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONSTRUCT_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
+
+# Source new modules if they exist
+if [ -f "$CONSTRUCT_ROOT/CONSTRUCT-CORE/CONSTRUCT/lib/construct-init/common.sh" ]; then
+    source "$CONSTRUCT_ROOT/CONSTRUCT-CORE/CONSTRUCT/lib/construct-init/common.sh"
+    # Enable debug mode if set
+    [ -n "$DEBUG" ] && log_debug "Loaded common.sh module with token bucket and caching"
+fi
+
+if [ -f "$CONSTRUCT_ROOT/CONSTRUCT-CORE/CONSTRUCT/lib/construct-init/pattern-extractor.sh" ]; then
+    source "$CONSTRUCT_ROOT/CONSTRUCT-CORE/CONSTRUCT/lib/construct-init/pattern-extractor.sh"
+    [ -n "$DEBUG" ] && log_debug "Loaded pattern-extractor.sh module"
+fi
 CONSTRUCT_CORE="$CONSTRUCT_ROOT/CONSTRUCT-CORE"
 CONSTRUCT_LAB="$CONSTRUCT_ROOT/CONSTRUCT-LAB"
 
@@ -47,21 +71,29 @@ echo -e "${BLUE}🚀 CONSTRUCT Integration System${NC}"
 echo -e "${BLUE}===============================${NC}"
 echo ""
 
+# Initialize script log for debugging
+echo "CONSTRUCT Init Script Log - $(date)" > script_log.txt
+echo "========================================" >> script_log.txt
+
 # Helper function to run command with timeout (cross-platform)
 run_with_timeout() {
     local timeout_seconds="$1"
     shift
     local cmd="$@"
+    local output_file=$(mktemp)
+    local error_file=$(mktemp)
     
     # Try gtimeout first (macOS with coreutils)
     if command -v gtimeout >/dev/null 2>&1; then
-        gtimeout "$timeout_seconds" $cmd
+        gtimeout "$timeout_seconds" $cmd >"$output_file" 2>"$error_file"
+        local exit_code=$?
     # Try timeout (Linux)
     elif command -v timeout >/dev/null 2>&1; then
-        timeout "$timeout_seconds" $cmd
+        timeout "$timeout_seconds" $cmd >"$output_file" 2>"$error_file"
+        local exit_code=$?
     # Fallback to background process approach
     else
-        $cmd &
+        $cmd >"$output_file" 2>"$error_file" &
         local pid=$!
         
         # Wait for either the process to complete or timeout
@@ -75,12 +107,27 @@ run_with_timeout() {
         if kill -0 $pid 2>/dev/null; then
             kill $pid 2>/dev/null
             wait $pid 2>/dev/null
+            echo -e "${YELLOW}⚠️${NC} Timeout error: $(cat "$error_file")" >> script_log.txt
+            rm -f "$output_file" "$error_file"
             return 124  # timeout exit code
         else
             wait $pid
-            return $?
+            local exit_code=$?
         fi
     fi
+    
+    # Log any errors to script_log.txt
+    if [ $exit_code -ne 0 ] && [ -s "$error_file" ]; then
+        echo -e "${YELLOW}⚠️${NC} Command error (exit $exit_code): $(cat "$error_file")" >> script_log.txt
+    fi
+    
+    # Output the result
+    cat "$output_file"
+    
+    # Clean up temp files
+    rm -f "$output_file" "$error_file"
+    
+    return $exit_code
 }
 
 # Phase 0: Verify Claude SDK Available (Required Dependency)
@@ -105,6 +152,23 @@ verify_claude_sdk() {
 
 # Run verification first
 verify_claude_sdk
+
+# Check for optional but recommended tools
+check_optional_tools() {
+    local tools=("jq" "yq" "python3")
+    for tool in "${tools[@]}"; do
+        if ! command -v "$tool" >/dev/null 2>&1; then
+            echo -e "${YELLOW}⚠️  Optional tool '$tool' not found${NC}"
+            case "$tool" in
+                jq) echo "   JSON parsing will use fallback methods" ;;
+                yq) echo "   YAML updates will be skipped" ;;
+                python3) echo "   Some path calculations may fail" ;;
+            esac
+        fi
+    done
+}
+
+check_optional_tools
 
 # Phase 1: Environmental Assessment
 assess_project_state() {
@@ -330,10 +394,10 @@ EOF
     echo ""
 }
 
-# Phase 3: Enhanced Pattern Extraction with 10 Categories
+# Phase 3: Three-Level Pattern Extraction System
 extract_existing_patterns() {
     if [ "$CLAUDE_HAS_EXTRACTABLE_PATTERNS" = true ]; then
-        echo -e "${BLUE}🔍 Phase 3: Extracting patterns across enhanced categories...${NC}"
+        echo -e "${BLUE}🔍 Phase 3: Three-level pattern extraction system...${NC}"
         
         # Backup original
         cp CLAUDE.md CLAUDE.md.backup
@@ -342,11 +406,28 @@ extract_existing_patterns() {
         # Get project name for unique naming
         PROJECT_NAME=$(basename "$PWD")
         
-        # Create project-specific injection directory in CONSTRUCT structure
-        mkdir -p "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections"
+        # Define 10 categories for sophisticated extraction
+        # Can be limited with CONSTRUCT_CATEGORIES environment variable
+        if [ -n "$CONSTRUCT_CATEGORIES" ]; then
+            IFS=',' read -ra categories <<< "$CONSTRUCT_CATEGORIES"
+        else
+            local categories=(
+                "architectural"
+                "frameworks"
+                "languages"
+                "platforms"
+                "tooling"
+                "ui"
+                "performance"
+                "quality"
+                "configuration"
+                "cross-platform"
+            )
+        fi
         
-        # Use Claude SDK for intelligent pattern extraction
-        echo -e "  ${YELLOW}📝${NC} Using Claude SDK to extract project patterns..."
+        # Level 1: Create complete blob extraction (current working approach)
+        echo -e "\n  ${BLUE}📦 Level 1: Complete blob extraction...${NC}"
+        mkdir -p "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections"
         
         # Create temp file for Claude SDK prompt
         local extract_prompt=$(mktemp)
@@ -370,41 +451,270 @@ EOF
         # Build the full extraction prompt including the backup content
         cat CLAUDE.md.backup >> "$extract_prompt"
         
-        # Extract patterns using Claude SDK with timeout
-        echo -e "  ${BLUE}📋${NC} Extracting patterns with Claude SDK..."
+        # Extract complete patterns using Claude SDK with timeout
+        echo -e "  ${BLUE}📋${NC} Extracting complete project patterns..."
         
-        if run_with_timeout 30 claude < "$extract_prompt" > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md" 2>/dev/null; then
-            rm -f "$extract_prompt"
-
-            # Check if extraction was successful
-            if [ -s "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md" ]; then
-                echo -e "  ${GREEN}✅${NC} Project patterns extracted via Claude SDK"
+        # Run extraction without checking exit code (like the working version)
+        # Increased timeout to 60s for large content
+        run_with_timeout 60 claude < "$extract_prompt" > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md" 2>/dev/null
+        rm -f "$extract_prompt"
+        
+        # Check if extraction was successful by checking file content
+        if [ -s "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md" ]; then
+                echo -e "  ${GREEN}✅${NC} Complete project patterns extracted"
                 
-                # Create pattern plugin metadata
-                cat > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/pattern.yaml" << EOF
+                # Create pattern plugin metadata for complete blob
+                cat > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/pattern.yaml" << EOF
+id: extracted-${PROJECT_NAME}-all
+name: Complete ${PROJECT_NAME} Patterns  
+description: All patterns extracted from existing CLAUDE.md (single blob)
+version: 1.0.0
+injections:
+  - extracted-${PROJECT_NAME}-all.md
+EOF
+
+                # Update patterns.yaml to include complete extracted patterns
+                if command -v yq >/dev/null 2>&1; then
+                    yq eval -i ".plugins += [\"extracted-${PROJECT_NAME}-all\"]" .construct/patterns.yaml
+                    echo -e "  ${GREEN}✅${NC} Pattern configuration updated with complete extraction"
+                fi
+                
+                # Level 2: Create categorized extractions with concurrent processing
+                echo -e "\n  ${BLUE}🗂️ Level 2: Categorized pattern extraction (concurrent)...${NC}"
+                
+                # Content of the complete extraction for categorization
+                local complete_content=$(cat "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md")
+                
+                # Create directories for all categories first
+                for category in "${categories[@]}"; do
+                    mkdir -p "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}/injections"
+                done
+                
+                # Process categories concurrently (max 3 at a time)
+                local max_concurrent=3
+                local category_count=0
+                local total_categories=${#categories[@]}
+                local pids=()
+                
+                for category in "${categories[@]}"; do
+                    # Wait if we've reached max concurrent processes
+                    while [ ${#pids[@]} -ge $max_concurrent ]; do
+                        local new_pids=()
+                        for pid in "${pids[@]}"; do
+                            if kill -0 "$pid" 2>/dev/null; then
+                                new_pids+=("$pid")
+                            fi
+                        done
+                        pids=("${new_pids[@]}")
+                        [ ${#pids[@]} -ge $max_concurrent ] && sleep 0.5
+                    done
+                    
+                    category_count=$((category_count + 1))
+                    echo -e "  ${GRAY}📁${NC} Starting ${category} extraction... (${category_count}/${total_categories})"
+                    
+                    # Launch extraction in background
+                    (
+                    
+                    # Create category-specific extraction prompt with JSON output
+                    local category_prompt=$(mktemp)
+                    cat > "$category_prompt" << EOF
+Analyze the project content and extract patterns related to ${category}. 
+
+Return ONLY a JSON object with this structure:
+{
+  "category": "${category}",
+  "patterns": "# Extracted patterns in markdown format\n\nPattern content here...",
+  "status": "success",
+  "error": ""
+}
+
+If no ${category} patterns are found, set patterns to "# No ${category} patterns found".
+If there's an error, set status to "failed" and include error message.
+
+Category definitions:
+- architectural: Design patterns, MVVM, Clean Architecture, coordinators, app structure
+- frameworks: Framework-specific patterns (SwiftUI, React, Flask, etc.)
+- languages: Language-specific conventions, modern features, idioms
+- platforms: Platform requirements (iOS, web, Android), platform-specific features
+- tooling: Build scripts, CI/CD, testing, development workflows, automation
+- ui: Design tokens, visual quality, accessibility, component patterns
+- performance: Optimization, rendering, memory management, lazy loading
+- quality: Professional standards, quality gates, testing, error handling
+- configuration: Platform settings, Info.plist, build config, environment setup
+- cross-platform: Shared models, API contracts, sync patterns, multi-platform
+
+Content to analyze:
+${complete_content}
+EOF
+                    
+                    # Extract category-specific patterns with JSON output
+                    local start_time=$(date +%s)
+                    local temp_output=$(mktemp)
+                    
+                    if run_with_timeout 30 claude --output-format json < "$category_prompt" > "$temp_output"; then
+                        # Check if we have jq for JSON parsing
+                        if command -v jq >/dev/null 2>&1 && [ -s "$temp_output" ]; then
+                            # First check if Claude returned an error
+                            local is_error=$(jq -r '.is_error' "$temp_output" 2>/dev/null || echo "true")
+                            
+                            if [ "$is_error" = "false" ]; then
+                                # Extract the result field which contains our JSON
+                                local result_json=$(jq -r '.result' "$temp_output" 2>/dev/null | sed 's/```json//' | sed 's/```//')
+                                
+                                if [ -n "$result_json" ]; then
+                                    # Parse our custom JSON structure
+                                    local status=$(echo "$result_json" | jq -r '.status' 2>/dev/null || echo "failed")
+                                    
+                                    if [ "$status" = "success" ]; then
+                                        # Extract patterns from JSON and save
+                                        echo "$result_json" | jq -r '.patterns' > "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}/injections/${PROJECT_NAME}-${category}.md"
+                                    else
+                                        # Log error and create placeholder
+                                        local error_msg=$(echo "$result_json" | jq -r '.error' 2>/dev/null || echo "Unknown error")
+                                        echo -e "    ${YELLOW}⚠️${NC} Claude failed for ${category}: $error_msg" >> script_log.txt
+                                        echo "# No ${category} patterns found" > "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}/injections/${PROJECT_NAME}-${category}.md"
+                                    fi
+                                else
+                                    echo -e "    ${YELLOW}⚠️${NC} Could not extract result from Claude response for ${category}" >> script_log.txt
+                                    echo "# No ${category} patterns found" > "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}/injections/${PROJECT_NAME}-${category}.md"
+                                fi
+                            else
+                                echo -e "    ${RED}❌${NC} Claude returned error for ${category}" >> script_log.txt
+                                echo "# No ${category} patterns found" > "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}/injections/${PROJECT_NAME}-${category}.md"
+                            fi
+                        else
+                            # Fallback if jq not available or JSON parsing failed
+                            echo -e "    ${YELLOW}⚠️${NC} JSON parsing failed for ${category}, using raw output" >> script_log.txt
+                            cp "$temp_output" "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}/injections/${PROJECT_NAME}-${category}.md"
+                        fi
+                    else
+                        echo -e "    ${RED}❌${NC} Claude timed out or failed for ${category}" >> script_log.txt
+                        echo "# No ${category} patterns found" > "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}/injections/${PROJECT_NAME}-${category}.md"
+                    fi
+                    
+                    rm -f "$category_prompt" "$temp_output"
+                    local end_time=$(date +%s)
+                    local duration=$((end_time - start_time))
+                    
+                    # Check if meaningful content was extracted
+                    if [ -s "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}/injections/${PROJECT_NAME}-${category}.md" ] && 
+                       ! grep -q "No ${category} patterns found" "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}/injections/${PROJECT_NAME}-${category}.md"; then
+                            
+                            # Create pattern metadata for this category
+                            # Capitalize first letter of category for display
+                            category_cap="$(echo "${category:0:1}" | tr '[:lower:]' '[:upper:]')${category:1}"
+                            cat > "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}/pattern.yaml" << EOF
+id: ${PROJECT_NAME}-${category}
+name: ${PROJECT_NAME} ${category_cap} Patterns
+description: ${category_cap} patterns extracted from ${PROJECT_NAME}
+version: 1.0.0
+category: ${category}
+injections:
+  - ${PROJECT_NAME}-${category}.md
+EOF
+                            echo -e "    ${GREEN}✓${NC} ${category} completed in ${duration}s - patterns extracted"
+                    else
+                        # Clean up empty category
+                        rm -rf "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}"
+                        echo -e "    ${GRAY}✓${NC} ${category} completed in ${duration}s - no patterns found"
+                    fi
+                    
+                    # Rate limiting handled by token bucket in common.sh
+                    ) &
+                    
+                    # Store PID
+                    pids+=($!)
+                done
+                
+                # Wait for all background processes to complete
+                echo -e "  ${BLUE}⏳${NC} Waiting for all extractions to complete..."
+                for pid in "${pids[@]}"; do
+                    wait "$pid"
+                done
+                echo -e "  ${GREEN}✅${NC} All category extractions completed"
+                
+                # Add delay before Level 3 to prevent rate-limiting
+                sleep 2
+                
+                # Level 3: Extract uncategorized/unique patterns
+                echo -e "\n  ${BLUE}📌 Level 3: Uncategorized pattern extraction...${NC}"
+                mkdir -p "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections"
+                
+                # Create uncategorized extraction prompt
+                local uncat_prompt=$(mktemp)
+                cat > "$uncat_prompt" << EOF
+From the following project content, extract patterns that DON'T fit clearly into these categories:
+- architectural, frameworks, languages, platforms, tooling, ui, performance, quality, configuration, cross-platform
+
+Focus on:
+1. Project-specific documentation (README content, project description)
+2. Unique workflows or processes specific to this project
+3. Custom scripts or commands not related to standard tooling
+4. Domain-specific knowledge or terminology
+5. Project history, decisions, or context
+6. Anything truly unique to this specific project
+
+If all content fits into the standard categories, return: "# No uncategorized patterns found"
+
+Otherwise, return ONLY the uncategorized/unique patterns in markdown format.
+
+Content to analyze:
+${complete_content}
+EOF
+                
+                # Extract uncategorized patterns with proper error handling
+                local uncat_output=$(mktemp)
+                if run_with_timeout 30 claude < "$uncat_prompt" > "$uncat_output"; then
+                    cp "$uncat_output" "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md"
+                else
+                    echo -e "  ${YELLOW}⚠️${NC} Level 3 extraction failed, creating placeholder"
+                    echo "# No uncategorized patterns found" > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md"
+                fi
+                rm -f "$uncat_prompt" "$uncat_output"
+                
+                if [ -s "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md" ] &&
+                   ! grep -q "No uncategorized patterns found" "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md"; then
+                        
+                        # Create pattern metadata for uncategorized
+                        cat > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/pattern.yaml" << EOF
 id: extracted-${PROJECT_NAME}
-name: Extracted ${PROJECT_NAME} Patterns  
-description: Comprehensive patterns extracted from existing CLAUDE.md
+name: ${PROJECT_NAME} Unique Patterns
+description: Project-specific patterns that don't fit standard categories
 version: 1.0.0
 injections:
   - extracted-${PROJECT_NAME}.md
 EOF
-
-                # Update patterns.yaml to include extracted patterns
-                if command -v yq >/dev/null 2>&1; then
-                    yq eval -i ".plugins += [\"extracted-${PROJECT_NAME}\"]" .construct/patterns.yaml
-                    echo -e "  ${GREEN}✅${NC} Pattern configuration updated with extracted rules"
+                        echo -e "  ${GREEN}✅${NC} Uncategorized patterns extracted"
+                else
+                    # Clean up if no uncategorized patterns
+                    rm -rf "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}"
+                    echo -e "  ${GRAY}ℹ️${NC} No uncategorized patterns found"
                 fi
-            else
-                echo -e "  ${RED}❌${NC} Error: Claude SDK extraction failed${NC}"
-                echo -e "  ${RED}❌${NC} CONSTRUCT requires Claude SDK for pattern extraction${NC}"
-                echo -e "  ${YELLOW}   Please check Claude SDK configuration and try again${NC}"
-                exit 1
-            fi
+                
+                echo -e "\n  ${GREEN}🎯 Three-level extraction complete!${NC}"
+                echo -e "  ${BLUE}📊 Summary:${NC}"
+                echo -e "    • Complete blob: extracted-${PROJECT_NAME}-all"
+                
+                # List successful category extractions
+                local extracted_categories=()
+                for category in "${categories[@]}"; do
+                    if [ -d "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}" ]; then
+                        extracted_categories+=("${PROJECT_NAME}-${category}")
+                    fi
+                done
+                
+                if [ ${#extracted_categories[@]} -gt 0 ]; then
+                    echo -e "    • Categories: ${extracted_categories[*]}"
+                fi
+                
+                if [ -d "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}" ]; then
+                    echo -e "    • Uncategorized: extracted-${PROJECT_NAME}"
+                fi
+                
         else
-            echo -e "  ${RED}❌${NC} Error: Claude SDK not available${NC}"
-            echo -e "  ${RED}❌${NC} CONSTRUCT is an AI-Native system that requires Claude SDK${NC}"
-            echo -e "  ${YELLOW}   Please install: https://docs.anthropic.com/claude/docs/claude-sdk${NC}"
+            echo -e "  ${RED}❌${NC} Error: Claude SDK extraction failed${NC}"
+            echo -e "  ${RED}❌${NC} CONSTRUCT requires Claude SDK for pattern extraction${NC}"
+            echo -e "  ${YELLOW}   Please check Claude SDK configuration and try again${NC}"
             exit 1
         fi
         

@@ -205,11 +205,23 @@ CLAUDE_CONTENT+="<!--
 # Check if we have extracted project knowledge to lead with
 PROJECT_CUSTOM_CONTENT=""
 PROJECT_NAME=$(basename "$PROJECT_DIR")
+
+# Check for three-level extraction structure (prioritize complete blob)
+# Level 1: Complete blob (preferred for assembly)
+project_all_path="$PROJECT_DIR/CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md"
+# Level 3: Uncategorized unique patterns (fallback)
 project_custom_path="$PROJECT_DIR/CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md"
-if [ -f "$project_custom_path" ]; then
+
+# Use complete blob if available, otherwise use uncategorized
+if [ -f "$project_all_path" ]; then
+    PROJECT_CUSTOM_CONTENT=$(cat "$project_all_path")
+    echo -e "${YELLOW}📋 Found complete project knowledge extraction (Level 1: all content)${NC}"
+elif [ -f "$project_custom_path" ]; then
     PROJECT_CUSTOM_CONTENT=$(cat "$project_custom_path")
-    echo -e "${YELLOW}📋 Found project-specific knowledge to feature prominently${NC}"
+    echo -e "${YELLOW}📋 Found uncategorized project knowledge (Level 3: unique patterns)${NC}"
 fi
+
+# Note: Level 2 (categorized patterns) are handled separately via plugin system
 
 # Start with project knowledge if available
 if [ -n "$PROJECT_CUSTOM_CONTENT" ]; then
@@ -267,7 +279,13 @@ for plugin in "${PLUGIN_ARRAY[@]}"; do
     plugin=$(echo "$plugin" | xargs) # Trim whitespace
     if [ -n "$plugin" ]; then
         # Skip extracted project content as it's already featured prominently above
-        if [[ "$plugin" == extracted-* ]]; then
+        # This includes: extracted-{PROJECT}-all, extracted-{PROJECT}, and {PROJECT}-{category}
+        if [[ "$plugin" == extracted-* ]] || [[ "$plugin" == *-architectural ]] || 
+           [[ "$plugin" == *-frameworks ]] || [[ "$plugin" == *-languages ]] || 
+           [[ "$plugin" == *-platforms ]] || [[ "$plugin" == *-tooling ]] || 
+           [[ "$plugin" == *-ui ]] || [[ "$plugin" == *-performance ]] || 
+           [[ "$plugin" == *-quality ]] || [[ "$plugin" == *-configuration ]] || 
+           [[ "$plugin" == *-cross-platform ]]; then
             continue
         fi
         
