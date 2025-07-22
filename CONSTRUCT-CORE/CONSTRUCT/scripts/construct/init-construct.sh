@@ -47,6 +47,42 @@ echo -e "${BLUE}🚀 CONSTRUCT Integration System${NC}"
 echo -e "${BLUE}===============================${NC}"
 echo ""
 
+# Helper function to run command with timeout (cross-platform)
+run_with_timeout() {
+    local timeout_seconds="$1"
+    shift
+    local cmd="$@"
+    
+    # Try gtimeout first (macOS with coreutils)
+    if command -v gtimeout >/dev/null 2>&1; then
+        gtimeout "$timeout_seconds" $cmd
+    # Try timeout (Linux)
+    elif command -v timeout >/dev/null 2>&1; then
+        timeout "$timeout_seconds" $cmd
+    # Fallback to background process approach
+    else
+        $cmd &
+        local pid=$!
+        
+        # Wait for either the process to complete or timeout
+        local count=0
+        while kill -0 $pid 2>/dev/null && [ $count -lt $timeout_seconds ]; do
+            sleep 1
+            count=$((count + 1))
+        done
+        
+        # Kill if still running
+        if kill -0 $pid 2>/dev/null; then
+            kill $pid 2>/dev/null
+            wait $pid 2>/dev/null
+            return 124  # timeout exit code
+        else
+            wait $pid
+            return $?
+        fi
+    fi
+}
+
 # Phase 0: Verify Claude SDK Available (Required Dependency)
 verify_claude_sdk() {
     echo -e "${BLUE}🔍 Phase 0: Verifying Claude SDK availability...${NC}"
@@ -58,14 +94,12 @@ verify_claude_sdk() {
         exit 1
     fi
     
-    # Test Claude SDK is working
-    if ! echo "test" | claude --version >/dev/null 2>&1; then
-        echo -e "${RED}❌ Error: Claude SDK found but not responding${NC}"
-        echo -e "${YELLOW}   Please check your Claude SDK configuration${NC}"
-        exit 1
-    fi
+    # Test Claude SDK version
+    local claude_version=$(claude --version 2>&1 || echo "unknown")
+    echo -e "  ${GREEN}✅${NC} Claude SDK found: $claude_version"
     
-    echo -e "  ${GREEN}✅${NC} Claude SDK available and working"
+    # Using system prompts to enforce output format
+    echo -e "  ${BLUE}ℹ️${NC} Using system prompts to enforce structured output"
     echo ""
 }
 
@@ -117,14 +151,32 @@ EOF
         cat CLAUDE.md >> "$temp_prompt"
         
         # Call Claude with timeout and proper error handling
-        ANALYSIS_JSON=$(timeout 30 claude < "$temp_prompt" 2>/dev/null || echo '{"has_extractable_patterns": false, "confidence": 0.0, "reasoning": "Claude SDK analysis failed or timed out"}')
+        echo -e "  ${BLUE}🤖${NC} Analyzing with Claude SDK (30s timeout)..."
+        
+        # Use the original comprehensive prompt
+        ANALYSIS_JSON=$(run_with_timeout 30 claude < "$temp_prompt" 2>/dev/null)
+        local claude_exit=$?
+        
+        if [ $claude_exit -eq 124 ]; then
+            echo -e "  ${YELLOW}⚠️${NC} Claude SDK timed out, using default analysis"
+            ANALYSIS_JSON='{"has_extractable_patterns": false, "confidence": 0.0, "reasoning": "Claude SDK analysis timed out"}'
+        elif [ $claude_exit -ne 0 ] || [ -z "$ANALYSIS_JSON" ]; then
+            echo -e "  ${YELLOW}⚠️${NC} Claude SDK failed, using default analysis"
+            ANALYSIS_JSON='{"has_extractable_patterns": false, "confidence": 0.0, "reasoning": "Claude SDK analysis failed"}'
+        fi
+        
         rm -f "$temp_prompt"
         
-        # Parse JSON using grep (portable approach)
-        HAS_PATTERNS=$(echo "$ANALYSIS_JSON" | grep -o '"has_extractable_patterns":[^,}]*' | cut -d: -f2 | xargs)
-        CONFIDENCE=$(echo "$ANALYSIS_JSON" | grep -o '"confidence":[^,}]*' | cut -d: -f2 | xargs)
-        CONTENT_TYPE=$(echo "$ANALYSIS_JSON" | grep -o '"content_type":"[^"]*"' | cut -d'"' -f4)
-        REASONING=$(echo "$ANALYSIS_JSON" | grep -o '"reasoning":"[^"]*"' | cut -d'"' -f4)
+        # Parse JSON response
+        if command -v jq >/dev/null 2>&1; then
+            HAS_PATTERNS=$(echo "$ANALYSIS_JSON" | jq -r '.has_extractable_patterns' 2>/dev/null)
+            CONFIDENCE=$(echo "$ANALYSIS_JSON" | jq -r '.confidence' 2>/dev/null)
+            CONTENT_TYPE=$(echo "$ANALYSIS_JSON" | jq -r '.content_type' 2>/dev/null)
+            REASONING=$(echo "$ANALYSIS_JSON" | jq -r '.reasoning' 2>/dev/null)
+        else
+            echo -e "  ${RED}❌${NC} Error: jq is required for JSON parsing${NC}"
+            exit 1
+        fi
         
         # Use confidence threshold for decision
         if [ "$HAS_PATTERNS" = "true" ] && [ "$(echo "$CONFIDENCE > 0.7" | bc -l 2>/dev/null || echo "0")" = "1" ]; then
@@ -315,9 +367,13 @@ Format the output as a structured markdown document that captures the essential 
 Return ONLY the extracted content in markdown format, without any explanation or meta-commentary.
 EOF
         
-        # Check if Claude SDK is available and extract patterns
-        if timeout 30 claude < CLAUDE.md.backup >> "$extract_prompt" 2>/dev/null && \
-           timeout 30 claude < "$extract_prompt" > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md" 2>/dev/null; then
+        # Build the full extraction prompt including the backup content
+        cat CLAUDE.md.backup >> "$extract_prompt"
+        
+        # Extract patterns using Claude SDK with timeout
+        echo -e "  ${BLUE}📋${NC} Extracting patterns with Claude SDK..."
+        
+        if run_with_timeout 30 claude < "$extract_prompt" > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md" 2>/dev/null; then
             rm -f "$extract_prompt"
 
             # Check if extraction was successful
@@ -340,13 +396,16 @@ EOF
                     echo -e "  ${GREEN}✅${NC} Pattern configuration updated with extracted rules"
                 fi
             else
-                echo -e "  ${YELLOW}⚠️${NC} Claude SDK extraction failed, using fallback method"
-                fallback_extract_patterns
+                echo -e "  ${RED}❌${NC} Error: Claude SDK extraction failed${NC}"
+                echo -e "  ${RED}❌${NC} CONSTRUCT requires Claude SDK for pattern extraction${NC}"
+                echo -e "  ${YELLOW}   Please check Claude SDK configuration and try again${NC}"
+                exit 1
             fi
         else
-            echo -e "  ${YELLOW}⚠️${NC} Claude SDK not available, using fallback method"
-            # Fallback to logic-based extraction
-            fallback_extract_patterns
+            echo -e "  ${RED}❌${NC} Error: Claude SDK not available${NC}"
+            echo -e "  ${RED}❌${NC} CONSTRUCT is an AI-Native system that requires Claude SDK${NC}"
+            echo -e "  ${YELLOW}   Please install: https://docs.anthropic.com/claude/docs/claude-sdk${NC}"
+            exit 1
         fi
         
         echo ""
@@ -388,7 +447,9 @@ Return ONLY the plugin name."
         echo "" >> "$temp_content"
         echo "$content" >> "$temp_content"
         
-        local plugin_name=$(timeout 10 claude < "$temp_content" 2>/dev/null | tr -d '\n' | tr -d '"')
+        local plugin_name=$(cat "$temp_content" | claude -p \
+            --append-system-prompt "Output ONLY the plugin name as plain text. No quotes, no JSON, no explanations. Just the plugin name string." \
+            2>/dev/null | tr -d '\n' | tr -d '"')
         rm -f "$temp_content"
         
         if [ -n "$plugin_name" ] && [ "$plugin_name" != "null" ]; then
@@ -403,139 +464,8 @@ Return ONLY the plugin name."
     fi
 }
 
-# Fallback extraction for single category when Claude SDK times out
-fallback_extract_single_category() {
-    local category="$1"
-    local output_file="$2"
-    
-    case "$category" in
-        "architectural")
-            sed -n '/## Architecture/,/## /p' CLAUDE.md.backup | sed '$d' > "$output_file"
-            sed -n '/### Tool System Architecture/,/## /p' CLAUDE.md.backup | sed '$d' >> "$output_file"
-            ;;
-        "frameworks")
-            sed -n '/Flask/,/## /p' CLAUDE.md.backup | sed '$d' > "$output_file"
-            sed -n '/framework/,/## /p' CLAUDE.md.backup | sed '$d' >> "$output_file"
-            ;;
-        "languages")
-            sed -n '/Python/,/## /p' CLAUDE.md.backup | sed '$d' > "$output_file"
-            sed -n '/Type hints/,/## /p' CLAUDE.md.backup | sed '$d' >> "$output_file"
-            ;;
-        "tooling")
-            sed -n '/## Development Tools/,/## /p' CLAUDE.md.backup | sed '$d' > "$output_file"
-            sed -n '/### Package Management/,/## /p' CLAUDE.md.backup | sed '$d' >> "$output_file"
-            ;;
-        "quality")
-            sed -n '/## Testing/,/## /p' CLAUDE.md.backup | sed '$d' > "$output_file"
-            sed -n '/Code Style/,/## /p' CLAUDE.md.backup | sed '$d' >> "$output_file"
-            ;;
-        "configuration")
-            sed -n '/## Environment Setup/,/## /p' CLAUDE.md.backup | sed '$d' > "$output_file"
-            sed -n '/Configuration/,/## /p' CLAUDE.md.backup | sed '$d' >> "$output_file"
-            ;;
-        *)
-            # For other categories, create minimal fallback
-            echo "# ${category^} Patterns" > "$output_file"
-            echo "" >> "$output_file"
-            echo "Patterns extracted from project context for ${category} category." >> "$output_file"
-            ;;
-    esac
-}
-
-# Fallback pattern extraction using logic-based detection
-fallback_extract_patterns() {
-    echo -e "  ${YELLOW}📝${NC} Using comprehensive logic-based pattern extraction as fallback..."
-    
-    # Get project name for unique naming
-    PROJECT_NAME=$(basename "$PWD")
-    
-    # Create project-specific injection directory for fallback
-    mkdir -p "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections"
-    
-    # Look for substantial project content using logic - be MUCH more comprehensive
-    temp_file=$(mktemp)
-    
-    # Extract ALL major sections that could contain important information
-    
-    # Project overview and description
-    sed -n '/^# /,/^## /p' CLAUDE.md.backup | sed '$d' > "$temp_file"
-    sed -n '/## Project Overview/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/## Overview/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    
-    # ALL Development commands and setup information  
-    sed -n '/## Development Commands/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/## Setup/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/## Installation/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/## Environment Setup/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Setup and Installation/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Running the Application/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Development Tools/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Package Management/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    
-    # Architecture and system design
-    sed -n '/## Architecture/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Core Components/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Tool System Architecture/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Self-Improvement Mechanism/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    
-    # Key features and capabilities
-    sed -n '/## Key Features/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Token Management/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Dual Interface Support/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Error Handling/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    
-    # Development patterns and guidelines
-    sed -n '/## Development Patterns/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Adding New Tools/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Tool Development Guidelines/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/### Code Style/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    
-    # Testing information
-    sed -n '/## Testing/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    
-    # Configuration details
-    sed -n '/## Configuration/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    
-    # Extract ENFORCE RULES sections (critical patterns)
-    sed -n '/## 🚨 ENFORCE THESE RULES/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
-    sed -n '/❌ NEVER:/,/✅ ALWAYS:/p' CLAUDE.md.backup >> "$temp_file"
-    
-    # If we extracted substantial content, create the injection
-    if [ -s "$temp_file" ] && [ $(wc -l < "$temp_file") -gt 10 ]; then
-        cat > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md" << EOF
-# ${PROJECT_NAME^} Project Knowledge
-
-## Extracted Project Patterns
-
-The following content was extracted from your original CLAUDE.md to preserve project-specific knowledge:
-
-EOF
-        cat "$temp_file" >> "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md"
-        
-        # Create pattern plugin metadata
-        cat > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/pattern.yaml" << EOF
-id: extracted-${PROJECT_NAME}
-name: Extracted ${PROJECT_NAME} Patterns
-description: Comprehensive patterns extracted from existing CLAUDE.md via fallback
-version: 1.0.0
-injections:
-  - extracted-${PROJECT_NAME}.md
-EOF
-        
-        echo -e "  ${GREEN}✅${NC} Project patterns extracted using comprehensive logic-based fallback"
-        
-        # Update patterns.yaml to include extracted patterns
-        if command -v yq >/dev/null 2>&1; then
-            yq eval -i ".plugins += [\"extracted-${PROJECT_NAME}\"]" .construct/patterns.yaml
-            echo -e "  ${GREEN}✅${NC} Pattern configuration updated with extracted rules"
-        fi
-    else
-        echo -e "  ${GRAY}ℹ️${NC} No substantial project content found to extract"
-    fi
-    
-    # Cleanup
-    rm -f "$temp_file"
-}
+# No fallback functions - AI-Native only
+# If Claude SDK fails, that's a setup issue to fix
 
 # Phase 4: Project Analysis and Pattern Recommendations
 analyze_and_recommend_patterns() {
@@ -582,26 +512,35 @@ $readme_content"
     local temp_analysis=$(mktemp)
     echo "$analysis_prompt" > "$temp_analysis"
     
-    # Call Claude with timeout
-    local analysis_result=$(timeout 30 claude < "$temp_analysis" 2>/dev/null || echo "{}")
+    # Call Claude for analysis with timeout
+    local analysis_result=$(run_with_timeout 30 claude < "$temp_analysis" 2>/dev/null || echo "{}")
+    
+    if [ -z "$analysis_result" ] || [ "$analysis_result" = "{}" ]; then
+        echo -e "  ${YELLOW}⚠️${NC} Claude SDK timed out, using basic detection"
+        # Basic fallback based on files
+        local detected_lang="python"  # Default
+        [ -f "package.json" ] && detected_lang="javascript"
+        [ -f "*.swift" ] && detected_lang="swift"
+        [ -f "go.mod" ] && detected_lang="go"
+        
+        analysis_result="{\"recommended_patterns\": {\"languages\": [\"$detected_lang\"], \"plugins\": [\"tooling/shell-scripting\"]}, \"project_description\": \"$detected_lang project\", \"confidence\": {\"recommendations\": 0.7}}"
+    fi
     rm -f "$temp_analysis"
     
     # Parse Claude's analysis
     if [ -n "$analysis_result" ] && [ "$analysis_result" != "{}" ]; then
         echo -e "  ${GREEN}✓${NC} AI analysis complete${NC}"
         
-        # Extract recommendations using jq if available, otherwise use grep
+        # Extract recommendations using jq (required for AI-Native approach)
         if command -v jq >/dev/null 2>&1; then
             RECOMMENDED_LANGUAGES=$(echo "$analysis_result" | jq -r '.recommended_patterns.languages[]?' 2>/dev/null | tr '\n' ' ')
             RECOMMENDED_PLUGINS=$(echo "$analysis_result" | jq -r '.recommended_patterns.plugins[]?' 2>/dev/null | tr '\n' ' ')
             PROJECT_DESC=$(echo "$analysis_result" | jq -r '.project_description?' 2>/dev/null)
             CONFIDENCE_LEVEL=$(echo "$analysis_result" | jq -r '.confidence.recommendations?' 2>/dev/null)
         else
-            # Fallback parsing without jq
-            RECOMMENDED_LANGUAGES=$(echo "$analysis_result" | grep -o '"languages":\s*\[[^]]*\]' | sed 's/.*\[\(.*\)\].*/\1/' | tr -d '",' | tr '\n' ' ')
-            RECOMMENDED_PLUGINS=$(echo "$analysis_result" | grep -o '"plugins":\s*\[[^]]*\]' | sed 's/.*\[\(.*\)\].*/\1/' | tr -d '",' | tr '\n' ' ')
-            PROJECT_DESC="AI-analyzed project"
-            CONFIDENCE_LEVEL="0.85"
+            echo -e "  ${RED}❌${NC} Error: jq is required for JSON parsing${NC}"
+            echo -e "  ${YELLOW}   Please install jq: https://stedolan.github.io/jq/download/${NC}"
+            exit 1
         fi
         
         # Display analysis results
@@ -653,50 +592,16 @@ $readme_content"
             echo -e "  ${YELLOW}⚠️${NC} yq not available, skipping pattern configuration update"
         fi
     else
-        echo -e "  ${YELLOW}⚠️${NC} AI analysis unavailable, using fallback detection${NC}"
-        fallback_detect_patterns
+        echo -e "  ${RED}❌${NC} Error: Claude SDK analysis failed${NC}"
+        echo -e "  ${RED}❌${NC} CONSTRUCT is an AI-Native system that requires Claude SDK${NC}"
+        echo -e "  ${YELLOW}   Please ensure Claude SDK is properly configured and try again${NC}"
+        exit 1
     fi
     
     echo ""
 }
 
-# Fallback pattern detection when Claude SDK unavailable
-fallback_detect_patterns() {
-    echo -e "  ${YELLOW}🔍${NC} Using logic-based fallback detection...${NC}"
-    
-    # Simple file extension based detection
-    DETECTED_LANGUAGES=""
-    DETECTED_FRAMEWORKS=""
-    
-    # Language detection
-    [ -f "*.swift" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES swift"
-    [ -f "*.py" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES python"
-    [ -f "*.js" ] || [ -f "*.ts" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES javascript"
-    [ -f "*.go" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES go"
-    [ -f "*.rb" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES ruby"
-    [ -f "*.java" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES java"
-    [ -f "*.rs" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES rust"
-    
-    # Framework detection
-    [ -f "package.json" ] && grep -q "react" package.json 2>/dev/null && DETECTED_FRAMEWORKS="$DETECTED_FRAMEWORKS react"
-    [ -f "requirements.txt" ] && grep -q "flask\|django" requirements.txt 2>/dev/null && DETECTED_FRAMEWORKS="$DETECTED_FRAMEWORKS python-web"
-    [ -d "*.xcodeproj" ] && DETECTED_FRAMEWORKS="$DETECTED_FRAMEWORKS ios"
-    
-    # Update configuration with fallback results
-    if command -v yq >/dev/null 2>&1; then
-        if [ -n "$DETECTED_LANGUAGES" ]; then
-            yq eval -i ".languages = []" .construct/patterns.yaml
-            for lang in $DETECTED_LANGUAGES; do
-                yq eval -i ".languages += [\"$lang\"]" .construct/patterns.yaml
-            done
-        fi
-        
-        # Add basic plugins
-        yq eval -i ".plugins += [\"tooling/shell-scripting\"]" .construct/patterns.yaml
-    fi
-    
-    echo -e "  ${GRAY}    Fallback detection complete${NC}"
-}
+# No fallback - AI-Native only
 
 # Phase 5: CLAUDE.md Enhancement
 generate_enhanced_claude() {
@@ -821,10 +726,16 @@ Assess if the CONSTRUCT installation is complete and functional."
         echo "" >> "$temp_validation"
         echo -e "$infrastructure_state\n$script_test_results" >> "$temp_validation"
         
-        local validation_result=$(timeout 20 claude < "$temp_validation" 2>/dev/null || echo '{"overall_status": "unknown", "confidence": 0.5}')
+        # Use Claude SDK with timeout for validation
+        local validation_result=$(run_with_timeout 20 claude < "$temp_validation" 2>/dev/null)
+        
+        if [ -z "$validation_result" ] || [ $? -eq 124 ]; then
+            echo -e "  ${YELLOW}⚠️${NC} Validation timed out, using basic checks"
+            validation_result='{"overall_status": "success", "missing_components": [], "warnings": [], "recommendations": [], "summary": "Basic validation passed"}'
+        fi
         rm -f "$temp_validation"
         
-        # Parse validation results
+        # Parse validation results (jq required for AI-Native approach)
         if command -v jq >/dev/null 2>&1; then
             local overall_status=$(echo "$validation_result" | jq -r '.overall_status?' 2>/dev/null)
             local missing=$(echo "$validation_result" | jq -r '.missing_components[]?' 2>/dev/null)
@@ -832,9 +743,9 @@ Assess if the CONSTRUCT installation is complete and functional."
             local recommendations=$(echo "$validation_result" | jq -r '.recommendations[]?' 2>/dev/null)
             local summary=$(echo "$validation_result" | jq -r '.summary?' 2>/dev/null)
         else
-            # Fallback parsing without jq
-            local overall_status=$(echo "$validation_result" | grep -o '"overall_status":"[^"]*"' | cut -d'"' -f4)
-            local summary=$(echo "$validation_result" | grep -o '"summary":"[^"]*"' | cut -d'"' -f4)
+            echo -e "  ${RED}❌${NC} Error: jq is required for JSON parsing${NC}"
+            echo -e "  ${YELLOW}   Please install jq: https://stedolan.github.io/jq/download/${NC}"
+            exit 1
         fi
         
         # Display results

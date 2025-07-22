@@ -205,7 +205,7 @@ CLAUDE_CONTENT+="<!--
 # Check if we have extracted project knowledge to lead with
 PROJECT_CUSTOM_CONTENT=""
 PROJECT_NAME=$(basename "$PROJECT_DIR")
-project_custom_path="./CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md"
+project_custom_path="$PROJECT_DIR/CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md"
 if [ -f "$project_custom_path" ]; then
     PROJECT_CUSTOM_CONTENT=$(cat "$project_custom_path")
     echo -e "${YELLOW}📋 Found project-specific knowledge to feature prominently${NC}"
