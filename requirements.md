@@ -11,19 +11,16 @@
 - **Bash**: 4.0+ (shell scripting)
 - **Git**: 2.0+ (version control and project management)
 - **yq**: 4.0+ (YAML processing for pattern system)
+- **jq**: 1.6+ (JSON processing for configuration and data handling)
 
 #### Optional but Recommended
-- **jq**: 1.6+ (JSON processing for advanced features)
 
 ## Installation Commands
 
 ### macOS (Homebrew)
 ```bash
-# Install yq (required for pattern system)
-brew install yq
-
-# Install jq (optional)
-brew install jq
+# Install required dependencies
+brew install yq jq
 ```
 
 ### Verification
@@ -82,12 +79,12 @@ All workspace commands require yq:
 
 | Feature | yq | jq | git | bash |
 |---------|----|----|-----|------|
-| Basic project creation | ✅ | ❌ | ✅ | ✅ |
-| Pattern system | ✅ | ❌ | ✅ | ✅ |
-| Multi-repo projects | ✅ | ❌ | ✅ | ✅ |
-| Workspace management | ✅ | ❌ | ✅ | ✅ |
-| Pattern validation | ✅ | ❌ | ❌ | ✅ |
-| Legacy migration | ✅ | ❌ | ✅ | ✅ |
+| Basic project creation | ✅ | ✅ | ✅ | ✅ |
+| Pattern system | ✅ | ✅ | ✅ | ✅ |
+| Multi-repo projects | ✅ | ✅ | ✅ | ✅ |
+| Workspace management | ✅ | ✅ | ✅ | ✅ |
+| Pattern validation | ✅ | ✅ | ❌ | ✅ |
+| Legacy migration | ✅ | ✅ | ✅ | ✅ |
 | Advanced analytics | ✅ | ✅ | ✅ | ✅ |
 
 ## Troubleshooting
