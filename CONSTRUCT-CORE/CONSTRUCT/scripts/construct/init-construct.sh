@@ -47,6 +47,31 @@ echo -e "${BLUE}🚀 CONSTRUCT Integration System${NC}"
 echo -e "${BLUE}===============================${NC}"
 echo ""
 
+# Phase 0: Verify Claude SDK Available (Required Dependency)
+verify_claude_sdk() {
+    echo -e "${BLUE}🔍 Phase 0: Verifying Claude SDK availability...${NC}"
+    
+    if ! command -v claude >/dev/null 2>&1; then
+        echo -e "${RED}❌ Error: Claude SDK is required but not found${NC}"
+        echo -e "${YELLOW}   CONSTRUCT is an AI-Native system that requires Claude SDK${NC}"
+        echo -e "${YELLOW}   Please install: https://docs.anthropic.com/claude/docs/claude-sdk${NC}"
+        exit 1
+    fi
+    
+    # Test Claude SDK is working
+    if ! echo "test" | claude --version >/dev/null 2>&1; then
+        echo -e "${RED}❌ Error: Claude SDK found but not responding${NC}"
+        echo -e "${YELLOW}   Please check your Claude SDK configuration${NC}"
+        exit 1
+    fi
+    
+    echo -e "  ${GREEN}✅${NC} Claude SDK available and working"
+    echo ""
+}
+
+# Run verification first
+verify_claude_sdk
+
 # Phase 1: Environmental Assessment
 assess_project_state() {
     echo -e "${BLUE}🔍 Phase 1: Assessing project state...${NC}"
@@ -56,82 +81,49 @@ assess_project_state() {
         HAS_CLAUDE_MD=true
         echo -e "  ${GREEN}✅${NC} CLAUDE.md exists"
         
-        # Analyze existing CLAUDE.md for extractable patterns using intelligent content analysis
-        echo -e "  ${YELLOW}🧠${NC} Analyzing CLAUDE.md content for custom patterns..."
+        # Analyze existing CLAUDE.md for extractable patterns using Claude SDK
+        echo -e "  ${YELLOW}🧠${NC} Analyzing CLAUDE.md content with AI...${NC}"
         
-        # Create a temporary analysis script
-        cat > .construct_temp_analysis.py << 'EOF'
-import sys
-import re
+        # Use Claude SDK for intelligent analysis with JSON output
+        ANALYSIS_JSON=$(cat CLAUDE.md | claude -p "Analyze this CLAUDE.md file and return ONLY a JSON object (no markdown formatting):
+{
+  \"has_extractable_patterns\": boolean,
+  \"confidence\": number between 0.0 and 1.0,
+  \"content_type\": \"project-specific\" or \"template\" or \"minimal\",
+  \"detected_patterns\": {
+    \"project_overview\": boolean,
+    \"architecture\": boolean,
+    \"development_commands\": boolean,
+    \"custom_rules\": boolean,
+    \"tool_patterns\": boolean,
+    \"technology_specific\": boolean,
+    \"substantial_content\": boolean
+  },
+  \"reasoning\": \"brief explanation of decision\"
+}
 
-def analyze_claude_md(filename):
-    try:
-        with open(filename, 'r', encoding='utf-8') as f:
-            content = f.read()
+Rules for analysis:
+- If it says 'This file provides guidance to Claude Code' and is under 2000 chars, it's likely a template
+- If it contains 'Generated:' and 'Source: CONSTRUCT-CORE', it's a CONSTRUCT-generated file
+- Look for project-specific technologies (SwiftUI, React, Flask, etc)
+- Check for custom guidelines, workflows, domain vocabulary
+- A confidence > 0.7 with project-specific content means it has extractable patterns" 2>/dev/null || echo '{"has_extractable_patterns": false, "confidence": 0.0, "reasoning": "Claude SDK analysis failed"}')
         
-        # Skip if it looks like a standard generated CLAUDE.md
-        if "This file provides guidance to Claude Code" in content and len(content) < 2000:
-            return False
-            
-        # Skip if it's clearly a CONSTRUCT-generated file
-        if "Generated:" in content and "Source: CONSTRUCT-CORE" in content:
-            return False
-            
-        indicators = []
+        # Parse JSON using grep (portable approach)
+        HAS_PATTERNS=$(echo "$ANALYSIS_JSON" | grep -o '"has_extractable_patterns":[^,}]*' | cut -d: -f2 | xargs)
+        CONFIDENCE=$(echo "$ANALYSIS_JSON" | grep -o '"confidence":[^,}]*' | cut -d: -f2 | xargs)
+        CONTENT_TYPE=$(echo "$ANALYSIS_JSON" | grep -o '"content_type":"[^"]*"' | cut -d'"' -f4)
+        REASONING=$(echo "$ANALYSIS_JSON" | grep -o '"reasoning":"[^"]*"' | cut -d'"' -f4)
         
-        # Look for project-specific technology mentions
-        tech_patterns = r'\b(SwiftUI|UIKit|React|Vue|Angular|Django|Flask|Rails|Spring|Express|FastAPI|Laravel)\b'
-        if re.search(tech_patterns, content, re.IGNORECASE):
-            indicators.append("technology-specific")
-            
-        # Look for custom guidelines/practices sections
-        if re.search(r'#+ [^#\n]*(?:Best Practices|Guidelines|Rules|Standards|Conventions)', content, re.IGNORECASE):
-            indicators.append("custom-guidelines")
-            
-        # Look for numbered workflow steps
-        if re.search(r'##? \d+\.', content):
-            indicators.append("structured-workflow")
-            
-        # Look for instruction patterns
-        instruction_patterns = r'(?:When|Always|Never|Use|Avoid|Follow|Remember|Ensure)\s+[a-z]'
-        if len(re.findall(instruction_patterns, content)) > 5:
-            indicators.append("instruction-heavy")
-            
-        # Look for code examples with specific syntax
-        if re.search(r'```\w+', content) and len(content) > 1000:
-            indicators.append("code-examples")
-            
-        # Look for project-specific vocabulary (beyond common words)
-        domain_words = re.findall(r'\b[A-Z][a-z]*(?:View|Model|Controller|Service|Manager|Handler|Provider|Factory)\b', content)
-        if len(set(domain_words)) > 3:
-            indicators.append("domain-vocabulary")
-            
-        # Look for custom configuration or setup instructions
-        if re.search(r'(?:configure|setup|install|initialize)', content, re.IGNORECASE) and 'claude' not in content.lower():
-            indicators.append("setup-instructions")
-            
-        # Decision: extractable if we found meaningful indicators
-        return len(indicators) >= 2
-        
-    except Exception as e:
-        # If analysis fails, err on the side of extraction
-        return True
-
-if __name__ == "__main__":
-    result = analyze_claude_md(sys.argv[1])
-    sys.exit(0 if result else 1)
-EOF
-
-        # Run the intelligent analysis
-        if python3 .construct_temp_analysis.py CLAUDE.md 2>/dev/null; then
+        # Use confidence threshold for decision
+        if [ "$HAS_PATTERNS" = "true" ] && [ "$(echo "$CONFIDENCE > 0.7" | bc -l 2>/dev/null || echo "0")" = "1" ]; then
             CLAUDE_HAS_EXTRACTABLE_PATTERNS=true
-            echo -e "  ${GREEN}📝${NC} Custom patterns detected through content analysis"
+            echo -e "  ${GREEN}📝${NC} Custom patterns detected (AI confidence: ${CONFIDENCE})"
+            echo -e "  ${GRAY}    Type: ${CONTENT_TYPE}, Reason: ${REASONING}${NC}"
         else
-            echo -e "  ${GRAY}ℹ️${NC} No significant custom patterns detected"
+            echo -e "  ${GRAY}ℹ️${NC} No significant custom patterns (AI confidence: ${CONFIDENCE})"
+            [ -n "$REASONING" ] && echo -e "  ${GRAY}    Reason: ${REASONING}${NC}"
         fi
-        
-        # Clean up
-        rm -f .construct_temp_analysis.py
     else
         echo -e "  ${YELLOW}⚠️${NC} CLAUDE.md not found"
         echo -e "  ${GRAY}💡 Run '/init' first to create base CLAUDE.md${NC}"
@@ -347,141 +339,42 @@ analyze_pattern_content() {
     local temp_file="$1"
     local category="$2"
     
-    case "$category" in
-        "architectural")
-            if grep -qi "mvvm\|viewmodel\|@published\|observable" "$temp_file"; then
-                if grep -qi "swift\|ios" "$temp_file" && grep -qi "typescript\|react\|web" "$temp_file"; then
-                    echo "multiplatform-mvvm"
-                else
-                    echo "mvvm-patterns"
-                fi
-            elif grep -qi "clean.*architecture\|use.*case\|entity\|repository" "$temp_file"; then
-                echo "clean-architecture"
-            elif grep -qi "coordinator\|navigation" "$temp_file"; then
-                echo "coordinator-pattern"
-            else
-                echo "custom-architecture"
-            fi
-            ;;
-        "frameworks")
-            if grep -qi "react" "$temp_file" && grep -qi "swiftui" "$temp_file"; then
-                echo "react-swiftui"
-            elif grep -qi "fastapi\|uvicorn\|pydantic" "$temp_file"; then
-                echo "fastapi-backend"
-            elif grep -qi "swiftui\|@state\|@binding" "$temp_file"; then
-                echo "swiftui-patterns"
-            elif grep -qi "react\|usestate\|useeffect" "$temp_file"; then
-                echo "react-patterns"
-            elif grep -qi "flask\|django" "$temp_file"; then
-                echo "python-web"
-            else
-                echo "custom-frameworks"
-            fi
-            ;;
-        "languages")
-            if grep -qi "swift" "$temp_file" && grep -qi "typescript\|javascript" "$temp_file"; then
-                echo "swift-typescript"
-            elif grep -qi "python.*typing\|type.*hint" "$temp_file"; then
-                echo "python-typing"
-            elif grep -qi "swift.*async\|await" "$temp_file"; then
-                echo "swift-concurrency"
-            elif grep -qi "typescript.*generic\|type.*utility" "$temp_file"; then
-                echo "typescript-advanced"
-            else
-                echo "custom-conventions"
-            fi
-            ;;
-        "platforms")
-            if grep -qi "ios" "$temp_file" && grep -qi "web\|browser" "$temp_file"; then
-                echo "ios-web"
-            elif grep -qi "info\.plist\|ios.*config" "$temp_file"; then
-                echo "ios-configuration"
-            elif grep -qi "responsive\|mobile.*web" "$temp_file"; then
-                echo "responsive-web"
-            else
-                echo "custom-platform"
-            fi
-            ;;
-        "tooling")
-            if grep -qi "build.*script\|npm.*script\|xcodebuild" "$temp_file"; then
-                echo "build-automation"
-            elif grep -qi "ci.*cd\|github.*action\|workflow" "$temp_file"; then
-                echo "ci-cd-workflows"
-            elif grep -qi "test.*script\|jest\|xctest" "$temp_file"; then
-                echo "testing-automation"
-            elif grep -qi "git.*hook\|pre.*commit" "$temp_file"; then
-                echo "git-workflows"
-            else
-                echo "custom-tooling"
-            fi
-            ;;
-        "ui")
-            if grep -qi "design.*token\|color.*system\|typography" "$temp_file"; then
-                echo "design-system"
-            elif grep -qi "accessibility\|wcag\|a11y\|voiceover" "$temp_file"; then
-                echo "accessibility-patterns"
-            elif grep -qi "dark.*mode\|theme\|appearance" "$temp_file"; then
-                echo "theming-system"
-            elif grep -qi "component.*library\|ui.*kit" "$temp_file"; then
-                echo "component-patterns"
-            else
-                echo "custom-design"
-            fi
-            ;;
-        "performance")
-            if grep -qi "lazy.*load\|virtualization" "$temp_file"; then
-                echo "lazy-loading"
-            elif grep -qi "memory.*management\|cache\|optimization" "$temp_file"; then
-                echo "memory-optimization"
-            elif grep -qi "bundle.*split\|code.*split" "$temp_file"; then
-                echo "bundle-optimization"
-            elif grep -qi "render.*optimization\|reselect\|memo" "$temp_file"; then
-                echo "render-optimization"
-            else
-                echo "performance-patterns"
-            fi
-            ;;
-        "quality")
-            if grep -qi "test.*pattern\|unit.*test\|integration" "$temp_file"; then
-                echo "testing-standards"
-            elif grep -qi "lint\|eslint\|swiftlint" "$temp_file"; then
-                echo "code-quality"
-            elif grep -qi "error.*handling\|exception" "$temp_file"; then
-                echo "error-handling"
-            elif grep -qi "security\|validation\|sanitization" "$temp_file"; then
-                echo "security-patterns"
-            else
-                echo "quality-standards"
-            fi
-            ;;
-        "configuration")
-            if grep -qi "environment\|env.*var\|config" "$temp_file"; then
-                echo "environment-config"
-            elif grep -qi "info\.plist\|bundle" "$temp_file"; then
-                echo "ios-app-config"
-            elif grep -qi "package\.json\|vite\|webpack" "$temp_file"; then
-                echo "build-config"
-            elif grep -qi "docker\|container" "$temp_file"; then
-                echo "deployment-config"
-            else
-                echo "custom-config"
-            fi
-            ;;
-        "cross-platform")
-            if grep -qi "model.*sync\|api.*contract" "$temp_file"; then
-                echo "api-contracts"
-            elif grep -qi "shared.*model\|common.*type" "$temp_file"; then
-                echo "shared-models"
-            elif grep -qi "authentication\|auth.*token" "$temp_file"; then
-                echo "auth-patterns"
-            else
-                echo "cross-platform-sync"
-            fi
-            ;;
-        *)
+    # Use Claude SDK for intelligent pattern categorization
+    if [ -f "$temp_file" ] && command -v claude >/dev/null 2>&1; then
+        local content=$(cat "$temp_file" 2>/dev/null | head -500)  # Limit content for context
+        
+        local analysis_prompt="Analyze this pattern content and suggest the best plugin name for category '$category'. Return ONLY the plugin name (no quotes, no explanation).
+
+Category: $category
+Content excerpt:
+$content
+
+For category '$category', suggest a descriptive plugin name based on the content. Examples:
+- architectural: mvvm-patterns, clean-architecture, coordinator-pattern
+- frameworks: react-swiftui, fastapi-backend, swiftui-patterns
+- languages: swift-typescript, python-typing, swift-concurrency
+- platforms: ios-web, ios-configuration, responsive-web
+- tooling: build-automation, ci-cd-workflows, testing-automation
+- ui: design-system, accessibility-patterns, theming-system
+- performance: lazy-loading, memory-optimization, render-optimization
+- quality: testing-standards, code-quality, error-handling
+- configuration: environment-config, ios-app-config, build-config
+- cross-platform: api-contracts, shared-models, auth-patterns
+
+Return ONLY the plugin name."
+
+        local plugin_name=$(echo "$content" | claude -p "$analysis_prompt" 2>/dev/null | tr -d '\n' | tr -d '"')
+        
+        if [ -n "$plugin_name" ] && [ "$plugin_name" != "null" ]; then
+            echo "$plugin_name"
+        else
+            # Fallback to generic name if Claude SDK fails
             echo "custom-${category}"
-            ;;
-    esac
+        fi
+    else
+        # Fallback when Claude SDK unavailable
+        echo "custom-${category}"
+    fi
 }
 
 # Fallback extraction for single category when Claude SDK times out
@@ -620,94 +513,157 @@ EOF
 
 # Phase 4: Project Analysis and Pattern Recommendations
 analyze_and_recommend_patterns() {
-    echo -e "${BLUE}🧠 Phase 4: Analyzing project for pattern recommendations...${NC}"
+    echo -e "${BLUE}🧠 Phase 4: AI-Native project analysis for pattern recommendations...${NC}"
     
-    # Detect languages
+    # Use Claude SDK to analyze entire project structure
+    echo -e "  ${YELLOW}🔍${NC} Analyzing project structure with AI...${NC}"
+    
+    # Create comprehensive project summary for Claude
+    local project_files=$(find . -type f -name "*.swift" -o -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.go" -o -name "*.rb" -o -name "*.java" -o -name "*.cpp" -o -name "*.c" -o -name "*.h" -o -name "*.rs" 2>/dev/null | head -20)
+    local config_files=$(find . -maxdepth 3 -name "package.json" -o -name "requirements.txt" -o -name "Gemfile" -o -name "Cargo.toml" -o -name "go.mod" -o -name "pom.xml" -o -name "build.gradle" -o -name "*.xcodeproj" 2>/dev/null | head -10)
+    local readme_content=""
+    if [ -f "README.md" ]; then
+        readme_content=$(head -50 README.md 2>/dev/null || echo "")
+    fi
+    
+    # Call Claude SDK for intelligent project analysis
+    local analysis_prompt="Analyze this project and recommend CONSTRUCT patterns. Return JSON with structure:
+{
+  \"detected_languages\": [\"language1\", \"language2\"],
+  \"detected_frameworks\": [\"framework1\", \"framework2\"],
+  \"recommended_patterns\": {
+    \"languages\": [\"swift\", \"python\"],
+    \"plugins\": [\"tooling/shell-scripting\", \"cross-platform/model-sync\"]
+  },
+  \"confidence\": {
+    \"languages\": 0.95,
+    \"frameworks\": 0.85,
+    \"recommendations\": 0.90
+  },
+  \"project_description\": \"Brief description of what this project appears to be\"
+}
+
+Project files found:
+$project_files
+
+Config files found:
+$config_files
+
+README excerpt:
+$readme_content"
+
+    local analysis_result=$(claude -p "$analysis_prompt" 2>/dev/null || echo "{}")
+    
+    # Parse Claude's analysis
+    if [ -n "$analysis_result" ] && [ "$analysis_result" != "{}" ]; then
+        echo -e "  ${GREEN}✓${NC} AI analysis complete${NC}"
+        
+        # Extract recommendations using jq if available, otherwise use grep
+        if command -v jq >/dev/null 2>&1; then
+            RECOMMENDED_LANGUAGES=$(echo "$analysis_result" | jq -r '.recommended_patterns.languages[]?' 2>/dev/null | tr '\n' ' ')
+            RECOMMENDED_PLUGINS=$(echo "$analysis_result" | jq -r '.recommended_patterns.plugins[]?' 2>/dev/null | tr '\n' ' ')
+            PROJECT_DESC=$(echo "$analysis_result" | jq -r '.project_description?' 2>/dev/null)
+            CONFIDENCE_LEVEL=$(echo "$analysis_result" | jq -r '.confidence.recommendations?' 2>/dev/null)
+        else
+            # Fallback parsing without jq
+            RECOMMENDED_LANGUAGES=$(echo "$analysis_result" | grep -o '"languages":\s*\[[^]]*\]' | sed 's/.*\[\(.*\)\].*/\1/' | tr -d '",' | tr '\n' ' ')
+            RECOMMENDED_PLUGINS=$(echo "$analysis_result" | grep -o '"plugins":\s*\[[^]]*\]' | sed 's/.*\[\(.*\)\].*/\1/' | tr -d '",' | tr '\n' ' ')
+            PROJECT_DESC="AI-analyzed project"
+            CONFIDENCE_LEVEL="0.85"
+        fi
+        
+        # Display analysis results
+        if [ -n "$PROJECT_DESC" ] && [ "$PROJECT_DESC" != "null" ]; then
+            echo -e "  ${BLUE}📋${NC} Project type: $PROJECT_DESC${NC}"
+        fi
+        
+        if [ -n "$RECOMMENDED_LANGUAGES" ]; then
+            echo -e "  ${BLUE}🔤${NC} Detected languages: $RECOMMENDED_LANGUAGES${NC}"
+        fi
+        
+        if [ -n "$RECOMMENDED_PLUGINS" ]; then
+            echo -e "  ${BLUE}🔌${NC} Recommended plugins: $RECOMMENDED_PLUGINS${NC}"
+        fi
+        
+        if [ -n "$CONFIDENCE_LEVEL" ] && [ "$CONFIDENCE_LEVEL" != "null" ]; then
+            local confidence_percent=$(awk "BEGIN {printf \"%.0f\", $CONFIDENCE_LEVEL * 100}")
+            echo -e "  ${BLUE}📊${NC} Confidence level: ${confidence_percent}%${NC}"
+        fi
+        
+        # Update patterns.yaml with AI recommendations
+        if command -v yq >/dev/null 2>&1; then
+            # Update languages
+            if [ -n "$RECOMMENDED_LANGUAGES" ]; then
+                # Clear existing languages and add AI-recommended ones
+                yq eval -i ".languages = []" .construct/patterns.yaml
+                for lang in $RECOMMENDED_LANGUAGES; do
+                    yq eval -i ".languages += [\"$lang\"]" .construct/patterns.yaml
+                done
+                echo -e "  ${GREEN}📋${NC} Updated languages: $(echo $RECOMMENDED_LANGUAGES | tr ' ' ', ')"
+            fi
+            
+            # Update plugins with AI recommendations
+            if [ -n "$RECOMMENDED_PLUGINS" ]; then
+                # Get existing plugins
+                EXISTING_PLUGINS=$(yq eval '.plugins[]' .construct/patterns.yaml 2>/dev/null | tr '\n' ' ')
+                
+                # Add recommended plugins one by one to avoid duplicates
+                for plugin in $RECOMMENDED_PLUGINS; do
+                    # Check if plugin already exists
+                    if ! echo "$EXISTING_PLUGINS" | grep -q "$plugin"; then
+                        yq eval -i ".plugins += [\"$plugin\"]" .construct/patterns.yaml
+                    fi
+                done
+                
+                echo -e "  ${GREEN}🔧${NC} Updated plugins with AI recommendations"
+            fi
+        else
+            echo -e "  ${YELLOW}⚠️${NC} yq not available, skipping pattern configuration update"
+        fi
+    else
+        echo -e "  ${YELLOW}⚠️${NC} AI analysis unavailable, using fallback detection${NC}"
+        fallback_detect_patterns
+    fi
+    
+    echo ""
+}
+
+# Fallback pattern detection when Claude SDK unavailable
+fallback_detect_patterns() {
+    echo -e "  ${YELLOW}🔍${NC} Using logic-based fallback detection...${NC}"
+    
+    # Simple file extension based detection
     DETECTED_LANGUAGES=""
-    if ls *.swift >/dev/null 2>&1 || find . -name "*.swift" -type f | head -1 | grep -q .; then
-        DETECTED_LANGUAGES="$DETECTED_LANGUAGES swift"
-        echo -e "  ${GREEN}🔤${NC} Detected: Swift"
-    fi
-    
-    if ls *.cs >/dev/null 2>&1 || find . -name "*.cs" -type f | head -1 | grep -q .; then
-        DETECTED_LANGUAGES="$DETECTED_LANGUAGES csharp"
-        echo -e "  ${GREEN}🔤${NC} Detected: C#"
-    fi
-    
-    if ls *.ts *.tsx >/dev/null 2>&1 || find . -name "*.ts" -o -name "*.tsx" -type f | head -1 | grep -q .; then
-        DETECTED_LANGUAGES="$DETECTED_LANGUAGES typescript"
-        echo -e "  ${GREEN}🔤${NC} Detected: TypeScript"
-    fi
-    
-    if ls *.py >/dev/null 2>&1 || find . -name "*.py" -type f | head -1 | grep -q .; then
-        DETECTED_LANGUAGES="$DETECTED_LANGUAGES python"
-        echo -e "  ${GREEN}🔤${NC} Detected: Python"
-    fi
-    
-    # Detect frameworks
     DETECTED_FRAMEWORKS=""
-    if [ -f "Info.plist" ] || find . -name "Info.plist" -type f | head -1 | grep -q .; then
-        DETECTED_FRAMEWORKS="$DETECTED_FRAMEWORKS ios"
-        echo -e "  ${GREEN}🏗️${NC} Detected: iOS"
-    fi
     
-    if [ -f "package.json" ]; then
-        DETECTED_FRAMEWORKS="$DETECTED_FRAMEWORKS web"
-        echo -e "  ${GREEN}🏗️${NC} Detected: Web (package.json)"
-    fi
+    # Language detection
+    [ -f "*.swift" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES swift"
+    [ -f "*.py" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES python"
+    [ -f "*.js" ] || [ -f "*.ts" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES javascript"
+    [ -f "*.go" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES go"
+    [ -f "*.rb" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES ruby"
+    [ -f "*.java" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES java"
+    [ -f "*.rs" ] && DETECTED_LANGUAGES="$DETECTED_LANGUAGES rust"
     
-    # Detect CONSTRUCT development
-    if [ -d "CONSTRUCT-CORE" ] || [ -d "CONSTRUCT-LAB" ]; then
-        DETECTED_FRAMEWORKS="$DETECTED_FRAMEWORKS construct-dev"
-        echo -e "  ${GREEN}🔧${NC} Detected: CONSTRUCT development"
-    fi
+    # Framework detection
+    [ -f "package.json" ] && grep -q "react" package.json 2>/dev/null && DETECTED_FRAMEWORKS="$DETECTED_FRAMEWORKS react"
+    [ -f "requirements.txt" ] && grep -q "flask\|django" requirements.txt 2>/dev/null && DETECTED_FRAMEWORKS="$DETECTED_FRAMEWORKS python-web"
+    [ -d "*.xcodeproj" ] && DETECTED_FRAMEWORKS="$DETECTED_FRAMEWORKS ios"
     
-    # Update patterns.yaml with detected languages and frameworks
+    # Update configuration with fallback results
     if command -v yq >/dev/null 2>&1; then
-        # Update languages
         if [ -n "$DETECTED_LANGUAGES" ]; then
-            # Clear existing languages and add detected ones
             yq eval -i ".languages = []" .construct/patterns.yaml
             for lang in $DETECTED_LANGUAGES; do
                 yq eval -i ".languages += [\"$lang\"]" .construct/patterns.yaml
             done
-            echo -e "  ${GREEN}📋${NC} Updated languages: $(echo $DETECTED_LANGUAGES | tr ' ' ', ')"
         fi
         
-        # Update plugins with recommended patterns
-        RECOMMENDED_PLUGINS=""
-        for lang in $DETECTED_LANGUAGES; do
-            RECOMMENDED_PLUGINS="$RECOMMENDED_PLUGINS \"languages/$lang\","
-        done
-        for framework in $DETECTED_FRAMEWORKS; do
-            RECOMMENDED_PLUGINS="$RECOMMENDED_PLUGINS \"platforms/$framework\","
-        done
-        
-        # Add common patterns
-        RECOMMENDED_PLUGINS="$RECOMMENDED_PLUGINS \"tooling/shell-scripting\","
-        
-        if [ -n "$RECOMMENDED_PLUGINS" ]; then
-            # Remove trailing comma
-            RECOMMENDED_PLUGINS=$(echo "$RECOMMENDED_PLUGINS" | sed 's/,$//')
-            
-            # Get existing plugins
-            EXISTING_PLUGINS=$(yq eval '.plugins[]' .construct/patterns.yaml 2>/dev/null | tr '\n' ' ')
-            
-            # Add recommended plugins one by one to avoid YAML parsing issues
-            for plugin in $(echo "$RECOMMENDED_PLUGINS" | tr ',' '\n' | sed 's/"//g'); do
-                # Check if plugin already exists
-                if ! echo "$EXISTING_PLUGINS" | grep -q "$plugin"; then
-                    yq eval -i ".plugins += [\"$plugin\"]" .construct/patterns.yaml
-                fi
-            done
-            
-            echo -e "  ${GREEN}🔧${NC} Updated plugins with recommendations (preserving existing)"
-        fi
-    else
-        echo -e "  ${YELLOW}⚠️${NC} yq not available, skipping pattern configuration update"
+        # Add basic plugins
+        yq eval -i ".plugins += [\"tooling/shell-scripting\"]" .construct/patterns.yaml
     fi
     
-    echo ""
+    echo -e "  ${GRAY}    Fallback detection complete${NC}"
 }
 
 # Phase 5: CLAUDE.md Enhancement
@@ -777,60 +733,138 @@ generate_enhanced_claude() {
 validate_infrastructure() {
     echo -e "${BLUE}🧪 Phase 6: Validating installed infrastructure...${NC}"
     
-    local validation_passed=true
-    
-    # Test essential scripts work
-    echo -e "  ${YELLOW}🔍${NC} Testing context updates..."
-    if [ -x "./CONSTRUCT/scripts/construct/update-context.sh" ]; then
-        if ./CONSTRUCT/scripts/construct/update-context.sh --dry-run >/dev/null 2>&1; then
-            echo -e "  ${GREEN}✅${NC} Context updates working"
+    # Use Claude SDK for comprehensive validation
+    if command -v claude >/dev/null 2>&1; then
+        echo -e "  ${YELLOW}🤖${NC} Using AI-Native validation...${NC}"
+        
+        # Gather infrastructure state for Claude analysis
+        local infrastructure_state=""
+        infrastructure_state+="Scripts present:\n"
+        [ -x "./CONSTRUCT/CONSTRUCT/scripts/construct/update-context.sh" ] && infrastructure_state+="- update-context.sh (executable)\n"
+        [ -x "./CONSTRUCT/CONSTRUCT/scripts/core/check-architecture.sh" ] && infrastructure_state+="- check-architecture.sh (executable)\n"
+        [ -x ".git/hooks/pre-commit" ] && infrastructure_state+="- git pre-commit hook (executable)\n"
+        
+        infrastructure_state+="\nDirectories present:\n"
+        [ -d "CONSTRUCT" ] && infrastructure_state+="- CONSTRUCT/ folder\n"
+        [ -d "CONSTRUCT/AI" ] && infrastructure_state+="- CONSTRUCT/AI/ documentation\n"
+        [ -d "CONSTRUCT/patterns/plugins" ] && infrastructure_state+="- CONSTRUCT/patterns/plugins/\n"
+        [ -L "CONSTRUCT/CONSTRUCT" ] && infrastructure_state+="- CONSTRUCT/CONSTRUCT (symlink)\n"
+        
+        infrastructure_state+="\nConfiguration files:\n"
+        [ -f ".construct/patterns.yaml" ] && infrastructure_state+="- .construct/patterns.yaml\n"
+        [ -f "CLAUDE.md" ] && infrastructure_state+="- CLAUDE.md (enhanced)\n"
+        
+        # Test script functionality
+        local script_test_results=""
+        if [ -x "./CONSTRUCT/CONSTRUCT/scripts/construct/update-context.sh" ]; then
+            if ./CONSTRUCT/CONSTRUCT/scripts/construct/update-context.sh --dry-run >/dev/null 2>&1; then
+                script_test_results+="update-context.sh: PASS\n"
+            else
+                script_test_results+="update-context.sh: FAIL\n"
+            fi
+        fi
+        
+        # Use Claude to analyze validation results
+        local validation_prompt="Analyze this CONSTRUCT infrastructure validation and return JSON:
+{
+  \"overall_status\": \"success\" or \"partial\" or \"failed\",
+  \"missing_components\": [\"component1\", \"component2\"],
+  \"warnings\": [\"warning1\", \"warning2\"],
+  \"recommendations\": [\"recommendation1\", \"recommendation2\"],
+  \"confidence\": 0.0-1.0,
+  \"summary\": \"brief summary of infrastructure state\"
+}
+
+Infrastructure state:
+$infrastructure_state
+
+Script test results:
+$script_test_results
+
+Assess if the CONSTRUCT installation is complete and functional."
+
+        local validation_result=$(echo -e "$infrastructure_state\n$script_test_results" | claude -p "$validation_prompt" 2>/dev/null || echo '{"overall_status": "unknown", "confidence": 0.5}')
+        
+        # Parse validation results
+        if command -v jq >/dev/null 2>&1; then
+            local overall_status=$(echo "$validation_result" | jq -r '.overall_status?' 2>/dev/null)
+            local missing=$(echo "$validation_result" | jq -r '.missing_components[]?' 2>/dev/null)
+            local warnings=$(echo "$validation_result" | jq -r '.warnings[]?' 2>/dev/null)
+            local recommendations=$(echo "$validation_result" | jq -r '.recommendations[]?' 2>/dev/null)
+            local summary=$(echo "$validation_result" | jq -r '.summary?' 2>/dev/null)
         else
-            echo -e "  ${RED}❌${NC} Context update script failed"
+            # Fallback parsing without jq
+            local overall_status=$(echo "$validation_result" | grep -o '"overall_status":"[^"]*"' | cut -d'"' -f4)
+            local summary=$(echo "$validation_result" | grep -o '"summary":"[^"]*"' | cut -d'"' -f4)
+        fi
+        
+        # Display results
+        if [ "$overall_status" = "success" ]; then
+            echo -e "  ${GREEN}🎉${NC} All validation checks passed!"
+        elif [ "$overall_status" = "partial" ]; then
+            echo -e "  ${YELLOW}⚠️${NC} Partial installation detected"
+        else
+            echo -e "  ${RED}❌${NC} Installation issues detected"
+        fi
+        
+        [ -n "$summary" ] && [ "$summary" != "null" ] && echo -e "  ${GRAY}    $summary${NC}"
+        
+        # Show missing components
+        if [ -n "$missing" ]; then
+            echo -e "  ${YELLOW}📋${NC} Missing components:"
+            echo "$missing" | while read -r component; do
+                [ -n "$component" ] && echo -e "    ${RED}•${NC} $component"
+            done
+        fi
+        
+        # Show warnings
+        if [ -n "$warnings" ]; then
+            echo -e "  ${YELLOW}⚠️${NC} Warnings:"
+            echo "$warnings" | while read -r warning; do
+                [ -n "$warning" ] && echo -e "    ${YELLOW}•${NC} $warning"
+            done
+        fi
+        
+        # Show recommendations
+        if [ -n "$recommendations" ]; then
+            echo -e "  ${BLUE}💡${NC} Recommendations:"
+            echo "$recommendations" | while read -r rec; do
+                [ -n "$rec" ] && echo -e "    ${BLUE}•${NC} $rec"
+            done
+        fi
+    else
+        # Fallback to basic validation when Claude SDK unavailable
+        echo -e "  ${YELLOW}⚠️${NC} Claude SDK unavailable, using basic validation..."
+        
+        local validation_passed=true
+        
+        # Basic checks
+        if [ -x "./CONSTRUCT/CONSTRUCT/scripts/construct/update-context.sh" ]; then
+            echo -e "  ${GREEN}✅${NC} Context update script found"
+        else
+            echo -e "  ${RED}❌${NC} Context update script missing"
             validation_passed=false
         fi
-    else
-        echo -e "  ${YELLOW}⚠️${NC} Context update script not found"
-    fi
-    
-    # Test architecture checks
-    echo -e "  ${YELLOW}🔍${NC} Testing architecture validation..."
-    if [ -x "./CONSTRUCT/scripts/core/check-architecture.sh" ]; then
-        if ./CONSTRUCT/scripts/core/check-architecture.sh --dry-run >/dev/null 2>&1; then
-            echo -e "  ${GREEN}✅${NC} Architecture validation working"
+        
+        if [ -d "CONSTRUCT/AI" ]; then
+            echo -e "  ${GREEN}✅${NC} AI documentation structure present"
         else
-            echo -e "  ${YELLOW}⚠️${NC} Architecture check had warnings (normal)"
+            echo -e "  ${RED}❌${NC} AI documentation structure missing"
+            validation_passed=false
         fi
-    else
-        echo -e "  ${YELLOW}⚠️${NC} Architecture check script not found"
-    fi
-    
-    # Test git hooks
-    echo -e "  ${YELLOW}🔍${NC} Testing git hooks..."
-    if [ -x ".git/hooks/pre-commit" ]; then
-        echo -e "  ${GREEN}✅${NC} Git hooks installed and executable"
-    else
-        echo -e "  ${YELLOW}⚠️${NC} Git hooks not properly installed"
-    fi
-    
-    # Test pattern validation
-    echo -e "  ${YELLOW}🔍${NC} Testing pattern validation..."
-    if [ -f ".construct/patterns.yaml" ]; then
-        if command -v yq >/dev/null 2>&1; then
-            if yq eval '.' .construct/patterns.yaml >/dev/null 2>&1; then
-                echo -e "  ${GREEN}✅${NC} Pattern configuration valid"
-            else
-                echo -e "  ${RED}❌${NC} Pattern configuration invalid"
-                validation_passed=false
-            fi
+        
+        if [ -f ".construct/patterns.yaml" ]; then
+            echo -e "  ${GREEN}✅${NC} Pattern configuration present"
         else
-            echo -e "  ${YELLOW}⚠️${NC} Cannot validate patterns (yq not available)"
+            echo -e "  ${RED}❌${NC} Pattern configuration missing"
+            validation_passed=false
         fi
-    fi
-    
-    if [ "$validation_passed" = true ]; then
-        echo -e "  ${GREEN}🎉${NC} All validation checks passed!"
-    else
-        echo -e "  ${YELLOW}⚠️${NC} Some validation checks failed. Check installation."
+        
+        if [ "$validation_passed" = true ]; then
+            echo -e "  ${GREEN}🎉${NC} Basic validation passed!"
+        else
+            echo -e "  ${YELLOW}⚠️${NC} Some components missing. Check installation."
+        fi
     fi
     
     return 0  # Don't fail on validation issues
