@@ -204,7 +204,8 @@ CLAUDE_CONTENT+="<!--
 
 # Check if we have extracted project knowledge to lead with
 PROJECT_CUSTOM_CONTENT=""
-project_custom_path="./CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md"
+PROJECT_NAME=$(basename "$PROJECT_DIR")
+project_custom_path="./CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md"
 if [ -f "$project_custom_path" ]; then
     PROJECT_CUSTOM_CONTENT=$(cat "$project_custom_path")
     echo -e "${YELLOW}📋 Found project-specific knowledge to feature prominently${NC}"
@@ -265,8 +266,8 @@ PATTERN_SUMMARIES=""
 for plugin in "${PLUGIN_ARRAY[@]}"; do
     plugin=$(echo "$plugin" | xargs) # Trim whitespace
     if [ -n "$plugin" ]; then
-        # Skip project-custom as it's already featured prominently above
-        if [ "$plugin" = "project-custom" ]; then
+        # Skip extracted project content as it's already featured prominently above
+        if [[ "$plugin" == extracted-* ]]; then
             continue
         fi
         

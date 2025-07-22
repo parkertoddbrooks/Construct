@@ -284,8 +284,11 @@ extract_existing_patterns() {
         cp CLAUDE.md CLAUDE.md.backup
         echo -e "  ${GREEN}💾${NC} Original CLAUDE.md backed up"
         
+        # Get project name for unique naming
+        PROJECT_NAME=$(basename "$PWD")
+        
         # Create project-specific injection directory in CONSTRUCT structure
-        mkdir -p CONSTRUCT/patterns/plugins/project-custom/injections
+        mkdir -p "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections"
         
         # Use Claude SDK for intelligent pattern extraction
         echo -e "  ${YELLOW}📝${NC} Using Claude SDK to extract project patterns..."
@@ -304,25 +307,25 @@ extract_existing_patterns() {
 
 Format the output as a structured markdown document that captures the essential project knowledge. Focus on preserving information that would help developers understand and work with this specific project.
 
-Return ONLY the extracted content in markdown format, without any explanation or meta-commentary." CLAUDE.md.backup > CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md 2>/dev/null; then
+Return ONLY the extracted content in markdown format, without any explanation or meta-commentary." CLAUDE.md.backup > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md" 2>/dev/null; then
 
             # Check if extraction was successful
-            if [ -s CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md ]; then
+            if [ -s "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md" ]; then
                 echo -e "  ${GREEN}✅${NC} Project patterns extracted via Claude SDK"
                 
                 # Create pattern plugin metadata
-                cat > CONSTRUCT/patterns/plugins/project-custom/pattern.yaml << 'EOF'
-id: project-custom
-name: Project-Specific Patterns  
-description: Custom patterns extracted from existing CLAUDE.md
+                cat > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/pattern.yaml" << EOF
+id: extracted-${PROJECT_NAME}
+name: Extracted ${PROJECT_NAME} Patterns  
+description: Comprehensive patterns extracted from existing CLAUDE.md
 version: 1.0.0
 injections:
-  - project-custom.md
+  - extracted-${PROJECT_NAME}.md
 EOF
 
                 # Update patterns.yaml to include extracted patterns
                 if command -v yq >/dev/null 2>&1; then
-                    yq eval -i '.plugins += ["project-custom"]' .construct/patterns.yaml
+                    yq eval -i ".plugins += [\"extracted-${PROJECT_NAME}\"]" .construct/patterns.yaml
                     echo -e "  ${GREEN}✅${NC} Pattern configuration updated with extracted rules"
                 fi
             else
@@ -524,8 +527,11 @@ fallback_extract_single_category() {
 fallback_extract_patterns() {
     echo -e "  ${YELLOW}📝${NC} Using comprehensive logic-based pattern extraction as fallback..."
     
+    # Get project name for unique naming
+    PROJECT_NAME=$(basename "$PWD")
+    
     # Create project-specific injection directory for fallback
-    mkdir -p CONSTRUCT/patterns/plugins/project-custom/injections
+    mkdir -p "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections"
     
     # Look for substantial project content using logic - be MUCH more comprehensive
     temp_file=$(mktemp)
@@ -577,31 +583,31 @@ fallback_extract_patterns() {
     
     # If we extracted substantial content, create the injection
     if [ -s "$temp_file" ] && [ $(wc -l < "$temp_file") -gt 10 ]; then
-        cat > CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md << 'EOF'
-# Project-Specific Patterns
+        cat > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md" << EOF
+# ${PROJECT_NAME^} Project Knowledge
 
-## Extracted Project Knowledge
+## Extracted Project Patterns
 
 The following content was extracted from your original CLAUDE.md to preserve project-specific knowledge:
 
 EOF
-        cat "$temp_file" >> CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md
+        cat "$temp_file" >> "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md"
         
         # Create pattern plugin metadata
-        cat > CONSTRUCT/patterns/plugins/project-custom/pattern.yaml << 'EOF'
-id: project-custom
-name: Project-Specific Patterns
-description: Custom patterns extracted from existing CLAUDE.md via fallback
+        cat > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/pattern.yaml" << EOF
+id: extracted-${PROJECT_NAME}
+name: Extracted ${PROJECT_NAME} Patterns
+description: Comprehensive patterns extracted from existing CLAUDE.md via fallback
 version: 1.0.0
 injections:
-  - project-custom.md
+  - extracted-${PROJECT_NAME}.md
 EOF
         
         echo -e "  ${GREEN}✅${NC} Project patterns extracted using comprehensive logic-based fallback"
         
         # Update patterns.yaml to include extracted patterns
         if command -v yq >/dev/null 2>&1; then
-            yq eval -i '.plugins += ["project-custom"]' .construct/patterns.yaml
+            yq eval -i ".plugins += [\"extracted-${PROJECT_NAME}\"]" .construct/patterns.yaml
             echo -e "  ${GREEN}✅${NC} Pattern configuration updated with extracted rules"
         fi
     else
