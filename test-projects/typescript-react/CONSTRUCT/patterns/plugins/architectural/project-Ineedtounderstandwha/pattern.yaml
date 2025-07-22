@@ -1,0 +1,7 @@
+id: project-Ineedtounderstandwha
+name: Project-Specific Uarchitectural - UIneedtounderstandwha
+description: Extracted architectural patterns from existing CLAUDE.md
+version: 1.0.0
+category: architectural
+injections:
+  - project-Ineedtounderstandwha.md

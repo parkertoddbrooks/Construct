@@ -1,0 +1,7 @@
+id: project-Ineedtounderstandwha
+name: Project-Specific Uquality - UIneedtounderstandwha
+description: Extracted quality patterns from existing CLAUDE.md
+version: 1.0.0
+category: quality
+injections:
+  - project-Ineedtounderstandwha.md

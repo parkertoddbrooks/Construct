@@ -1,0 +1,7 @@
+id: project-Ineedtounderstandwha
+name: Project-Specific Utooling - UIneedtounderstandwha
+description: Extracted tooling patterns from existing CLAUDE.md
+version: 1.0.0
+category: tooling
+injections:
+  - project-Ineedtounderstandwha.md

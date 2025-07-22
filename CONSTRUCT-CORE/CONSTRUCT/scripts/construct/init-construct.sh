@@ -284,10 +284,51 @@ extract_existing_patterns() {
         cp CLAUDE.md CLAUDE.md.backup
         echo -e "  ${GREEN}💾${NC} Original CLAUDE.md backed up"
         
+        # Create project-specific injection directory in CONSTRUCT structure
+        mkdir -p CONSTRUCT/patterns/plugins/project-custom/injections
+        
+        # Use Claude SDK for intelligent pattern extraction
+        echo -e "  ${YELLOW}📝${NC} Using Claude SDK to extract project patterns..."
+        
         # Check if Claude SDK is available
-        if command -v claude >/dev/null 2>&1; then
-            # Use enhanced categorization extraction
-            extract_enhanced_patterns
+        if claude -p "Analyze this CLAUDE.md file and extract ALL project-specific content that should be preserved. This includes:
+
+1. Project overview and description
+2. Development commands and workflows  
+3. Architecture explanations
+4. Tool development patterns
+5. Configuration details
+6. Any custom guidelines or best practices
+7. Technology-specific information
+8. Build/test/deployment instructions
+
+Format the output as a structured markdown document that captures the essential project knowledge. Focus on preserving information that would help developers understand and work with this specific project.
+
+Return ONLY the extracted content in markdown format, without any explanation or meta-commentary." CLAUDE.md.backup > CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md 2>/dev/null; then
+
+            # Check if extraction was successful
+            if [ -s CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md ]; then
+                echo -e "  ${GREEN}✅${NC} Project patterns extracted via Claude SDK"
+                
+                # Create pattern plugin metadata
+                cat > CONSTRUCT/patterns/plugins/project-custom/pattern.yaml << 'EOF'
+id: project-custom
+name: Project-Specific Patterns  
+description: Custom patterns extracted from existing CLAUDE.md
+version: 1.0.0
+injections:
+  - project-custom.md
+EOF
+
+                # Update patterns.yaml to include extracted patterns
+                if command -v yq >/dev/null 2>&1; then
+                    yq eval -i '.plugins += ["project-custom"]' .construct/patterns.yaml
+                    echo -e "  ${GREEN}✅${NC} Pattern configuration updated with extracted rules"
+                fi
+            else
+                echo -e "  ${YELLOW}⚠️${NC} Claude SDK extraction failed, using fallback method"
+                fallback_extract_patterns
+            fi
         else
             echo -e "  ${YELLOW}⚠️${NC} Claude SDK not available, using fallback method"
             # Fallback to logic-based extraction
@@ -298,171 +339,240 @@ extract_existing_patterns() {
     fi
 }
 
-# Enhanced pattern extraction with comprehensive categorization (bash 3+ compatible)
-extract_enhanced_patterns() {
-    echo -e "  ${YELLOW}🧠${NC} Using enhanced categorization with Claude SDK..."
+# Analyze pattern content to create descriptive plugin names
+analyze_pattern_content() {
+    local temp_file="$1"
+    local category="$2"
     
-    local patterns_created=0
-    local categories="architectural cross-platform frameworks languages platforms tooling ui performance quality configuration"
-    
-    # Process each category individually
-    for category in $categories; do
-        # Set category description and keywords based on category name
-        case "$category" in
-            "ui")
-                description="Design tokens, visual quality, accessibility, component design patterns"
-                keywords="design.*token|\.frame.*token|AppColors|spacing|visual.*quality|accessibility|component.*pattern|@State.*UI|background.*flash"
-                ;;
-            "performance")
-                description="Optimization patterns, rendering rules, memory management, lazy loading"
-                keywords="LazyVStack|performance|optimization|rendering|ForEach.*id|memory.*management|animation.*performance|loading.*pattern"
-                ;;
-            "quality")
-                description="Professional standards, quality gates, empirical discoveries, best practices"
-                keywords="quality.*gate|professional.*standard|empirical|validated.*discover|best.*practice|architectural.*constant|NEVER:|ALWAYS:"
-                ;;
-            "configuration")
-                description="Platform settings, Info.plist, build configuration, environment setup"
-                keywords="Info\.plist|Xcode.*setting|build.*config|environment|permission.*config|orientation.*setting|launch.*screen"
-                ;;
-            "architectural")
-                description="MVVM, Clean Architecture, design patterns, business logic separation"
-                keywords="MVVM|ViewModel|@Published|business.*logic|Clean.*Architecture|design.*pattern|coordinator|navigation.*pattern"
-                ;;
-            "frameworks")
-                description="SwiftUI, Flask, React, framework-specific patterns and best practices"
-                keywords="SwiftUI|@State|Flask|React|framework.*specific|library.*pattern|NavigationStack|async.*await.*UI"
-                ;;
-            "languages")
-                description="Swift, Python, TypeScript language conventions and modern patterns"
-                keywords="Swift.*6|async.*await|python.*convention|language.*specific|syntax.*pattern|@MainActor|concurrency"
-                ;;
-            "platforms")
-                description="iOS, web, Android platform-specific requirements and constraints"
-                keywords="iOS.*specific|platform.*requirement|device.*specific|platform.*constraint|Watch.*connectivity"
-                ;;
-            "tooling")
-                description="Build scripts, development workflows, CI/CD, tool configurations"
-                keywords="build.*script|CI.*CD|deployment|development.*tool|workflow.*automation|testing.*framework"
-                ;;
-            "cross-platform")
-                description="Shared models, API contracts, multi-platform sync patterns"
-                keywords="shared.*model|API.*contract|cross.*platform|multi.*platform.*sync|data.*synchronization"
-                ;;
-        esac
-        
-        # Use Claude SDK for intelligent extraction per category
-        claude -p "Extract content related to: $description
-
-Keywords to focus on: $keywords
-
-From this CLAUDE.md file, extract only content that matches this category.
-Look for:
-- Specific rules and patterns (❌ NEVER: / ✅ ALWAYS: patterns)
-- Do/Don't examples  
-- Configuration requirements
-- Best practices and standards
-- Project-specific implementations
-
-Return clean markdown without category headers.
-Focus on project-specific patterns that override or extend standard patterns.
-If no relevant content exists, return empty." \
-        CLAUDE.md.backup > "temp_${category}.md" 2>/dev/null
-        
-        if [ -s "temp_${category}.md" ] && [ $(wc -l < "temp_${category}.md") -gt 5 ]; then
-            # Determine specific plugin name using Claude intelligence
-            plugin_name=$(claude -p "Based on this content, what specific plugin name fits best?
-Category: $category
-
-For ui: design-system, visual-quality, accessibility, tokens
-For performance: optimization, rendering, memory-management  
-For quality: standards, gates, discoveries, practices
-For configuration: ios-config, build-config, env-config
-For architectural: mvvm, clean, coordinator, navigation
-For frameworks: swiftui, web, react, flask
-For languages: swift, python, typescript
-For platforms: ios, web, android
-For tooling: build, scripting, ci-cd
-For cross-platform: sync, api, models
-
-Return ONLY the plugin name." "temp_${category}.md" 2>/dev/null | head -1 | tr -d '\n' || echo "project-${category}")
-            
-            # Clean plugin name (remove any extra text)
-            plugin_name=$(echo "$plugin_name" | sed 's/[^a-zA-Z0-9-]//g' | head -c 20)
-            [ -z "$plugin_name" ] && plugin_name="project-${category}"
-            
-            # Create directory structure
-            mkdir -p "CONSTRUCT/patterns/plugins/${category}/project-${plugin_name}/injections"
-            
-            # Move extracted content
-            mv "temp_${category}.md" "CONSTRUCT/patterns/plugins/${category}/project-${plugin_name}/injections/project-${plugin_name}.md"
-            
-            # Create pattern metadata (bash 3+ compatible)
-            category_title=$(echo "$category" | sed 's/./\U&/')
-            plugin_title=$(echo "$plugin_name" | sed 's/./\U&/')
-            
-            cat > "CONSTRUCT/patterns/plugins/${category}/project-${plugin_name}/pattern.yaml" << EOF
-id: project-${plugin_name}
-name: Project-Specific ${category_title} - ${plugin_title}
-description: Extracted ${category} patterns from existing CLAUDE.md
-version: 1.0.0
-category: ${category}
-injections:
-  - project-${plugin_name}.md
-EOF
-            
-            # Update patterns.yaml
-            if command -v yq >/dev/null 2>&1; then
-                yq eval -i ".plugins += [\"${category}/project-${plugin_name}\"]" .construct/patterns.yaml
-                echo -e "  ${GREEN}✅${NC} Created ${category}/project-${plugin_name} pattern"
-                patterns_created=$((patterns_created + 1))
+    case "$category" in
+        "architectural")
+            if grep -qi "mvvm\|viewmodel\|@published\|observable" "$temp_file"; then
+                if grep -qi "swift\|ios" "$temp_file" && grep -qi "typescript\|react\|web" "$temp_file"; then
+                    echo "multiplatform-mvvm"
+                else
+                    echo "mvvm-patterns"
+                fi
+            elif grep -qi "clean.*architecture\|use.*case\|entity\|repository" "$temp_file"; then
+                echo "clean-architecture"
+            elif grep -qi "coordinator\|navigation" "$temp_file"; then
+                echo "coordinator-pattern"
+            else
+                echo "custom-architecture"
             fi
-        else
-            echo -e "  ${GRAY}ℹ️${NC} No substantial ${category} patterns found"
-            rm -f "temp_${category}.md"
-        fi
-    done
+            ;;
+        "frameworks")
+            if grep -qi "react" "$temp_file" && grep -qi "swiftui" "$temp_file"; then
+                echo "react-swiftui"
+            elif grep -qi "fastapi\|uvicorn\|pydantic" "$temp_file"; then
+                echo "fastapi-backend"
+            elif grep -qi "swiftui\|@state\|@binding" "$temp_file"; then
+                echo "swiftui-patterns"
+            elif grep -qi "react\|usestate\|useeffect" "$temp_file"; then
+                echo "react-patterns"
+            elif grep -qi "flask\|django" "$temp_file"; then
+                echo "python-web"
+            else
+                echo "custom-frameworks"
+            fi
+            ;;
+        "languages")
+            if grep -qi "swift" "$temp_file" && grep -qi "typescript\|javascript" "$temp_file"; then
+                echo "swift-typescript"
+            elif grep -qi "python.*typing\|type.*hint" "$temp_file"; then
+                echo "python-typing"
+            elif grep -qi "swift.*async\|await" "$temp_file"; then
+                echo "swift-concurrency"
+            elif grep -qi "typescript.*generic\|type.*utility" "$temp_file"; then
+                echo "typescript-advanced"
+            else
+                echo "custom-conventions"
+            fi
+            ;;
+        "platforms")
+            if grep -qi "ios" "$temp_file" && grep -qi "web\|browser" "$temp_file"; then
+                echo "ios-web"
+            elif grep -qi "info\.plist\|ios.*config" "$temp_file"; then
+                echo "ios-configuration"
+            elif grep -qi "responsive\|mobile.*web" "$temp_file"; then
+                echo "responsive-web"
+            else
+                echo "custom-platform"
+            fi
+            ;;
+        "tooling")
+            if grep -qi "build.*script\|npm.*script\|xcodebuild" "$temp_file"; then
+                echo "build-automation"
+            elif grep -qi "ci.*cd\|github.*action\|workflow" "$temp_file"; then
+                echo "ci-cd-workflows"
+            elif grep -qi "test.*script\|jest\|xctest" "$temp_file"; then
+                echo "testing-automation"
+            elif grep -qi "git.*hook\|pre.*commit" "$temp_file"; then
+                echo "git-workflows"
+            else
+                echo "custom-tooling"
+            fi
+            ;;
+        "ui")
+            if grep -qi "design.*token\|color.*system\|typography" "$temp_file"; then
+                echo "design-system"
+            elif grep -qi "accessibility\|wcag\|a11y\|voiceover" "$temp_file"; then
+                echo "accessibility-patterns"
+            elif grep -qi "dark.*mode\|theme\|appearance" "$temp_file"; then
+                echo "theming-system"
+            elif grep -qi "component.*library\|ui.*kit" "$temp_file"; then
+                echo "component-patterns"
+            else
+                echo "custom-design"
+            fi
+            ;;
+        "performance")
+            if grep -qi "lazy.*load\|virtualization" "$temp_file"; then
+                echo "lazy-loading"
+            elif grep -qi "memory.*management\|cache\|optimization" "$temp_file"; then
+                echo "memory-optimization"
+            elif grep -qi "bundle.*split\|code.*split" "$temp_file"; then
+                echo "bundle-optimization"
+            elif grep -qi "render.*optimization\|reselect\|memo" "$temp_file"; then
+                echo "render-optimization"
+            else
+                echo "performance-patterns"
+            fi
+            ;;
+        "quality")
+            if grep -qi "test.*pattern\|unit.*test\|integration" "$temp_file"; then
+                echo "testing-standards"
+            elif grep -qi "lint\|eslint\|swiftlint" "$temp_file"; then
+                echo "code-quality"
+            elif grep -qi "error.*handling\|exception" "$temp_file"; then
+                echo "error-handling"
+            elif grep -qi "security\|validation\|sanitization" "$temp_file"; then
+                echo "security-patterns"
+            else
+                echo "quality-standards"
+            fi
+            ;;
+        "configuration")
+            if grep -qi "environment\|env.*var\|config" "$temp_file"; then
+                echo "environment-config"
+            elif grep -qi "info\.plist\|bundle" "$temp_file"; then
+                echo "ios-app-config"
+            elif grep -qi "package\.json\|vite\|webpack" "$temp_file"; then
+                echo "build-config"
+            elif grep -qi "docker\|container" "$temp_file"; then
+                echo "deployment-config"
+            else
+                echo "custom-config"
+            fi
+            ;;
+        "cross-platform")
+            if grep -qi "model.*sync\|api.*contract" "$temp_file"; then
+                echo "api-contracts"
+            elif grep -qi "shared.*model\|common.*type" "$temp_file"; then
+                echo "shared-models"
+            elif grep -qi "authentication\|auth.*token" "$temp_file"; then
+                echo "auth-patterns"
+            else
+                echo "cross-platform-sync"
+            fi
+            ;;
+        *)
+            echo "custom-${category}"
+            ;;
+    esac
+}
+
+# Fallback extraction for single category when Claude SDK times out
+fallback_extract_single_category() {
+    local category="$1"
+    local output_file="$2"
     
-    if [ $patterns_created -gt 0 ]; then
-        echo -e "  ${GREEN}🎉${NC} Successfully created $patterns_created categorized pattern plugins"
-    else
-        echo -e "  ${YELLOW}⚠️${NC} No patterns extracted, falling back to single-file extraction"
-        fallback_extract_patterns
-    fi
+    case "$category" in
+        "architectural")
+            sed -n '/## Architecture/,/## /p' CLAUDE.md.backup | sed '$d' > "$output_file"
+            sed -n '/### Tool System Architecture/,/## /p' CLAUDE.md.backup | sed '$d' >> "$output_file"
+            ;;
+        "frameworks")
+            sed -n '/Flask/,/## /p' CLAUDE.md.backup | sed '$d' > "$output_file"
+            sed -n '/framework/,/## /p' CLAUDE.md.backup | sed '$d' >> "$output_file"
+            ;;
+        "languages")
+            sed -n '/Python/,/## /p' CLAUDE.md.backup | sed '$d' > "$output_file"
+            sed -n '/Type hints/,/## /p' CLAUDE.md.backup | sed '$d' >> "$output_file"
+            ;;
+        "tooling")
+            sed -n '/## Development Tools/,/## /p' CLAUDE.md.backup | sed '$d' > "$output_file"
+            sed -n '/### Package Management/,/## /p' CLAUDE.md.backup | sed '$d' >> "$output_file"
+            ;;
+        "quality")
+            sed -n '/## Testing/,/## /p' CLAUDE.md.backup | sed '$d' > "$output_file"
+            sed -n '/Code Style/,/## /p' CLAUDE.md.backup | sed '$d' >> "$output_file"
+            ;;
+        "configuration")
+            sed -n '/## Environment Setup/,/## /p' CLAUDE.md.backup | sed '$d' > "$output_file"
+            sed -n '/Configuration/,/## /p' CLAUDE.md.backup | sed '$d' >> "$output_file"
+            ;;
+        *)
+            # For other categories, create minimal fallback
+            echo "# ${category^} Patterns" > "$output_file"
+            echo "" >> "$output_file"
+            echo "Patterns extracted from project context for ${category} category." >> "$output_file"
+            ;;
+    esac
 }
 
 # Fallback pattern extraction using logic-based detection
 fallback_extract_patterns() {
-    echo -e "  ${YELLOW}📝${NC} Using logic-based pattern extraction as fallback..."
+    echo -e "  ${YELLOW}📝${NC} Using comprehensive logic-based pattern extraction as fallback..."
     
     # Create project-specific injection directory for fallback
     mkdir -p CONSTRUCT/patterns/plugins/project-custom/injections
     
-    # Look for substantial project content using logic
+    # Look for substantial project content using logic - be MUCH more comprehensive
     temp_file=$(mktemp)
     
-    # Extract project overview sections
-    sed -n '/## Project Overview/,/## /p' CLAUDE.md.backup | head -n -1 > "$temp_file"
+    # Extract ALL major sections that could contain important information
     
-    # Extract development commands
-    sed -n '/## Development Commands/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
-    sed -n '/### Running/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
-    sed -n '/### Environment Setup/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    # Project overview and description
+    sed -n '/^# /,/^## /p' CLAUDE.md.backup | sed '$d' > "$temp_file"
+    sed -n '/## Project Overview/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/## Overview/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
     
-    # Extract architecture information
-    sed -n '/## Architecture/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
-    sed -n '/## Code Architecture/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
-    sed -n '/### Core Components/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    # ALL Development commands and setup information  
+    sed -n '/## Development Commands/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/## Setup/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/## Installation/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/## Environment Setup/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Setup and Installation/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Running the Application/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Development Tools/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Package Management/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
     
-    # Extract tool development patterns
-    sed -n '/## Tool Development/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
-    sed -n '/### Tool Development Pattern/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    # Architecture and system design
+    sed -n '/## Architecture/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Core Components/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Tool System Architecture/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Self-Improvement Mechanism/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
     
-    # Extract configuration details
-    sed -n '/## Configuration/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    # Key features and capabilities
+    sed -n '/## Key Features/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Token Management/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Dual Interface Support/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Error Handling/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    
+    # Development patterns and guidelines
+    sed -n '/## Development Patterns/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Adding New Tools/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Tool Development Guidelines/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    sed -n '/### Code Style/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    
+    # Testing information
+    sed -n '/## Testing/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
+    
+    # Configuration details
+    sed -n '/## Configuration/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
     
     # Extract ENFORCE RULES sections (critical patterns)
-    sed -n '/## 🚨 ENFORCE THESE RULES/,/## /p' CLAUDE.md.backup | head -n -1 >> "$temp_file"
+    sed -n '/## 🚨 ENFORCE THESE RULES/,/^## /p' CLAUDE.md.backup | sed '$d' >> "$temp_file"
     sed -n '/❌ NEVER:/,/✅ ALWAYS:/p' CLAUDE.md.backup >> "$temp_file"
     
     # If we extracted substantial content, create the injection
@@ -487,7 +597,7 @@ injections:
   - project-custom.md
 EOF
         
-        echo -e "  ${GREEN}✅${NC} Project patterns extracted using logic-based fallback"
+        echo -e "  ${GREEN}✅${NC} Project patterns extracted using comprehensive logic-based fallback"
         
         # Update patterns.yaml to include extracted patterns
         if command -v yq >/dev/null 2>&1; then
@@ -608,19 +718,47 @@ generate_enhanced_claude() {
         
         # Check if assemble-claude.sh exists
         ASSEMBLE_SCRIPT="$CONSTRUCT_CORE/CONSTRUCT/scripts/construct/assemble-claude.sh"
+        echo -e "  ${BLUE}🔍${NC} Looking for assemble script: $ASSEMBLE_SCRIPT"
+        
         if [ -x "$ASSEMBLE_SCRIPT" ]; then
+            echo -e "  ${GREEN}✅${NC} Found assemble-claude.sh"
             echo -e "  ${YELLOW}🔧${NC} Assembling enhanced CLAUDE.md..."
             
-            # Call assemble-claude.sh with current directory and plugins only
+            # Call assemble-claude.sh with current directory and plugins
             if [ -n "$PLUGINS" ]; then
-                "$ASSEMBLE_SCRIPT" "$PROJECT_ROOT" "$PLUGINS" || {
-                    echo -e "  ${YELLOW}⚠️${NC} Pattern assembly failed, keeping existing CLAUDE.md"
-                }
+                echo -e "  ${BLUE}📋${NC} Calling: $ASSEMBLE_SCRIPT '$PROJECT_ROOT' '$PLUGINS'"
+                
+                # Call the fixed assemble script
+                if "$ASSEMBLE_SCRIPT" "$PROJECT_ROOT" "$PLUGINS" 2>&1; then
+                    echo -e "  ${GREEN}✅${NC} Pattern assembly completed successfully"
+                else
+                    echo -e "  ${RED}❌${NC} Pattern assembly failed with exit code $?"
+                    echo -e "  ${YELLOW}⚠️${NC} Keeping existing CLAUDE.md"
+                fi
             else
-                echo -e "  ${GRAY}ℹ️${NC} No plugins configured, keeping existing CLAUDE.md"
+                echo -e "  ${GRAY}ℹ️${NC} No plugins configured, using basic template"
+                # Call with empty plugins to get base template
+                if "$ASSEMBLE_SCRIPT" "$PROJECT_ROOT" "" 2>&1; then
+                    echo -e "  ${GREEN}✅${NC} Basic template generated"
+                fi
+            fi
+        elif [ -f "$ASSEMBLE_SCRIPT" ]; then
+            echo -e "  ${RED}❌${NC} assemble-claude.sh found but not executable"
+            echo -e "  ${YELLOW}🔧${NC} Making executable..."
+            chmod +x "$ASSEMBLE_SCRIPT"
+            
+            # Try again
+            if [ -n "$PLUGINS" ]; then
+                echo -e "  ${BLUE}📋${NC} Retrying: $ASSEMBLE_SCRIPT '$PROJECT_ROOT' '$PLUGINS'"
+                if "$ASSEMBLE_SCRIPT" "$PROJECT_ROOT" "$PLUGINS" 2>&1; then
+                    echo -e "  ${GREEN}✅${NC} Pattern assembly completed after fixing permissions"
+                else
+                    echo -e "  ${RED}❌${NC} Pattern assembly still failed"
+                fi
             fi
         else
-            echo -e "  ${YELLOW}⚠️${NC} assemble-claude.sh not found, keeping existing CLAUDE.md"
+            echo -e "  ${RED}❌${NC} assemble-claude.sh not found at: $ASSEMBLE_SCRIPT"
+            echo -e "  ${YELLOW}⚠️${NC} Cannot generate enhanced CLAUDE.md"
         fi
     else
         echo -e "  ${YELLOW}⚠️${NC} Pattern configuration not readable, keeping existing CLAUDE.md"

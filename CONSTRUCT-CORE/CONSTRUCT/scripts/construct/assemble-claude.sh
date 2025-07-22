@@ -221,7 +221,7 @@ $PROJECT_CUSTOM_CONTENT
 "
 fi
 
-# Add base content (universal principles)
+# Add base content (universal principles) 
 if [ ! -f "$CONSTRUCT_CORE/CLAUDE-BASE.md" ]; then
     echo -e "${RED}❌ Error: CLAUDE-BASE.md not found in $CONSTRUCT_CORE${NC}"
     exit 1

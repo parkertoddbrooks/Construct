@@ -1,0 +1,7 @@
+id: project-Ineedmoreinformation
+name: Project-Specific Ucross-platform - UIneedmoreinformation
+description: Extracted cross-platform patterns from existing CLAUDE.md
+version: 1.0.0
+category: cross-platform
+injections:
+  - project-Ineedmoreinformation.md

@@ -1,0 +1,7 @@
+id: project-react
+name: Project-Specific Uframeworks - Ureact
+description: Extracted frameworks patterns from existing CLAUDE.md
+version: 1.0.0
+category: frameworks
+injections:
+  - project-react.md

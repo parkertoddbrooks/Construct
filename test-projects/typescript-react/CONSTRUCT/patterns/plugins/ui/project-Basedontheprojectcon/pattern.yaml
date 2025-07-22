@@ -1,0 +1,7 @@
+id: project-Basedontheprojectcon
+name: Project-Specific Uui - UBasedontheprojectcon
+description: Extracted ui patterns from existing CLAUDE.md
+version: 1.0.0
+category: ui
+injections:
+  - project-Basedontheprojectcon.md

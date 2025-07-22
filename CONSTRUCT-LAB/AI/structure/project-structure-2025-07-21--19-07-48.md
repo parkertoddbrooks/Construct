@@ -319,6 +319,7 @@ _archive/CONSTRUCT - branch - refactor:core-lab-templates/CONSTRUCT-LAB/tools/va
 _archive/CONSTRUCT - branch - refactor:core-lab-templates/Projects/_ai-ignore_not-used/test003/.construct/CLAUDE.md.sha256
 _archive/CONSTRUCT - branch - refactor:core-lab-templates/Projects/_ai-ignore_not-used/test01/.construct/CLAUDE.md.sha256
 _archive/CONSTRUCT - branch - refactor:core-lab-templates/Projects/_ai-ignore_not-used/TestPatternProject/.construct/CLAUDE.md.sha256
+batch_test.sh
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-08--20-17-09/assemble-claude.sh
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-08--20-17-09/before_coding.sh
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts--2025-07-08--20-17-09/check-architecture.sh
@@ -492,10 +493,12 @@ CONSTRUCT-CORE/patterns/plugins/tooling/shell-scripting/validators/orchestration
 CONSTRUCT-LAB/patterns/plugins/tooling/shell-scripting/injections/validators/interface-consistency.sh
 CONSTRUCT-LAB/tools/promote-to-core.sh
 CONSTRUCT-LAB/tools/validate-promotion.sh
+optimized_extraction.sh
 Projects/_ai-ignore_not-used/test003/.construct/CLAUDE.md.sha256
 Projects/_ai-ignore_not-used/test01/.construct/CLAUDE.md.sha256
 Projects/_ai-ignore_not-used/TestPatternProject/.construct/CLAUDE.md.sha256
 Projects/grok-code/grok-code-python/.construct/CLAUDE.md.sha256
+Projects/test-typescript-react/.construct/CLAUDE.md.sha256
 ```
 
 ## YAML Configuration Files
@@ -578,6 +581,26 @@ Projects/_ai-ignore_not-used/TestPatternProject/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/TestProject/.construct/patterns.yaml
 Projects/grok-code/grok-code-python/.construct/patterns.yaml
 Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/project-custom/pattern.yaml
+Projects/large-test-project/.construct/patterns.yaml
+Projects/large-test-project/CONSTRUCT/patterns/plugins/architectural/multiplatform-mvvm/pattern.yaml
+Projects/large-test-project/CONSTRUCT/patterns/plugins/cross-platform/api-contracts/pattern.yaml
+Projects/large-test-project/CONSTRUCT/patterns/plugins/frameworks/react-swiftui/pattern.yaml
+Projects/test-typescript-react/.construct/patterns.yaml
+Projects/test-typescript-react/CONSTRUCT/patterns/plugins/frameworks/project-react/pattern.yaml
+Projects/test-typescript-react/CONSTRUCT/patterns/plugins/languages/project-typescript/pattern.yaml
+Projects/test-typescript-react/CONSTRUCT/patterns/plugins/performance/project-optimization/pattern.yaml
+Projects/test-typescript-react/CONSTRUCT/patterns/plugins/quality/project-gates/pattern.yaml
+Projects/test-typescript-react/CONSTRUCT/patterns/plugins/tooling/project-design-system/pattern.yaml
+Projects/test-typescript-react/CONSTRUCT/patterns/plugins/ui/project-design-system/pattern.yaml
+test-projects/typescript-react/.construct/patterns.yaml
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/architectural/project-Ineedtounderstandwha/pattern.yaml
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/cross-platform/project-Ineedmoreinformation/pattern.yaml
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/frameworks/project-react/pattern.yaml
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/languages/project-typescript/pattern.yaml
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/performance/project-optimization/pattern.yaml
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/quality/project-Ineedtounderstandwha/pattern.yaml
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/tooling/project-Ineedtounderstandwha/pattern.yaml
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/ui/project-Basedontheprojectcon/pattern.yaml
 ```
 
 ## Markdown Documentation Files
@@ -2265,6 +2288,8 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-20--09-47-35.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-20--19-28-36.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-20--19-36-00.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-20--19-51-24.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-21--08-28-37.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-21--08-44-52.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/_devupdate-prompt.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
@@ -2376,6 +2401,8 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-20-0947-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-20-1928-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-20-1936-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-20-1951-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-21-0828-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-21-0844-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -2536,6 +2563,8 @@ CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-20--19-28-34.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-20--19-35-58.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-20--19-51-22.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-21--08-28-35.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-21--08-44-50.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-21--19-07-48.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -2668,9 +2697,11 @@ CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-20--09-47-32.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-20--19-28-34.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-20--19-35-58.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-20--19-51-22.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-21--08-28-35.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-21--08-44-50.md
 CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--22-55-28.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
-CONSTRUCT-LAB/AI/structure/project-structure-2025-07-21--08-28-35.md
+CONSTRUCT-LAB/AI/structure/project-structure-2025-07-21--19-07-48.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-03.md
@@ -2812,10 +2843,68 @@ Projects/grok-code/grok-code-python/CONSTRUCT/AI/docs/README.md
 Projects/grok-code/grok-code-python/CONSTRUCT/AI/todo/README.md
 Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/project-custom/injections/project-custom.md
 Projects/grok-code/grok-code-python/readme.md
+Projects/large-test-project/CLAUDE--2025-07-21--09-14-30.md
+Projects/large-test-project/CLAUDE.md
+Projects/large-test-project/CLAUDE.md.backup
+Projects/large-test-project/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/check-quality/README.md
+Projects/large-test-project/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md
+Projects/large-test-project/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/README.md
+Projects/large-test-project/CONSTRUCT/AI/_git-ignore/template-structure/AI/docs/README.md
+Projects/large-test-project/CONSTRUCT/AI/_git-ignore/template-structure/AI/todo/README.md
+Projects/large-test-project/CONSTRUCT/AI/dev-logs/check-quality/README.md
+Projects/large-test-project/CONSTRUCT/AI/dev-logs/dev-updates/_devupdate-prompt.md
+Projects/large-test-project/CONSTRUCT/AI/dev-logs/dev-updates/README.md
+Projects/large-test-project/CONSTRUCT/AI/docs/README.md
+Projects/large-test-project/CONSTRUCT/AI/todo/README.md
+Projects/large-test-project/CONSTRUCT/patterns/plugins/architectural/multiplatform-mvvm/injections/multiplatform-mvvm.md
+Projects/large-test-project/CONSTRUCT/patterns/plugins/cross-platform/api-contracts/injections/api-contracts.md
+Projects/large-test-project/CONSTRUCT/patterns/plugins/frameworks/react-swiftui/injections/react-swiftui.md
+Projects/large-test-project/README.md
 Projects/RUN/patterns/run-specific.md
+Projects/test-typescript-react/.construct/CLAUDE.md.sha256
+Projects/test-typescript-react/CLAUDE.md
+Projects/test-typescript-react/CLAUDE.md.backup
+Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/check-quality/README.md
+Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md
+Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/README.md
+Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/docs/README.md
+Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/todo/README.md
+Projects/test-typescript-react/CONSTRUCT/AI/dev-logs/check-quality/README.md
+Projects/test-typescript-react/CONSTRUCT/AI/dev-logs/dev-updates/_devupdate-prompt.md
+Projects/test-typescript-react/CONSTRUCT/AI/dev-logs/dev-updates/README.md
+Projects/test-typescript-react/CONSTRUCT/AI/docs/README.md
+Projects/test-typescript-react/CONSTRUCT/AI/todo/README.md
+Projects/test-typescript-react/CONSTRUCT/patterns/plugins/frameworks/project-react/injections/project-react.md
+Projects/test-typescript-react/CONSTRUCT/patterns/plugins/languages/project-typescript/injections/project-typescript.md
+Projects/test-typescript-react/CONSTRUCT/patterns/plugins/performance/project-optimization/injections/project-optimization.md
+Projects/test-typescript-react/CONSTRUCT/patterns/plugins/quality/project-gates/injections/project-gates.md
+Projects/test-typescript-react/CONSTRUCT/patterns/plugins/tooling/project-design-system/injections/project-design-system.md
+Projects/test-typescript-react/CONSTRUCT/patterns/plugins/ui/project-design-system/injections/project-design-system.md
 README--2025-07-20--19-46-36.md
 README.md
 requirements.md
+test-projects/python-api/CLAUDE.md
+test-projects/typescript-react/CLAUDE.md
+test-projects/typescript-react/CLAUDE.md.backup
+test-projects/typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/check-quality/README.md
+test-projects/typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/_devupdate-prompt.md
+test-projects/typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates/README.md
+test-projects/typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/docs/README.md
+test-projects/typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/todo/README.md
+test-projects/typescript-react/CONSTRUCT/AI/dev-logs/check-quality/README.md
+test-projects/typescript-react/CONSTRUCT/AI/dev-logs/dev-updates/_devupdate-prompt.md
+test-projects/typescript-react/CONSTRUCT/AI/dev-logs/dev-updates/README.md
+test-projects/typescript-react/CONSTRUCT/AI/docs/README.md
+test-projects/typescript-react/CONSTRUCT/AI/todo/README.md
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/architectural/project-Ineedtounderstandwha/injections/project-Ineedtounderstandwha.md
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/cross-platform/project-Ineedmoreinformation/injections/project-Ineedmoreinformation.md
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/frameworks/project-react/injections/project-react.md
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/languages/project-typescript/injections/project-typescript.md
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/performance/project-optimization/injections/project-optimization.md
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/quality/project-Ineedtounderstandwha/injections/project-Ineedtounderstandwha.md
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/tooling/project-Ineedtounderstandwha/injections/project-Ineedtounderstandwha.md
+test-projects/typescript-react/CONSTRUCT/patterns/plugins/ui/project-Basedontheprojectcon/injections/project-Basedontheprojectcon.md
+test-projects/typescript-react/temp_configuration.md
 ```
 
 ## Python Files Found
@@ -3567,6 +3656,7 @@ test-runner.sh
   .construct
   .construct-workspace
   .construct-workspace/import-history
+  CONSTRUCT
   CONSTRUCT-CORE
   CONSTRUCT-CORE/_ai-ignore_not-used
   CONSTRUCT-CORE/CONSTRUCT
@@ -3907,8 +3997,174 @@ test-runner.sh
   Projects/grok-code/grok-code-python/static/js
   Projects/grok-code/grok-code-python/templates
   Projects/grok-code/grok-code-python/tools
+  Projects/large-test-project
+  Projects/large-test-project/.construct
+  Projects/large-test-project/CONSTRUCT
+  Projects/large-test-project/CONSTRUCT/AI
+  Projects/large-test-project/CONSTRUCT/AI/_git-ignore
+  Projects/large-test-project/CONSTRUCT/AI/_git-ignore/template-structure
+  Projects/large-test-project/CONSTRUCT/AI/_git-ignore/template-structure/AI
+  Projects/large-test-project/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs
+  Projects/large-test-project/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/check-quality
+  Projects/large-test-project/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates
+  Projects/large-test-project/CONSTRUCT/AI/_git-ignore/template-structure/AI/docs
+  Projects/large-test-project/CONSTRUCT/AI/_git-ignore/template-structure/AI/todo
+  Projects/large-test-project/CONSTRUCT/AI/ai-misc-conversations
+  Projects/large-test-project/CONSTRUCT/AI/ai-raw-cli
+  Projects/large-test-project/CONSTRUCT/AI/dev-logs
+  Projects/large-test-project/CONSTRUCT/AI/dev-logs/check-quality
+  Projects/large-test-project/CONSTRUCT/AI/dev-logs/check-quality/automated
+  Projects/large-test-project/CONSTRUCT/AI/dev-logs/dev-updates
+  Projects/large-test-project/CONSTRUCT/AI/dev-logs/dev-updates/automated
+  Projects/large-test-project/CONSTRUCT/AI/dev-logs/session-states
+  Projects/large-test-project/CONSTRUCT/AI/dev-logs/session-states/automated
+  Projects/large-test-project/CONSTRUCT/AI/docs
+  Projects/large-test-project/CONSTRUCT/AI/docs/automated
+  Projects/large-test-project/CONSTRUCT/AI/docs/automated/_archive
+  Projects/large-test-project/CONSTRUCT/AI/examples
+  Projects/large-test-project/CONSTRUCT/AI/PRDs
+  Projects/large-test-project/CONSTRUCT/AI/PRDs/_archive
+  Projects/large-test-project/CONSTRUCT/AI/PRDs/current-sprint
+  Projects/large-test-project/CONSTRUCT/AI/PRDs/full-app
+  Projects/large-test-project/CONSTRUCT/AI/PRDs/future
+  Projects/large-test-project/CONSTRUCT/AI/structure
+  Projects/large-test-project/CONSTRUCT/AI/todo
+  Projects/large-test-project/CONSTRUCT/AI/todo/_done
+  Projects/large-test-project/CONSTRUCT/patterns
+  Projects/large-test-project/CONSTRUCT/patterns/plugins
+  Projects/large-test-project/CONSTRUCT/patterns/plugins/architectural
+  Projects/large-test-project/CONSTRUCT/patterns/plugins/architectural/multiplatform-mvvm
+  Projects/large-test-project/CONSTRUCT/patterns/plugins/architectural/multiplatform-mvvm/injections
+  Projects/large-test-project/CONSTRUCT/patterns/plugins/cross-platform
+  Projects/large-test-project/CONSTRUCT/patterns/plugins/cross-platform/api-contracts
+  Projects/large-test-project/CONSTRUCT/patterns/plugins/cross-platform/api-contracts/injections
+  Projects/large-test-project/CONSTRUCT/patterns/plugins/frameworks
+  Projects/large-test-project/CONSTRUCT/patterns/plugins/frameworks/react-swiftui
+  Projects/large-test-project/CONSTRUCT/patterns/plugins/frameworks/react-swiftui/injections
   Projects/RUN
   Projects/RUN/patterns
+  Projects/test-python-api
+  Projects/test-typescript-react
+  Projects/test-typescript-react/.construct
+  Projects/test-typescript-react/CONSTRUCT
+  Projects/test-typescript-react/CONSTRUCT/AI
+  Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore
+  Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore/template-structure
+  Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI
+  Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs
+  Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/check-quality
+  Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates
+  Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/docs
+  Projects/test-typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/todo
+  Projects/test-typescript-react/CONSTRUCT/AI/ai-misc-conversations
+  Projects/test-typescript-react/CONSTRUCT/AI/ai-raw-cli
+  Projects/test-typescript-react/CONSTRUCT/AI/dev-logs
+  Projects/test-typescript-react/CONSTRUCT/AI/dev-logs/check-quality
+  Projects/test-typescript-react/CONSTRUCT/AI/dev-logs/check-quality/automated
+  Projects/test-typescript-react/CONSTRUCT/AI/dev-logs/dev-updates
+  Projects/test-typescript-react/CONSTRUCT/AI/dev-logs/dev-updates/automated
+  Projects/test-typescript-react/CONSTRUCT/AI/dev-logs/session-states
+  Projects/test-typescript-react/CONSTRUCT/AI/dev-logs/session-states/automated
+  Projects/test-typescript-react/CONSTRUCT/AI/docs
+  Projects/test-typescript-react/CONSTRUCT/AI/docs/automated
+  Projects/test-typescript-react/CONSTRUCT/AI/docs/automated/_archive
+  Projects/test-typescript-react/CONSTRUCT/AI/examples
+  Projects/test-typescript-react/CONSTRUCT/AI/PRDs
+  Projects/test-typescript-react/CONSTRUCT/AI/PRDs/_archive
+  Projects/test-typescript-react/CONSTRUCT/AI/PRDs/current-sprint
+  Projects/test-typescript-react/CONSTRUCT/AI/PRDs/full-app
+  Projects/test-typescript-react/CONSTRUCT/AI/PRDs/future
+  Projects/test-typescript-react/CONSTRUCT/AI/structure
+  Projects/test-typescript-react/CONSTRUCT/AI/todo
+  Projects/test-typescript-react/CONSTRUCT/AI/todo/_done
+  Projects/test-typescript-react/CONSTRUCT/patterns
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/frameworks
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/frameworks/project-react
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/frameworks/project-react/injections
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/languages
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/languages/project-typescript
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/languages/project-typescript/injections
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/performance
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/performance/project-optimization
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/performance/project-optimization/injections
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/quality
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/quality/project-gates
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/quality/project-gates/injections
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/tooling
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/tooling/project-design-system
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/tooling/project-design-system/injections
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/ui
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/ui/project-design-system
+  Projects/test-typescript-react/CONSTRUCT/patterns/plugins/ui/project-design-system/injections
+  Projects/test-typescript-react/Projects
+  Projects/test-typescript-react/Projects/large-test-project
+  test-projects
+  test-projects/mobile-app
+  test-projects/python-api
+  test-projects/python-api/Projects
+  test-projects/python-api/Projects/test-mobile-app
+  test-projects/python-api/Projects/test-python-api
+  test-projects/python-api/Projects/test-typescript-react
+  test-projects/typescript-react
+  test-projects/typescript-react/.construct
+  test-projects/typescript-react/CONSTRUCT
+  test-projects/typescript-react/CONSTRUCT/AI
+  test-projects/typescript-react/CONSTRUCT/AI/_git-ignore
+  test-projects/typescript-react/CONSTRUCT/AI/_git-ignore/template-structure
+  test-projects/typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI
+  test-projects/typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs
+  test-projects/typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/check-quality
+  test-projects/typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/dev-logs/dev-updates
+  test-projects/typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/docs
+  test-projects/typescript-react/CONSTRUCT/AI/_git-ignore/template-structure/AI/todo
+  test-projects/typescript-react/CONSTRUCT/AI/ai-misc-conversations
+  test-projects/typescript-react/CONSTRUCT/AI/ai-raw-cli
+  test-projects/typescript-react/CONSTRUCT/AI/dev-logs
+  test-projects/typescript-react/CONSTRUCT/AI/dev-logs/check-quality
+  test-projects/typescript-react/CONSTRUCT/AI/dev-logs/check-quality/automated
+  test-projects/typescript-react/CONSTRUCT/AI/dev-logs/dev-updates
+  test-projects/typescript-react/CONSTRUCT/AI/dev-logs/dev-updates/automated
+  test-projects/typescript-react/CONSTRUCT/AI/dev-logs/session-states
+  test-projects/typescript-react/CONSTRUCT/AI/dev-logs/session-states/automated
+  test-projects/typescript-react/CONSTRUCT/AI/docs
+  test-projects/typescript-react/CONSTRUCT/AI/docs/automated
+  test-projects/typescript-react/CONSTRUCT/AI/docs/automated/_archive
+  test-projects/typescript-react/CONSTRUCT/AI/examples
+  test-projects/typescript-react/CONSTRUCT/AI/PRDs
+  test-projects/typescript-react/CONSTRUCT/AI/PRDs/_archive
+  test-projects/typescript-react/CONSTRUCT/AI/PRDs/current-sprint
+  test-projects/typescript-react/CONSTRUCT/AI/PRDs/full-app
+  test-projects/typescript-react/CONSTRUCT/AI/PRDs/future
+  test-projects/typescript-react/CONSTRUCT/AI/structure
+  test-projects/typescript-react/CONSTRUCT/AI/todo
+  test-projects/typescript-react/CONSTRUCT/AI/todo/_done
+  test-projects/typescript-react/CONSTRUCT/patterns
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/architectural
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/architectural/project-Ineedtounderstandwha
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/architectural/project-Ineedtounderstandwha/injections
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/cross-platform
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/cross-platform/project-Ineedmoreinformation
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/cross-platform/project-Ineedmoreinformation/injections
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/frameworks
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/frameworks/project-react
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/frameworks/project-react/injections
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/languages
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/languages/project-typescript
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/languages/project-typescript/injections
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/performance
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/performance/project-optimization
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/performance/project-optimization/injections
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/quality
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/quality/project-Ineedtounderstandwha
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/quality/project-Ineedtounderstandwha/injections
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/tooling
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/tooling/project-Ineedtounderstandwha
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/tooling/project-Ineedtounderstandwha/injections
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/ui
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/ui/project-Basedontheprojectcon
+  test-projects/typescript-react/CONSTRUCT/patterns/plugins/ui/project-Basedontheprojectcon/injections
 ```
 
 ## Configuration Analysis
@@ -3919,13 +4175,13 @@ No config directory found
 ## Summary Statistics
 ```
 === File Counts ===
-Shell Scripts: 397
-YAML Configs: 78
-Markdown Docs: 1959
+Shell Scripts: 399
+YAML Configs: 98
+Markdown Docs: 2021
 Python Files: 42
 
 === Directory Structure ===
-Total Directories: 1058
+Total Directories: 1228
 
 === Project Health ===
 Pattern Configuration: Found
@@ -3949,5 +4205,5 @@ Active Patterns:
 - AI documentation: 5 files
 
 ---
-*Generated by scan_project_structure.sh on Mon Jul 21 08:28:37 PDT 2025*
+*Generated by scan_project_structure.sh on Mon Jul 21 19:07:51 PDT 2025*
 *Project: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT*
