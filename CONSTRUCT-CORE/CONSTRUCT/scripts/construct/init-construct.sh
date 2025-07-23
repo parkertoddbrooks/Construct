@@ -130,6 +130,9 @@ run_with_timeout() {
     return $exit_code
 }
 
+# Export the function so it's available in subshells
+export -f run_with_timeout
+
 # Phase 0: Verify Claude SDK Available (Required Dependency)
 verify_claude_sdk() {
     echo -e "${BLUE}🔍 Phase 0: Verifying Claude SDK availability...${NC}"
@@ -454,10 +457,20 @@ EOF
         # Extract complete patterns using Claude SDK with timeout
         echo -e "  ${BLUE}📋${NC} Extracting complete project patterns..."
         
-        # Run extraction without checking exit code (like the working version)
-        # Increased timeout to 60s for large content
-        run_with_timeout 60 claude < "$extract_prompt" > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md" 2>/dev/null
-        rm -f "$extract_prompt"
+        # Run extraction with proper error handling
+        local extract_output=$(mktemp)
+        if run_with_timeout 60 claude < "$extract_prompt" > "$extract_output"; then
+            cp "$extract_output" "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md"
+        else
+            echo -e "  ${YELLOW}⚠️${NC} Level 1 extraction failed, creating minimal content"
+            # Create minimal content from original CLAUDE.md
+            echo "# Project Content" > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md"
+            echo "" >> "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md"
+            # Extract just the project-specific sections
+            sed -n '/^## Project Overview/,/^## Development Commands/p' CLAUDE.md.backup >> "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md" 2>/dev/null || true
+            sed -n '/^## Development Commands/,/^## Architecture/p' CLAUDE.md.backup >> "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md" 2>/dev/null || true
+        fi
+        rm -f "$extract_prompt" "$extract_output"
         
         # Check if extraction was successful by checking file content
         if [ -s "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md" ]; then
@@ -514,6 +527,17 @@ EOF
                     
                     # Launch extraction in background
                     (
+                    # Ensure PATH and functions are available in subshell
+                    export PATH="$PATH"
+                    
+                    # Debug: Check if functions are available
+                    if ! type -t run_with_timeout >/dev/null; then
+                        echo -e "    ${RED}❌${NC} run_with_timeout not found in subshell for ${category}" >> script_log.txt
+                    fi
+                    
+                    if ! command -v claude >/dev/null 2>&1; then
+                        echo -e "    ${RED}❌${NC} claude command not found in subshell for ${category}" >> script_log.txt
+                    fi
                     
                     # Create category-specific extraction prompt with JSON output
                     local category_prompt=$(mktemp)
@@ -633,8 +657,9 @@ EOF
                 done
                 echo -e "  ${GREEN}✅${NC} All category extractions completed"
                 
-                # Add delay before Level 3 to prevent rate-limiting
-                sleep 2
+                # Add longer delay before Level 3 to prevent rate-limiting
+                echo -e "  ${GRAY}⏳${NC} Waiting 10 seconds before Level 3 extraction..."
+                sleep 10
                 
                 # Level 3: Extract uncategorized/unique patterns
                 echo -e "\n  ${BLUE}📌 Level 3: Uncategorized pattern extraction...${NC}"
@@ -642,23 +667,31 @@ EOF
                 
                 # Create uncategorized extraction prompt
                 local uncat_prompt=$(mktemp)
+                # Build list of categories that actually found patterns
+                local found_categories=()
+                for category in "${categories[@]}"; do
+                    if [ -d "CONSTRUCT/patterns/plugins/${PROJECT_NAME}-${category}" ]; then
+                        found_categories+=("$category")
+                    fi
+                done
+                
                 cat > "$uncat_prompt" << EOF
-From the following project content, extract patterns that DON'T fit clearly into these categories:
-- architectural, frameworks, languages, platforms, tooling, ui, performance, quality, configuration, cross-platform
+Extract ALL content from the original project documentation that was NOT already captured in these extracted categories: ${found_categories[@]}
 
-Focus on:
-1. Project-specific documentation (README content, project description)
-2. Unique workflows or processes specific to this project
-3. Custom scripts or commands not related to standard tooling
-4. Domain-specific knowledge or terminology
-5. Project history, decisions, or context
-6. Anything truly unique to this specific project
+This should include:
+1. Project overview and description
+2. Installation and setup instructions
+3. Environment configuration (.env setup)
+4. Specific tool lists and descriptions
+5. Development workflows not captured in the categories
+6. Any commands, configurations, or guidelines not already extracted
+7. Project-specific details that don't fit the standard patterns
 
-If all content fits into the standard categories, return: "# No uncategorized patterns found"
+Return the REMAINDER content - everything that wasn't already extracted into the categories above.
 
-Otherwise, return ONLY the uncategorized/unique patterns in markdown format.
+If everything was already captured in the categories, return: "# No uncategorized patterns found"
 
-Content to analyze:
+Original content to analyze:
 ${complete_content}
 EOF
                 

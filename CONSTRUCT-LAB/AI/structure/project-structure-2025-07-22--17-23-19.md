@@ -414,6 +414,8 @@ CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54/w
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54/workspace/workspace-status.sh
 CONSTRUCT-CORE/CONSTRUCT/_ai-ignore_not-used/scripts-new--2025-07-09--23-24-54/workspace/workspace-update.sh
 CONSTRUCT-CORE/CONSTRUCT/lib/common-patterns.sh
+CONSTRUCT-CORE/CONSTRUCT/lib/construct-init/common.sh
+CONSTRUCT-CORE/CONSTRUCT/lib/construct-init/pattern-extractor.sh
 CONSTRUCT-CORE/CONSTRUCT/lib/file-analysis.sh
 CONSTRUCT-CORE/CONSTRUCT/lib/interactive-support.sh
 CONSTRUCT-CORE/CONSTRUCT/lib/template-location.sh
@@ -447,6 +449,7 @@ CONSTRUCT-CORE/CONSTRUCT/scripts/construct/check-symlinks.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct-old.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh.backup
+CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh.backup-20250722-153907
 CONSTRUCT-CORE/CONSTRUCT/scripts/construct/refresh-plugin-registry.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/construct/scan_project_structure.sh
 CONSTRUCT-CORE/CONSTRUCT/scripts/construct/update-architecture.sh
@@ -581,7 +584,10 @@ Projects/_ai-ignore_not-used/test01/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/TestPatternProject/.construct/patterns.yaml
 Projects/_ai-ignore_not-used/TestProject/.construct/patterns.yaml
 Projects/grok-code/grok-code-python/.construct/patterns.yaml
+Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/extracted-grok-code-python-all/pattern.yaml
 Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/extracted-grok-code-python/pattern.yaml
+Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/grok-code-python-platforms/pattern.yaml
+Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/grok-code-python-tooling/pattern.yaml
 Projects/large-test-project/.construct/patterns.yaml
 Projects/large-test-project/CONSTRUCT/patterns/plugins/architectural/multiplatform-mvvm/pattern.yaml
 Projects/large-test-project/CONSTRUCT/patterns/plugins/cross-platform/api-contracts/pattern.yaml
@@ -2300,6 +2306,8 @@ CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-21--21-36-48.
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-21--21-41-25.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-21--21-57-26.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-22--10-12-47.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-22--12-55-55.md
+CONSTRUCT-LAB/AI/dev-logs/dev-updates/automated/devupdate--2025-07-22--16-11-09.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/_devupdate-prompt.md
 CONSTRUCT-LAB/AI/dev-logs/dev-updates/user-initiated/devupdate--userinit--2025-07-07--12-30-00.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/_archive/2025-06-30-1320-construct-session.md
@@ -2419,6 +2427,8 @@ CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-21-2136-construct-ses
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-21-2141-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-21-2157-construct-session.md
 CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-22-1012-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-22-1255-construct-session.md
+CONSTRUCT-LAB/AI/dev-logs/session-states/automated/2025-07-22-1611-construct-session.md
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220003
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220619
 CONSTRUCT-LAB/AI/docs/automated/_archive/improving-CONSTRUCT-guide-automated.md.backup-20250630-220716
@@ -2587,6 +2597,8 @@ CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-21--21-41-22.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-21--21-57-23.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-22--10-12-44.md
 CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-22--12-55-53.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-22--16-11-06.md
+CONSTRUCT-LAB/AI/quality-reports/quality-report-2025-07-22--17-23-19.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--13-49-35.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--14-18-25.md
 CONSTRUCT-LAB/AI/structure/_old/construct-structure-2025-06-30--15-35-11.md
@@ -2727,9 +2739,11 @@ CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-21--21-36-45.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-21--21-41-22.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-21--21-57-23.md
 CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-22--10-12-44.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-22--12-55-53.md
+CONSTRUCT-LAB/AI/structure/_old/project-structure-2025-07-22--16-11-06.md
 CONSTRUCT-LAB/AI/structure/construct-structure-2025-07-09--22-55-28.md
 CONSTRUCT-LAB/AI/structure/current-structure.md
-CONSTRUCT-LAB/AI/structure/project-structure-2025-07-22--12-55-53.md
+CONSTRUCT-LAB/AI/structure/project-structure-2025-07-22--17-23-19.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-01.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-02.md
 CONSTRUCT-LAB/AI/todo/_archive/CONSTRUCT-RESTRUCTURE-PLAN-03.md
@@ -2880,7 +2894,10 @@ Projects/grok-code/grok-code-python/CONSTRUCT/AI/dev-logs/dev-updates/_devupdate
 Projects/grok-code/grok-code-python/CONSTRUCT/AI/dev-logs/dev-updates/README.md
 Projects/grok-code/grok-code-python/CONSTRUCT/AI/docs/README.md
 Projects/grok-code/grok-code-python/CONSTRUCT/AI/todo/README.md
+Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/extracted-grok-code-python-all/injections/extracted-grok-code-python-all.md
 Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/extracted-grok-code-python/injections/extracted-grok-code-python.md
+Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/grok-code-python-platforms/injections/grok-code-python-platforms.md
+Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/grok-code-python-tooling/injections/grok-code-python-tooling.md
 Projects/grok-code/grok-code-python/readme.md
 Projects/large-test-project/CLAUDE--2025-07-21--09-14-30.md
 Projects/large-test-project/CLAUDE.md
@@ -3261,6 +3278,8 @@ template-location.sh
 template-utils.sh
 validation.sh
 common-patterns.sh
+common.sh
+pattern-extractor.sh
 file-analysis.sh
 interactive-support.sh
 template-location.sh
@@ -3726,6 +3745,7 @@ test-runner.sh
   CONSTRUCT-CORE/CONSTRUCT/adapters
   CONSTRUCT-CORE/CONSTRUCT/config
   CONSTRUCT-CORE/CONSTRUCT/lib
+  CONSTRUCT-CORE/CONSTRUCT/lib/construct-init
   CONSTRUCT-CORE/CONSTRUCT/orchestrator
   CONSTRUCT-CORE/CONSTRUCT/scripts
   CONSTRUCT-CORE/CONSTRUCT/scripts-backup-20250710-094133
@@ -4067,7 +4087,13 @@ test-runner.sh
   Projects/grok-code/grok-code-python/CONSTRUCT/patterns
   Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins
   Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/extracted-grok-code-python
+  Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/extracted-grok-code-python-all
+  Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/extracted-grok-code-python-all/injections
   Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/extracted-grok-code-python/injections
+  Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/grok-code-python-platforms
+  Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/grok-code-python-platforms/injections
+  Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/grok-code-python-tooling
+  Projects/grok-code/grok-code-python/CONSTRUCT/patterns/plugins/grok-code-python-tooling/injections
   Projects/grok-code/grok-code-python/prompts
   Projects/grok-code/grok-code-python/static
   Projects/grok-code/grok-code-python/static/css
@@ -4252,13 +4278,13 @@ No config directory found
 ## Summary Statistics
 ```
 === File Counts ===
-Shell Scripts: 400
-YAML Configs: 98
-Markdown Docs: 2059
+Shell Scripts: 402
+YAML Configs: 101
+Markdown Docs: 2070
 Python Files: 42
 
 === Directory Structure ===
-Total Directories: 1267
+Total Directories: 1274
 
 === Project Health ===
 Pattern Configuration: Found
@@ -4282,5 +4308,5 @@ Active Patterns:
 - AI documentation: 5 files
 
 ---
-*Generated by scan_project_structure.sh on Tue Jul 22 12:55:55 PDT 2025*
+*Generated by scan_project_structure.sh on Tue Jul 22 17:23:21 PDT 2025*
 *Project: /Users/parker/Documents/dev/claude-engineer/_Projects/CONSTRUCT*
