@@ -1,7 +1,0 @@
-id: project-optimization
-name: Project-Specific Uperformance - Uoptimization
-description: Extracted performance patterns from existing CLAUDE.md
-version: 1.0.0
-category: performance
-injections:
-  - project-optimization.md

@@ -1,7 +1,0 @@
-id: project-typescript
-name: Project-Specific Ulanguages - Utypescript
-description: Extracted languages patterns from existing CLAUDE.md
-version: 1.0.0
-category: languages
-injections:
-  - project-typescript.md
