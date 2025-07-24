@@ -30,6 +30,49 @@ fi
 
 set -e
 
+# Parse command line arguments
+DRY_RUN=false
+VERBOSE=false
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        --verbose|-v)
+            VERBOSE=true
+            DEBUG=true
+            shift
+            ;;
+        --help|-h)
+            echo "CONSTRUCT Integration System (construct-init / install-construct)"
+            echo ""
+            echo "Usage: $0 [OPTIONS]"
+            echo ""
+            echo "Complete CONSTRUCT installation and pattern extraction system."
+            echo ""
+            echo "Options:"
+            echo "  --dry-run    Preview changes without making them"
+            echo "  --verbose    Enable verbose output"
+            echo "  --help       Show this help message"
+            echo ""
+            echo "Environment variables:"
+            echo "  CONSTRUCT_CATEGORIES         Comma-separated list of categories to extract"
+            echo "  CONSTRUCT_EXTRACTION_LEVEL   Extraction level (1, 2, or 3)"
+            echo "  CLAUDE_PATH                  Path to Claude CLI (default: claude)"
+            echo ""
+            echo "Aliases: construct-init, install-construct"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Use --help for usage information"
+            exit 1
+            ;;
+    esac
+done
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -69,11 +112,18 @@ CLAUDE_HAS_EXTRACTABLE_PATTERNS=false
 
 echo -e "${BLUE}🚀 CONSTRUCT Integration System${NC}"
 echo -e "${BLUE}===============================${NC}"
+if [ "$DRY_RUN" = true ]; then
+    echo -e "${YELLOW}🔍 Running in DRY-RUN mode - no changes will be made${NC}"
+fi
 echo ""
 
 # Initialize script log for debugging
-echo "CONSTRUCT Init Script Log - $(date)" > script_log.txt
-echo "========================================" >> script_log.txt
+if [ "$DRY_RUN" = false ]; then
+    echo "CONSTRUCT Init Script Log - $(date)" > script_log.txt
+    echo "========================================" >> script_log.txt
+else
+    [ -n "$DEBUG" ] && log_info "[DRY-RUN] Would create script_log.txt"
+fi
 
 # Helper function to run command with timeout (cross-platform)
 run_with_timeout() {
@@ -410,8 +460,12 @@ extract_existing_patterns() {
         echo -e "${BLUE}🔍 Phase 3: Three-level pattern extraction system...${NC}"
         
         # Backup original
-        cp CLAUDE.md CLAUDE.md.backup
-        echo -e "  ${GREEN}💾${NC} Original CLAUDE.md backed up"
+        if [ "$DRY_RUN" = false ]; then
+            cp CLAUDE.md CLAUDE.md.backup
+            echo -e "  ${GREEN}💾${NC} Original CLAUDE.md backed up"
+        else
+            log_info "[DRY-RUN] Would backup CLAUDE.md to CLAUDE.md.backup"
+        fi
         
         # Get project name for unique naming
         PROJECT_NAME=$(basename "$PWD")
@@ -437,6 +491,12 @@ extract_existing_patterns() {
         
         # Level 1: Create complete blob extraction (current working approach)
         echo -e "\n  ${BLUE}📦 Level 1: Complete blob extraction...${NC}"
+        
+        if [ "$DRY_RUN" = true ]; then
+            log_info "[DRY-RUN] Would extract complete patterns to: CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/"
+            return 0
+        fi
+        
         mkdir -p "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections"
         
         # Create temp file for Claude SDK prompt
