@@ -36,7 +36,8 @@ General-purpose orchestrators that work with any project using patterns.yaml:
 
 Project-aware tools that were originally CONSTRUCT-specific but now work with any project:
 
-- **`assemble-claude.sh`** - Assembles CLAUDE.md from multiple sources (now with --list-plugins, --list-sets, --refresh-registry)
+- **`init-construct.sh`** - AI-Native intelligent orchestrator for CONSTRUCT integration (NEW!)
+- **`assemble-claude.sh`** - Assembles CLAUDE.md from patterns and base template
 - **`check-symlinks.sh`** - Validates LAB/CORE symlink integrity
 - **`refresh-plugin-registry.sh`** - Refreshes the plugin registry by scanning plugin directories
 - **`update-context.sh`** - Updates project context (PROJECT_DIR/CLAUDE.md)
@@ -45,6 +46,16 @@ Project-aware tools that were originally CONSTRUCT-specific but now work with an
 
 ### Usage
 ```bash
+# NEW: AI-Native CONSTRUCT integration
+./construct/init-construct.sh                    # Integrate CONSTRUCT into current project
+./construct/init-construct.sh --dry-run          # Preview changes without making them
+./construct/init-construct.sh --verbose          # Enable debug output
+./construct/init-construct.sh --help             # Show usage information
+
+# Pattern assembly
+./construct/assemble-claude.sh . "languages/swift,frameworks/swiftui"  # Assemble with patterns
+./construct/assemble-claude.sh . ""              # Base template only
+
 # Most CONSTRUCT scripts now accept PROJECT_DIR parameter
 ./construct/update-context.sh                    # Update current project's CLAUDE.md
 ./construct/update-context.sh Projects/MyApp     # Update specific project's CLAUDE.md
@@ -208,6 +219,10 @@ Most scripts now accept a PROJECT_DIR parameter as their first argument:
 
 # Check specific project
 ./core/check-architecture.sh ~/Projects/MyApp
+
+# NEW: Integrate CONSTRUCT into any project
+./construct/init-construct.sh                    # Full AI-powered integration
+./construct/init-construct.sh --dry-run          # Preview what would happen
 
 # Update any project's context
 ./construct/update-context.sh                    # Current project

@@ -1,14 +1,36 @@
-# Enhanced init-construct: Two-Stage Initialization
+# Enhanced init-construct: AI-Native Intelligent Orchestrator
 
-This document explains the enhanced `init-construct.sh` script that provides intelligent two-stage initialization for CONSTRUCT projects, working seamlessly with Claude Code's `/init` command.
+This document explains the enhanced `init-construct.sh` script that provides AI-powered, intelligent initialization for CONSTRUCT projects, working seamlessly with Claude Code's `/init` command.
+
+## 🚀 Major Updates (July 2025)
+
+### AI-Native Architecture
+- **Claude SDK Integration**: Full AI-powered analysis replacing regex patterns
+- **Intelligent Pattern Detection**: Claude analyzes content for extractable patterns
+- **Smart Project Analysis**: AI-driven language and framework detection
+- **Three-Level Extraction**: Comprehensive pattern extraction system
+
+### Production Features
+- **--dry-run Mode**: Preview changes without modifications
+- **Token Bucket Rate Limiting**: Prevents API rate limit violations
+- **Response Caching**: Reduces redundant API calls
+- **Concurrent Processing**: Parallel category extraction (3 at a time)
+- **Configuration System**: YAML-based configuration with environment overrides
+- **Log Rotation**: Automatic log management with compression
+- **Comprehensive Testing**: Full unit test suite
+
+### Modular Architecture
+- **lib/construct-init/common.sh**: Shared utilities, logging, rate limiting
+- **lib/construct-init/config.sh**: Configuration management
+- **lib/construct-init/pattern-extractor.sh**: Concurrent pattern extraction
 
 ## Overview
 
-The enhanced init-construct implements a progressive enhancement approach with three distinct operating modes:
+The enhanced init-construct implements a progressive enhancement approach with intelligent AI-powered analysis:
 
-1. **Mode 1: First-time CONSTRUCT users** - Interactive plugin selection after `/init`
+1. **Mode 1: First-time CONSTRUCT users** - AI-powered plugin recommendations
 2. **Mode 2: Existing CONSTRUCT users** - Pattern regeneration from `.construct/patterns.yaml`
-3. **Mode 3: Legacy migration** - Extract patterns from existing CLAUDE.md files
+3. **Mode 3: Legacy migration** - Three-level AI extraction from existing CLAUDE.md
 
 ## Philosophy: Progressive Enhancement
 
@@ -16,68 +38,79 @@ The key principle is to **work WITH /init, not against it**. The system preserve
 
 ```
 Stage 1: /init → Creates initial CLAUDE.md with project context
-Stage 2: init-construct → Enhances with patterns and organization
+Stage 2: init-construct → AI-enhanced patterns and infrastructure
 ```
+
+## 🏗️ Unified CONSTRUCT/ Architecture
+
+### Revolutionary Folder Structure
+Every project gets the same structure as CONSTRUCT-LAB:
+
+```
+myproject/
+├── CONSTRUCT/              # ← Unified CONSTRUCT content
+│   ├── CONSTRUCT/          # ← Symlink to tools (not tracked)
+│   ├── AI/                 # ← Project AI documentation
+│   └── patterns/           # ← Project-specific patterns
+│       └── plugins/        # ← Extracted patterns
+├── .construct/             # ← Pure metadata (hidden)
+│   └── patterns.yaml       # ← Configuration
+├── src/
+└── package.json
+```
+
+**Why This Is Genius**:
+- **Consistent Architecture**: Same mental model everywhere
+- **Clean Separation**: Visible CONSTRUCT content vs hidden metadata
+- **Familiar Pattern**: Symlinks for tools (like LAB)
+- **Git Friendly**: Tools symlinked, content tracked
 
 ## Operating Modes
 
-### Mode 1: First-time CONSTRUCT users (Interactive Selection)
+### Mode 1: First-time CONSTRUCT users (AI Recommendations)
 
 **Detection**: No `.construct/patterns.yaml` file exists
 
 **Flow**:
-1. Analyzes project structure to detect languages (Swift, Python, TypeScript, Rust)
-2. Detects basic frameworks (SwiftUI via Package.swift, React via package.json)
-3. Detects iOS platform (via Info.plist or .xcodeproj)
-4. Shows recommendations and prompts for acceptance
-5. Creates `.construct/patterns.yaml` with selected plugins
+1. Claude SDK analyzes entire project structure
+2. AI detects languages, frameworks, and architectures
+3. Recommends patterns with confidence scores
+4. Creates `.construct/patterns.yaml` with selections
+5. Installs complete CONSTRUCT infrastructure
 6. Enhances CLAUDE.md with pattern content
 
 **Example Session**:
 ```bash
 $ /init  # Claude Code creates initial CLAUDE.md
-$ ./CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
+$ construct-init
 
-🚀 CONSTRUCT Pattern Enhancement
-================================
-📍 Project root: /path/to/project
-Creating .construct directory...
-Creating patterns.yaml...
+🚀 CONSTRUCT Integration System
+===============================
+🔍 Phase 0: Verifying Claude SDK availability...
+  ✅ Claude SDK found: claude 0.1.0
+  ℹ️  Using system prompts to enforce structured output
 
-📦 Based on your project, we recommend these plugins:
-  ✓ languages/swift
-  ✓ frameworks/swiftui
-  ✓ platforms/ios
+🔍 Phase 1: Assessing project state...
+  ✅ CLAUDE.md exists
+  🧠 Analyzing CLAUDE.md content with AI...
+  🤖 Analyzing with Claude SDK (30s timeout)...
+  📝 Custom patterns detected (AI confidence: 0.85)
+    Type: project-specific, Reason: Contains SwiftUI patterns
 
-Accept recommendations? [Y/n/customize]: customize
+🛠️ Phase 2: Installing missing CONSTRUCT infrastructure...
+  🏗️ Creating unified CONSTRUCT/ folder structure...
+  🔗 Linking CONSTRUCT tools (live repo mode)...
+  ✅ AI documentation structure installed
+  ✅ Pattern configuration installed
+  ✅ Git hooks installed
 
-📦 Available Pattern Plugins:
-
-languages:
-  - languages/csharp
-    C# language patterns and modern .NET best practices
-  - languages/python
-    Python language patterns following PEP 8 and modern best practices
-  - languages/swift
-    Swift 6 language patterns and best practices for iOS development
-
-frameworks:
-  - frameworks/ios-ui-library
-    iOS UI component library patterns for SwiftUI reusable components
-  - frameworks/swiftui
-    SwiftUI framework patterns and best practices for modern iOS development
-
-platforms:
-  - platforms/ios
-    iOS platform-specific patterns and conventions
-
-architectural:
-  - architectural/mvvm
-    Model-View-ViewModel architectural pattern for clean separation of concerns
-  - architectural/mvvm-ios
-    MVVM architecture pattern specifically for iOS applications with SwiftUI
-
-Enter plugins to install (comma-separated, e.g., languages/swift,platforms/ios):
+🧠 Phase 4: AI-Native project analysis...
+  🔍 Analyzing project structure with AI...
+  ✓ AI analysis complete
+  📋 Project type: iOS SwiftUI application
+  🔤 Detected languages: swift 
+  🔌 Recommended plugins: tooling/shell-scripting cross-platform/model-sync
+  📊 Confidence level: 90%
 ```
 
 ### Mode 2: Existing User (Pattern Regeneration)
@@ -88,334 +121,327 @@ Enter plugins to install (comma-separated, e.g., languages/swift,platforms/ios):
 1. Reads existing pattern configuration
 2. Preserves ALL content from `/init` in CLAUDE.md
 3. Regenerates pattern sections with latest content
-4. Updates CURRENT-STRUCTURE section
+4. Updates infrastructure if needed
+5. Validates all components
 
-**Example**:
+### Mode 3: Legacy Migration (Three-Level Extraction)
+
+**Detection**: CLAUDE.md exists with extractable patterns
+
+**AI-Powered Three-Level Extraction**:
+
+#### Level 1: Complete Blob Extraction
 ```bash
-$ /init  # Updates CLAUDE.md with new project info
-$ ./CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
+📦 Level 1: Complete blob extraction...
+📋 Extracting complete project patterns...
+✅ Complete project patterns extracted
+```
+- Extracts ALL project-specific content
+- Creates `extracted-{project}-all` plugin
+- Preserves full context for other levels
 
-🔄 Refreshing CONSTRUCT patterns...
-✅ Found existing configuration in .construct/patterns.yaml
-📝 Preserving /init content and updating pattern sections...
-✅ CLAUDE.md updated with latest patterns
+#### Level 2: Categorized Extraction (Concurrent)
+```bash
+🗂️ Level 2: Categorized pattern extraction (concurrent)...
+📁 Starting architectural extraction... (1/10)
+📁 Starting frameworks extraction... (2/10)
+📁 Starting languages extraction... (3/10)
+⏳ Waiting for all extractions to complete...
+✅ All category extractions completed
+```
+- Processes 10 categories in parallel (max 3 concurrent)
+- AI analyzes content for each category
+- Creates focused pattern plugins
+- Token bucket prevents rate limiting
+
+#### Level 3: Uncategorized Patterns
+```bash
+📌 Level 3: Uncategorized pattern extraction...
+✅ Uncategorized patterns extracted
+```
+- Extracts REMAINDER content not in categories
+- Captures project-specific details
+- Ensures nothing is lost
+
+## Command-Line Options
+
+### --dry-run Mode
+Preview all changes without making modifications:
+```bash
+$ construct-init --dry-run
+
+🚀 CONSTRUCT Integration System
+===============================
+🔍 Running in DRY-RUN mode - no changes will be made
+
+[DRY-RUN] Would create script_log.txt
+[DRY-RUN] Would backup CLAUDE.md to CLAUDE.md.backup
+[DRY-RUN] Would extract complete patterns to: CONSTRUCT/patterns/plugins/extracted-MyProject-all/
+[DRY-RUN] Would extract patterns for categories: architectural frameworks languages...
 ```
 
-### Mode 3: Legacy Migration (Pattern Extraction)
-
-**Detection**: CLAUDE.md exists without being from /init and no patterns.yaml exists
-
-**Flow**:
-1. Backs up original as CLAUDE.md.pre-construct
-2. Extracts sections matching: Rules, Guidelines, Standards, Patterns, Anti-patterns
-3. Creates LAB plugin at `project-specific/<project-name>/`
-4. Saves each extracted section as separate injection file
-5. Creates plugin metadata and documentation
-6. Proceeds with interactive plugin selection for base patterns
-
-**Example**:
+### --verbose Mode
+Enable detailed debug output:
 ```bash
-$ ./CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
+$ construct-init --verbose
 
-🚀 CONSTRUCT Pattern Enhancement
-================================
-📍 Project root: /path/to/project
-🔄 Detected legacy CLAUDE.md - will extract patterns
-✅ Backed up original as CLAUDE.md.pre-construct
-📝 Extracting custom patterns from existing CLAUDE.md...
-✅ Extracted: rules
-✅ Extracted: guidelines
-✅ Created LAB plugin: project-specific/myproject
-Creating patterns.yaml...
+🔍 Loaded common.sh module with token bucket and caching
+🔍 Loaded pattern-extractor.sh module
+🔍 Loaded config.sh module
+🔍 Claude API call attempt 1/3
+🔍 Consumed API token (remaining: 9)
+🔍 Cache miss for key a1b2c3d4...
+```
 
-[Continues with normal plugin selection, adding the extracted plugin automatically]
+### --help
+Display usage information:
+```bash
+$ construct-init --help
+
+Usage: construct-init [OPTIONS]
+
+Options:
+  --dry-run    Preview changes without making them
+  --verbose    Enable verbose output
+  --help       Show this help message
+
+Environment variables:
+  CONSTRUCT_CATEGORIES         Comma-separated list of categories to extract
+  CONSTRUCT_TOKEN_BUCKET_SIZE  Token bucket size (default: 10)
+  CONSTRUCT_TOKEN_REFILL_RATE  Token refill rate (default: 2)
+  CONSTRUCT_CACHE_MAX_AGE      Cache TTL in seconds (default: 3600)
+  MAX_CONCURRENT               Max concurrent extractions (default: 3)
 ```
 
 ## Technical Implementation
 
-### Project Analysis
+### AI-Native Project Analysis
 
-The script automatically detects:
-
-**Languages**:
-- Swift: `*.swift`, `*.xcodeproj`, `Package.swift`
-- Python: `*.py`, `requirements.txt`, `setup.py`, `pyproject.toml`
-- TypeScript: `*.ts`, `*.tsx`, `package.json`, `tsconfig.json`
-- Rust: `*.rs`, `Cargo.toml`
-
-**Frameworks** (limited detection):
-- SwiftUI: Checks for "SwiftUI" in Package.swift
-- React: Checks for "react" in package.json
-
-**Platforms**:
-- iOS: `*.xcodeproj` or `Info.plist`
-
-### Registry Integration
-
-The script loads available plugins from:
-```
-CONSTRUCT-CORE/patterns/plugins/registry.yaml
-```
-
-Each plugin provides:
-- Description for user selection
-- Dependencies on other plugins
-- Validators for compliance checking
-- Generators for code creation
-
-### Pattern Extraction
-
-For legacy migration, the script:
-1. Searches for sections with headers matching: `## Rules`, `## Guidelines`, `## Standards`, `## Patterns`, `## Anti-patterns`
-2. Extracts content between these headers and the next `##` header
-3. Saves each section as a separate file in the injections directory
-
-The extracted content is saved in this structure:
-```
-CONSTRUCT-LAB/patterns/plugins/project-specific/<project-name>/
-├── <project-name>.md   # Auto-generated documentation
-├── <project-name>.yaml # Plugin metadata
-└── injections/         # Extracted sections
-    ├── rules.md
-    ├── guidelines.md
-    └── standards.md
-```
-
-## Interactive Scripts Support
-
-The script supports the Interactive Scripts pattern for Claude Code compatibility:
+The script uses Claude SDK for intelligent detection:
 
 ```bash
-# Show prompts without executing
-init-construct.sh --show-prompts
+# Claude analyzes project files and structure
+Project files found:
+./src/App.swift
+./src/ViewModels/MainViewModel.swift
+./Package.swift
 
-# Output format varies by mode:
-# Mode 1/3 (no patterns.yaml):
-1. Pattern plugins to install
-   Format: comma-separated list
-   
-   Based on your project, we recommend:
-   - languages/swift
-   - frameworks/swiftui
-   - platforms/ios
-   
-   Available plugins:
-   - architectural/mvvm
-   - architectural/mvvm-ios
-   ... and more
-   
-   Default: Accept recommendations or none if no project detected
+Config files found:
+./Package.swift
 
-# Mode 2 (patterns.yaml exists):
-No prompts needed - patterns.yaml already exists
-Will regenerate from existing patterns
+# AI returns structured analysis
+{
+  "detected_languages": ["swift"],
+  "detected_frameworks": ["swiftui"],
+  "recommended_patterns": {
+    "languages": ["swift"],
+    "plugins": ["tooling/shell-scripting", "architectural/mvvm-ios"]
+  },
+  "confidence": {
+    "languages": 0.95,
+    "recommendations": 0.90
+  },
+  "project_description": "iOS SwiftUI application with MVVM architecture"
+}
 ```
 
-When piped input is detected, the script reads plugin selections from stdin:
+### Token Bucket Rate Limiting
+
+Prevents API rate limit violations:
 ```bash
-echo "languages/swift,platforms/ios" | init-construct.sh
+# Configuration (environment or config.yaml)
+CONSTRUCT_TOKEN_BUCKET_SIZE=10    # Max burst capacity
+CONSTRUCT_TOKEN_REFILL_RATE=2     # Tokens per second
+
+# During execution
+🔍 Consumed API token (remaining: 9)
+🔍 Consumed API token (remaining: 8)
+🔍 Rate limit: waiting for tokens (available: 0)
+🔍 Consumed API token (remaining: 1)
 ```
+
+### Response Caching
+
+Reduces redundant API calls:
+```bash
+# Cache configuration
+CONSTRUCT_CACHE_DIR=~/.cache/construct
+CONSTRUCT_CACHE_MAX_AGE=3600  # 1 hour
+
+# Cache behavior
+🔍 Cache miss for key a1b2c3d4...
+🔍 Saved to cache: a1b2c3d4...
+🔍 Cache hit for key a1b2c3d4... (age: 120s)
+```
+
+### Configuration System
+
+Flexible configuration with multiple sources:
+
+```yaml
+# .construct/config.yaml
+api:
+  token_bucket_size: 10
+  token_refill_rate: 2
+  max_retries: 3
+  timeout: 30
+
+cache:
+  directory: ~/.cache/construct
+  max_age: 3600
+  cleanup_days: 7
+
+extraction:
+  max_concurrent: 3
+  categories:
+    - architectural
+    - frameworks
+    - languages
+    # ... more categories
+
+logging:
+  level: info
+  file: ~/.construct/logs/init.log
+  rotate_size: 10485760
+  keep_count: 5
+```
+
+### Modular Architecture
+
+#### lib/construct-init/common.sh
+- Logging functions with rotation
+- Token bucket implementation
+- Cache management
+- Claude SDK retry logic
+- Temp file cleanup handlers
+
+#### lib/construct-init/config.sh
+- YAML configuration parsing
+- Environment variable overrides
+- Default configuration values
+- Multi-location config search
+
+#### lib/construct-init/pattern-extractor.sh
+- Concurrent extraction logic
+- Category-specific processing
+- Pattern metadata creation
+- Progress tracking
 
 ## Integration with Workspace Scripts
 
-The enhanced init-construct integrates with:
-
-**create-project.sh**:
+### create-project.sh
 ```bash
 # Two-stage initialization for new projects
 create-project.sh MyApp
 cd Projects/MyApp
-/init                    # Stage 1
-init-construct.sh        # Stage 2
+/init                    # Stage 1: Base CLAUDE.md
+construct-init           # Stage 2: AI enhancement
 ```
 
-**import-project.sh**:
+### import-project.sh
 ```bash
 # Migration path for existing projects
 import-project.sh /path/to/existing/project
 cd Projects/ImportedProject
-init-construct.sh        # Detects Mode 3, extracts patterns
+construct-init           # AI extracts patterns
 ```
-
-## Configuration
-
-### .construct/patterns.yaml
-
-Generated configuration structure:
-```yaml
-# Project pattern configuration
-project_name: "MyApp"
-construct_version: "2.0"
-
-# Active patterns
-languages:
-  - swift
-  - python
-
-frameworks:
-  - swiftui
-
-platforms:
-  - ios
-
-# Plugin specifications
-plugins:
-  # Core plugins
-  - "languages/swift"
-  - "languages/python"
-  - "frameworks/swiftui"
-  - "platforms/ios"
-  
-  # Architecture patterns
-  - "architectural/mvvm-ios"
-  
-  # Project-specific (LAB)
-  - "projects/myapp-custom"
-
-# Custom project rules (if not extracted to LAB)
-custom_rules:
-  - "Use 'Mgr' suffix for manager classes"
-  - "All API calls must use async/await"
-```
-
-### Environment Variables
-
-The script uses standard CONSTRUCT environment variables:
-```bash
-# These are auto-detected, not typically overridden
-CONSTRUCT_ROOT   # Git repository root
-CONSTRUCT_CORE   # $CONSTRUCT_ROOT/CONSTRUCT-CORE
-PROJECT_ROOT     # Where .git is located
-```
-
-Note: The script does not currently support debug mode or auto-accept flags.
 
 ## Error Handling
 
-The script handles various error conditions:
+The script includes comprehensive error handling:
 
-1. **Missing /init content**: Prompts user to run `/init` first
-2. **Invalid plugin selection**: Shows error and re-prompts
-3. **Missing registry**: Falls back to manual configuration
-4. **Write permissions**: Checks before modifying files
-5. **Malformed CLAUDE.md**: Preserves original with .backup
+1. **Claude SDK Failures**: Retry with exponential backoff
+2. **Rate Limiting**: Token bucket prevents violations
+3. **Timeouts**: Cross-platform timeout handling
+4. **Cache Errors**: Graceful degradation
+5. **File Permissions**: Pre-checks before modifications
+6. **Cleanup**: Trap handlers for temp files
 
 ## Best Practices
 
 ### For New Projects
-
 1. Always run `/init` first to establish base context
-2. Run `init-construct.sh` immediately after for pattern selection
-3. Review generated `.construct/patterns.yaml` 
-4. Commit both CLAUDE.md and patterns.yaml to version control
+2. Run `construct-init` immediately after for AI enhancement
+3. Review generated `.construct/patterns.yaml`
+4. Commit infrastructure to version control
 
 ### For Existing Projects
+1. Use `--dry-run` first to preview changes
+2. Review three-level extraction results
+3. Check `CONSTRUCT/patterns/plugins/` for extracted patterns
+4. Validate with `construct-check`
 
-1. Back up your current CLAUDE.md before migration
-2. Review extracted patterns in LAB plugin
-3. Adjust plugin selection based on actual needs
-4. Test pattern compliance with `check-architecture.sh`
+### Performance Optimization
+1. Use caching for repeated runs
+2. Limit categories with `CONSTRUCT_CATEGORIES` env var
+3. Adjust `MAX_CONCURRENT` for your system
+4. Monitor token bucket with `--verbose`
 
-### For Claude Code Integration
+## Testing
 
-1. Use `--show-prompts` when running from Claude Code
-2. Provide structured inputs as shown in prompts
-3. Let Claude Code handle file modifications
-4. Verify results with `construct-patterns.sh list`
+Comprehensive test suite available:
+```bash
+# Run all unit tests
+./CONSTRUCT-CORE/CONSTRUCT/tests/run-unit-tests.sh
+
+# Test specific module
+./CONSTRUCT-CORE/CONSTRUCT/tests/unit/test-common.sh
+./CONSTRUCT-CORE/CONSTRUCT/tests/unit/test-config.sh
+./CONSTRUCT-CORE/CONSTRUCT/tests/unit/test-pattern-extractor.sh
+```
 
 ## Troubleshooting
 
 ### Common Issues
 
-**"CLAUDE.md not found!"**
-- You need to run `/init` first to create the base CLAUDE.md
-- The script requires an existing CLAUDE.md to enhance
+**"Claude SDK is required but not found"**
+- Install Claude SDK: https://docs.anthropic.com/claude/docs/claude-sdk
+- CONSTRUCT is AI-Native and requires Claude SDK
 
-**"CLAUDE.md already enhanced"**
-- The script detected enhancement markers
-- Use `--regenerate` flag to update from patterns
+**"jq is required for JSON parsing"**
+- Install jq for JSON parsing
+- Required for AI analysis results
 
-**"yq not installed"**
-- Plugin descriptions will be limited
-- The script falls back to directory scanning
-- Install yq for full registry features
+**Rate limiting issues**
+- Adjust `CONSTRUCT_TOKEN_BUCKET_SIZE`
+- Increase delays between calls
+- Use cache to reduce API calls
 
-### Current Limitations
+### Debug Mode
+```bash
+# Enable full debug output
+DEBUG=1 construct-init --verbose
 
-1. No debug mode implemented
-2. No `--force-migration` option
-3. Limited framework detection (only SwiftUI and React)
-4. No validation of plugin selections against registry
-5. Pattern injection is basic (adds markers but limited content merging)
+# Check logs
+tail -f ~/.construct/logs/construct-init.log
+```
 
-## Migration Guide
+## Recent Improvements
 
-### From Manual CLAUDE.md
+### From Latest Commits:
+1. **Complete Test Suite** (commit 6eed99e)
+   - Unit tests for all modules
+   - Test framework with assertions
+   - Mock support for testing
 
-1. **Backup current file**:
-   ```bash
-   cp CLAUDE.md CLAUDE.md.pre-construct
-   ```
+2. **Three-Level Extraction** (commit a279359)
+   - Complete blob extraction
+   - Concurrent categorized extraction
+   - Remainder pattern extraction
 
-2. **Run migration**:
-   ```bash
-   init-construct.sh
-   ```
+3. **Major Refactoring** (commit 859d4b5)
+   - Modular architecture
+   - Token bucket rate limiting
+   - Response caching system
 
-3. **Review extracted patterns**:
-   ```bash
-   cat CONSTRUCT-LAB/patterns/plugins/projects/*/pattern.md
-   ```
-
-4. **Adjust if needed**:
-   - Edit LAB plugin files
-   - Add/remove plugins in patterns.yaml
-   - Re-run `update-context.sh`
-
-### From Older CONSTRUCT Versions
-
-If you have an older CONSTRUCT project:
-
-1. **Run with --regenerate**:
-   ```bash
-   init-construct.sh --regenerate
-   ```
-
-2. **Review the enhanced CLAUDE.md**
-
-3. **Run update-context to populate dynamic sections**:
-   ```bash
-   construct-update
-   ```
-
-## Actual Implementation Notes
-
-### What's Working
-- Basic three-mode detection logic
-- Project analysis for Swift, Python, TypeScript, Rust
-- Interactive plugin selection with Y/n/customize prompts
-- Pattern extraction from legacy CLAUDE.md files
-- Registry loading with fallback to directory scanning
-- Creation of patterns.yaml with selected plugins
-- Basic CLAUDE.md enhancement with markers
-
-### What's Partially Implemented
-- Pattern injection system (adds header and markers but limited content merging)
-- Framework detection (only SwiftUI and React)
-- /init content preservation (basic implementation)
-- Interactive prompts support (works but output format differs from spec)
-
-### What's Not Implemented
-- Advanced pattern content injection from plugin files
-- Debug mode and environment variable controls
-- Plugin validation against registry
-- Force migration options
-- Comprehensive framework/platform detection
-- Full template processing with all injection points
+4. **AI-Native Implementation** (commit 3f7478e)
+   - Claude SDK integration
+   - Cross-platform timeouts
+   - Intelligent orchestration
 
 ## Related Documentation
 
-- [Plugin Registry](./plugin-registry.md) - How plugins are organized
-- [Interactive Scripts](./interactive-scripts.md) - Claude Code integration patterns
-- [Init and Construct Init](./init-and-construct-init.md) - Two-stage initialization concept
-- [Workspace Management](../core/workspace-management.md) - Project creation and import
+- [assemble-claude.md](./assemble-claude.md) - Pattern assembly engine
+- [Library Documentation](../../CONSTRUCT-CORE/CONSTRUCT/lib/README.md) - Module reference
+- [CLAUDE-BASE Template](../core/claude-base-template.md) - Base template system
+- [Interactive Scripts](./interactive-scripts.md) - Claude Code integration

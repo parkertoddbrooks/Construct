@@ -38,10 +38,16 @@ Complete index of all CONSTRUCT documentation, organized by topic.
 
 ## 🔧 Features
 
+### AI-Native Integration
+- [init-construct Enhanced](features/init-construct-enhanced.md) - AI-powered CONSTRUCT integration ⭐ NEW
+- [assemble-claude](features/assemble-claude.md) - Pattern assembly engine ⭐ NEW
+- [CLAUDE-BASE Template](core/claude-base-template.md) - Foundation template system ⭐ NEW
+
 ### Script System
 - [Interactive Scripts](features/interactive-scripts.md) - Script interactivity features
 - [Repository Context](features/repository-context.md) - Context management in scripts
 - [Session Management](../CONSTRUCT-LAB/AI/dev-logs/session-states/README.md) - Development session tracking
+- [Library System](../CONSTRUCT-CORE/CONSTRUCT/lib/README.md) - Shared libraries and modules ⭐ NEW
 
 ### Development Workflow
 - [LAB to CORE Promotion](core/promotion-system-guide.md) - How code moves from experimental to stable
@@ -94,9 +100,49 @@ Complete index of all CONSTRUCT documentation, organized by topic.
 
 ### Configuration Templates
 - [Patterns Template](../CONSTRUCT-CORE/patterns/templates/patterns.yaml) - Project pattern configuration
-- [Project Sets](../CONSTRUCT-CORE/patterns/templates/project-sets.yaml) - Pre-configured project types ⭐ NEW
+- [Project Sets](../CONSTRUCT-CORE/patterns/templates/project-sets.yaml) - Pre-configured project types
 
-## 🆕 What's New (2025-07-10)
+## 🆕 What's New (2025-07-23)
+
+### Major AI-Native Updates
+
+1. **init-construct.sh Transformation** 🚀
+   - [AI-Native Intelligent Orchestrator](features/init-construct-enhanced.md) - Complete rewrite with Claude SDK
+   - Three-level pattern extraction system (blob, categorized, uncategorized)
+   - Token bucket rate limiting and response caching
+   - `--dry-run` mode for safe testing
+   - Concurrent processing (3 categories at once)
+   - [Full documentation](features/init-construct-enhanced.md)
+
+2. **Modular Library System** 📚
+   - [construct-init/common.sh](../CONSTRUCT-CORE/CONSTRUCT/lib/README.md#commonsh) - Core utilities with rate limiting
+   - [construct-init/config.sh](../CONSTRUCT-CORE/CONSTRUCT/lib/README.md#configsh) - YAML configuration management
+   - [construct-init/pattern-extractor.sh](../CONSTRUCT-CORE/CONSTRUCT/lib/README.md#pattern-extractorsh) - Concurrent extraction
+   - [Library Documentation](../CONSTRUCT-CORE/CONSTRUCT/lib/README.md)
+
+3. **Enhanced Pattern Assembly** 🧩
+   - [assemble-claude.sh Documentation](features/assemble-claude.md) - Pattern assembly engine
+   - [CLAUDE-BASE.md Template](core/claude-base-template.md) - Foundation template system
+   - Support for AI-extracted patterns with project naming
+
+4. **Comprehensive Testing** ✅
+   - Full unit test suite for all modules
+   - Test framework with assertions
+   - Mock support for complex testing scenarios
+   - Run with: `./CONSTRUCT-CORE/CONSTRUCT/tests/run-unit-tests.sh`
+
+5. **Production Features** 🏭
+   - **Configuration System**: YAML-based with environment overrides
+   - **Log Rotation**: Automatic log management with compression
+   - **Cross-Platform**: Works on macOS and Linux
+   - **Error Recovery**: Comprehensive error handling and cleanup
+
+### Fixed PATH Issue (Latest)
+- Resolved claude command not found in subshells
+- Added CLAUDE_PATH export for reliable execution
+- All three extraction levels now working properly
+
+## 🆕 Previous Updates (2025-07-10)
 
 ### Major Updates
 1. **Scripts Reorganization** 
