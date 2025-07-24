@@ -133,6 +133,9 @@ run_with_timeout() {
 # Export the function so it's available in subshells
 export -f run_with_timeout
 
+# Get the full path to claude command for use in subshells
+CLAUDE_PATH=""
+
 # Phase 0: Verify Claude SDK Available (Required Dependency)
 verify_claude_sdk() {
     echo -e "${BLUE}🔍 Phase 0: Verifying Claude SDK availability...${NC}"
@@ -143,6 +146,10 @@ verify_claude_sdk() {
         echo -e "${YELLOW}   Please install: https://docs.anthropic.com/claude/docs/claude-sdk${NC}"
         exit 1
     fi
+    
+    # Get full path to claude for subshells
+    CLAUDE_PATH=$(which claude)
+    export CLAUDE_PATH
     
     # Test Claude SDK version
     local claude_version=$(claude --version 2>&1 || echo "unknown")
@@ -221,7 +228,7 @@ EOF
         echo -e "  ${BLUE}🤖${NC} Analyzing with Claude SDK (30s timeout)..."
         
         # Use the original comprehensive prompt
-        ANALYSIS_JSON=$(run_with_timeout 30 claude < "$temp_prompt" 2>/dev/null)
+        ANALYSIS_JSON=$(run_with_timeout 30 "$CLAUDE_PATH" < "$temp_prompt" 2>/dev/null)
         local claude_exit=$?
         
         if [ $claude_exit -eq 124 ]; then
@@ -459,7 +466,7 @@ EOF
         
         # Run extraction with proper error handling
         local extract_output=$(mktemp)
-        if run_with_timeout 60 claude < "$extract_prompt" > "$extract_output"; then
+        if run_with_timeout 60 "$CLAUDE_PATH" < "$extract_prompt" > "$extract_output"; then
             cp "$extract_output" "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md"
         else
             echo -e "  ${YELLOW}⚠️${NC} Level 1 extraction failed, creating minimal content"
@@ -529,14 +536,15 @@ EOF
                     (
                     # Ensure PATH and functions are available in subshell
                     export PATH="$PATH"
+                    export CLAUDE_PATH="$CLAUDE_PATH"
                     
                     # Debug: Check if functions are available
                     if ! type -t run_with_timeout >/dev/null; then
                         echo -e "    ${RED}❌${NC} run_with_timeout not found in subshell for ${category}" >> script_log.txt
                     fi
                     
-                    if ! command -v claude >/dev/null 2>&1; then
-                        echo -e "    ${RED}❌${NC} claude command not found in subshell for ${category}" >> script_log.txt
+                    if [ -z "$CLAUDE_PATH" ] || [ ! -x "$CLAUDE_PATH" ]; then
+                        echo -e "    ${RED}❌${NC} claude not accessible in subshell for ${category}" >> script_log.txt
                     fi
                     
                     # Create category-specific extraction prompt with JSON output
@@ -575,7 +583,7 @@ EOF
                     local start_time=$(date +%s)
                     local temp_output=$(mktemp)
                     
-                    if run_with_timeout 30 claude --output-format json < "$category_prompt" > "$temp_output"; then
+                    if run_with_timeout 30 "$CLAUDE_PATH" --output-format json < "$category_prompt" > "$temp_output"; then
                         # Check if we have jq for JSON parsing
                         if command -v jq >/dev/null 2>&1 && [ -s "$temp_output" ]; then
                             # First check if Claude returned an error
@@ -697,7 +705,7 @@ EOF
                 
                 # Extract uncategorized patterns with proper error handling
                 local uncat_output=$(mktemp)
-                if run_with_timeout 30 claude < "$uncat_prompt" > "$uncat_output"; then
+                if run_with_timeout 30 "$CLAUDE_PATH" < "$uncat_prompt" > "$uncat_output"; then
                     cp "$uncat_output" "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md"
                 else
                     echo -e "  ${YELLOW}⚠️${NC} Level 3 extraction failed, creating placeholder"
@@ -856,7 +864,7 @@ $readme_content"
     echo "$analysis_prompt" > "$temp_analysis"
     
     # Call Claude for analysis with timeout
-    local analysis_result=$(run_with_timeout 30 claude < "$temp_analysis" 2>/dev/null || echo "{}")
+    local analysis_result=$(run_with_timeout 30 "$CLAUDE_PATH" < "$temp_analysis" 2>/dev/null || echo "{}")
     
     if [ -z "$analysis_result" ] || [ "$analysis_result" = "{}" ]; then
         echo -e "  ${YELLOW}⚠️${NC} Claude SDK timed out, using basic detection"
@@ -1070,7 +1078,7 @@ Assess if the CONSTRUCT installation is complete and functional."
         echo -e "$infrastructure_state\n$script_test_results" >> "$temp_validation"
         
         # Use Claude SDK with timeout for validation
-        local validation_result=$(run_with_timeout 20 claude < "$temp_validation" 2>/dev/null)
+        local validation_result=$(run_with_timeout 20 "$CLAUDE_PATH" < "$temp_validation" 2>/dev/null)
         
         if [ -z "$validation_result" ] || [ $? -eq 124 ]; then
             echo -e "  ${YELLOW}⚠️${NC} Validation timed out, using basic checks"
