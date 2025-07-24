@@ -35,6 +35,67 @@ log_debug() {
     [ -n "$LOG_FILE" ] && echo "[DEBUG] $(date '+%Y-%m-%d %H:%M:%S') $1" >> "$LOG_FILE"
 }
 
+# Log rotation
+LOG_DIR="${CONSTRUCT_LOG_DIR:-$HOME/.construct/logs}"
+LOG_MAX_SIZE="${CONSTRUCT_LOG_MAX_SIZE:-10485760}"  # 10MB default
+LOG_KEEP_COUNT="${CONSTRUCT_LOG_KEEP_COUNT:-5}"     # Keep 5 old logs
+
+# Setup logging with rotation
+setup_logging() {
+    mkdir -p "$LOG_DIR"
+    
+    # Determine log file name
+    local log_name="${1:-construct-init.log}"
+    export LOG_FILE="$LOG_DIR/$log_name"
+    
+    # Rotate if needed
+    rotate_log_if_needed "$LOG_FILE"
+    
+    # Initialize log
+    echo "=== CONSTRUCT Log Started: $(date) ===" >> "$LOG_FILE"
+}
+
+# Rotate log if it exceeds max size
+rotate_log_if_needed() {
+    local log_file="$1"
+    local max_size="${2:-$LOG_MAX_SIZE}"
+    local keep_count="${3:-$LOG_KEEP_COUNT}"
+    
+    if [ -f "$log_file" ]; then
+        local size
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            size=$(stat -f%z "$log_file" 2>/dev/null || echo 0)
+        else
+            size=$(stat -c%s "$log_file" 2>/dev/null || echo 0)
+        fi
+        
+        if [ $size -gt $max_size ]; then
+            log_info "Rotating log file (size: $size bytes)"
+            
+            # Create rotated filename with timestamp
+            local timestamp=$(date +%Y%m%d_%H%M%S)
+            local rotated_file="${log_file}.${timestamp}"
+            
+            # Move current log to rotated name
+            mv "$log_file" "$rotated_file"
+            
+            # Compress if gzip available
+            if command -v gzip >/dev/null 2>&1; then
+                gzip "$rotated_file"
+                rotated_file="${rotated_file}.gz"
+            fi
+            
+            # Clean up old logs
+            local log_pattern="${log_file}.*"
+            local old_logs=($(ls -t $log_pattern 2>/dev/null | tail -n +$((keep_count + 1))))
+            for old_log in "${old_logs[@]}"; do
+                rm -f "$old_log"
+                log_debug "Removed old log: $old_log"
+            done
+        fi
+    fi
+}
+
 # Validation functions
 validate_directory() {
     local dir="$1"
@@ -321,9 +382,13 @@ call_claude_with_cache() {
 # Initialize cache on module load
 init_cache
 
+# Setup logging on module load
+setup_logging
+
 # Export functions
 export -f log_error log_warning log_info log_success log_debug
 export -f validate_directory check_required_tools
 export -f setup_cleanup add_temp_file cleanup_on_exit
 export -f consume_api_token call_claude_with_retry call_claude_with_cache
 export -f show_progress init_cache get_cache_key check_cache save_cache
+export -f setup_logging rotate_log_if_needed
