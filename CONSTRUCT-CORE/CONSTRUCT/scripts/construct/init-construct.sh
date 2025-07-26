@@ -33,11 +33,16 @@ set -e
 # Parse command line arguments
 DRY_RUN=false
 VERBOSE=false
+FULL_EXTRACT=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
         --dry-run)
             DRY_RUN=true
+            shift
+            ;;
+        --extract)
+            FULL_EXTRACT=true
             shift
             ;;
         --verbose|-v)
@@ -54,6 +59,7 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "Options:"
             echo "  --dry-run    Preview changes without making them"
+            echo "  --extract    Perform full three-level pattern extraction (slower but more sophisticated)"
             echo "  --verbose    Enable verbose output"
             echo "  --help       Show this help message"
             echo ""
@@ -275,16 +281,13 @@ EOF
         cat CLAUDE.md >> "$temp_prompt"
         
         # Call Claude with timeout and proper error handling
-        echo -e "  ${BLUE}🤖${NC} Analyzing with Claude SDK (30s timeout)..."
+        echo -e "  ${BLUE}🤖${NC} Analyzing with Claude SDK (60s timeout)..."
         
         # Use the original comprehensive prompt
-        ANALYSIS_JSON=$(run_with_timeout 30 "$CLAUDE_PATH" < "$temp_prompt" 2>/dev/null)
+        ANALYSIS_JSON=$(run_with_timeout 60 "$CLAUDE_PATH" < "$temp_prompt" 2>/dev/null)
         local claude_exit=$?
         
-        if [ $claude_exit -eq 124 ]; then
-            echo -e "  ${YELLOW}⚠️${NC} Claude SDK timed out, using default analysis"
-            ANALYSIS_JSON='{"has_extractable_patterns": false, "confidence": 0.0, "reasoning": "Claude SDK analysis timed out"}'
-        elif [ $claude_exit -ne 0 ] || [ -z "$ANALYSIS_JSON" ]; then
+        if [ $claude_exit -ne 0 ] || [ -z "$ANALYSIS_JSON" ]; then
             echo -e "  ${YELLOW}⚠️${NC} Claude SDK failed, using default analysis"
             ANALYSIS_JSON='{"has_extractable_patterns": false, "confidence": 0.0, "reasoning": "Claude SDK analysis failed"}'
         fi
@@ -521,14 +524,16 @@ EOF
         # Build the full extraction prompt including the backup content
         cat CLAUDE.md.backup >> "$extract_prompt"
         
-        # Extract complete patterns using Claude SDK with timeout
-        echo -e "  ${BLUE}📋${NC} Extracting complete project patterns..."
+        # Extract complete patterns using Claude SDK with streaming
+        echo -ne "  ${BLUE}📋${NC} Extracting complete project patterns"
         
         # Run extraction with proper error handling
         local extract_output=$(mktemp)
-        if run_with_timeout 60 "$CLAUDE_PATH" < "$extract_prompt" > "$extract_output"; then
+        if PATH="$PATH" CLAUDE_PATH="$CLAUDE_PATH" call_claude_streaming "$extract_prompt" "$extract_output" true; then
+            echo "" # New line after progress dots
             cp "$extract_output" "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md"
         else
+            echo "" # New line after progress dots
             echo -e "  ${YELLOW}⚠️${NC} Level 1 extraction failed, creating minimal content"
             # Create minimal content from original CLAUDE.md
             echo "# Project Content" > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md"
@@ -559,8 +564,12 @@ EOF
                     echo -e "  ${GREEN}✅${NC} Pattern configuration updated with complete extraction"
                 fi
                 
-                # Level 2: Create categorized extractions with concurrent processing
-                echo -e "\n  ${BLUE}🗂️ Level 2: Categorized pattern extraction (concurrent)...${NC}"
+                # Continue with Level 2 & 3 only if --extract flag is used
+                if [ "$FULL_EXTRACT" = true ]; then
+                    echo -e "\n  ${BLUE}🔄${NC} Continuing with full extraction..."
+                    
+                    # Level 2: Create categorized extractions with concurrent processing
+                    echo -e "\n  ${BLUE}🗂️ Level 2: Categorized pattern extraction (concurrent)...${NC}"
                 
                 # Content of the complete extraction for categorization
                 local complete_content=$(cat "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}-all/injections/extracted-${PROJECT_NAME}-all.md")
@@ -725,9 +734,8 @@ EOF
                 done
                 echo -e "  ${GREEN}✅${NC} All category extractions completed"
                 
-                # Add longer delay before Level 3 to prevent rate-limiting
-                echo -e "  ${GRAY}⏳${NC} Waiting 10 seconds before Level 3 extraction..."
-                sleep 10
+                # Short delay before Level 3
+                sleep 2
                 
                 # Level 3: Extract uncategorized/unique patterns
                 echo -e "\n  ${BLUE}📌 Level 3: Uncategorized pattern extraction...${NC}"
@@ -765,10 +773,15 @@ EOF
                 
                 # Extract uncategorized patterns with proper error handling
                 local uncat_output=$(mktemp)
-                if run_with_timeout 30 "$CLAUDE_PATH" < "$uncat_prompt" > "$uncat_output"; then
+                echo -ne "  ${GRAY}🔍${NC} Running Level 3 extraction"
+                if PATH="$PATH" CLAUDE_PATH="$CLAUDE_PATH" call_claude_streaming "$uncat_prompt" "$uncat_output" true; then
+                    echo "" # New line after progress dots
+                    echo -e "  ${GREEN}✓${NC} Level 3 extraction completed"
                     cp "$uncat_output" "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md"
                 else
+                    echo "" # New line after progress dots
                     echo -e "  ${YELLOW}⚠️${NC} Level 3 extraction failed, creating placeholder"
+                    [ -n "$DEBUG" ] && echo -e "  ${GRAY}Debug: $(cat "$uncat_output")${NC}"
                     echo "# No uncategorized patterns found" > "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}/injections/extracted-${PROJECT_NAME}.md"
                 fi
                 rm -f "$uncat_prompt" "$uncat_output"
@@ -811,6 +824,12 @@ EOF
                 if [ -d "CONSTRUCT/patterns/plugins/extracted-${PROJECT_NAME}" ]; then
                     echo -e "    • Uncategorized: extracted-${PROJECT_NAME}"
                 fi
+                
+            else
+                # Quick extraction path (default)
+                echo -e "\n  ${GREEN}✅ Quick extraction complete!${NC}"
+                echo -e "  ${GRAY}💡 Use 'construct-init --extract' for advanced pattern categorization${NC}"
+            fi
                 
         else
             echo -e "  ${RED}❌${NC} Error: Claude SDK extraction failed${NC}"
@@ -924,7 +943,7 @@ $readme_content"
     echo "$analysis_prompt" > "$temp_analysis"
     
     # Call Claude for analysis with timeout
-    local analysis_result=$(run_with_timeout 30 "$CLAUDE_PATH" < "$temp_analysis" 2>/dev/null || echo "{}")
+    local analysis_result=$(run_with_timeout 60 "$CLAUDE_PATH" < "$temp_analysis" 2>/dev/null || echo "{}")
     
     if [ -z "$analysis_result" ] || [ "$analysis_result" = "{}" ]; then
         echo -e "  ${YELLOW}⚠️${NC} Claude SDK timed out, using basic detection"
@@ -944,10 +963,10 @@ $readme_content"
         
         # Extract recommendations using jq (required for AI-Native approach)
         if command -v jq >/dev/null 2>&1; then
-            RECOMMENDED_LANGUAGES=$(echo "$analysis_result" | jq -r '.recommended_patterns.languages[]?' 2>/dev/null | tr '\n' ' ')
-            RECOMMENDED_PLUGINS=$(echo "$analysis_result" | jq -r '.recommended_patterns.plugins[]?' 2>/dev/null | tr '\n' ' ')
-            PROJECT_DESC=$(echo "$analysis_result" | jq -r '.project_description?' 2>/dev/null)
-            CONFIDENCE_LEVEL=$(echo "$analysis_result" | jq -r '.confidence.recommendations?' 2>/dev/null)
+            RECOMMENDED_LANGUAGES=$(echo "$analysis_result" | jq -r '.recommended_patterns.languages[]?' 2>/dev/null | tr '\n' ' ' || echo "")
+            RECOMMENDED_PLUGINS=$(echo "$analysis_result" | jq -r '.recommended_patterns.plugins[]?' 2>/dev/null | tr '\n' ' ' || echo "")
+            PROJECT_DESC=$(echo "$analysis_result" | jq -r '.project_description?' 2>/dev/null || echo "")
+            CONFIDENCE_LEVEL=$(echo "$analysis_result" | jq -r '.confidence.recommendations?' 2>/dev/null || echo "")
         else
             echo -e "  ${RED}❌${NC} Error: jq is required for JSON parsing${NC}"
             echo -e "  ${YELLOW}   Please install jq: https://stedolan.github.io/jq/download/${NC}"

@@ -385,10 +385,129 @@ init_cache
 # Setup logging on module load
 setup_logging
 
+# Stream Claude API with progress indicators
+call_claude_streaming() {
+    local prompt_file="$1"
+    local output_file="$2"
+    local show_progress="${3:-true}"
+    
+    # Use claude from PATH if CLAUDE_PATH not set
+    local claude_cmd="${CLAUDE_PATH:-claude}"
+    
+    # Clear output file
+    > "$output_file"
+    
+    # Debug: log command being run
+    log_debug "Running: $claude_cmd --print --output-format json < $prompt_file"
+    
+    # Create temp file for output
+    local json_output=$(mktemp)
+    local error_output=$(mktemp)
+    
+    # Call Claude with JSON output format
+    if [ "$show_progress" = true ]; then
+        echo -ne " ${GRAY}[thinking]${NC}"
+    fi
+    
+    # Run claude and capture both stdout and stderr
+    "$claude_cmd" --print --output-format json < "$prompt_file" > "$json_output" 2> "$error_output"
+    local exit_code=$?
+    
+    # Debug: save raw output for inspection
+    if [ -n "$DEBUG" ]; then
+        cp "$json_output" "/tmp/claude-json-debug-$(date +%s).json"
+        log_debug "Saved raw JSON output to /tmp/claude-json-debug-*.json"
+    fi
+    
+    if [ $exit_code -eq 0 ] && [ -s "$json_output" ]; then
+        # Extract content from JSON response
+        if command -v jq >/dev/null 2>&1; then
+            # The JSON format has the actual response in the 'result' field
+            local content=$(jq -r '.result // empty' "$json_output" 2>/dev/null || echo "")
+            
+            if [ -n "$content" ]; then
+                echo "$content" > "$output_file"
+                if [ "$show_progress" = true ]; then
+                    echo -ne "${GREEN} ✓${NC}"
+                fi
+                rm -f "$json_output" "$error_output"
+                return 0
+            else
+                # Try alternative JSON structure (message.content[0].text)
+                content=$(jq -r '.message.content[0].text // empty' "$json_output" 2>/dev/null || echo "")
+                if [ -n "$content" ]; then
+                    echo "$content" > "$output_file"
+                    if [ "$show_progress" = true ]; then
+                        echo -ne "${GREEN} ✓${NC}"
+                    fi
+                    rm -f "$json_output" "$error_output"
+                    return 0
+                fi
+            fi
+            
+            log_debug "No content extracted from JSON response"
+            return 1
+        else
+            # Fallback without jq - try to extract result field
+            local content=$(grep -o '"result":"[^"]*"' "$json_output" | cut -d'"' -f4)
+            if [ -n "$content" ]; then
+                # Basic unescaping
+                content=$(echo "$content" | sed 's/\\n/\
+/g' | sed 's/\\"/"/g')
+                echo "$content" > "$output_file"
+                if [ "$show_progress" = true ]; then
+                    echo -ne "${GREEN} ✓${NC}"
+                fi
+                rm -f "$json_output" "$error_output"
+                return 0
+            fi
+            
+            log_debug "No content extracted from JSON response (no jq)"
+            return 1
+        fi
+    else
+        # Log error if any
+        if [ -s "$error_output" ]; then
+            log_debug "Claude error: $(cat "$error_output")"
+        fi
+        log_debug "Claude exit code: $exit_code"
+        rm -f "$json_output" "$error_output"
+        return 1
+    fi
+}
+
+# Simple Claude call for JSON responses (no streaming)
+call_claude_json() {
+    local prompt_file="$1"
+    local output_file="$2"
+    
+    # Use claude from PATH if CLAUDE_PATH not set
+    local claude_cmd="${CLAUDE_PATH:-claude}"
+    
+    # Clear output file
+    > "$output_file"
+    
+    # Call Claude with JSON output format (--print required for non-interactive)
+    if "$claude_cmd" --print --output-format json < "$prompt_file" > "$output_file" 2>&1; then
+        # Check if response is valid JSON with is_error=false
+        if command -v jq >/dev/null 2>&1 && jq -e '.is_error == false' "$output_file" >/dev/null 2>&1; then
+            # Extract just the result field
+            jq -r '.result' "$output_file" > "${output_file}.tmp" && mv "${output_file}.tmp" "$output_file"
+            return 0
+        else
+            log_debug "Claude returned error or invalid JSON"
+            return 1
+        fi
+    else
+        log_debug "Claude command failed"
+        return 1
+    fi
+}
+
 # Export functions
 export -f log_error log_warning log_info log_success log_debug
 export -f validate_directory check_required_tools
 export -f setup_cleanup add_temp_file cleanup_on_exit
 export -f consume_api_token call_claude_with_retry call_claude_with_cache
 export -f show_progress init_cache get_cache_key check_cache save_cache
-export -f setup_logging rotate_log_if_needed
+export -f setup_logging rotate_log_if_needed call_claude_streaming call_claude_json
