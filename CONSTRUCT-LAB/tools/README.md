@@ -2,6 +2,16 @@
 
 This directory contains tools for managing the CONSTRUCT-LAB development environment, particularly the promotion system for moving validated code from LAB to CORE.
 
+## Recent Updates
+
+### AI-Native Orchestrator Complete (July 2025)
+The major init-construct.sh refactoring is complete with Claude SDK integration:
+- Fixed streaming JSON issues by switching to standard JSON format
+- Added `--extract` flag for optional full three-level pattern extraction
+- Improved error handling and debug logging
+- Quick mode (default) completes in ~30 seconds
+- Full extraction mode available for deeper analysis
+
 ## Available Tools
 
 ### 🚀 promote-to-core.sh

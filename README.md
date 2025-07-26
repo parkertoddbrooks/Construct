@@ -69,13 +69,15 @@ git clone https://github.com/yourusername/construct.git
 cd construct
 
 # For new projects
-./CONSTRUCT-CORE/CONSTRUCT/scripts/workspace/create-project.sh MyApp ios
+./CONSTRUCT-CORE/CONSTRUCT/scripts/create-project.sh MyApp
 
-# For existing projects - Two-Stage Installation
-./CONSTRUCT-CORE/CONSTRUCT/scripts/workspace/import-project.sh ../YourProject
+# For existing projects
+./CONSTRUCT-CORE/CONSTRUCT/scripts/import-project.sh ../YourProject
 cd Projects/YourProject
-/init                    # Initialize base CLAUDE.md
-construct-init          # AI-Native integration with pattern extraction
+./CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh  # AI analyzes and enhances with patterns
+
+# Optional: Full three-level pattern extraction (slower but more sophisticated)
+./CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh --extract
 ```
 
 ### Using CONSTRUCT
@@ -125,8 +127,7 @@ CONSTRUCT's breakthrough is the **AI-Native Intelligent Orchestrator** that uses
 
 ```bash
 cd YourProject
-/init                    # Create base CLAUDE.md
-construct-init          # AI analyzes and enhances with patterns
+./CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
 ```
 
 **What the AI-Native Orchestrator does:**
@@ -186,7 +187,7 @@ The AI-Native Orchestrator installs everything needed:
 ### With CONSTRUCT
 ```bash
 # One-time setup extracts and preserves your project knowledge
-construct-init
+./CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh
 
 # AI always knows your architecture, patterns, and current context
 # Your extracted project knowledge appears prominently in CLAUDE.md

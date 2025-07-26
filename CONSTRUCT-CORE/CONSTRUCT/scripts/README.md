@@ -36,7 +36,7 @@ General-purpose orchestrators that work with any project using patterns.yaml:
 
 Project-aware tools that were originally CONSTRUCT-specific but now work with any project:
 
-- **`init-construct.sh`** - AI-Native intelligent orchestrator for CONSTRUCT integration (NEW!)
+- **`init-construct.sh`** - AI-Native intelligent orchestrator for CONSTRUCT integration
 - **`assemble-claude.sh`** - Assembles CLAUDE.md from patterns and base template
 - **`check-symlinks.sh`** - Validates LAB/CORE symlink integrity
 - **`refresh-plugin-registry.sh`** - Refreshes the plugin registry by scanning plugin directories
@@ -46,8 +46,9 @@ Project-aware tools that were originally CONSTRUCT-specific but now work with an
 
 ### Usage
 ```bash
-# NEW: AI-Native CONSTRUCT integration
-./construct/init-construct.sh                    # Integrate CONSTRUCT into current project
+# AI-Native CONSTRUCT integration with Claude SDK
+./construct/init-construct.sh                    # Quick analysis and pattern extraction (default)
+./construct/init-construct.sh --extract          # Full three-level pattern extraction (slower)
 ./construct/init-construct.sh --dry-run          # Preview changes without making them
 ./construct/init-construct.sh --verbose          # Enable debug output
 ./construct/init-construct.sh --help             # Show usage information
@@ -220,8 +221,9 @@ Most scripts now accept a PROJECT_DIR parameter as their first argument:
 # Check specific project
 ./core/check-architecture.sh ~/Projects/MyApp
 
-# NEW: Integrate CONSTRUCT into any project
-./construct/init-construct.sh                    # Full AI-powered integration
+# Integrate CONSTRUCT into any project (Claude SDK powered)
+./construct/init-construct.sh                    # Quick pattern extraction (30 seconds)
+./construct/init-construct.sh --extract          # Full three-level extraction (5+ minutes)
 ./construct/init-construct.sh --dry-run          # Preview what would happen
 
 # Update any project's context

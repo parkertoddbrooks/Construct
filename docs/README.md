@@ -2,16 +2,23 @@
 
 Welcome to the CONSTRUCT documentation. This directory contains comprehensive documentation for the CONSTRUCT pattern framework.
 
-## 🆕 What's New (2025-07-21)
+## 🆕 What's New (2025-07-26)
 
-### Major Updates
+### Latest Updates
+- **init-construct.sh Fixed** - Claude SDK integration now working properly with JSON output
+- **Streaming Issues Resolved** - Switched from broken streaming to reliable JSON format  
+- **Two-Mode Operation** - Quick extraction (default, ~30s) or full extraction (--extract flag)
+- **Improved Error Handling** - Better debug logging and error messages
+- **No More Truncation** - Content extraction now preserves all project knowledge
+
+### Previous Updates (2025-07-21)
 - **Phase 2A Complete** - Enhanced pattern categorization system with 10 categories
 - **Claude SDK Integration** - AI-native intelligent pattern extraction and analysis
-- **Comprehensive Project Support** - Now handles projects with design tokens, quality gates, professional standards
+- **Comprehensive Project Support** - Now handles projects with design tokens, quality gates
 - **Cross-Platform Compatibility** - Bash 3+ support for macOS, Linux, Windows WSL
 - **Enhanced Categories** - Added ui/, performance/, quality/, configuration/ pattern categories
 
-[See full changelog →](DOCS-INDEX.md#-whats-new-2025-07-21)
+[See full changelog →](DOCS-INDEX.md#-whats-new-2025-07-26)
 
 ## 📚 Documentation Guides
 

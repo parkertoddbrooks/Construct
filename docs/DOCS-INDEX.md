@@ -142,6 +142,24 @@ Complete index of all CONSTRUCT documentation, organized by topic.
 - Added CLAUDE_PATH export for reliable execution
 - All three extraction levels now working properly
 
+## 🆕 What's New (2025-07-26)
+
+### init-construct.sh Fixes
+1. **Claude SDK Integration Fixed**
+   - Streaming JSON wasn't actually streaming - switched to reliable JSON format
+   - Fixed truncation issues - all content now preserved
+   - Added proper error handling for Claude CLI failures
+
+2. **Performance Improvements**
+   - Default quick mode completes in ~30 seconds
+   - Optional `--extract` flag for full three-level extraction
+   - Removed artificial delays and timeouts
+
+3. **Debugging Enhancements**
+   - Added DEBUG mode with detailed logging
+   - JSON responses saved to /tmp for inspection
+   - Better error messages for troubleshooting
+
 ## 🆕 Previous Updates (2025-07-10)
 
 ### Major Updates
