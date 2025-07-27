@@ -69,10 +69,10 @@ git clone https://github.com/yourusername/construct.git
 cd construct
 
 # For new projects
-./CONSTRUCT-CORE/CONSTRUCT/scripts/create-project.sh MyApp
+./CONSTRUCT-CORE/CONSTRUCT/scripts/workspace/create-project.sh MyApp
 
 # For existing projects
-./CONSTRUCT-CORE/CONSTRUCT/scripts/import-project.sh ../YourProject
+./CONSTRUCT-CORE/CONSTRUCT/scripts/workspace/import-project.sh ../YourProject
 cd Projects/YourProject
 ./CONSTRUCT-CORE/CONSTRUCT/scripts/construct/init-construct.sh  # AI analyzes and enhances with patterns
 
@@ -82,7 +82,10 @@ cd Projects/YourProject
 
 ### Using CONSTRUCT
 ```bash
-# Manage patterns in your project
+# First, install shortcuts (optional but recommended)
+./CONSTRUCT-CORE/shortcuts/install-shortcuts.sh
+
+# Then use shortcut commands:
 construct-patterns list                    # View available patterns
 construct-patterns show                    # Show current configuration
 construct-patterns regenerate              # Update CLAUDE.md from patterns
@@ -91,6 +94,11 @@ construct-patterns regenerate              # Update CLAUDE.md from patterns
 construct-update         # Refresh dynamic context
 construct-check          # Validate architecture
 construct-quality        # Check code quality
+
+# Or use full paths without shortcuts:
+./CONSTRUCT-CORE/CONSTRUCT/scripts/core/construct-patterns.sh list
+./CONSTRUCT-CORE/CONSTRUCT/scripts/construct/update-context.sh
+./CONSTRUCT-CORE/CONSTRUCT/scripts/core/check-architecture.sh
 ```
 
 Now Claude Code knows your architecture, your patterns, your preferences - automatically.
@@ -246,12 +254,19 @@ No gatekeepers. No committees. If it works, it's good.
 
 ## Status & Roadmap
 
-### ✅ **Phase 1 Complete: AI-Native Orchestrator (Step 2)**
+### 🎉 Latest Updates (July 2025)
+- **Claude SDK Integration Fixed**: Resolved streaming issues, now using reliable JSON format
+- **Performance Optimized**: Quick mode completes in ~30 seconds
+- **No More Truncation**: All project knowledge preserved during extraction
+- **Enhanced Debugging**: DEBUG mode for troubleshooting
+
+### ✅ **Phase 1 Complete: AI-Native Orchestrator**
 - **Intelligent Pattern Extraction**: Claude SDK analyzes and preserves project knowledge
 - **Unified Architecture**: Same folder structure as CONSTRUCT-LAB
-- **Automatic Integration**: Two-stage setup (`/init` → `construct-init`)
+- **One-Command Integration**: Simple `init-construct.sh` setup
 - **Focused Assembly**: Project-first CLAUDE.md generation
 - **Complete Infrastructure**: Tools, hooks, patterns, validation
+- **Two-Mode Operation**: Quick extraction (default) or full analysis (--extract)
 
 ### 🚧 **Phase 2: Core Infrastructure (Steps 3-4)**
 - Pattern System Enhancement
